@@ -8,24 +8,18 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
-
-@Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Board extends Auditable {
+public class Image extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long boardId;
-
-    @Column
-    private String title;
-
-    @Column
-    private String body;
+    private long imageId;
 
     @ManyToOne
-    @JoinColumn(name = "MEMBER_ID")
-    private Member member;
+    @JoinColumn(name = "BOARD_ID")
+    private Board board;
 
+    @Column
+    private String imageUrl;
 }

@@ -28,9 +28,34 @@ public class StockOrder extends Auditable {
     @JoinColumn(name = "COMPANY_ID")
     private Company company;
 
-    @Column
-    private boolean orderType;
+    @Enumerated(value = EnumType.STRING)
+    @Column(length = 20, nullable = false)
+    private OrderTypes OrderTypes;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(length = 20, nullable = false)
+    private OrderStatus OrderStatus;
 
     @Column
     private long price;
+
+    public enum OrderTypes {
+        SELL("매도"),
+        BUY("매수");
+        @Getter
+        private String types;
+
+        OrderTypes(String types) { this.types = types; }
+    }
+
+    public enum OrderStatus {
+        ORDER_COMPLETE("채결 완료"),
+        ORDER_WAIT("체결 대기");
+        @Getter
+        private String status;
+
+        OrderStatus(String status) {
+            this.status = status;
+        }
+    }
 }

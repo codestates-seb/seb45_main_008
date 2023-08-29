@@ -12,22 +12,16 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class StockHold extends Auditable {
+public class Star extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long stockHoldId;
-
-    @Column
-    private int stockCount;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "COMPANY_ID")
-    private Company company;
+    private long starId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    @Column
-    private long price;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "COMPANY_ID")
+    private Company company;
 }
