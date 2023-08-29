@@ -2,6 +2,7 @@ package com.stockholm.main_project.stock.stockdata.controller;
 
 
 import com.stockholm.main_project.stock.stockdata.dto.StockasbiDataDto;
+import com.stockholm.main_project.stock.stockdata.dto.StockminDto;
 import com.stockholm.main_project.stock.stockdata.service.StockService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -27,9 +28,9 @@ public class StockController {
         return ResponseEntity.ok(stockDatas);
     }
     @ResponseBody
-    @GetMapping("/stockhour")
-    public ResponseEntity<List<String>> getStockhourData() {
-        List<String> stockDatas = stockService.getStockhourData();
+    @GetMapping("/stockmin")
+    public ResponseEntity<List<StockminDto>> getStockminData() {
+        List<StockminDto> stockDatas = stockService.getStockminData();
         return ResponseEntity.ok(stockDatas);
     }
 }
