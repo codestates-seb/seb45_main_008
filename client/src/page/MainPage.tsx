@@ -1,4 +1,5 @@
 import { styled } from "styled-components";
+import Header from "../components/header"
 
 import CentralChartSection from "../components/CentralChartSection/Index";
 
@@ -22,12 +23,6 @@ const Container = styled.div`
   height: 100vh;
   display: flex;
   flex-direction: column;
-`;
-
-const Header = styled.header`
-  width: 100%;
-  height: 51px;
-  border: 1px solid black;
 `;
 
 const Main = styled.main`
