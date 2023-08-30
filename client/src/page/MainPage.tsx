@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-
+import { TabContainer } from "./TabSection";
 const MainPage = () => {
   return (
     <Container>
@@ -7,7 +7,7 @@ const MainPage = () => {
       <Main>
         <LeftSection></LeftSection>
         <CentralSection></CentralSection>
-        <RightSection></RightSection>
+        <TabContainer></TabContainer>
       </Main>
     </Container>
   );
@@ -37,13 +37,6 @@ const Main = styled.main`
 
 const LeftSection = styled.section`
   min-width: 248px;
-  height: 100%;
-  border: 1px solid black;
-`;
-
-const RightSection = styled.section`
-  flex: 3.3 0 0;
-  min-width: 400px;
   height: 100%;
   border: 1px solid black;
 `;
