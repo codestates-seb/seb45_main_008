@@ -29,6 +29,7 @@ const Button = styled.div<OwnProps>`
   display: flex;
   justify-content: center;
   align-items: center;
+  font-size: 22px;
   border-right: ${(props) =>
     props.direction === "left" && "1px solid darkgray"};
   border-left: ${(props) =>
