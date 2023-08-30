@@ -9,22 +9,21 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity
+@Entity(name = "members")
 @Getter
 @Setter
-@NoArgsConstructor
 public class Member extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long memberId;
 
-    @Column
+    @Column(length = 30, nullable = false)
     private String email;
 
-    @Column
+    @Column(length = 10, nullable = false)
     private String name;
 
-    @Column
+    @Column(length = 255, nullable = false)
     private String password;
 
     @Enumerated(value = EnumType.STRING)
