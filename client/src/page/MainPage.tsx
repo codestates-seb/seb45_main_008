@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import Header from "../components/header"
+import Header from "../components/header";
 
 import CentralChartSection from "../components/CentralChartSection/Index";
 
