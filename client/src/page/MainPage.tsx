@@ -1,12 +1,14 @@
 import { styled } from "styled-components";
 
+import CentralChartSection from "../components/CentralChartSection/Index";
+
 const MainPage = () => {
   return (
     <Container>
       <Header />
       <Main>
         <LeftSection></LeftSection>
-        <CentralSection></CentralSection>
+        <CentralChartSection />
         <RightSection></RightSection>
       </Main>
     </Container>
@@ -46,10 +48,4 @@ const RightSection = styled.section`
   min-width: 400px;
   height: 100%;
   border: 1px solid black;
-`;
-
-const CentralSection = styled.section`
-  flex: 6.7 0 0;
-  min-width: 630px;
-  height: 100%;
 `;
