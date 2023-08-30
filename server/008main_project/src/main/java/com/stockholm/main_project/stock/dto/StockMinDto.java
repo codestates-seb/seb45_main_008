@@ -1,4 +1,4 @@
-package com.stockholm.main_project.stock.stockdata.dto;
+package com.stockholm.main_project.stock.dto;
 
 import lombok.Getter;
 import lombok.NoArgsConstructor;

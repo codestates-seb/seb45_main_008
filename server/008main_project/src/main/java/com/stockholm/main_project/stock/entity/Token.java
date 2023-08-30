@@ -1,27 +1,26 @@
 package com.stockholm.main_project.stock.entity;
 
-import com.stockholm.main_project.audit.Auditable;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 
 @Entity
 @Getter
 @Setter
 @NoArgsConstructor
-public class Company extends Auditable {
+public class Token {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long companyId;
+    long tokenId;
+
+    @Column(length = 500)
+    private String token;
 
     @Column
-    private String code;
+    private LocalDateTime expired;
 
-    @Column
-    private String korName;
 
-    @Column
-    private String information;
 }

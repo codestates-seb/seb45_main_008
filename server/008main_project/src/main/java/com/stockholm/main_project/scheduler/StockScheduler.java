@@ -1,22 +1,44 @@
-//package com.stockholm.main_project.scheduler;
-//
-//import com.stockholm.main_project.stock.stockdata.dto.StockasbiDataDto;
-//import com.stockholm.main_project.stock.stockdata.service.StockService;
-//import lombok.extern.slf4j.Slf4j;
-//import org.springframework.scheduling.annotation.Scheduled;
-//import org.springframework.stereotype.Service;
-//
-//import java.util.List;
-//
-//@Slf4j
-//@Service
-//public class StockScheduler {
-//    private StockService stockService;
-//
-//    public StockScheduler(StockService stockService) {
-//        this.stockService = stockService;
+package com.stockholm.main_project.scheduler;
+
+import com.stockholm.main_project.stock.dto.StockasbiDataDto;
+import com.stockholm.main_project.stock.entity.Company;
+import com.stockholm.main_project.stock.service.StockService;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+@Slf4j
+@Service
+public class StockScheduler {
+    private StockService stockService;
+
+    public StockScheduler(StockService stockService) {
+        this.stockService = stockService;
+    }
+
+    //@Scheduled(cron = "5 0 9 * * MON-FRI")
+    @Scheduled(fixedRate = 10000000)
+    public void firstSchedule() throws InterruptedException {
+        List<Company> companyList = stockService.getCompanies();
+
+        for(int i = 0; i < companyList.size(); i++) {
+            StockasbiDataDto stockasbiDataDto = stockService.getStockasbiData(companyList.get(i).getCode());
+
+
+
+            Thread.sleep(100);
+        }
+    }
+
+//    @Scheduled(fixedRate = 1000)
+//    public void run() {
+//        System.out.println("Hi");
 //    }
-//
+}
+
+
 //    @Scheduled(fixedRate = 60000)
 //    public void run() {
 //        List<StockasbiDataDto> stockasbiDataDtos = stockService.getStockasbiData();
@@ -121,4 +143,4 @@
 //            log.info(stockasbiDataDto.getOutput1().getAskp5());
 //        }
 //    }
-//}
+
