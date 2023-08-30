@@ -3,14 +3,14 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import StockHolmLogo from "../asset/images/StockHolmLogo.png"
 
-
-
 const Header: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>('');
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
+
+  const loginText = "로그인";
 
   return (
     <HeaderContainer>
@@ -53,7 +53,7 @@ const SearchBar = styled.input.attrs({
 const LoginButton = styled.button`
   background-color: #fff; // 흰색 배경
   color: #2F4F4F; // 글자색
-  border: 1px solid #2F4F4F; // 보라색 테두리
+  border: 1px solid #2F4F4F; // 회색 테두리
   padding: 0.5rem 1rem;
   border-radius: 5px; // 5px 둥글게
   cursor: pointer;
@@ -63,7 +63,5 @@ const LoginButton = styled.button`
     background-color: #f2f2f2; // 호버 시 약간 어두운 흰색으로 변경
   }
 `;
-  const loginText = "로그인";
-
 
 export default Header;
