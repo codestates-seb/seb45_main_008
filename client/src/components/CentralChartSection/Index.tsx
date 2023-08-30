@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 
-import UpperMenuBar from "./UpperMenuBar";
+import UpperMenuBar from "../CentralSectionMenu/Index";
 import StockPriceChart from "./StockPriceChart";
 import TransactionVolumeChart from "./TransactionVolumeChart";
 

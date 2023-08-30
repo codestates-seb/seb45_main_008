@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 
 // dummyData -> 일부 재활용 예정 (변수명 다시 생각)
-import dummyImg from "../../asset/CentralChartSection-dummyImg.png";
+import dummyImg from "../../asset/CentralSectionMenu-dummyImg.png";
 const corpName: string = "카카오";
 const stockCode: string = "035720";
 const stockCodeAdditionalInfo: string = "코스피";
@@ -39,9 +39,10 @@ const StockInfoOverview = () => {
 export default StockInfoOverview;
 
 const Container = styled.div`
+  flex: 7 0 0;
+
   display: flex;
   flex-direction: row;
-  justify-content: center;
   align-items: center;
   padding-left: 12px;
   padding-right: 12px;

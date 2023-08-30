@@ -7,11 +7,11 @@ const ExpandScreenBtn = (props: OwnProps) => {
   const { direction } = props;
 
   if (direction === "left") {
-    return <ExpandBtn direction="left">{expandLeft}</ExpandBtn>;
+    return <Button direction="left">{expandLeft}</Button>;
   }
 
   if (direction === "right") {
-    return <ExpandBtn direction="right">{expandRight}</ExpandBtn>;
+    return <Button direction="right">{expandRight}</Button>;
   }
 };
 
@@ -23,7 +23,7 @@ interface OwnProps {
 }
 
 // component 생성
-const ExpandBtn = styled.div<OwnProps>`
+const Button = styled.div<OwnProps>`
   width: 43px;
   height: 100%;
   display: flex;
