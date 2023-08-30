@@ -23,12 +23,6 @@ const Container = styled.div`
   flex-direction: column;
 `;
 
-// const Header = styled.header`
-//   width: 100%;
-//   height: 51px;
-//   border: 1px solid black;
-// `;
-
 const Main = styled.main`
   width: 100%;
   height: 100%;

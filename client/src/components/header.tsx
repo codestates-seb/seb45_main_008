@@ -1,8 +1,27 @@
-// header.tsx
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import StockHolmLogo from "../asset/images/StockHolmLogo.png"
+
+
+
+const Header: React.FC = () => {
+  const [searchValue, setSearchValue] = useState<string>('');
+
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchValue(event.target.value);
+  };
+
+  return (
+    <HeaderContainer>
+      <LogoImage src={StockHolmLogo} />
+      <SearchBar value={searchValue} onChange={handleSearchChange} />
+      <LoginButton>{loginText}</LoginButton>
+    </HeaderContainer>
+  );
+};
+
+
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -44,22 +63,7 @@ const LoginButton = styled.button`
     background-color: #f2f2f2; // 호버 시 약간 어두운 흰색으로 변경
   }
 `;
+  const loginText = "로그인";
 
-
-const Header: React.FC = () => {
-  const [searchValue, setSearchValue] = useState<string>('');
-
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
-  };
-
-  return (
-    <HeaderContainer>
-      <LogoImage src={StockHolmLogo} />
-      <SearchBar value={searchValue} onChange={handleSearchChange} />
-      <LoginButton>로그인</LoginButton>
-    </HeaderContainer>
-  );
-};
 
 export default Header;
