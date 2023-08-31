@@ -16,6 +16,9 @@ public class Company extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long companyId;
 
+    @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
+    private StockAsBi stockAsBi;
+
     @Column
     private String code;
 

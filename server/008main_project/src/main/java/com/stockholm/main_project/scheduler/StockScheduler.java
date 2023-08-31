@@ -1,42 +1,80 @@
 package com.stockholm.main_project.scheduler;
 
-import com.stockholm.main_project.stock.dto.StockasbiDataDto;
-import com.stockholm.main_project.stock.entity.Company;
-import com.stockholm.main_project.stock.service.StockService;
+import com.stockholm.main_project.stock.service.StockAsBiService;
+import com.stockholm.main_project.stock.service.StockMinService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
-import java.util.List;
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 
 @Slf4j
 @Service
 public class StockScheduler {
-    private StockService stockService;
+    private final StockAsBiService stockAsBiService;
+    private final StockMinService stockMinService;
 
-    public StockScheduler(StockService stockService) {
-        this.stockService = stockService;
+    public StockScheduler(StockAsBiService stockAsBiService, StockMinService stockMinService) {
+        this.stockAsBiService = stockAsBiService;
+
+        this.stockMinService = stockMinService;
+    }
+    @Scheduled(cron = "* 30/30 9-15 * * MON-FRI")
+    public void myScheduledMethod() throws InterruptedException {
+        // 이 메소드는 매주 월요일부터 금요일까지 9:30부터 15:30까지 30분 간격으로 실행됩니다.
+        // 원하는 작업을 여기에 추가하세요.
+        LocalDateTime start = LocalDateTime.now();
+        stockAsBiService.updateStockAsBi();
+        stockMinService.updateStockMin();
+        LocalDateTime end = LocalDateTime.now();
+        Duration duration = Duration.between(start, end);
+        System.out.println(duration.getSeconds());
+
     }
 
-    //@Scheduled(cron = "5 0 9 * * MON-FRI")
-    @Scheduled(fixedRate = 10000000)
-    public void firstSchedule() throws InterruptedException {
-        List<Company> companyList = stockService.getCompanies();
 
-        for(int i = 0; i < companyList.size(); i++) {
-            StockasbiDataDto stockasbiDataDto = stockService.getStockasbiData(companyList.get(i).getCode());
-
-
-
-            Thread.sleep(100);
-        }
-    }
-
-//    @Scheduled(fixedRate = 1000)
-//    public void run() {
-//        System.out.println("Hi");
+//    @Scheduled(fixedRate = 10000000)
+//    public void firstSchedule() throws InterruptedException {
+//        LocalDateTime start = LocalDateTime.now();
+//        stockAsBiService.updateStockAsBi();
+//        LocalDateTime end = LocalDateTime.now();
+//        Duration duration = Duration.between(start, end);
+//        System.out.println(duration.getSeconds());
 //    }
+
+//    @Scheduled(fixedRate = 10000000)
+//    public void secondSchedule() throws InterruptedException {
+//        LocalDateTime start = LocalDateTime.now();
+//        stockMinService.updateStockMin();
+//        LocalDateTime end = LocalDateTime.now();
+//        Duration duration = Duration.between(start, end);
+//        System.out.println(duration.getSeconds());
+//    }
+
+    @Scheduled(fixedRate = 10000000)
+    public void secondSchedule() throws InterruptedException {
+        LocalDateTime start = LocalDateTime.now();
+        stockAsBiService.updateStockAsBi();
+        stockMinService.updateStockMin();
+        LocalDateTime end = LocalDateTime.now();
+        Duration duration = Duration.between(start, end);
+        System.out.println(duration.getSeconds());
+    }
+
+
+
+//    @Scheduled(fixedRate = 100000000)
+//    public void run() {
+//        companyService.fillCompaines();
+//    }
+//
+
 }
+
+
+
 
 
 //    @Scheduled(fixedRate = 60000)

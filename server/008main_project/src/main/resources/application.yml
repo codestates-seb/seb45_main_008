@@ -33,6 +33,6 @@ token:
   app-secret: "vtzv7bG78qgtThPEujr1MWDJHKTawSoEDRfAJzB/lYvwj67HdzUsyUavVGD4kORIeGS5q6BJBwoICXy97h8d3RaSAvhK03Yu/seFm0t+22ZQBv4GKhxvU5jGwdMrsucyKuQ0EtXfkJxJoLFsqIO1UA1n3r4HX0D5RxIe8I8efwEYVbidAn4="
 
 stock-url:
-  token: "https://openapi.koreainvestment.com:9443/oauth2/tokenP"
-  stockasbi: "https://openapi.koreainvestment.com:9443/uapi/domestic-stock/v1/quotations/inquire-asking-price-exp-ccn"
-  stockhour: "https://openapi.koreainvestment.com:9443/uapi/domestic-stock/v1/quotations/inquire-time-itemchartprice"
+  token: "https://openapivts.koreainvestment.com:29443/oauth2/tokenP"
+  stockasbi: "https://openapivts.koreainvestment.com:29443/uapi/domestic-stock/v1/quotations/inquire-asking-price-exp-ccn"
+  stockhour: "https://openapivts.koreainvestment.com:29443/uapi/domestic-stock/v1/quotations/inquire-time-itemchartprice"

@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 public class Token {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     long tokenId;
 
     @Column(length = 500)

@@ -4,10 +4,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Getter
 @Setter
 @NoArgsConstructor
 public class StockMinDto {
     private StockMinOutput1 output1;
-    private StockMinOutput2[] output2;
+    private List<StockMinOutput2> output2;
 }
