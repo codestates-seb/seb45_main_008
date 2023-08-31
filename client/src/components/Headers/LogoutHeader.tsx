@@ -1,9 +1,9 @@
 
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import StockHolmLogo from "../asset/images/StockHolmLogo.png"
+import StockHolmLogo from "../../asset/images/StockHolmLogo.png"
 
-const Header: React.FC = () => {
+const LogoutHeader: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>('');
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -12,16 +12,20 @@ const Header: React.FC = () => {
 
   const loginText = "로그인";
 
+  const handleLogoClick = () => {
+    console.log("Logo clicked");
+  };
+
   return (
     <HeaderContainer>
-      <LogoImage src={StockHolmLogo} />
+      <LogoButton onClick={handleLogoClick}>
+        <LogoImage src={StockHolmLogo} />
+      </LogoButton>
       <SearchBar value={searchValue} onChange={handleSearchChange} />
       <LoginButton>{loginText}</LoginButton>
     </HeaderContainer>
   );
 };
-
-
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -33,6 +37,17 @@ const HeaderContainer = styled.div`
   width: 100%;
   height: 51px;
   
+`;
+
+const LogoButton = styled.button`
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  
+  &:focus {
+    outline: none;
+  }
 `;
 
 const LogoImage = styled.img`
@@ -64,4 +79,4 @@ const LoginButton = styled.button`
   }
 `;
 
-export default Header;
+export default LogoutHeader;
