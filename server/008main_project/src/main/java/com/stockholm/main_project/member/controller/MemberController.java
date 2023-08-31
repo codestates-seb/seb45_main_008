@@ -4,11 +4,12 @@ import com.stockholm.main_project.member.dto.MemberPatchDto;
 import com.stockholm.main_project.member.dto.MemberPostDto;
 import com.stockholm.main_project.member.entity.Member;
 import com.stockholm.main_project.member.mapper.MemberMapper;
-import com.stockholm.main_project.member.repository.MemberRepository;
 import com.stockholm.main_project.member.service.MemberService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/members")
@@ -23,7 +24,7 @@ public class MemberController {
     }
 
     @PostMapping
-    public ResponseEntity postUser(@RequestBody MemberPostDto memberPostDto){
+    public ResponseEntity postUser(@Valid @RequestBody MemberPostDto memberPostDto){
         Member member = mapper.memberPostToMember(memberPostDto);
 
         Member response = memberService.createMember(member);

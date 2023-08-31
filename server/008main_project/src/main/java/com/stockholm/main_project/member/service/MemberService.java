@@ -1,6 +1,7 @@
 package com.stockholm.main_project.member.service;
 
 import com.stockholm.main_project.auth.utils.CustomAuthorityUtils;
+import com.stockholm.main_project.member.dto.MemberPostDto;
 import com.stockholm.main_project.member.entity.Member;
 import com.stockholm.main_project.member.repository.MemberRepository;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,6 +24,15 @@ public class MemberService {
     }
 
     public Member createMember(Member member) {
+
+        verifyExistsEmail(member.getEmail());
+
+        String password = member.getPassword();
+        String confirmPassword = member.getConfirmPassword();
+
+        if (!password.equals(confirmPassword)) {
+            throw new IllegalArgumentException("비밀번호와 비밀번호 재확인이 일치하지 않습니다.");
+        }// 암호 재확인 기능
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encryptedPassword);
 
@@ -61,6 +71,12 @@ public class MemberService {
     public void deleteMember(long memberId) {
 
         memberRepository.deleteById(memberId);
+    }
+
+    private void verifyExistsEmail(String email) {
+        Optional<Member> member = memberRepository.findByEmail(email);
+        if (member.isPresent())
+            throw new RuntimeException("이미 가입된 이메일입니다.");
     }
 }
 

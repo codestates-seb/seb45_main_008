@@ -9,7 +9,7 @@ import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@Entity(name = "members")
+@Entity
 @Getter
 @Setter
 public class Member extends Auditable {
@@ -25,6 +25,9 @@ public class Member extends Auditable {
 
     @Column(length = 255, nullable = false)
     private String password;
+
+    @Transient
+    private String confirmPassword; //실제 저장을 하지 않기 위해 @Transient 사용
 
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
