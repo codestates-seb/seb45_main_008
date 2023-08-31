@@ -1,15 +1,13 @@
 import { styled } from "styled-components";
 
 import UpperMenuBar from "../CentralSectionMenu/Index";
-import StockPriceChart from "./StockPriceChart";
-import TransactionVolumeChart from "./TransactionVolumeChart";
+import StockChart from "./StockChart";
 
 const CentralChartSection = () => {
   return (
     <Container>
       <UpperMenuBar />
-      <StockPriceChart />
-      <TransactionVolumeChart />
+      <StockChart />
     </Container>
   );
 };
