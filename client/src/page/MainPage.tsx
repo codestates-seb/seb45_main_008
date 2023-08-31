@@ -1,16 +1,17 @@
 import { styled } from "styled-components";
-import LogoutHeader from "../components/Headers/LogoutHeader"
-import LoginHeader from "../components/Headers/LoginHeader"
+
+import LoginHeader from "../components/Headers/LoginHeader";
+import StockOrder from "../components/StockOrder/Index";
 
 const MainPage = () => {
   return (
     <Container>
       <LoginHeader />
-      <LogoutHeader />
       <Main>
         <LeftSection></LeftSection>
         <CentralSection></CentralSection>
-        <RightSection></RightSection>
+        <StockOrder />
+        {/* <RightSection></RightSection> */}
       </Main>
     </Container>
   );
@@ -38,12 +39,12 @@ const LeftSection = styled.section`
   border: 1px solid black;
 `;
 
-const RightSection = styled.section`
-  flex: 3.3 0 0;
-  min-width: 400px;
-  height: 100%;
-  border: 1px solid black;
-`;
+// const RightSection = styled.section`
+//   flex: 3.3 0 0;
+//   min-width: 400px;
+//   height: 100%;
+//   border: 1px solid black;
+// `;
 
 const CentralSection = styled.section`
   flex: 6.7 0 0;
