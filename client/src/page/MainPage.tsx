@@ -1,5 +1,5 @@
 import { styled } from "styled-components";
-import { TabContainer } from "./TabSection";
+import { TabContainerPage } from "./TabSection/TabContainerPage";
 const MainPage = () => {
   return (
     <Container>
@@ -7,7 +7,7 @@ const MainPage = () => {
       <Main>
         <LeftSection></LeftSection>
         <CentralSection></CentralSection>
-        <TabContainer></TabContainer>
+        <TabContainerPage></TabContainerPage>
       </Main>
     </Container>
   );

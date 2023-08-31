@@ -1,13 +1,8 @@
-import {
-  MarketInfoStyle,
-  Market,
-  Issue,
-  StockList,
-} from "../TabStyle/MarketInfoStyle";
+import styled from "styled-components";
 import React, { useState } from "react";
-import MarketSummary from "../TabComponents/MarketSummary";
-import MarketStockList from "../TabComponents/MarketStockList";
-import MarketIssue from "../TabComponents/MarketIssue";
+import MarketSummary from "../../components/MarketComponents/MarketSummary";
+import MarketStockList from "../../components/MarketComponents/MarketStockList";
+import MarketIssue from "../../components/MarketComponents/MarketIssue";
 interface Props {}
 const MarketInfo: React.FC<Props> = () => {
   const [selectedTab, setSelectedTab] = useState<string>("market");
@@ -34,3 +29,20 @@ const MarketInfo: React.FC<Props> = () => {
 };
 
 export default MarketInfo;
+
+// **스타일 옮기기
+//시장정보 탭의 프레임 스타일
+const MarketInfoStyle = styled.div`
+  display: flex;
+  justify-content: space-around;
+`;
+
+//시장정보 탭의 시장요약 스타일
+const Market = styled.div`
+  text-align: center;
+`;
+
+//시장정보 탭의 전체주식 스타일
+const StockList = styled.div``;
+//시장정보 탭의 시장이슈 스타일
+const Issue = styled.div``;
