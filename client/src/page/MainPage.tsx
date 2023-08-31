@@ -1,12 +1,11 @@
 import { styled } from "styled-components";
-import Header from "../components/header";
-
+import LoginHeader from "../components/Headers/LoginHeader";
 import CentralChartSection from "../components/CentralChartSection/Index";
 
 const MainPage = () => {
   return (
     <Container>
-      <Header />
+      <LoginHeader />
       <Main>
         <LeftSection></LeftSection>
         <CentralChartSection />

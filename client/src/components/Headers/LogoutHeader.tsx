@@ -1,9 +1,19 @@
+<<<<<<< HEAD:client/src/components/header.tsx
 import React, { useState } from "react";
 import styled from "styled-components";
 import StockHolmLogo from "../asset/images/StockHolmLogo.png";
 
 const Header: React.FC = () => {
   const [searchValue, setSearchValue] = useState<string>("");
+=======
+
+import React, { useState } from 'react';
+import styled from 'styled-components';
+import StockHolmLogo from "../../asset/images/StockHolmLogo.png"
+
+const LogoutHeader: React.FC = () => {
+  const [searchValue, setSearchValue] = useState<string>('');
+>>>>>>> abeda5eea2cb094da744b5034865c55e4cbb769f:client/src/components/Headers/LogoutHeader.tsx
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
@@ -11,9 +21,15 @@ const Header: React.FC = () => {
 
   const loginText = "로그인";
 
+  const handleLogoClick = () => {
+    console.log("Logo clicked");
+  };
+
   return (
     <HeaderContainer>
-      <LogoImage src={StockHolmLogo} />
+      <LogoButton onClick={handleLogoClick}>
+        <LogoImage src={StockHolmLogo} />
+      </LogoButton>
       <SearchBar value={searchValue} onChange={handleSearchChange} />
       <LoginButton>{loginText}</LoginButton>
     </HeaderContainer>
@@ -29,6 +45,17 @@ const HeaderContainer = styled.div`
   border-bottom: 1px solid #2f4f4f; // 다크 슬레이트 그레이 줄
   width: 100%;
   height: 51px;
+`;
+
+const LogoButton = styled.button`
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  
+  &:focus {
+    outline: none;
+  }
 `;
 
 const LogoImage = styled.img`
@@ -60,4 +87,4 @@ const LoginButton = styled.button`
   }
 `;
 
-export default Header;
+export default LogoutHeader;
