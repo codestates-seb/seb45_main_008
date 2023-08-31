@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 
 import LoginHeader from "../components/Headers/LoginHeader";
-import StockOrder from "../components/StockOrder/Index";
+import StockOrderSection from "../components/StockOrderSection/Index";
 
 const MainPage = () => {
   return (
@@ -10,7 +10,7 @@ const MainPage = () => {
       <Main>
         <LeftSection></LeftSection>
         <CentralSection></CentralSection>
-        <StockOrder />
+        <StockOrderSection />
         {/* <RightSection></RightSection> */}
       </Main>
     </Container>
