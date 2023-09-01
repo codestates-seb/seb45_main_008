@@ -1,19 +1,9 @@
-<<<<<<< HEAD:client/src/components/header.tsx
 import React, { useState } from "react";
 import styled from "styled-components";
-import StockHolmLogo from "../asset/images/StockHolmLogo.png";
+import StockHolmLogo from "../../asset/images/StockHolmLogo.png";
 
-const Header: React.FC = () => {
+const LogoutHeader: React.FC<LogoutHeaderProps> = ({ onLoginClick }) => {
   const [searchValue, setSearchValue] = useState<string>("");
-=======
-
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import StockHolmLogo from "../../asset/images/StockHolmLogo.png"
-
-const LogoutHeader: React.FC = () => {
-  const [searchValue, setSearchValue] = useState<string>('');
->>>>>>> abeda5eea2cb094da744b5034865c55e4cbb769f:client/src/components/Headers/LogoutHeader.tsx
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
@@ -31,7 +21,7 @@ const LogoutHeader: React.FC = () => {
         <LogoImage src={StockHolmLogo} />
       </LogoButton>
       <SearchBar value={searchValue} onChange={handleSearchChange} />
-      <LoginButton>{loginText}</LoginButton>
+      <LoginButton onClick={onLoginClick}>{loginText}</LoginButton>
     </HeaderContainer>
   );
 };
@@ -52,7 +42,7 @@ const LogoButton = styled.button`
   border: none;
   cursor: pointer;
   padding: 0;
-  
+
   &:focus {
     outline: none;
   }
@@ -86,5 +76,8 @@ const LoginButton = styled.button`
     background-color: #f2f2f2; // 호버 시 약간 어두운 흰색으로 변경
   }
 `;
+interface LogoutHeaderProps {
+  onLoginClick: () => void;
+}
 
 export default LogoutHeader;
