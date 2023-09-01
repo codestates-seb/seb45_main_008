@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 
-const StockPriceInfo = () => {
+const StockPrice = () => {
   return (
     <Container>
       <HighFigure></HighFigure>
@@ -10,10 +10,10 @@ const StockPriceInfo = () => {
   );
 };
 
-export default StockPriceInfo;
+export default StockPrice;
 
 const Container = styled.div`
-  width: 160px;
+  width: 40%;
   height: 100%;
   margin-right: 16px;
   border-right: 1px solid black;

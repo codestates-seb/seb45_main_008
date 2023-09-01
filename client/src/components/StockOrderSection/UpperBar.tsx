@@ -20,7 +20,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  height: 43px;
+  min-height: 43px;
   border-bottom: 1px solid black;
 `;
 
@@ -34,7 +34,7 @@ const CloseBtn = styled.button`
   position: absolute;
   right: 10px;
   width: 28px;
-  height: 100%;
+  height: 95%;
   border: none;
   font-size: 20px;
   color: #525252;

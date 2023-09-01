@@ -1,12 +1,52 @@
 import { styled } from "styled-components";
 
+const titleText: string = "주문내역";
+const orderPendingTitle: string = "미체결";
+const orderPendingEmptyMessage: string = "미체결 내역이 없습니다";
+
 const OrderResult = () => {
-  return <Container></Container>;
+  return (
+    <Container>
+      <Title>{titleText}</Title>
+      <OrderPending>
+        <div className="orderPendingTitle">{orderPendingTitle}</div>
+        <div className="emptyIndicator">{orderPendingEmptyMessage}</div>
+      </OrderPending>
+    </Container>
+  );
 };
 
 export default OrderResult;
 
 const Container = styled.div`
   flex: 1 0 0;
-  border-bottom: 1px solid black;
+  padding-top: 16px;
+  display: flex;
+  flex-direction: column;
+`;
+
+const Title = styled.div`
+  font-size: 16px;
+  font-weight: 500;
+  padding-left: 16px;
+  padding-bottom: 16px;
+  /* border-bottom: 1px solid black; */
+`;
+
+const OrderPending = styled.div`
+  .orderPendingTitle {
+    padding-left: 16px;
+    margin-bottom: 8px;
+  }
+
+  .emptyIndicator {
+    width: 100%;
+    height: 48px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 14px;
+    font-weight: 350;
+    color: #999999;
+  }
 `;

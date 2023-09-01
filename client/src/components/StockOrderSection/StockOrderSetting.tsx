@@ -1,4 +1,7 @@
 import { styled } from "styled-components";
+import PriceSetting from "./PriceSetting";
+import VolumeSetting from "./VolumeSetteing";
+import StockOrderBtn from "./StockOrderBtn";
 
 const orderType01: string = "매수";
 const orderType02: string = "매도";
@@ -10,6 +13,9 @@ const StockOrderSetting = () => {
         <div className="buying">{orderType01}</div>
         <div className="selling">{orderType02}</div>
       </OrderType>
+      <PriceSetting />
+      <VolumeSetting />
+      <StockOrderBtn />
     </Container>
   );
 };
@@ -17,10 +23,8 @@ const StockOrderSetting = () => {
 export default StockOrderSetting;
 
 const Container = styled.div`
-  width: 208px;
+  width: 51%;
   height: 100%;
-  border-left: 1px solid black;
-  border-right: 1px solid black;
 `;
 
 const OrderType = styled.div`

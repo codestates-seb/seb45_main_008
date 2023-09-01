@@ -11,7 +11,7 @@ const MainPage = () => {
         <LeftSection></LeftSection>
         <CentralSection></CentralSection>
         <StockOrderSection />
-        {/* <RightSection></RightSection> */}
+        <RightSection></RightSection>
       </Main>
     </Container>
   );
@@ -39,12 +39,12 @@ const LeftSection = styled.section`
   border: 1px solid black;
 `;
 
-// const RightSection = styled.section`
-//   flex: 3.3 0 0;
-//   min-width: 400px;
-//   height: 100%;
-//   border: 1px solid black;
-// `;
+export const RightSection = styled.section`
+  width: 26%;
+  min-width: 400px;
+  height: 100%;
+  border: 1px solid black;
+`;
 
 const CentralSection = styled.section`
   flex: 6.7 0 0;

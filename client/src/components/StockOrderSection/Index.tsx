@@ -5,6 +5,8 @@ import StockName from "./StockName";
 import OrderRequest from "./OrderRequest";
 import OrderResult from "./OrderResult";
 
+// test
+
 const StockOrderSection = () => {
   return (
     <Container>
@@ -28,7 +30,7 @@ const Container = styled.aside`
   display: flex;
   flex-direction: column;
 
-  flex: 3.3 0 0;
+  width: 26%;
   min-width: 400px;
   height: 100%;
   border-left: 1px solid #2f4f4f;
