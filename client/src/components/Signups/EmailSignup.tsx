@@ -1,25 +1,34 @@
 import styled from 'styled-components';
 
-const EmailSignupModal = ({ onClose }: { onClose: () => void }) => {
-  // 문자열 변수 정의
-  const titleText = "이메일로 회원가입";
-  const emailLabelText = "이메일";
-  const requestVerificationText = "이메일 인증요청";
+const strings = {
+  titleText: "이메일로 회원가입",
+  emailLabelText: "이메일",
+  requestVerificationText: "이메일 인증요청"
+};
 
+const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestVerification }) => {
   return (
     <ModalBackground>
       <ModalContainer>
         <CloseButton onClick={onClose}>&times;</CloseButton>
-        <Title>{titleText}</Title>
-        <Label>{emailLabelText}</Label>
+        <Title>{strings.titleText}</Title>
+        <Label>{strings.emailLabelText}</Label>
         <Input type="email" placeholder="이메일을 입력하세요" />
-        <SignupButton>{requestVerificationText}</SignupButton>
+        <SignupButton onClick={onRequestVerification}>
+          {strings.requestVerificationText}
+        </SignupButton>
       </ModalContainer>
     </ModalBackground>
   );
 };
 
 export default EmailSignupModal;
+
+
+type EmailSignupModalProps = {
+  onClose: () => void;
+  onRequestVerification: () => void;
+};
 
 const ModalBackground = styled.div`
   display: flex;

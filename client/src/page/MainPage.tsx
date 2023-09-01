@@ -5,6 +5,8 @@ import LoginHeader from "../components/Headers/LoginHeader";
 import OAuthLoginModal from "../components/Logins/OAuthLogin";
 import EmailLoginModal from "../components/Logins/EmailLogin";
 import EmailSignupModal from "../components/Signups/EmailSignup";
+import EmailVerificationModal from '../components/Signups/EmailCertify';
+import PasswordSettingModal from '../components/Signups/Password';
 
 const MainPage = () => {
   const [isOAuthModalOpen, setOAuthModalOpen] = useState(false);
@@ -37,6 +39,28 @@ const MainPage = () => {
     setEmailSignupModalOpen(false);
   }, []);
 
+  const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] = useState(false);
+
+  const openEmailVerificationModal = useCallback(() => {
+    setEmailSignupModalOpen(false); // 이메일 회원가입 모달 닫기
+    setEmailVerificationModalOpen(true); // 이메일 인증 모달 열기
+  }, []);
+
+  const closeEmailVerificationModal = useCallback(() => {
+    setEmailVerificationModalOpen(false);
+  }, []);
+
+  const [isPasswordSettingModalOpen, setPasswordSettingModalOpen] = useState(false);
+
+  const openPasswordSettingModal = useCallback(() => {
+    setEmailVerificationModalOpen(false);  // 이메일 인증 모달 닫기
+    setPasswordSettingModalOpen(true);     // 비밀번호 설정 모달 열기
+  }, []);
+
+  const closePasswordSettingModal = useCallback(() => {
+    setPasswordSettingModalOpen(false);
+  }, []);
+
   return (
     <Container>
       <LoginHeader />
@@ -52,7 +76,24 @@ const MainPage = () => {
         onEmailSignupClick={openEmailSignupModal} 
       />}
       {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} />}
-      {isEmailSignupModalOpen && <EmailSignupModal onClose={closeEmailSignupModal} />}
+      
+      {isEmailSignupModalOpen && 
+        <EmailSignupModal 
+          onClose={closeEmailSignupModal} 
+          onRequestVerification={openEmailVerificationModal} // 추가된 prop
+        />
+      }
+      
+      {isEmailVerificationModalOpen && 
+        <EmailVerificationModal 
+          onClose={closeEmailVerificationModal}
+          onNextStep={openPasswordSettingModal}  // 추가된 prop
+        />
+      }
+
+      {isPasswordSettingModalOpen && 
+        <PasswordSettingModal onClose={closePasswordSettingModal} />
+      }
     </Container>
   );
 };
