@@ -25,4 +25,7 @@ public class Company extends Auditable {
     @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
     private StockAsBi stockAsBi;
 
+    @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
+    private StockInf stockInf;
+
 }

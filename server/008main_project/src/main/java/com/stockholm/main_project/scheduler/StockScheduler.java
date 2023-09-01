@@ -60,16 +60,18 @@ public class StockScheduler {
 //        companyService.fillCompaines();
 //    }
 
-    @Scheduled(fixedRate = 10000000)
-    public void secondSchedule() throws InterruptedException {
-        LocalDateTime start = LocalDateTime.now();
-        stockAsBiService.updateStockAsBi();
-        stockMinService.updateStockMin();
-        LocalDateTime end = LocalDateTime.now();
-        Duration duration = Duration.between(start, end);
-        System.out.println(duration.getSeconds());
+//    @Scheduled(fixedRate = 10000000)
+//    public void secondSchedule() throws InterruptedException {
+//        LocalDateTime start = LocalDateTime.now();
+//        stockAsBiService.updateStockAsBi();
+//        stockMinService.updateStockMin();
+//        LocalDateTime end = LocalDateTime.now();
+//        Duration duration = Duration.between(start, end);
+//        System.out.println(duration.getSeconds());
+//
+//    }
 
-    }
+
 //    @Scheduled(fixedRate = 10000000)
 //    public void firstSchedule() throws InterruptedException {
 //        LocalDateTime start = LocalDateTime.now();
@@ -79,6 +81,14 @@ public class StockScheduler {
 //        System.out.println(duration.getSeconds());
 //    }
 
+//    @Scheduled(fixedRate = 10000000)
+//    public void secondSchedule() throws InterruptedException {
+//        LocalDateTime start = LocalDateTime.now();
+//        stockMinService.updateStockMin();
+//        LocalDateTime end = LocalDateTime.now();
+//        Duration duration = Duration.between(start, end);
+//        System.out.println(duration.getSeconds());
+//    }
 
 }
 

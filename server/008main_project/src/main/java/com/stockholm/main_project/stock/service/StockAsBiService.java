@@ -33,11 +33,11 @@ public class StockAsBiService {
     }
 
     public void updateStockAsBi() throws InterruptedException {
-        List<Company> companyList = companyService.getCompanies();
+        List<Company> companyList = companyService.findCompanies();
 
         for(int i = 0; i < companyList.size(); i++) {
             // 주식 코드로 회사 불러오기
-            Company company = companyService.getCompany(companyList.get(i).getCode());
+            Company company = companyService.findCompanyByCode(companyList.get(i).getCode());
             // api 호출하기
             StockasbiDataDto stockasbiDataDto = apiCallService.getStockasbiDataFromApi(company.getCode());
             // mapper로 정리 된 값 받기

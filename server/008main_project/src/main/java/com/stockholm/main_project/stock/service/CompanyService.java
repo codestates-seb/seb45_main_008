@@ -24,13 +24,18 @@ public class CompanyService {
     }
 
     // 특정 회사  리턴
-    public Company getCompany(String stockCode) {
+    public Company findCompanyByCode(String stockCode) {
         Company company = companyRepository.findByCode(stockCode);
         return company;
     }
 
+    public Company findCompanyById(long companyId) {
+        Company company = companyRepository.findByCompanyId(companyId);
+        return company;
+    }
+
     // 모든 회사 리턴
-    public List<Company> getCompanies() {
+    public List<Company> findCompanies() {
         List<Company> companies = companyRepository.findAll();
 
         return companies;

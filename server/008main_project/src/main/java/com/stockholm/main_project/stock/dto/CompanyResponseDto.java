@@ -15,5 +15,7 @@ public class CompanyResponseDto {
 
     private String korName;
 
-    private String information;
+    private StockAsBiResponseDto stockAsBiResponseDto;
+
+    private StockInfResponseDto stockInfResponseDto;
 }
