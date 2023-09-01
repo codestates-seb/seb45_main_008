@@ -4,7 +4,7 @@ import StockHolmLogo from "../../asset/images/StockHolmLogo.png";
 import SampleProfile from "../../asset/images/ProfileSample.png"; 
 import AlarmImage from "../../asset/images/alarm.png"; 
 
-const LoginHeader: React.FC = () => {
+const LoginHeader: React.FC<LoginHeaderProps> = ({ onLogoutClick }) => {
   const [searchValue, setSearchValue] = useState<string>('');
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,11 +30,17 @@ const LoginHeader: React.FC = () => {
         <ProfileButton>
           <ProfileImage src={SampleProfile} />
         </ProfileButton>
-        <LogoutButton>{logoutText}</LogoutButton>
+        <LogoutButton onClick={onLogoutClick}>{logoutText}</LogoutButton>  {/* 로그아웃 버튼 클릭 시 onLogoutClick 실행 */}
       </UserActions>
     </HeaderContainer>
   );
 };
+
+export default LoginHeader;
+
+interface LoginHeaderProps {
+  onLogoutClick: () => void;  // 로그아웃 클릭 핸들러 타입 정의
+}
 
 const HeaderContainer = styled.div`
   display: flex;
@@ -124,4 +130,3 @@ const LogoutButton = styled.button`
 
 
 
-export default LoginHeader;

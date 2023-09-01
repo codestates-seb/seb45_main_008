@@ -9,6 +9,10 @@ const strings = {
   };
   
   const PasswordSettingModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+    const handleConfirmClick = () => {
+        console.log("Confirm button clicked!");  // 로그 추가
+        onClose(); // 모달을 닫습니다.
+    };
     return (
       <ModalBackground>
         <ModalContainer>
@@ -20,7 +24,7 @@ const strings = {
           <Input type="password" placeholder="비밀번호를 다시 입력해주세요" />
           <Label>{strings.nicknameLabelText}</Label>
           <Input type="text" placeholder="닉네임을 입력해주세요" />
-          <ConfirmButton>{strings.confirmButtonText}</ConfirmButton>
+          <ConfirmButton onClick={handleConfirmClick}>{strings.confirmButtonText}</ConfirmButton>
         </ModalContainer>
       </ModalBackground>
     );
@@ -41,6 +45,7 @@ const ModalBackground = styled.div`
 `;
 
 const ModalContainer = styled.div`
+  position: relative;
   background-color: white;
   padding: 20px;
   width: 400px;

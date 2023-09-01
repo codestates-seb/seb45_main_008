@@ -61,10 +61,22 @@ const MainPage = () => {
     setPasswordSettingModalOpen(false);
   }, []);
 
+  const [isLoggedIn, setIsLoggedIn] = useState(false);  // 로그인 상태 관리
+
+  const handleLogin = () => {
+      setIsLoggedIn(true);
+  };
+
+  const handleLogout = () => {
+    setIsLoggedIn(false);
+  };
+
   return (
     <Container>
-      <LoginHeader />
-      <LogoutHeader onLoginClick={openOAuthModal} />
+      {isLoggedIn ? 
+        <LoginHeader onLogoutClick={handleLogout} /> : // 로그아웃 버튼 클릭 핸들러 추가
+        <LogoutHeader onLoginClick={openOAuthModal} />
+      }
       <Main>
         <LeftSection></LeftSection>
         <CentralSection></CentralSection>
@@ -92,8 +104,9 @@ const MainPage = () => {
       }
 
       {isPasswordSettingModalOpen && 
-        <PasswordSettingModal onClose={closePasswordSettingModal} />
+          <PasswordSettingModal onClose={() => { handleLogin(); closePasswordSettingModal(); }} />
       }
+
     </Container>
   );
 };
