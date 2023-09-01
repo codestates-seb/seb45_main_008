@@ -78,6 +78,7 @@ const PriceController = styled.input`
   height: 30px;
   border: 1px solid darkgray;
   border-right: none;
+  border-radius: 0.2rem 0 0 0.2rem;
 `;
 
 const DirectionBox = styled.div`
@@ -96,6 +97,11 @@ const DirectionBox = styled.div`
 
     &.PriceUp {
       border-bottom: none;
+      border-radius: 0 0.2rem 0 0;
+    }
+
+    &.PriceDown {
+      border-radius: 0 0 0.2rem 0;
     }
   }
 `;
