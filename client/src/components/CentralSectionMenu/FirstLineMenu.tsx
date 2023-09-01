@@ -1,7 +1,7 @@
 import { styled } from "styled-components";
 
 import ExpandScreenBtn from "./FLineExpandScreenBtn";
-import StockInfoOverview from "./FLineStockInfoOverview";
+import StockOverview from "./FLineStockOverview";
 import BookmarkBtn from "./FLineBookmarkBtn";
 import TradeBtn from "./FLineTradeBtn";
 
@@ -9,7 +9,7 @@ const FirstLineMenu = () => {
   return (
     <Container>
       <ExpandScreenBtn direction="left" />
-      <StockInfoOverview />
+      <StockOverview />
       <BookmarkBtn />
       <TradeBtn type="buying" />
       <TradeBtn type="selling" />

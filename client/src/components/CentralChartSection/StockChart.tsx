@@ -12,12 +12,14 @@ const StockChart = () => {
 export default StockChart;
 
 const options = {
-  title: {
-    text: "Stock Chart with Separate Y Axes on the Right Side",
-  },
+  // title: {
+  //   text: "Stock Chart with Separate Y Axes on the Right Side",
+  // },
   xAxis: {
     type: "category",
     data: [
+      new Date("2023-08-31 14:00").toLocaleDateString(),
+      "2023-08-31 14:00",
       "Day 1",
       "Day 2",
       "Day 3",
@@ -51,7 +53,7 @@ const options = {
   yAxis: [
     {
       type: "value",
-      name: "Price", // 주가 Y 축 라벨
+      // name: "Price", // 주가 Y 축 라벨
       position: "right", // 오른쪽에 위치
     },
   ],
@@ -68,10 +70,10 @@ const options = {
   },
   series: [
     {
-      name: "Price",
+      name: "주가",
       type: "candlestick", // 캔들스틱 시리즈
       data: [
-        [100, 120, 80, 90],
+        [100, 120, 80, 90], // 시가, 종가, 저가, 주가
         [110, 130, 100, 120],
         [90, 110, 70, 100],
         [95, 105, 85, 110],
@@ -84,12 +86,12 @@ const options = {
         [150, 170, 140, 180],
         [160, 180, 150, 190],
         [170, 190, 160, 200],
-        [180, 200, 170, 210],
-        [110, 120, 100, 130],
-        [130, 150, 120, 160],
+        [170, 200, 170, 210],
+        [170, 140, 130, 130],
+        [150, 160, 120, 160],
         [140, 160, 130, 170],
         [150, 170, 140, 180],
-        [105, 125, 95, 120],
+        [140, 125, 95, 120],
         [110, 120, 100, 130],
         [120, 140, 110, 150],
         [130, 150, 120, 160],
@@ -117,5 +119,4 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 20px;
 `;

@@ -13,7 +13,7 @@ const volumeAdditionalInfo: string = "거래량";
 const transactionValue: string = "419억 1,468만";
 const valueAdditionalInfo: string = "거래대금";
 
-const StockInfoOverview = () => {
+const StockOverview = () => {
   return (
     <Container>
       <CorpLogo src={dummyImg} />
@@ -36,7 +36,7 @@ const StockInfoOverview = () => {
   );
 };
 
-export default StockInfoOverview;
+export default StockOverview;
 
 const Container = styled.div`
   flex: 7 0 0;
