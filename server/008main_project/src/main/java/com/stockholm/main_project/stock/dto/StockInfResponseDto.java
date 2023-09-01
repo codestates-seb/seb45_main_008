@@ -1,6 +1,5 @@
 package com.stockholm.main_project.stock.dto;
 
-import com.stockholm.main_project.stock.entity.Company;
 import lombok.Getter;
 import lombok.Setter;
 

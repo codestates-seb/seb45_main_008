@@ -1,7 +1,5 @@
 package com.stockholm.main_project.stock.service;
 
-
-//import com.stockholm.main_project.stock.stockdata.dto.StockasbiDataConverter;
 import com.stockholm.main_project.stock.dto.StockasbiDataDto;
 import com.stockholm.main_project.stock.dto.StockMinDto;
 import com.stockholm.main_project.stock.repository.CompanyRepository;
