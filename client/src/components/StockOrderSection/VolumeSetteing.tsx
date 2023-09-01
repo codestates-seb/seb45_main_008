@@ -84,6 +84,8 @@ const VolumeSettingBox = styled.div`
 const VolumeController = styled.input`
   flex: 1 0 0;
   height: 30px;
+  border: 1px solid darkgray;
+  border-right: none;
 `;
 
 const DirectionBox = styled.div`
@@ -97,6 +99,12 @@ const DirectionBox = styled.div`
     justify-content: center;
     align-items: center;
     font-size: 10px;
+    border: 1px solid darkgray;
+    border-radius: 0%;
+
+    &.VolumeUp {
+      border-bottom: none;
+    }
   }
 `;
 
