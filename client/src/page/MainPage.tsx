@@ -87,7 +87,12 @@ const MainPage = () => {
         onEmailLoginClick={openEmailLoginModal} 
         onEmailSignupClick={openEmailSignupModal} 
       />}
-      {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} />}
+      {isEmailLoginModalOpen && 
+        <EmailLoginModal 
+          onClose={closeEmailLoginModal}
+          onLogin={handleLogin}  // 추가된 prop
+        />
+      }
       
       {isEmailSignupModalOpen && 
         <EmailSignupModal 

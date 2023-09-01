@@ -1,3 +1,5 @@
+import axios from 'axios';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const strings = {
@@ -7,38 +9,61 @@ const strings = {
     nextStepText: "인증 후 다음단계",
     codeHintText: "이메일로 전송된 코드를 입력하세요",
     termsText: "개인정보 처리방침 및 서비스 이용약관에 동의합니다"
-  };
-  
-  const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({ onClose, onNextStep }) => {
+};
+
+const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({ onClose, onNextStep }) => {
+    const [email, setEmail] = useState('sample@example.com');  // 이메일 상태
+    const [verificationCode, setVerificationCode] = useState('');  // 인증코드 상태
+
+    const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setEmail(event.target.value);
+    };
+
+    const handleVerificationCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setVerificationCode(event.target.value);
+    };
+
+    const handleNextStepClick = async () => {
+        try {
+            const response = await axios.post('http://localhost:8080/email/confirm', { email, code: verificationCode });
+            if (response.status === 200) {
+                onNextStep();
+            } else {
+                console.error('Error during email confirmation');
+            }
+        } catch (error) {
+            console.error('Error during email confirmation:', error);
+        }
+    };
+
     return (
-      <ModalBackground>
-        <ModalContainer>
-          <CloseButton onClick={onClose}>&times;</CloseButton>
-          <Title>{strings.titleText}</Title>
-          <Label>{strings.emailLabelText}</Label>
-          <Input type="email" value="sample@example.com" disabled />
-          <Label>{strings.codeLabelText}</Label>
-          <Input type="text" placeholder={strings.codeHintText} />
-          <HintText>{strings.codeHintText}</HintText>
-          <TermsCheckbox>
-            <input type="checkbox" id="terms" />
-            <label htmlFor="terms">{strings.termsText}</label>
-          </TermsCheckbox>
-          <SignupButton onClick={onNextStep}>
-            {strings.nextStepText}
-          </SignupButton>
-        </ModalContainer>
-      </ModalBackground>
+        <ModalBackground>
+            <ModalContainer>
+                <CloseButton onClick={onClose}>&times;</CloseButton>
+                <Title>{strings.titleText}</Title>
+                <Label>{strings.emailLabelText}</Label>
+                <Input type="email" value={email} onChange={handleEmailChange} />
+                <Label>{strings.codeLabelText}</Label>
+                <Input type="text" placeholder={strings.codeHintText} value={verificationCode} onChange={handleVerificationCodeChange} />
+                <HintText>{strings.codeHintText}</HintText>
+                <TermsCheckbox>
+                    <input type="checkbox" id="terms" />
+                    <label htmlFor="terms">{strings.termsText}</label>
+                </TermsCheckbox>
+                <SignupButton onClick={handleNextStepClick}>
+                    {strings.nextStepText}
+                </SignupButton>
+            </ModalContainer>
+        </ModalBackground>
     );
-  };
-  
+};
 
 export default EmailVerificationModal;
 
 type EmailVerificationModalProps = {
     onClose: () => void;
     onNextStep: () => void;
-  };
+};
 
 const ModalBackground = styled.div`
   display: flex;
@@ -53,7 +78,7 @@ const ModalBackground = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  position: relative;
+position: relative;
   background-color: white;
   padding: 20px;
   width: 400px;

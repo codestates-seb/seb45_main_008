@@ -1,6 +1,8 @@
+import axios from 'axios';
 import styled from 'styled-components';
+import React, { useState } from 'react';
 
-const EmailLoginModal = ({ onClose }: { onClose: () => void }) => {
+const EmailLoginModal = ({ onClose, onLogin }: { onClose: () => void, onLogin: () => void }) => {
   // 문자열 변수 정의
   const titleText = "이메일로 로그인";
   const emailLabelText = "이메일";
@@ -10,17 +12,42 @@ const EmailLoginModal = ({ onClose }: { onClose: () => void }) => {
   const noAccountText = "계정이 없습니까?";
   const registerButtonText = "회원가입하기";
 
+  const [email, setEmail] = useState('');  // 입력된 이메일 상태
+  const [password, setPassword] = useState('');  // 입력된 비밀번호 상태
+
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+  };
+
+  const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+  };
+
+  const handleLoginClick = async () => {
+    try {
+      const response = await axios.post('http://localhost:8080/login', { email, password });
+      if (response.status === 200) {
+        onLogin();
+        onClose();
+      } else {
+        console.error('Error during login');
+      }
+    } catch (error) {
+      console.error('Error during login:', error);
+    }
+  };
+
   return (
     <ModalBackground>
       <ModalContainer>
-        <CloseButton onClick={onClose}>&times;</CloseButton> {/* 닫기 버튼 추가 */}
+        <CloseButton onClick={onClose}>&times;</CloseButton>
         <Title>{titleText}</Title>
         <Label>{emailLabelText}</Label>
-        <Input type="email" placeholder="이메일을 입력하세요" />
+        <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} />
         <Label>{passwordLabelText}</Label>
-        <Input type="password" placeholder="비밀번호를 입력하세요" />
+        <Input type="password" placeholder="비밀번호를 입력하세요" value={password} onChange={handlePasswordChange} />
         <RightAlignedButton>{findPasswordText}</RightAlignedButton>
-        <LoginButton>{loginButtonText}</LoginButton>
+        <LoginButton onClick={handleLoginClick}>{loginButtonText}</LoginButton>
         <BottomText>
           {noAccountText} <RegisterButton>{registerButtonText}</RegisterButton>
         </BottomText>

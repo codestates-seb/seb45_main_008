@@ -1,4 +1,6 @@
+import axios from 'axios';
 import styled from 'styled-components';
+import React, { useState } from 'react';
 
 const strings = {
   titleText: "이메일로 회원가입",
@@ -7,14 +9,33 @@ const strings = {
 };
 
 const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestVerification }) => {
+  const [email, setEmail] = useState(''); // 입력된 이메일을 관리하는 상태
+
+  const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+  };
+
+  const handleVerificationRequest = async () => {
+    try {
+      const response = await axios.post('http://localhost:8080/email/send', { email });
+      if (response.status === 200) {
+        onRequestVerification();
+      } else {
+        console.error('Error sending verification email');
+      }
+    } catch (error) {
+      console.error('Error sending verification email:', error);
+    }
+  };
+
   return (
     <ModalBackground>
       <ModalContainer>
         <CloseButton onClick={onClose}>&times;</CloseButton>
         <Title>{strings.titleText}</Title>
         <Label>{strings.emailLabelText}</Label>
-        <Input type="email" placeholder="이메일을 입력하세요" />
-        <SignupButton onClick={onRequestVerification}>
+        <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} />
+        <SignupButton onClick={handleVerificationRequest}>
           {strings.requestVerificationText}
         </SignupButton>
       </ModalContainer>

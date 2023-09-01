@@ -1,3 +1,5 @@
+import axios from 'axios';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const strings = {
@@ -9,26 +11,57 @@ const strings = {
   };
   
   const PasswordSettingModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
-    const handleConfirmClick = () => {
-        console.log("Confirm button clicked!");  // 로그 추가
-        onClose(); // 모달을 닫습니다.
+    const [password, setPassword] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
+    const [nickname, setNickname] = useState('');
+
+    const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setPassword(e.target.value);
     };
+
+    const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setConfirmPassword(e.target.value);
+    };
+
+    const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setNickname(e.target.value);
+    };
+
+    const handleConfirmClick = async () => {
+        try {
+            const response = await axios.post('http://localhost:8080/members', {
+                password,
+                confirmPassword,
+                nickname
+            });
+
+            if (response.status === 200) {
+                console.log('Data sent successfully');
+                onClose();
+            } else {
+                console.error('Error sending data');
+            }
+        } catch (error) {
+            console.error('Error sending data:', error);
+        }
+    };
+
     return (
-      <ModalBackground>
-        <ModalContainer>
-          <CloseButton onClick={onClose}>&times;</CloseButton>
-          <Title>{strings.titleText}</Title>
-          <Label>{strings.passwordLabelText}</Label>
-          <Input type="password" placeholder="8~16자리 비밀번호를 입력해주세요" />
-          <Label>{strings.confirmPasswordLabelText}</Label>
-          <Input type="password" placeholder="비밀번호를 다시 입력해주세요" />
-          <Label>{strings.nicknameLabelText}</Label>
-          <Input type="text" placeholder="닉네임을 입력해주세요" />
-          <ConfirmButton onClick={handleConfirmClick}>{strings.confirmButtonText}</ConfirmButton>
-        </ModalContainer>
-      </ModalBackground>
+        <ModalBackground>
+            <ModalContainer>
+                <CloseButton onClick={onClose}>&times;</CloseButton>
+                <Title>{strings.titleText}</Title>
+                <Label>{strings.passwordLabelText}</Label>
+                <Input type="password" placeholder="8~16자리 비밀번호를 입력해주세요" value={password} onChange={handlePasswordChange} />
+                <Label>{strings.confirmPasswordLabelText}</Label>
+                <Input type="password" placeholder="비밀번호를 다시 입력해주세요" value={confirmPassword} onChange={handleConfirmPasswordChange} />
+                <Label>{strings.nicknameLabelText}</Label>
+                <Input type="text" placeholder="닉네임을 입력해주세요" value={nickname} onChange={handleNicknameChange} />
+                <ConfirmButton onClick={handleConfirmClick}>{strings.confirmButtonText}</ConfirmButton>
+            </ModalContainer>
+        </ModalBackground>
     );
-  };
+};
   
   export default PasswordSettingModal;
   

@@ -1,6 +1,7 @@
 import styled from 'styled-components';
 import googleLogo from '../../asset/images/GoogleLogo.svg'; 
 import kakaoLogo from '../../asset/images/KakaoLogo.svg';  
+import axios from 'axios';
 
 
 
@@ -12,16 +13,48 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
     const emailLoginText = "이메일로 로그인";
     const emailSignupText = "이메일로 회원가입";
 
+
+    const handleGoogleLogin = async () => {
+      try {
+          const response = await axios.post('http://localhost:8080/auth/google');
+          if (response.status === 200) {
+              // 로그인 처리
+              console.log("Successfully logged in with Google!");
+              onClose();
+          } else {
+              console.error("Error logging in with Google");
+          }
+      } catch (error) {
+          console.error("Error logging in with Google:", error);
+      }
+  };
+
+  const handleKakaoLogin = async () => {
+      try {
+          const response = await axios.post('http://localhost:8080/auth/kakao');
+          if (response.status === 200) {
+              // 로그인 처리
+              console.log("Successfully logged in with Kakao!");
+              onClose();
+          } else {
+              console.error("Error logging in with Kakao");
+          }
+      } catch (error) {
+          console.error("Error logging in with Kakao:", error);
+      }
+  };
+
     return (
       <ModalBackground>
         <ModalContainer>
           <CloseButton onClick={onClose}>&times;</CloseButton>
           <Title>{titleText}</Title>
-          <GoogleButton>
+          <GoogleButton onClick={handleGoogleLogin}>
             <LogoImage src={googleLogo} alt="Google Logo" />
             {googleLoginText}
           </GoogleButton>
-          <KakaoButton>
+      
+          <KakaoButton onClick={handleKakaoLogin}>
             <LogoImage src={kakaoLogo} alt="Kakao Logo" />
             {kakaoLoginText}
           </KakaoButton>
