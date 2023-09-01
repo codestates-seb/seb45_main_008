@@ -1,28 +1,33 @@
 package com.stockholm.main_project.stock.controller;
 
 
+import com.stockholm.main_project.stock.dto.StockasbiDataDto;
 import com.stockholm.main_project.stock.service.ApiCallService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RestController;
 
-@Controller
+@RestController
 public class StockController {
 
-    @Autowired
-    private ApiCallService apiCallService;
+    private final ApiCallService apiCallService;
+
+    public StockController(ApiCallService apiCallService) {
+        this.apiCallService = apiCallService;
+    }
+
+    @GetMapping("/stockasbi")
+    public ResponseEntity getStockasbiData() {
+        StockasbiDataDto stockDatas = apiCallService.getStockasbiDataFromApi("005930");
+        return ResponseEntity.ok(stockDatas);
+    }
+
+    @GetMapping("/kospi")
+    public ResponseEntity getKospiMonth() {
+        String kospi = apiCallService.getKospiMonthFromApi();
+        return ResponseEntity.ok(kospi);
+    }
 
 
-//    @ResponseBody
-//    @GetMapping("/stockasbi")
-//    public ResponseEntity getStockasbiData() {
-//        List<StockasbiDataDto> stockDatas = stockService.getStockasbiData();
-//        return ResponseEntity.ok(stockDatas);
-//    }
-//    @ResponseBody
-//    @GetMapping("/stockmin")
-//    public ResponseEntity getStockMinData() {
-//        List<StockMinDto> stockDatas = stockService.getStockMinData();
-//        return ResponseEntity.ok(stockDatas);
-//    }
 }
 

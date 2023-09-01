@@ -36,3 +36,4 @@ stock-url:
   token: "https://openapivts.koreainvestment.com:29443/oauth2/tokenP"
   stockasbi: "https://openapivts.koreainvestment.com:29443/uapi/domestic-stock/v1/quotations/inquire-asking-price-exp-ccn"
   stockhour: "https://openapivts.koreainvestment.com:29443/uapi/domestic-stock/v1/quotations/inquire-time-itemchartprice"
+  kospi: "https://openapivts.koreainvestment.com:29443/uapi/domestic-stock/v1/quotations/inquire-daily-indexchartprice"

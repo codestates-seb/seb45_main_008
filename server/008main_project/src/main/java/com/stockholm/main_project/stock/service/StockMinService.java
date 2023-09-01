@@ -6,13 +6,17 @@ import com.stockholm.main_project.stock.entity.StockMin;
 import com.stockholm.main_project.stock.mapper.StockMapper;
 import com.stockholm.main_project.stock.repository.StockMinRepository;
 import com.stockholm.main_project.utils.Time;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Transactional
+@Slf4j
 public class StockMinService {
 
     private final CompanyService companyService;
@@ -32,10 +36,11 @@ public class StockMinService {
         LocalDateTime now = LocalDateTime.now();
         String strHour = Time.strHour(now);
 
+
         for(int i = 0; i < companyList.size(); i++) {
             // 주식 코드로 회사 불러오기
             Company company = companyService.getCompany(companyList.get(i).getCode());
-            // api 호출하기
+            // 분봉 api 호출하기
             StockMinDto stockMinDto = apiCallService.getStockMinDataFromApi(company.getCode(), strHour);
             // mapper로 정리 된 값 받기
             List<StockMin> stockMinList = stockMinDto.getOutput2().stream()
@@ -49,7 +54,7 @@ public class StockMinService {
             // 저장한다
             stockMinRepository.saveAll(stockMinList);
 
-            Thread.sleep(30);
+            Thread.sleep(180);
         }
     }
 

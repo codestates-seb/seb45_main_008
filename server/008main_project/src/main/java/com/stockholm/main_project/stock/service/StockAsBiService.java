@@ -5,11 +5,15 @@ import com.stockholm.main_project.stock.entity.Company;
 import com.stockholm.main_project.stock.entity.StockAsBi;
 import com.stockholm.main_project.stock.mapper.StockMapper;
 import com.stockholm.main_project.stock.repository.StockAsBiRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.List;
 
 @Service
+@Transactional
+@Slf4j
 public class StockAsBiService {
 
     private final StockAsBiRepository stockAsBiRepository;
@@ -38,19 +42,18 @@ public class StockAsBiService {
             StockasbiDataDto stockasbiDataDto = apiCallService.getStockasbiDataFromApi(company.getCode());
             // mapper로 정리 된 값 받기
             StockAsBi stockAsBi = stockMapper.stockAsBiOutput1ToStockAsBi(stockasbiDataDto.getOutput1());
-            // 회사에 1대1 매칭된 호가 컬럼 불러오기
-            StockAsBi stock = company.getStockAsBi();
-            // 호가 컬럼의 id를 새로운 호가에 붙혀준다
-            stockAsBi.setStockAsBiId(stock.getStockAsBiId());
+
             // 회사 등록
             stockAsBi.setCompany(company);
             // 호가 컬럼을 새로운 호가 컬럼으로 변경한다
+            StockAsBi oldStockAsBi = company.getStockAsBi();
+            stockAsBi.setStockAsBiId(oldStockAsBi.getStockAsBiId());
             company.setStockAsBi(stockAsBi);
 
             // 저장한다
             companyService.saveCompany(company);
 
-            Thread.sleep(30);
+            Thread.sleep(180);
         }
     }
 

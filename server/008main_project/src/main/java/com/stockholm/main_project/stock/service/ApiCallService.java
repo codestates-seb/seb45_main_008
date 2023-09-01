@@ -5,6 +5,7 @@ package com.stockholm.main_project.stock.service;
 import com.stockholm.main_project.stock.dto.StockasbiDataDto;
 import com.stockholm.main_project.stock.dto.StockMinDto;
 import com.stockholm.main_project.stock.repository.CompanyRepository;
+import com.stockholm.main_project.utils.Time;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,8 +14,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.http.*;
 import org.springframework.web.client.RestTemplate;
 
+import javax.transaction.Transactional;
+import java.time.LocalDateTime;
+
 
 @Service
+@Transactional
 @Slf4j
 public class ApiCallService {
     @Getter
@@ -36,6 +41,10 @@ public class ApiCallService {
     @Getter
     @Value("${stock-url.stockhour}")
     private String STOCKHOUR_URL;
+
+    @Getter
+    @Value("${stock-url.kospi}")
+    private String KOSPI_URL;
 
 
     private final String FID_ETC_CLS_CODE = "";
@@ -72,13 +81,12 @@ public class ApiCallService {
         if (response.getStatusCode().is2xxSuccessful()) {
             StockasbiDataDto stockasbiDataDto = response.getBody();
             return stockasbiDataDto;
-            // 응답 바디를 MyResponseClass 객체로 매핑하여 처리
         } else {
             log.info("error");
             return null;
         }
 
-        }
+    }
 
     public StockMinDto getStockMinDataFromApi(String stockCode, String strHour) {
         String token = tokenService.getAccessToken();
@@ -99,11 +107,41 @@ public class ApiCallService {
         if (response.getStatusCode().is2xxSuccessful()) {
             StockMinDto stockMinDto = response.getBody();
             return stockMinDto;
-            // 응답 바디를 MyResponseClass 객체로 매핑하여 처리
+
         } else {
             log.info("error");
             return null;
         }
 
     }
+
+    public String getKospiMonthFromApi(){
+        String token = tokenService.getAccessToken();
+
+        LocalDateTime localDateTime = LocalDateTime.now();
+
+        String strMonth = Time.strMonth(localDateTime);
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + token);
+        headers.add("appkey", APP_KEY);
+        headers.add("appsecret", APP_SECRET);
+        headers.add("tr_id", "FHKUP03500100");
+
+        String uri = KOSPI_URL + "?FID_COND_MRKT_DIV_CODE=U&FID_INPUT_ISCD=" + "0001" + "&FID_INPUT_DATE_1=" + "20230101"
+                +"&FID_INPUT_DATE_2=" + strMonth + "&FID_PERIOD_DIV_CODE=" + "M";
+
+        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+
+        ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            return response.getBody();
+        } else {
+            log.info("error");
+            return null;
+        }
+
+    }
+
 }

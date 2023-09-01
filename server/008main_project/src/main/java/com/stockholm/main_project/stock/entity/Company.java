@@ -16,15 +16,13 @@ public class Company extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long companyId;
 
-    @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
-    private StockAsBi stockAsBi;
-
     @Column
     private String code;
 
     @Column
     private String korName;
 
-    @Column
-    private String information;
+    @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
+    private StockAsBi stockAsBi;
+
 }

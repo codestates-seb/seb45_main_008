@@ -15,4 +15,11 @@ public class Time {
 
         return formattedDateTime;
     }
+
+    public static String strMonth(LocalDateTime localDateTime) {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyyMMdd");
+        String formattedDateTime = localDateTime.format(formatter);
+
+        return formattedDateTime;
+    }
 }
