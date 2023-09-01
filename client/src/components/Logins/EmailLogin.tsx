@@ -1,8 +1,14 @@
-import axios from 'axios';
-import styled from 'styled-components';
-import React, { useState } from 'react';
+import axios from "axios";
+import styled from "styled-components";
+import React, { useState } from "react";
 
-const EmailLoginModal = ({ onClose, onLogin }: { onClose: () => void, onLogin: () => void }) => {
+const EmailLoginModal = ({
+  onClose,
+  onLogin,
+}: {
+  onClose: () => void;
+  onLogin: () => void;
+}) => {
   // 문자열 변수 정의
   const titleText = "이메일로 로그인";
   const emailLabelText = "이메일";
@@ -12,8 +18,8 @@ const EmailLoginModal = ({ onClose, onLogin }: { onClose: () => void, onLogin: (
   const noAccountText = "계정이 없습니까?";
   const registerButtonText = "회원가입하기";
 
-  const [email, setEmail] = useState('');  // 입력된 이메일 상태
-  const [password, setPassword] = useState('');  // 입력된 비밀번호 상태
+  const [email, setEmail] = useState(""); // 입력된 이메일 상태
+  const [password, setPassword] = useState(""); // 입력된 비밀번호 상태
 
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -25,15 +31,18 @@ const EmailLoginModal = ({ onClose, onLogin }: { onClose: () => void, onLogin: (
 
   const handleLoginClick = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/login', { email, password });
+      const response = await axios.post("http://localhost:8080/login", {
+        email,
+        password,
+      });
       if (response.status === 200) {
         onLogin();
         onClose();
       } else {
-        console.error('Error during login');
+        console.error("Error during login");
       }
     } catch (error) {
-      console.error('Error during login:', error);
+      console.error("Error during login:", error);
     }
   };
 
@@ -43,9 +52,19 @@ const EmailLoginModal = ({ onClose, onLogin }: { onClose: () => void, onLogin: (
         <CloseButton onClick={onClose}>&times;</CloseButton>
         <Title>{titleText}</Title>
         <Label>{emailLabelText}</Label>
-        <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} />
+        <Input
+          type="email"
+          placeholder="이메일을 입력하세요"
+          value={email}
+          onChange={handleEmailChange}
+        />
         <Label>{passwordLabelText}</Label>
-        <Input type="password" placeholder="비밀번호를 입력하세요" value={password} onChange={handlePasswordChange} />
+        <Input
+          type="password"
+          placeholder="비밀번호를 입력하세요"
+          value={password}
+          onChange={handlePasswordChange}
+        />
         <RightAlignedButton>{findPasswordText}</RightAlignedButton>
         <LoginButton onClick={handleLoginClick}>{loginButtonText}</LoginButton>
         <BottomText>
@@ -71,7 +90,7 @@ const ModalBackground = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  position: relative;  
+  position: relative;
   background-color: white;
   padding: 20px;
   width: 400px;
@@ -85,7 +104,7 @@ const CloseButton = styled.button`
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px solid lightgray;
   font-size: 1.5rem;
   cursor: pointer;
@@ -94,7 +113,7 @@ const CloseButton = styled.button`
 const Title = styled.h2`
   margin-bottom: 20px;
   font-size: 1.6rem; // 크기를 줄입니다.
-  font-weight: 400;  // 굵기를 줄입니다.
+  font-weight: 400; // 굵기를 줄입니다.
 `;
 
 const Label = styled.label`
@@ -138,6 +157,6 @@ const BottomText = styled.div`
 const RegisterButton = styled.button`
   background: none;
   border: none;
-  color: slategray;  // 글자색을 변경합니다.
+  color: slategray; // 글자색을 변경합니다.
   cursor: pointer;
 `;

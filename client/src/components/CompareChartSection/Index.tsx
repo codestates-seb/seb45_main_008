@@ -1,6 +1,7 @@
 import { styled } from "styled-components";
 
 import SearchBox from "./SearchBox";
+import CompareList from "./CompareList";
 
 const titleText: string = "비교차트";
 
@@ -12,6 +13,7 @@ const CompareChartSection = () => {
         <CloseBtn>&#10005;</CloseBtn>
       </UpperBar>
       <SearchBox />
+      <CompareList />
     </Container>
   );
 };
@@ -22,7 +24,8 @@ const Container = styled.div`
   position: fixed;
   left: 0px;
   transition: 0.3s left ease-in-out;
-
+  display: flex;
+  flex-direction: column;
   min-width: 248px;
   height: 100%;
   border: 1px solid black;

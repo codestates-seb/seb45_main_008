@@ -8,7 +8,7 @@ import EmailSignupModal from "../components/Signups/EmailSignup";
 import EmailVerificationModal from "../components/Signups/EmailCertify";
 import PasswordSettingModal from "../components/Signups/Password";
 
-// 왼쪽 비교차트
+import CentralChartSection from "../components/CentralChartSection/Index";
 import CompareChartSection from "../components/CompareChartSection/Index";
 
 const MainPage = () => {
@@ -86,7 +86,7 @@ const MainPage = () => {
       <Main>
         <CompareChartSection />
         <LeftSection></LeftSection>
-        <CentralSection></CentralSection>
+        <CentralChartSection />
         <RightSection></RightSection>
       </Main>
       {isOAuthModalOpen && (
@@ -156,10 +156,4 @@ const RightSection = styled.section`
   min-width: 400px;
   height: 100%;
   border: 1px solid black;
-`;
-
-const CentralSection = styled.section`
-  flex: 6.7 0 0;
-  min-width: 630px;
-  height: 100%;
 `;
