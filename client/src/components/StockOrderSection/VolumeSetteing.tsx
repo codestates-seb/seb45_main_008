@@ -121,7 +121,7 @@ const PercentageBox = styled.div`
   margin-top: 8px;
 
   & button {
-    width: 46px;
+    width: 56px;
     height: 28px;
     border: none;
     border-radius: 0.2rem;
