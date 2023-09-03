@@ -1,17 +1,21 @@
+import { useSelector } from "react-redux";
 import { styled } from "styled-components";
+import { StateProps } from "../../models/stateProps";
+import { OrderTypeProps } from "../../models/orderTypeProps";
 
 const availableMoneyText01: string = "최대";
 const availableMoneyText02: string = "원";
 const totalAmountText01: string = "주문총액";
 const totalAmountText02: string = "원";
-const orderBtnText: string = "매수";
 
 // dummyData
 import { availableMoney } from "./dummyData";
 const dummyAmount: string = "0";
+const dummyMoney = availableMoney.toLocaleString();
 
 const StockOrderBtn = () => {
-  const dummyMoney = availableMoney.toLocaleString();
+  const stockOrderType = useSelector((state: StateProps) => state.stockOrderType);
+  const orderBtnText: string = stockOrderType ? "매도" : "매수";
 
   return (
     <Container>
@@ -25,7 +29,7 @@ const StockOrderBtn = () => {
         <div className="totalAmount">{dummyAmount}</div>
         <div>{totalAmountText02}</div>
       </TotalAmount>
-      <OrderBtn>{orderBtnText}</OrderBtn>
+      <OrderBtn ordertype={stockOrderType}>{orderBtnText}</OrderBtn>
     </Container>
   );
 };
@@ -73,13 +77,13 @@ const TotalAmount = styled.div`
   }
 `;
 
-const OrderBtn = styled.button`
+const OrderBtn = styled.button<OrderTypeProps>`
   width: 100%;
   height: 32px;
   margin-top: 16px;
   border: none;
   border-radius: 0.25rem;
-  background-color: #ed2926;
+  background-color: ${(props) => (props.ordertype ? "#2679ed" : "#e22926")};
   color: #ffffff;
   font-weight: 400;
 `;

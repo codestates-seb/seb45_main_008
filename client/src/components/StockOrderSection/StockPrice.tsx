@@ -43,7 +43,7 @@ const PriceInfo = (props: PriceInfoProps) => {
   // 11번째 가격 -> 렌더링 시 정중앙에 위치하도록
   useEffect(() => {
     ref.current?.focus();
-    ref.current?.scrollIntoView({ block: "center" });
+    ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
   }, []);
 
   if (index === 10) {

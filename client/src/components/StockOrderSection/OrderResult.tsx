@@ -30,7 +30,6 @@ const Title = styled.div`
   font-weight: 500;
   padding-left: 16px;
   padding-bottom: 16px;
-  /* border-bottom: 1px solid black; */
 `;
 
 const OrderPending = styled.div`
