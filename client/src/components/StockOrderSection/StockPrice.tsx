@@ -1,5 +1,8 @@
+import { useSelector, useDispatch } from "react-redux";
 import { useRef, useEffect } from "react";
 import { styled } from "styled-components";
+import { setStockOrderPrice } from "../../reducer/StockOrderPrice-Reducer";
+import { StateProps } from "../../models/stateProps";
 
 // dummyData
 import { dummyPrice } from "./dummyData";
@@ -14,13 +17,7 @@ const StockPrice = () => {
       </HighFigure>
       <PriceList>
         {dummyPrice.map((item, idx) => (
-          <PriceInfo
-            key={item.price}
-            index={idx}
-            price={item.price}
-            changeRate={item.changeRate}
-            volume={item.volume}
-          />
+          <PriceInfo key={item.price} index={idx} price={item.price} changeRate={item.changeRate} volume={item.volume} />
         ))}
       </PriceList>
       <LowerFigure>
@@ -37,6 +34,12 @@ const PriceInfo = (props: PriceInfoProps) => {
   const { index, price, changeRate, volume } = props;
   const ref = useRef<HTMLDivElement | null>(null);
 
+  const stockOrderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
+  const dispatch = useDispatch();
+  const handleSetOrderPrice = () => {
+    dispatch(setStockOrderPrice(price));
+  };
+
   const changeRateText01: string = changeRate > 0 ? "+" : "";
   const changeRateText02: string = "%";
 
@@ -48,7 +51,7 @@ const PriceInfo = (props: PriceInfoProps) => {
 
   if (index === 10) {
     return (
-      <InfoContainer index={index} ref={ref}>
+      <InfoContainer index={index} ref={ref} price={price} orderPrice={stockOrderPrice} onClick={handleSetOrderPrice}>
         <Price>
           <div className="price">{price}</div>
           <div className="changeRate">
@@ -59,19 +62,14 @@ const PriceInfo = (props: PriceInfoProps) => {
         </Price>
         <Volume index={index}>
           <div className="volume">{volume}</div>
-          <VolumePercentge
-            index={index}
-            volume={volume}
-            upperPriceVolumeSum={upperPriceVolumeSum}
-            lowerPriceVolumeSum={lowerPriceVolumeSum}
-          />
+          <VolumePercentge index={index} volume={volume} upperPriceVolumeSum={upperPriceVolumeSum} lowerPriceVolumeSum={lowerPriceVolumeSum} />
         </Volume>
       </InfoContainer>
     );
   }
 
   return (
-    <InfoContainer index={index}>
+    <InfoContainer index={index} price={price} orderPrice={stockOrderPrice} onClick={handleSetOrderPrice}>
       <Price>
         <div className="price">{price}</div>
         <div className="changeRate">
@@ -82,12 +80,7 @@ const PriceInfo = (props: PriceInfoProps) => {
       </Price>
       <Volume index={index}>
         <div className="volume">{volume}</div>
-        <VolumePercentge
-          index={index}
-          volume={volume}
-          upperPriceVolumeSum={upperPriceVolumeSum}
-          lowerPriceVolumeSum={lowerPriceVolumeSum}
-        />
+        <VolumePercentge index={index} volume={volume} upperPriceVolumeSum={upperPriceVolumeSum} lowerPriceVolumeSum={lowerPriceVolumeSum} />
       </Volume>
     </InfoContainer>
   );
@@ -103,6 +96,8 @@ interface PriceInfoProps {
 
 interface InfoContainerProps {
   index: number;
+  price: number;
+  orderPrice: number;
 }
 
 interface VolumeProps {
@@ -147,6 +142,7 @@ const InfoContainer = styled.div<InfoContainerProps>`
   margin-bottom: 2px;
   background-color: ${(props) => (props.index > 9 ? "#FDE8E7" : "#E7F0FD")};
   border: ${(props) => (props.index === 10 ? "1px solid #2F4F4F" : "none")};
+  border-left: ${(props) => (props.price === props.orderPrice ? "3px solid red" : props.index > 9 ? "3px solid #FDE8E7" : "3px solid #E7F0FD")};
   display: flex;
   flex-direction: row;
 `;
@@ -154,7 +150,7 @@ const InfoContainer = styled.div<InfoContainerProps>`
 const Price = styled.div`
   width: 50%;
   display: flex;
-  padding-right: 8px;
+  padding-right: 11px;
   flex-direction: column;
   align-items: flex-end;
 
@@ -190,12 +186,7 @@ const Volume = styled.div<VolumeProps>`
 `;
 
 const VolumePercentge = styled.span<VolumePercentageProps>`
-  width: ${(props) =>
-    (props.volume /
-      (props.index < 10
-        ? props.upperPriceVolumeSum
-        : props.lowerPriceVolumeSum)) *
-    100}%;
+  width: ${(props) => (props.volume / (props.index < 10 ? props.upperPriceVolumeSum : props.lowerPriceVolumeSum)) * 100}%;
 
   height: 2px;
   background-color: ${(props) => (props.index < 10 ? "#2679ed" : "#e22926")};

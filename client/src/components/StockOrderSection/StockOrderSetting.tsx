@@ -33,7 +33,7 @@ const StockOrderSetting = () => {
           {orderType02}
         </Selling>
       </OrderType>
-      <TypeDividingLine />
+      <OrderTypeDividingLine />
       <PriceSetting />
       <VolumeSetting />
       <StockOrderBtn />
@@ -43,7 +43,7 @@ const StockOrderSetting = () => {
 
 export default StockOrderSetting;
 
-const TypeDividingLine = () => {
+const OrderTypeDividingLine = () => {
   const stockOrderType = useSelector((state: StateProps) => state.stockOrderType);
 
   return (
@@ -63,9 +63,10 @@ const Container = styled.div`
 
 const OrderType = styled.div`
   width: 100%;
-  height: 32px;
+  height: 31px;
   display: flex;
   flex-direction: row;
+  color: #9999;
 `;
 
 const Buying = styled.div<OrderTypeProps>`
@@ -76,6 +77,7 @@ const Buying = styled.div<OrderTypeProps>`
   height: 31px;
   font-size: 14px;
   color: ${(props) => !props.ordertype && "#e22926"};
+  transition: color 0.5s;
 `;
 
 const Selling = styled.div<OrderTypeProps>`
@@ -86,6 +88,7 @@ const Selling = styled.div<OrderTypeProps>`
   height: 31px;
   font-size: 14px;
   color: ${(props) => props.ordertype && "#2679ed"};
+  transition: color 0.5s;
 `;
 
 const DividingContainer = styled.div<OrderTypeProps>`
@@ -96,11 +99,11 @@ const DefaultLine = styled.div<OrderTypeProps>`
   transform: translateX(${(props) => (props.ordertype ? "50%" : "0")});
   transition: transform 0.3s ease-in-out;
   width: 100%;
-  height: 1.2px;
+  height: 2px;
 `;
 
 const DivdingLine = styled.div<OrderTypeProps>`
   width: 50%;
-  height: 1.2px;
+  height: 2px;
   background-color: ${(props) => (props.ordertype ? "#2679ed" : "#e22926")};
 `;

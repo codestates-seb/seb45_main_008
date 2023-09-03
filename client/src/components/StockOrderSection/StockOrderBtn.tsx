@@ -84,6 +84,7 @@ const OrderBtn = styled.button<OrderTypeProps>`
   border: none;
   border-radius: 0.25rem;
   background-color: ${(props) => (props.ordertype ? "#2679ed" : "#e22926")};
+  transition: background-color 0.5s;
   color: #ffffff;
   font-weight: 400;
 `;

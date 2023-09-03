@@ -1,5 +1,6 @@
 // dummyData
 export const dummyPrice: dummyProps[] = [
+  { price: 200, changeRate: 90, volume: 300 },
   { price: 190, changeRate: 90, volume: 500 },
   { price: 180, changeRate: 80, volume: 120 },
   { price: 170, changeRate: 70, volume: 78 },
@@ -19,8 +20,8 @@ export const dummyPrice: dummyProps[] = [
   { price: 30, changeRate: -70, volume: 1100 },
   { price: 20, changeRate: -80, volume: 800 },
   { price: 10, changeRate: -90, volume: 500 },
-  { price: 5, changeRate: -95, volume: 800 },
 ];
+export const standardPrice = 100;
 export const upperPriceVolumeSum = 1000;
 export const lowerPriceVolumeSum = 2000;
 export const availableMoney = 10000000;
