@@ -7,8 +7,8 @@ import EmailLoginModal from "../components/Logins/EmailLogin";
 import EmailSignupModal from "../components/Signups/EmailSignup";
 import EmailVerificationModal from "../components/Signups/EmailCertify";
 import PasswordSettingModal from "../components/Signups/Password";
-
 import CentralChartSection from "../components/CentralChartSection/Index";
+import WatchList from "../components/WatchList";
 
 const MainPage = () => {
   const [isOAuthModalOpen, setOAuthModalOpen] = useState(false);
@@ -83,7 +83,9 @@ const MainPage = () => {
         <LogoutHeader onLoginClick={openOAuthModal} />
       )}
       <Main>
-        <LeftSection></LeftSection>
+        <LeftSection>
+          <WatchList />
+        </LeftSection>
         <CentralChartSection />
         <RightSection></RightSection>
       </Main>
