@@ -9,6 +9,7 @@ import EmailVerificationModal from "../components/Signups/EmailCertify";
 import PasswordSettingModal from "../components/Signups/Password";
 import CentralChartSection from "../components/CentralChartSection/Index";
 import WatchList from "../components/WatchList";
+import Holdings from "../components/Holdings"; // Assuming you have a Holdings component
 
 const MainPage = () => {
   const [isOAuthModalOpen, setOAuthModalOpen] = useState(false);
@@ -71,6 +72,12 @@ const MainPage = () => {
     setIsLoggedIn(true);
   };
 
+  const [selectedMenu, setSelectedMenu] = useState<"관심목록" | "투자목록">("관심목록"); // Default menu is 관심목록
+
+  const handleMenuChange = (menu: "관심목록" | "투자목록") => {
+    setSelectedMenu(menu);
+  };
+
   const handleLogout = () => {
     setIsLoggedIn(false);
   };
@@ -84,7 +91,7 @@ const MainPage = () => {
       )}
       <Main>
         <LeftSection>
-          <WatchList />
+          {selectedMenu === "관심목록" ? <WatchList key="watchlist" /> : <Holdings key="holdings" />}
         </LeftSection>
         <CentralChartSection />
         <RightSection></RightSection>
@@ -94,6 +101,8 @@ const MainPage = () => {
           onClose={closeOAuthModal}
           onEmailLoginClick={openEmailLoginModal}
           onEmailSignupClick={openEmailSignupModal}
+          onWatchListClick={() => handleMenuChange("관심목록")}
+          onHoldingsClick={() => handleMenuChange("투자목록")}
         />
       )}
       {isEmailLoginModalOpen && (
