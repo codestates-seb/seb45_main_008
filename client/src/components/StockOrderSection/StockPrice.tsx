@@ -1,41 +1,20 @@
+import { useRef, useEffect } from "react";
 import { styled } from "styled-components";
 
 // dummyData
-const dummyPrice: dummyProps[] = [
-  { price: 190, changeRate: 90, volume: 500 },
-  { price: 180, changeRate: 80, volume: 120 },
-  { price: 170, changeRate: 70, volume: 78 },
-  { price: 160, changeRate: 60, volume: 55 },
-  { price: 150, changeRate: 50, volume: 91 },
-  { price: 140, changeRate: 40, volume: 300 },
-  { price: 130, changeRate: 30, volume: 10 },
-  { price: 120, changeRate: 20, volume: 80 },
-  { price: 110, changeRate: 10, volume: 40 },
-  { price: 100, changeRate: 0, volume: 180 },
-  { price: 90, changeRate: -10, volume: 250 },
-  { price: 80, changeRate: -20, volume: 1000 },
-  { price: 70, changeRate: -30, volume: 900 },
-  { price: 60, changeRate: -40, volume: 850 },
-  { price: 50, changeRate: -50, volume: 154 },
-  { price: 40, changeRate: -60, volume: 820 },
-  { price: 30, changeRate: -70, volume: 1100 },
-  { price: 20, changeRate: -80, volume: 800 },
-  { price: 10, changeRate: -90, volume: 500 },
-  { price: 5, changeRate: -95, volume: 800 },
-];
-const upperPriceVolumeSum = 1000;
-const lowerPriceVolumeSum = 2000;
-//
+import { dummyPrice } from "./dummyData";
+import { upperPriceVolumeSum, lowerPriceVolumeSum } from "./dummyData";
 
 const StockPrice = () => {
   return (
     <Container>
-      <HighFigure></HighFigure>
+      <HighFigure>
+        <div className="price"></div>
+        <div className="volume"></div>
+      </HighFigure>
       <PriceList>
         {dummyPrice.map((item, idx) => (
           <PriceInfo
-            upperPriceVolumeSum={upperPriceVolumeSum}
-            lowerPriceVolumeSum={lowerPriceVolumeSum}
             key={item.price}
             index={idx}
             price={item.price}
@@ -44,7 +23,10 @@ const StockPrice = () => {
           />
         ))}
       </PriceList>
-      <LowerFigure></LowerFigure>
+      <LowerFigure>
+        <div className="price"></div>
+        <div className="volume"></div>
+      </LowerFigure>
     </Container>
   );
 };
@@ -52,17 +34,41 @@ const StockPrice = () => {
 export default StockPrice;
 
 const PriceInfo = (props: PriceInfoProps) => {
-  const {
-    upperPriceVolumeSum,
-    lowerPriceVolumeSum,
-    index,
-    price,
-    changeRate,
-    volume,
-  } = props;
+  const { index, price, changeRate, volume } = props;
+  const ref = useRef<HTMLDivElement | null>(null);
 
   const changeRateText01: string = changeRate > 0 ? "+" : "";
   const changeRateText02: string = "%";
+
+  // 11번째 가격 -> 렌더링 시 정중앙에 위치하도록
+  useEffect(() => {
+    ref.current?.focus();
+    ref.current?.scrollIntoView({ block: "center" });
+  }, []);
+
+  if (index === 10) {
+    return (
+      <InfoContainer index={index} ref={ref}>
+        <Price>
+          <div className="price">{price}</div>
+          <div className="changeRate">
+            {changeRateText01}
+            {changeRate}
+            {changeRateText02}
+          </div>
+        </Price>
+        <Volume index={index}>
+          <div className="volume">{volume}</div>
+          <VolumePercentge
+            index={index}
+            volume={volume}
+            upperPriceVolumeSum={upperPriceVolumeSum}
+            lowerPriceVolumeSum={lowerPriceVolumeSum}
+          />
+        </Volume>
+      </InfoContainer>
+    );
+  }
 
   return (
     <InfoContainer index={index}>
@@ -87,16 +93,8 @@ const PriceInfo = (props: PriceInfoProps) => {
   );
 };
 
-// dummy 관련 변수
-interface dummyProps {
-  price: number;
-  changeRate: number;
-  volume: number;
-}
-
+// type 지정
 interface PriceInfoProps {
-  upperPriceVolumeSum: number;
-  lowerPriceVolumeSum: number;
   index: number;
   price: number;
   changeRate: number;
@@ -148,6 +146,7 @@ const InfoContainer = styled.div<InfoContainerProps>`
   height: 36px;
   margin-bottom: 2px;
   background-color: ${(props) => (props.index > 9 ? "#FDE8E7" : "#E7F0FD")};
+  border: ${(props) => (props.index === 10 ? "1px solid #2F4F4F" : "none")};
   display: flex;
   flex-direction: row;
 `;

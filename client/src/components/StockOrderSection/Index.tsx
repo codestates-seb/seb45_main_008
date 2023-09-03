@@ -22,12 +22,10 @@ const Container = styled.aside`
   position: fixed;
   right: 0px;
   transition: right 0.3s ease-in-out;
-
   display: flex;
   flex-direction: column;
-
   width: 26%;
   min-width: 400px;
   height: 100%;
-  border-left: 1px solid #2f4f4f;
+  background-color: #ffffff;
 `;

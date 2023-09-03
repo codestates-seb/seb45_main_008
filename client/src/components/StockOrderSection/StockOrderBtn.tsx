@@ -7,10 +7,12 @@ const totalAmountText02: string = "원";
 const orderBtnText: string = "매수";
 
 // dummyData
-const dummyMoney: string = "9,990,086";
+import { availableMoney } from "./dummyData";
 const dummyAmount: string = "0";
 
 const StockOrderBtn = () => {
+  const dummyMoney = availableMoney.toLocaleString();
+
   return (
     <Container>
       <AvailableMoney>
