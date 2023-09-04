@@ -1,12 +1,29 @@
+import { useDispatch } from "react-redux";
 import { styled } from "styled-components";
+import { stockOrderOpen } from "../../reducer/StockOrderSet-Reducer";
+import { orderTypeBuying, orderTypeSelling } from "../../reducer/StockOrderType-Reducer";
 
 const StockOrderBtn = (props: OwnProps) => {
   const { type } = props;
   const buttonText: string = type === "buying" ? "매수" : "매도";
 
+  const dispatch = useDispatch();
+
+  const handleStockOrderSet = () => {
+    dispatch(stockOrderOpen());
+
+    if (type === "buying") {
+      dispatch(orderTypeBuying());
+    } else {
+      dispatch(orderTypeSelling());
+    }
+  };
+
   return (
     <Container>
-      <Button type={type}>{buttonText}</Button>
+      <Button type={type} onClick={handleStockOrderSet}>
+        {buttonText}
+      </Button>
     </Container>
   );
 };

@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import LogoutHeader from "../components/Headers/LogoutHeader";
 import LoginHeader from "../components/Headers/LoginHeader";
@@ -13,8 +14,12 @@ import Holdings from "../components/watchlist/Holdings"; // Assuming you have a 
 import CompareChartSection from "../components/CompareChartSection/Index";
 import StockOrderSection from "../components/StockOrderSection/Index";
 
+import { StateProps } from "../models/stateProps";
+
 import { TabContainerPage } from "./TabPages/TabContainerPage";
 const MainPage = () => {
+  const expandScreen = useSelector((state: StateProps) => state.expandScreen);
+
   const [isOAuthModalOpen, setOAuthModalOpen] = useState(false);
   const [isEmailLoginModalOpen, setEmailLoginModalOpen] = useState(false);
   const [isEmailSignupModalOpen, setEmailSignupModalOpen] = useState(false);
@@ -88,10 +93,12 @@ const MainPage = () => {
       {isLoggedIn ? <LoginHeader onLogoutClick={handleLogout} /> : <LogoutHeader onLoginClick={openOAuthModal} />}
       <Main>
         <CompareChartSection />
-        <LeftSection>{selectedMenu === "관심목록" ? <WatchList key="watchlist" currentListType={selectedMenu} onChangeListType={handleMenuChange} /> : <Holdings currentListType={selectedMenu} onChangeListType={handleMenuChange} />}</LeftSection>
+        {!expandScreen.left && (
+          <LeftSection>{selectedMenu === "관심목록" ? <WatchList key="watchlist" currentListType={selectedMenu} onChangeListType={handleMenuChange} /> : <Holdings currentListType={selectedMenu} onChangeListType={handleMenuChange} />}</LeftSection>
+        )}
         <CentralChart />
         <StockOrderSection />
-        <TabContainerPage></TabContainerPage>
+        {!expandScreen.right && <TabContainerPage></TabContainerPage>}
       </Main>
       {isOAuthModalOpen && (
         <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} onEmailSignupClick={openEmailSignupModal} onWatchListClick={() => handleMenuChange("관심목록")} onHoldingsClick={() => handleMenuChange("투자목록")} />

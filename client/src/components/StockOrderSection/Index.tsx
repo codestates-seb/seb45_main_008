@@ -1,4 +1,7 @@
+import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
+import { stockOrderClose } from "../../reducer/StockOrderSet-Reducer";
+import { StateProps } from "../../models/stateProps";
 
 import OrderRequest from "./OrderRequest";
 import OrderResult from "./OrderResult";
@@ -10,11 +13,20 @@ const marketType: string = "코스피";
 import { dummyStockName } from "./dummyData";
 
 const StockOrderSection = () => {
+  const stockOrderSet = useSelector((state: StateProps) => state.stockOrderSet);
+  const dispatch = useDispatch();
+
+  const handleStockOrderClose = () => {
+    dispatch(stockOrderClose());
+  };
+
   return (
-    <Container>
+    <Container orderSet={stockOrderSet}>
       <UpperBar>
         <h2 className="Title">{titleText}</h2>
-        <button className="CloseButton">&#10005;</button>
+        <button className="CloseButton" onClick={handleStockOrderClose}>
+          &#10005;
+        </button>
       </UpperBar>
       <StockName>
         <img className="CorpLogo" src={dummyStockName.corpLogo} />
@@ -33,16 +45,17 @@ const StockOrderSection = () => {
 
 export default StockOrderSection;
 
-const Container = styled.aside`
+const Container = styled.aside<{ orderSet: boolean }>`
   position: fixed;
   z-index: 1;
-  right: 0px;
+  right: ${(props) => (props.orderSet ? "0px" : "-500px")};
   transition: right 0.3s ease-in-out;
   display: flex;
   flex-direction: column;
   width: 26%;
   min-width: 400px;
   height: 100%;
+  border-left: 1px solid black;
   background-color: #ffffff;
 `;
 
