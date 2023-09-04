@@ -1,9 +1,9 @@
 import { styled } from "styled-components";
 
-import UpperMenuBar from "../CentralSectionMenu/Index";
+import UpperMenuBar from "../CentralChartMenu/Index";
 import StockChart from "./StockChart";
 
-const CentralChartSection = () => {
+const CentralChart = () => {
   return (
     <Container>
       <UpperMenuBar />
@@ -12,7 +12,7 @@ const CentralChartSection = () => {
   );
 };
 
-export default CentralChartSection;
+export default CentralChart;
 
 const Container = styled.div`
   flex: 6.7 0 0;

@@ -1,3 +1,5 @@
+import logoImg from "../../asset/CentralSectionMenu-dummyImg.png";
+
 // dummyData
 export const dummyPrice: dummyProps[] = [
   { price: 200, changeRate: 90, volume: 300 },
@@ -26,9 +28,21 @@ export const upperPriceVolumeSum = 1000;
 export const lowerPriceVolumeSum = 2000;
 export const availableMoney = 10000000;
 
+export const dummyStockName: dummyName = {
+  corpLogo: logoImg,
+  corpName: "카카오",
+  stockCode: "035720",
+};
+
 // dummy 관련 변수
 interface dummyProps {
   price: number;
   changeRate: number;
   volume: number;
+}
+
+interface dummyName {
+  corpLogo: string;
+  corpName: string;
+  stockCode: string;
 }

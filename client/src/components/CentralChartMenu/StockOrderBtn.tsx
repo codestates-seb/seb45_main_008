@@ -1,6 +1,6 @@
 import { styled } from "styled-components";
 
-const TradeBtn = (props: OwnProps) => {
+const StockOrderBtn = (props: OwnProps) => {
   const { type } = props;
   const buttonText: string = type === "buying" ? "매수" : "매도";
 
@@ -11,7 +11,7 @@ const TradeBtn = (props: OwnProps) => {
   );
 };
 
-export default TradeBtn;
+export default StockOrderBtn;
 
 // type 정의
 interface OwnProps {
@@ -36,8 +36,7 @@ const Button = styled.div<OwnProps>`
 
   font-size: 12px;
   color: ${(props) => (props.type === "buying" ? "#cc3c3a" : "#4479c2")};
-  background-color: ${(props) =>
-    props.type === "buying" ? "#fcdddb" : "#dce9fc"};
+  background-color: ${(props) => (props.type === "buying" ? "#fcdddb" : "#dce9fc")};
 
   padding-top: 2px;
   border-radius: 0.2rem;

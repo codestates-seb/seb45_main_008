@@ -8,7 +8,7 @@ import EmailSignupModal from "../components/Signups/EmailSignup";
 import EmailVerificationModal from "../components/Signups/EmailCertify";
 import PasswordSettingModal from "../components/Signups/Password";
 
-import CentralChartSection from "../components/CentralChartSection/Index";
+import CentralChart from "../components/CentralChart/Index";
 import CompareChartSection from "../components/CompareChartSection/Index";
 import StockOrderSection from "../components/StockOrderSection/Index";
 
@@ -85,7 +85,7 @@ const MainPage = () => {
       <Main>
         <CompareChartSection />
         <LeftSection></LeftSection>
-        <CentralChartSection />
+        <CentralChart />
         <StockOrderSection />
         <RightSection></RightSection>
       </Main>

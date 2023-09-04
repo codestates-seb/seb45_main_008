@@ -1,12 +1,12 @@
 import { styled } from "styled-components";
 
-import StockPrice from "./StockPrice";
+import StockPriceList from "./StockPriceList";
 import StockOrderSetting from "./StockOrderSetting";
 
 const OrderRequest = () => {
   return (
     <Container>
-      <StockPrice />
+      <StockPriceList />
       <StockOrderSetting />
     </Container>
   );

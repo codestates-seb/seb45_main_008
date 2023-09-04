@@ -12,48 +12,12 @@ const StockChart = () => {
 export default StockChart;
 
 const options = {
-  // title: {
-  //   text: "Stock Chart with Separate Y Axes on the Right Side",
-  // },
   xAxis: {
     type: "category",
-    data: [
-      new Date("2023-08-31 14:00").toLocaleDateString(),
-      "2023-08-31 14:00",
-      "Day 1",
-      "Day 2",
-      "Day 3",
-      "Day 4",
-      "Day 5",
-      "Day 6",
-      "Day 7",
-      "Day 8",
-      "Day 9",
-      "Day 10",
-      "Day 11",
-      "Day 12",
-      "Day 13",
-      "Day 14",
-      "Day 15",
-      "Day 16",
-      "Day 17",
-      "Day 18",
-      "Day 19",
-      "Day 20",
-      "Day 21",
-      "Day 22",
-      "Day 23",
-      "Day 24",
-      "Day 25",
-      "Day 26",
-      "Day 27",
-      "Day 28",
-    ], // X 축 라벨
   },
   yAxis: [
     {
       type: "value",
-      // name: "Price", // 주가 Y 축 라벨
       position: "right", // 오른쪽에 위치
     },
   ],
@@ -107,7 +71,6 @@ const options = {
   ],
 };
 
-// 사이즈 조절을 위한 스타일 설정
 const chartStyle = {
   width: "100%",
   height: "100%",

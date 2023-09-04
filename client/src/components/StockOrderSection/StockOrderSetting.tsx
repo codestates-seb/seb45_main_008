@@ -25,15 +25,15 @@ const StockOrderSetting = () => {
 
   return (
     <Container>
-      <OrderType>
+      <div className="OrderType">
         <Buying onClick={handleSetBuying} ordertype={stockOrderType}>
           {orderType01}
         </Buying>
         <Selling onClick={handleSetSelling} ordertype={stockOrderType}>
           {orderType02}
         </Selling>
-      </OrderType>
-      <OrderTypeDividingLine />
+      </div>
+      <DecorationLine />
       <PriceSetting />
       <VolumeSetting />
       <StockOrderBtn />
@@ -43,7 +43,7 @@ const StockOrderSetting = () => {
 
 export default StockOrderSetting;
 
-const OrderTypeDividingLine = () => {
+const DecorationLine = () => {
   const stockOrderType = useSelector((state: StateProps) => state.stockOrderType);
 
   return (
@@ -59,14 +59,14 @@ const OrderTypeDividingLine = () => {
 const Container = styled.div`
   width: 51%;
   height: 100%;
-`;
 
-const OrderType = styled.div`
-  width: 100%;
-  height: 31px;
-  display: flex;
-  flex-direction: row;
-  color: #9999;
+  .OrderType {
+    width: 100%;
+    height: 31px;
+    display: flex;
+    flex-direction: row;
+    color: #9999;
+  }
 `;
 
 const Buying = styled.div<OrderTypeProps>`

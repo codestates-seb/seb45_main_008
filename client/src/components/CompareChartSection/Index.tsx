@@ -22,7 +22,7 @@ export default CompareChartSection;
 
 const Container = styled.div`
   position: fixed;
-  left: -300px;
+  left: 0px;
   transition: 0.3s left ease-in-out;
   display: flex;
   flex-direction: column;
