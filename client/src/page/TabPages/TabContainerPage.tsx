@@ -8,18 +8,20 @@ import { Status } from "../../components/statusComponents/Status";
 export const TabContainerPage = () => {
   return (
     <TabContainerStyle>
-      <TabNavArea>
-        <Nav to="/">시장정보</Nav>
-        <Nav to="/stockitems">종목정보</Nav>
-        <Nav to="/community">커뮤니티</Nav>
-        <Nav to="/status">투자현황</Nav>
-      </TabNavArea>
-      <Routes>
-        <Route path="/" element={<MarketInfo />} />
-        <Route path="/stockitems" element={<StockItems />} />
-        <Route path="/community" element={<Community />} />
-        <Route path="/status" element={<Status />} />
-      </Routes>
+      <div style={{ overflow: "auto" }}>
+        <TabNavArea>
+          <Nav to="/">시장정보</Nav>
+          <Nav to="/stockitems">종목정보</Nav>
+          <Nav to="/community">커뮤니티</Nav>
+          <Nav to="/status">투자현황</Nav>
+        </TabNavArea>
+        <Routes>
+          <Route path="/" element={<MarketInfo />} />
+          <Route path="/stockitems" element={<StockItems />} />
+          <Route path="/community" element={<Community />} />
+          <Route path="/status" element={<Status />} />
+        </Routes>
+      </div>
     </TabContainerStyle>
   );
 };
@@ -27,7 +29,8 @@ export const TabContainerPage = () => {
 const TabContainerStyle = styled.div`
   width: 26%;
   min-width: 400px;
-  height: 100%;
+
+  overflow: hidden;
   border: 1px solid black;
 `;
 
