@@ -9,6 +9,7 @@ import EmailVerificationModal from "../components/Signups/EmailCertify";
 import PasswordSettingModal from "../components/Signups/Password";
 
 import CentralChartSection from "../components/CentralChartSection/Index";
+import CompareChartSection from "../components/CompareChartSection/Index";
 import StockOrderSection from "../components/StockOrderSection/Index";
 
 const MainPage = () => {
@@ -42,8 +43,7 @@ const MainPage = () => {
     setEmailSignupModalOpen(false);
   }, []);
 
-  const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] =
-    useState(false);
+  const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] = useState(false);
 
   const openEmailVerificationModal = useCallback(() => {
     setEmailSignupModalOpen(false); // 이메일 회원가입 모달 닫기
@@ -54,8 +54,7 @@ const MainPage = () => {
     setEmailVerificationModalOpen(false);
   }, []);
 
-  const [isPasswordSettingModalOpen, setPasswordSettingModalOpen] =
-    useState(false);
+  const [isPasswordSettingModalOpen, setPasswordSettingModalOpen] = useState(false);
 
   const openPasswordSettingModal = useCallback(() => {
     setEmailVerificationModalOpen(false); // 이메일 인증 모달 닫기
@@ -84,18 +83,13 @@ const MainPage = () => {
         <LogoutHeader onLoginClick={openOAuthModal} />
       )}
       <Main>
+        <CompareChartSection />
         <LeftSection></LeftSection>
         <CentralChartSection />
         <StockOrderSection />
         <RightSection></RightSection>
       </Main>
-      {isOAuthModalOpen && (
-        <OAuthLoginModal
-          onClose={closeOAuthModal}
-          onEmailLoginClick={openEmailLoginModal}
-          onEmailSignupClick={openEmailSignupModal}
-        />
-      )}
+      {isOAuthModalOpen && <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} onEmailSignupClick={openEmailSignupModal} />}
       {isEmailLoginModalOpen && (
         <EmailLoginModal
           onClose={closeEmailLoginModal}

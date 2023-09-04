@@ -1,54 +1,50 @@
 import { styled } from "styled-components";
 
-import StockName from "./StockName";
-import OrderRequest from "./OrderRequest";
-import OrderResult from "./OrderResult";
+import SearchBox from "./SearchBox";
+import CompareList from "./CompareList";
 
-const titleText: string = "주식주문";
+const titleText: string = "비교차트";
 
-const StockOrderSection = () => {
+const CompareChartSection = () => {
   return (
     <Container>
       <UpperBar>
         <Title>{titleText}</Title>
         <CloseBtn>&#10005;</CloseBtn>
       </UpperBar>
-      <StockName />
-      <OrderRequest />
-      <OrderResult />
+      <SearchBox />
+      <CompareList />
     </Container>
   );
 };
 
-export default StockOrderSection;
+export default CompareChartSection;
 
-const Container = styled.aside`
+const Container = styled.div`
   position: fixed;
-  right: -500px;
-  transition: right 0.3s ease-in-out;
+  left: -300px;
+  transition: 0.3s left ease-in-out;
   display: flex;
   flex-direction: column;
-  width: 26%;
-  min-width: 400px;
+  min-width: 248px;
   height: 100%;
-  background-color: #ffffff;
+  border: 1px solid black;
 `;
 
 const UpperBar = styled.div`
   position: relative;
+  width: 100%;
+  height: 43px;
   display: flex;
   flex-direction: row;
   justify-content: center;
   align-items: center;
-  width: 100%;
-  min-height: 43px;
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid darkgray;
 `;
 
 const Title = styled.h2`
   font-size: 17px;
-  font-weight: 450;
-  color: #1c1c1c;
+  font-weight: 500;
 `;
 
 const CloseBtn = styled.button`
@@ -57,7 +53,8 @@ const CloseBtn = styled.button`
   width: 28px;
   height: 95%;
   border: none;
-  font-size: 20px;
+  font-size: 17px;
+  font-weight: 500;
   color: #525252;
   background-color: #ffff;
 `;
