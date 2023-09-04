@@ -2,7 +2,7 @@ import MarketInfo from "./MarketInfoPage";
 import { Routes, Route, Link } from "react-router-dom";
 import styled from "styled-components";
 import { StockItems } from "../../components/stockListComponents/StockItems";
-import { Community } from "../../components/communityComponents/community";
+import { Community } from "./communityPage";
 import { Status } from "../../components/statusComponents/Status";
 
 export const TabContainerPage = () => {
@@ -25,7 +25,7 @@ export const TabContainerPage = () => {
 };
 
 const TabContainerStyle = styled.div`
-  flex: 3.3 0 0;
+  width: 26%;
   min-width: 400px;
   height: 100%;
   border: 1px solid black;
