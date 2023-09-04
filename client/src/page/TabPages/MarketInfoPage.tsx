@@ -40,9 +40,14 @@ const MarketInfoStyle = styled.div`
 //시장정보 탭의 시장요약 스타일
 const Market = styled.div`
   text-align: center;
+  cursor: pointer;
 `;
 
 //시장정보 탭의 전체주식 스타일
-const StockList = styled.div``;
+const StockList = styled.div`
+  cursor: pointer;
+`;
 //시장정보 탭의 시장이슈 스타일
-const Issue = styled.div``;
+const Issue = styled.div`
+  cursor: pointer;
+`;
