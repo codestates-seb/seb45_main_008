@@ -9,6 +9,7 @@ import EmailVerificationModal from "../components/Signups/EmailCertify";
 import PasswordSettingModal from "../components/Signups/Password";
 
 import CentralChartSection from "../components/CentralChartSection/Index";
+import CompareChartSection from "../components/CompareChartSection/Index";
 
 const MainPage = () => {
   const [isOAuthModalOpen, setOAuthModalOpen] = useState(false);
@@ -83,6 +84,7 @@ const MainPage = () => {
         <LogoutHeader onLoginClick={openOAuthModal} />
       )}
       <Main>
+        <CompareChartSection />
         <LeftSection></LeftSection>
         <CentralChartSection />
         <RightSection></RightSection>
