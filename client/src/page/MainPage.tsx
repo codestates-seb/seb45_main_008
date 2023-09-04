@@ -8,8 +8,8 @@ import EmailSignupModal from "../components/Signups/EmailSignup";
 import EmailVerificationModal from "../components/Signups/EmailCertify";
 import PasswordSettingModal from "../components/Signups/Password";
 import CentralChartSection from "../components/CentralChartSection/Index";
-import WatchList from "../components/WatchList";
-import Holdings from "../components/Holdings"; // Assuming you have a Holdings component
+import WatchList from "../components/watchlist/WatchList";
+import Holdings from "../components/watchlist/Holdings"; // Assuming you have a Holdings component
 
 const MainPage = () => {
   const [isOAuthModalOpen, setOAuthModalOpen] = useState(false);

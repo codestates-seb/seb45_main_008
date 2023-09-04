@@ -1,24 +1,26 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import Samsung_logo from "../../asset/images/logos/Samsung_logo.svg"
+import LG_logo from "../../asset/images/logos/LG_logo.svg"
+import Sk_logo from "../../asset/images/logos/Sk_logo.png"
+import POSCO_logo from "../../asset/images/logos/POSCO_logo.svg"
 
 const WatchList = () => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [listType, setListType] = useState('관심목록');
 
   const favoriteStocks = [
-    { name: "삼성전자", code: "005930", price: "71,000원", change: "+6.13%", changePrice: "+4,100원" },
-    { name: "LG에너지솔루션", code: "373220", price: "522,000원", change: "-4.04%", changePrice: "-22,000원" },
-    { name: "SK하이닉스", code: "000660", price: "120,000원", change: "-1.48%", changePrice: "-1,800원" },
-    { name: "삼성바이오로직스", code: "207940", price: "733,000원", change: "-0.54%", changePrice: "-4,000원" },
-    { name: "POSCO홀딩스", code: "005490", price: "560,000원", change: "-3.28%", changePrice: "-19,000원" },
-    { name: "삼성전자우", code: "005935", price: "56,900원", change: "+5.37%", changePrice: "+2,900원" },
-    { name: "삼성SDI", code: "006400", price: "596,000원", change: "-2.93%", changePrice: "-18,000원" }
+    { name: "삼성전자", code: "005930", price: "71,000원", change: "+6.13%", changePrice: "+4,100원", logo: Samsung_logo },
+    { name: "LG에너지솔루션", code: "373220", price: "522,000원", change: "-4.04%", changePrice: "-22,000원", logo: LG_logo },
+    { name: "SK하이닉스", code: "000660", price: "120,000원", change: "-1.48%", changePrice: "-1,800원", logo: Sk_logo },
+    { name: "삼성바이오로직스", code: "207940", price: "733,000원", change: "-0.54%", changePrice: "-4,000원", logo: Samsung_logo },
+    { name: "POSCO홀딩스", code: "005490", price: "560,000원", change: "-3.28%", changePrice: "-19,000원", logo: POSCO_logo },
+    { name: "삼성전자우", code: "005935", price: "56,900원", change: "+5.37%", changePrice: "+2,900원", logo: Samsung_logo },
+    { name: "삼성SDI", code: "006400", price: "596,000원", change: "-2.93%", changePrice: "-18,000원", logo: Samsung_logo } 
   ];
 
   const [showChangePrice, setShowChangePrice] = useState(false);
   
-  
-
   return (
     <WatchListContainer>
       <Header>
@@ -31,12 +33,12 @@ const WatchList = () => {
           </SlideMenu>
         )}
       </Header>
-      <Divider /> {/* 회색 가로줄 추가 */}
+      <Divider />
       <AddStockButton onClick={() => { /* 종목 추가 로직 */ }}>종목 추가</AddStockButton>
-      <Divider /> {/* 회색 가로줄 추가 */}
+      <Divider />
       {favoriteStocks.map(stock => (
         <StockItem key={stock.name}>
-          <Logo src="path_to_logo_image.jpg" alt="stock logo"/>
+          <Logo src={stock.logo} alt="stock logo"/>
           <StockInfo>
             <StockName>{stock.name}</StockName>
             <StockCode>{stock.code}</StockCode>
@@ -109,7 +111,7 @@ const MenuItem = styled.button`
 const StockItem = styled.button`
   display: flex;
   justify-content: space-between;
-  align-items: flex-start; // 시작 위치 정렬 추가
+  align-items: flex-start;
   padding: 8px 0;
   border-bottom: 1px solid #e0e0e0;
   width: 100%;
@@ -129,8 +131,8 @@ const Logo = styled.img`
 const StockInfo = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start; // 시작 위치 정렬 추가
-  margin-right: 16px;  // 간격 추가
+  align-items: flex-start;
+  margin-right: 16px;
 `;
 
 const StockName = styled.span`
@@ -144,7 +146,7 @@ const StockCode = styled.span`
 const StockPriceSection = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start; // 시작 위치 정렬 추가
+  align-items: flex-start;
 `;
 
 const StockPrice = styled.span.attrs<{ change: string }>(({ change }) => ({
@@ -158,26 +160,26 @@ const StockChange = styled.span.attrs<{ change: string }>(({ change }) => ({
       color: getColorByChange(change),
     },
   }))`
-    cursor: pointer; // 마우스 포인터 변경 추가
+    cursor: pointer;
   `;
 
 const Divider = styled.div`
-height: 1px;
-background-color: #aaa; // 회색으로 설정
-margin: 8px 0; // 상하 여백 추가
+  height: 1px;
+  background-color: #aaa;
+  margin: 8px 0;
 `;
 
 const AddStockButton = styled.button`
-padding: 10px 20px; // 크기 약간 키움
-border: none;
-background-color: transparent;
-cursor: pointer;
-text-align: left;
-color: black; // 검정색으로 변경
-&:hover {
-  background-color: #e0e0e0;
-}
+  padding: 10px 20px;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  text-align: left;
+  color: black;
+
+  &:hover {
+    background-color: #e0e0e0;
+  }
 `;
 
 export default WatchList;
-
