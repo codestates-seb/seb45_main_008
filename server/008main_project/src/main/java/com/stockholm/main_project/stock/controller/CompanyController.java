@@ -1,12 +1,22 @@
 package com.stockholm.main_project.stock.controller;
 
 import com.stockholm.main_project.stock.dto.CompanyResponseDto;
+import com.stockholm.main_project.stock.dto.StockAsBiResponseDto;
 import com.stockholm.main_project.stock.dto.StockMinResponseDto;
+import com.stockholm.main_project.stock.dto.StockasbiDataDto;
 import com.stockholm.main_project.stock.entity.Company;
+import com.stockholm.main_project.stock.entity.StockAsBi;
 import com.stockholm.main_project.stock.entity.StockMin;
 import com.stockholm.main_project.stock.mapper.CompanyMapper;
 import com.stockholm.main_project.stock.service.CompanyService;
 import com.stockholm.main_project.stock.service.StockMinService;
+import com.stockholm.main_project.swaggersample.HelloResponse;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.ArraySchema;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,16 +44,34 @@ public class CompanyController {
         this.companyMapper = companyMapper;
         this.stockMinService = stockMinService;
     }
-
+    // swagger 추가
+    @Operation(summary = "CompanyList 가져오기", description = "CompanyList를 Get해 옵니다", tags = { "Company" })
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = CompanyResponseDto.class)))),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
     // 전체 회사 리스트
     @GetMapping
-    public ResponseEntity getCompanyList() {
+    public ResponseEntity getCompanyList() throws InterruptedException {
+        companyService.fillCompaines();
         List<Company> companyList = companyService.findCompanies();
         List<CompanyResponseDto> companyResponseDtoList = companyMapper.CompaniesToCompanyResponseDtos(companyList);
 
         return new ResponseEntity<>(companyResponseDtoList, HttpStatus.OK);
     }
 
+    // swagger 추가
+    @Operation(summary = "특정 회사의 주식 호가 정보 가져오기", description = "특정 회사의 주식 호가 정보를 Get해 옵니다", tags = { "StockAsbi" })
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(schema = @Schema(implementation = CompanyResponseDto.class))),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
     // 주식 호가 정보
     @GetMapping("/{companyId}")
     public ResponseEntity getCompanyStockAsBi(@PathVariable("companyId") Long comanyId) {
