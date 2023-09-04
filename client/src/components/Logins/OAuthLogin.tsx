@@ -74,6 +74,8 @@ interface LoginModalProps {
     onClose: () => void;
     onEmailLoginClick: () => void;
     onEmailSignupClick: () => void;  // 추가
+    onWatchListClick: () => void; // 추가
+    onHoldingsClick: () => void; // 추가
 }
 
 const OrText = styled.span`

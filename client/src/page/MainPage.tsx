@@ -7,8 +7,9 @@ import EmailLoginModal from "../components/Logins/EmailLogin";
 import EmailSignupModal from "../components/Signups/EmailSignup";
 import EmailVerificationModal from "../components/Signups/EmailCertify";
 import PasswordSettingModal from "../components/Signups/Password";
-
 import CentralChartSection from "../components/CentralChartSection/Index";
+import WatchList from "../components/watchlist/WatchList";
+import Holdings from "../components/watchlist/Holdings"; // Assuming you have a Holdings component
 import CompareChartSection from "../components/CompareChartSection/Index";
 import StockOrderSection from "../components/StockOrderSection/Index";
 
@@ -71,6 +72,12 @@ const MainPage = () => {
     setIsLoggedIn(true);
   };
 
+  const [selectedMenu, setSelectedMenu] = useState<"관심목록" | "투자목록">("투자목록"); // Default menu is 관심목록
+
+  const handleMenuChange = (menu: "관심목록" | "투자목록") => {
+    setSelectedMenu(menu);
+  };
+
   const handleLogout = () => {
     setIsLoggedIn(false);
   };
@@ -78,39 +85,57 @@ const MainPage = () => {
   return (
     <Container>
       {isLoggedIn ? (
-        <LoginHeader onLogoutClick={handleLogout} /> // 로그아웃 버튼 클릭 핸들러 추가
+        <LoginHeader onLogoutClick={handleLogout} />
       ) : (
         <LogoutHeader onLoginClick={openOAuthModal} />
       )}
       <Main>
         <CompareChartSection />
-        <LeftSection></LeftSection>
+        <LeftSection>
+          {selectedMenu === "관심목록" ? (
+            <WatchList 
+              key="watchlist"
+              currentListType={selectedMenu}
+              onChangeListType={handleMenuChange}
+            />
+          ) : (
+            <Holdings 
+              currentListType={selectedMenu}
+              onChangeListType={handleMenuChange}
+            />
+          )}
+        </LeftSection>
         <CentralChartSection />
         <StockOrderSection />
         <RightSection></RightSection>
       </Main>
-      {isOAuthModalOpen && <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} onEmailSignupClick={openEmailSignupModal} />}
+      {isOAuthModalOpen && (
+        <OAuthLoginModal
+          onClose={closeOAuthModal}
+          onEmailLoginClick={openEmailLoginModal}
+          onEmailSignupClick={openEmailSignupModal}
+          onWatchListClick={() => handleMenuChange("관심목록")}
+          onHoldingsClick={() => handleMenuChange("투자목록")}
+        />
+      )}
       {isEmailLoginModalOpen && (
         <EmailLoginModal
           onClose={closeEmailLoginModal}
-          onLogin={handleLogin} // 추가된 prop
+          onLogin={handleLogin}
         />
       )}
-
       {isEmailSignupModalOpen && (
         <EmailSignupModal
           onClose={closeEmailSignupModal}
-          onRequestVerification={openEmailVerificationModal} // 추가된 prop
+          onRequestVerification={openEmailVerificationModal}
         />
       )}
-
       {isEmailVerificationModalOpen && (
         <EmailVerificationModal
           onClose={closeEmailVerificationModal}
-          onNextStep={openPasswordSettingModal} // 추가된 prop
+          onNextStep={openPasswordSettingModal}
         />
       )}
-
       {isPasswordSettingModalOpen && (
         <PasswordSettingModal
           onClose={() => {
