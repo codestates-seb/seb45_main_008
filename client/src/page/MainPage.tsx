@@ -10,6 +10,8 @@ import PasswordSettingModal from "../components/Signups/Password";
 import CentralChartSection from "../components/CentralChartSection/Index";
 import WatchList from "../components/watchlist/WatchList";
 import Holdings from "../components/watchlist/Holdings"; // Assuming you have a Holdings component
+import CompareChartSection from "../components/CompareChartSection/Index";
+import StockOrderSection from "../components/StockOrderSection/Index";
 
 const MainPage = () => {
   const [isOAuthModalOpen, setOAuthModalOpen] = useState(false);
@@ -42,8 +44,7 @@ const MainPage = () => {
     setEmailSignupModalOpen(false);
   }, []);
 
-  const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] =
-    useState(false);
+  const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] = useState(false);
 
   const openEmailVerificationModal = useCallback(() => {
     setEmailSignupModalOpen(false); // 이메일 회원가입 모달 닫기
@@ -54,8 +55,7 @@ const MainPage = () => {
     setEmailVerificationModalOpen(false);
   }, []);
 
-  const [isPasswordSettingModalOpen, setPasswordSettingModalOpen] =
-    useState(false);
+  const [isPasswordSettingModalOpen, setPasswordSettingModalOpen] = useState(false);
 
   const openPasswordSettingModal = useCallback(() => {
     setEmailVerificationModalOpen(false); // 이메일 인증 모달 닫기
@@ -85,12 +85,13 @@ const MainPage = () => {
   return (
     <Container>
       {isLoggedIn ? (
-        <LoginHeader onLogoutClick={handleLogout} /> // 로그아웃 버튼 클릭 핸들러 추가
+        <LoginHeader onLogoutClick={handleLogout} />
       ) : (
         <LogoutHeader onLoginClick={openOAuthModal} />
       )}
       <Main>
-      <LeftSection>
+        <CompareChartSection />
+        <LeftSection>
           {selectedMenu === "관심목록" ? (
             <WatchList 
               key="watchlist"
@@ -105,6 +106,7 @@ const MainPage = () => {
           )}
         </LeftSection>
         <CentralChartSection />
+        <StockOrderSection />
         <RightSection></RightSection>
       </Main>
       {isOAuthModalOpen && (
@@ -119,24 +121,21 @@ const MainPage = () => {
       {isEmailLoginModalOpen && (
         <EmailLoginModal
           onClose={closeEmailLoginModal}
-          onLogin={handleLogin} // 추가된 prop
+          onLogin={handleLogin}
         />
       )}
-
       {isEmailSignupModalOpen && (
         <EmailSignupModal
           onClose={closeEmailSignupModal}
-          onRequestVerification={openEmailVerificationModal} // 추가된 prop
+          onRequestVerification={openEmailVerificationModal}
         />
       )}
-
       {isEmailVerificationModalOpen && (
         <EmailVerificationModal
           onClose={closeEmailVerificationModal}
-          onNextStep={openPasswordSettingModal} // 추가된 prop
+          onNextStep={openPasswordSettingModal}
         />
       )}
-
       {isPasswordSettingModalOpen && (
         <PasswordSettingModal
           onClose={() => {
@@ -171,8 +170,8 @@ const LeftSection = styled.section`
   border: 1px solid black;
 `;
 
-const RightSection = styled.section`
-  flex: 3.3 0 0;
+export const RightSection = styled.section`
+  width: 26%;
   min-width: 400px;
   height: 100%;
   border: 1px solid black;
