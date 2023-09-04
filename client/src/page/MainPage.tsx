@@ -10,6 +10,7 @@ import PasswordSettingModal from "../components/Signups/Password";
 
 import CentralChartSection from "../components/CentralChartSection/Index";
 import CompareChartSection from "../components/CompareChartSection/Index";
+import StockOrderSection from "../components/StockOrderSection/Index";
 
 const MainPage = () => {
   const [isOAuthModalOpen, setOAuthModalOpen] = useState(false);
@@ -42,8 +43,7 @@ const MainPage = () => {
     setEmailSignupModalOpen(false);
   }, []);
 
-  const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] =
-    useState(false);
+  const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] = useState(false);
 
   const openEmailVerificationModal = useCallback(() => {
     setEmailSignupModalOpen(false); // 이메일 회원가입 모달 닫기
@@ -54,8 +54,7 @@ const MainPage = () => {
     setEmailVerificationModalOpen(false);
   }, []);
 
-  const [isPasswordSettingModalOpen, setPasswordSettingModalOpen] =
-    useState(false);
+  const [isPasswordSettingModalOpen, setPasswordSettingModalOpen] = useState(false);
 
   const openPasswordSettingModal = useCallback(() => {
     setEmailVerificationModalOpen(false); // 이메일 인증 모달 닫기
@@ -87,15 +86,10 @@ const MainPage = () => {
         <CompareChartSection />
         <LeftSection></LeftSection>
         <CentralChartSection />
+        <StockOrderSection />
         <RightSection></RightSection>
       </Main>
-      {isOAuthModalOpen && (
-        <OAuthLoginModal
-          onClose={closeOAuthModal}
-          onEmailLoginClick={openEmailLoginModal}
-          onEmailSignupClick={openEmailSignupModal}
-        />
-      )}
+      {isOAuthModalOpen && <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} onEmailSignupClick={openEmailSignupModal} />}
       {isEmailLoginModalOpen && (
         <EmailLoginModal
           onClose={closeEmailLoginModal}
@@ -151,8 +145,8 @@ const LeftSection = styled.section`
   border: 1px solid black;
 `;
 
-const RightSection = styled.section`
-  flex: 3.3 0 0;
+export const RightSection = styled.section`
+  width: 26%;
   min-width: 400px;
   height: 100%;
   border: 1px solid black;
