@@ -13,6 +13,17 @@ spring:
         dialect: org.hibernate.dialect.MySQL5InnoDBDialect
         format_sql: true
 
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: projectstockholm0@gmail.com
+    password: kqnonrrvrrldwzlb
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
@@ -37,3 +48,8 @@ stock-url:
   stockasbi: "https://openapivts.koreainvestment.com:29443/uapi/domestic-stock/v1/quotations/inquire-asking-price-exp-ccn"
   stockhour: "https://openapivts.koreainvestment.com:29443/uapi/domestic-stock/v1/quotations/inquire-time-itemchartprice"
   kospi: "https://openapivts.koreainvestment.com:29443/uapi/domestic-stock/v1/quotations/inquire-daily-indexchartprice"
+
+jwt:
+  #key: ${JWT_SECRET_KEY}
+  access-token-expiration-minutes: 40
+  refresh-token-expiration-minutes: 420
