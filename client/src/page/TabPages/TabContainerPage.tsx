@@ -8,7 +8,7 @@ import { Status } from "../../components/statusComponents/Status";
 export const TabContainerPage = () => {
   return (
     <TabContainerStyle>
-      <div style={{ overflow: "auto" }}>
+      <div>
         <TabNavArea>
           <Nav to="/">시장정보</Nav>
           <Nav to="/stockitems">종목정보</Nav>
