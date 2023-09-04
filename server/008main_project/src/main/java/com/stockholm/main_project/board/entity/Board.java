@@ -22,7 +22,7 @@ public class Board extends Auditable {
     private String title;
 
     @Column
-    private String body;
+    private String content;
 
     @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
