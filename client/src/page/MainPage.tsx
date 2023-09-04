@@ -13,6 +13,7 @@ import Holdings from "../components/watchlist/Holdings"; // Assuming you have a 
 import CompareChartSection from "../components/CompareChartSection/Index";
 import StockOrderSection from "../components/StockOrderSection/Index";
 
+import { TabContainerPage } from "./TabPages/TabContainerPage";
 const MainPage = () => {
   const [isOAuthModalOpen, setOAuthModalOpen] = useState(false);
   const [isEmailLoginModalOpen, setEmailLoginModalOpen] = useState(false);
@@ -44,7 +45,8 @@ const MainPage = () => {
     setEmailSignupModalOpen(false);
   }, []);
 
-  const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] = useState(false);
+  const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] =
+    useState(false);
 
   const openEmailVerificationModal = useCallback(() => {
     setEmailSignupModalOpen(false); // 이메일 회원가입 모달 닫기
@@ -55,7 +57,8 @@ const MainPage = () => {
     setEmailVerificationModalOpen(false);
   }, []);
 
-  const [isPasswordSettingModalOpen, setPasswordSettingModalOpen] = useState(false);
+  const [isPasswordSettingModalOpen, setPasswordSettingModalOpen] =
+    useState(false);
 
   const openPasswordSettingModal = useCallback(() => {
     setEmailVerificationModalOpen(false); // 이메일 인증 모달 닫기
@@ -72,7 +75,9 @@ const MainPage = () => {
     setIsLoggedIn(true);
   };
 
-  const [selectedMenu, setSelectedMenu] = useState<"관심목록" | "투자목록">("투자목록"); // Default menu is 관심목록
+  const [selectedMenu, setSelectedMenu] = useState<"관심목록" | "투자목록">(
+    "투자목록"
+  ); // Default menu is 관심목록
 
   const handleMenuChange = (menu: "관심목록" | "투자목록") => {
     setSelectedMenu(menu);
@@ -93,13 +98,13 @@ const MainPage = () => {
         <CompareChartSection />
         <LeftSection>
           {selectedMenu === "관심목록" ? (
-            <WatchList 
+            <WatchList
               key="watchlist"
               currentListType={selectedMenu}
               onChangeListType={handleMenuChange}
             />
           ) : (
-            <Holdings 
+            <Holdings
               currentListType={selectedMenu}
               onChangeListType={handleMenuChange}
             />
@@ -107,7 +112,7 @@ const MainPage = () => {
         </LeftSection>
         <CentralChartSection />
         <StockOrderSection />
-        <RightSection></RightSection>
+        <TabContainerPage></TabContainerPage>
       </Main>
       {isOAuthModalOpen && (
         <OAuthLoginModal
@@ -119,10 +124,7 @@ const MainPage = () => {
         />
       )}
       {isEmailLoginModalOpen && (
-        <EmailLoginModal
-          onClose={closeEmailLoginModal}
-          onLogin={handleLogin}
-        />
+        <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} />
       )}
       {isEmailSignupModalOpen && (
         <EmailSignupModal
