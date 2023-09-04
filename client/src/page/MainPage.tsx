@@ -72,7 +72,7 @@ const MainPage = () => {
     setIsLoggedIn(true);
   };
 
-  const [selectedMenu, setSelectedMenu] = useState<"관심목록" | "투자목록">("관심목록"); // Default menu is 관심목록
+  const [selectedMenu, setSelectedMenu] = useState<"관심목록" | "투자목록">("투자목록"); // Default menu is 관심목록
 
   const handleMenuChange = (menu: "관심목록" | "투자목록") => {
     setSelectedMenu(menu);
@@ -90,8 +90,19 @@ const MainPage = () => {
         <LogoutHeader onLoginClick={openOAuthModal} />
       )}
       <Main>
-        <LeftSection>
-          {selectedMenu === "관심목록" ? <WatchList key="watchlist" /> : <Holdings key="holdings" />}
+      <LeftSection>
+          {selectedMenu === "관심목록" ? (
+            <WatchList 
+              key="watchlist"
+              currentListType={selectedMenu}
+              onChangeListType={handleMenuChange}
+            />
+          ) : (
+            <Holdings 
+              currentListType={selectedMenu}
+              onChangeListType={handleMenuChange}
+            />
+          )}
         </LeftSection>
         <CentralChartSection />
         <RightSection></RightSection>

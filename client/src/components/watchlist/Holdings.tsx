@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import Samsung_logo from "../../asset/logos/Samsung_logo.svg"
+import Menu_icon from "../../asset/images/menu.png"
 
-const Holdings = () => {
+const Holdings: React.FC<HoldingsProps> = ({ currentListType, onChangeListType }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const [listType, setListType] = useState('투자목록');
+
 
   const holdingsData = [
     { name: "삼성전자", code: "005930", price: "71,000원", change: "+6.13%", 
       profit: "수익", holding: "보유", profitAmount: "+10,000원", purchasePrice: "61,000원",
-      rateOfReturn: "+15%", stocksHeld: "100주"
+      rateOfReturn: "+15%", stocksHeld: "100주", logo: Samsung_logo
     },
     // ... (다른 종목들의 더미 데이터도 추가 가능)
   ];
@@ -18,12 +20,16 @@ const Holdings = () => {
   return (
     <HoldingsContainer>
       <Header>
-        <Icon onClick={() => setMenuOpen(!isMenuOpen)}>📄</Icon>
-        <HeaderText>{listType}</HeaderText>
+      <Icon 
+          src={Menu_icon}
+          alt="menu icon"
+          onClick={() => setMenuOpen(!isMenuOpen)}
+        />
+        <HeaderText>{currentListType}</HeaderText>
         {isMenuOpen && (
           <SlideMenu>
-            <MenuItem onClick={() => { setListType('관심목록'); setMenuOpen(false); }}>관심목록</MenuItem>
-            <MenuItem onClick={() => { setListType('투자목록'); setMenuOpen(false); }}>투자목록</MenuItem>
+            <MenuItem onClick={() => { onChangeListType('관심목록'); setMenuOpen(false); }}>관심목록</MenuItem>
+            <MenuItem onClick={() => { onChangeListType('투자목록'); setMenuOpen(false); }}>투자목록</MenuItem>
           </SlideMenu>
         )}
       </Header>
@@ -33,7 +39,7 @@ const Holdings = () => {
       {holdingsData.map(stock => (
         <>
           <StockItem key={stock.name}>
-            <Logo src="path_to_logo_image.jpg" alt="stock logo"/>
+            <Logo src={stock.logo} alt="stock logo"/>
             <StockInfo>
               <StockName>{stock.name}</StockName>
               <StockCode>{stock.code}</StockCode>
@@ -50,17 +56,17 @@ const Holdings = () => {
             </StockPriceSection>
           </StockItem>
           <StockDetails>
-            <DetailSection>
+              <DetailSection>
               <DetailTitle>{stock.profit}</DetailTitle>
-              <DetailData>{stock.profitAmount}</DetailData>
+              <DetailTitle>{stock.holding}</DetailTitle>
             </DetailSection>
             <DetailSection>
-              <DetailTitle>{stock.holding}</DetailTitle>
+              <ColoredDetailData value={stock.profitAmount}>{stock.profitAmount}</ColoredDetailData>
               <DetailData>{stock.purchasePrice}</DetailData>
             </DetailSection>
             <DetailSection>
-              <DetailTitle>{stock.rateOfReturn}</DetailTitle>
-              <DetailData>{stock.stocksHeld}</DetailData>
+              <ColoredDetailData value={stock.rateOfReturn}>{stock.rateOfReturn}</ColoredDetailData>
+              <DetailTitle>{stock.stocksHeld}</DetailTitle>
             </DetailSection>
           </StockDetails>
           <ThickDivider />
@@ -68,6 +74,11 @@ const Holdings = () => {
       ))}
     </HoldingsContainer>
   );
+};
+
+type HoldingsProps = {
+  currentListType: "관심목록" | "투자목록";
+  onChangeListType: (type: "관심목록" | "투자목록") => void;
 };
 
 const getColorByChange = (change: string) => {
@@ -86,8 +97,9 @@ const getColorByChange = (change: string) => {
     position: relative;
   `;
   
-  const Icon = styled.span`
-    font-size: 24px;
+  const Icon = styled.img`
+    width: 24px;
+    height: 24px;
     cursor: pointer;
     margin-right: 10px;
   `;
@@ -182,11 +194,11 @@ const getColorByChange = (change: string) => {
   
 
 const EvaluationProfit = styled.div`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
   margin: 10px 0;
   text-align: center;
-  color: green; // 수익금이 플러스일 경우 초록색으로 표시
+  color: red; // 수익금이 플러스일 경우 초록색으로 표시
 `;
 
 const StockDetails = styled.div`
@@ -203,11 +215,27 @@ const DetailSection = styled.div`
 `;
 
 const DetailTitle = styled.span`
-  font-weight: bold;
-  margin-bottom: 4px;
+  font-weight: light;
+  font-size : 14px;
 `;
 
-const DetailData = styled.span``;
+const DetailData = styled.span`
+  font-size: 14px;  // Setting standardized font size for all data
+`;
+
+const getColorByValue = (value: string) => {
+  if (value.startsWith('+')) return 'red';
+  if (value.startsWith('-')) return 'blue';
+  return 'black';
+};
+
+const ColoredDetailData = styled.span.attrs<{ value: string }>(({ value }) => ({
+  style: {
+    color: getColorByValue(value),
+  },
+}))`
+  font-size: 14px;  // Setting standardized font size for all data
+`;
 
 const ThickDivider = styled.div`
   height: 2px;

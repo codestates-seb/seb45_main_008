@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import Samsung_logo from "../../asset/images/logos/Samsung_logo.svg"
-import LG_logo from "../../asset/images/logos/LG_logo.svg"
-import Sk_logo from "../../asset/images/logos/Sk_logo.png"
-import POSCO_logo from "../../asset/images/logos/POSCO_logo.svg"
+import Samsung_logo from "../../asset/logos/Samsung_logo.svg"
+import LG_logo from "../../asset/logos/LG_logo.svg"
+import Sk_logo from "../../asset/logos/Sk_logo.png"
+import POSCO_logo from "../../asset/logos/POSCO_logo.svg"
+import Menu_icon from "../../asset/images/menu.png"
 
-const WatchList = () => {
+const WatchList: React.FC<WatchListProps> = ({ currentListType, onChangeListType }) => {
+
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const [listType, setListType] = useState('관심목록');
+  
 
   const favoriteStocks = [
     { name: "삼성전자", code: "005930", price: "71,000원", change: "+6.13%", changePrice: "+4,100원", logo: Samsung_logo },
@@ -24,12 +26,16 @@ const WatchList = () => {
   return (
     <WatchListContainer>
       <Header>
-        <Icon onClick={() => setMenuOpen(!isMenuOpen)}>📄</Icon>
-        <HeaderText>{listType}</HeaderText>
+        <Icon 
+          src={Menu_icon}
+          alt="menu icon"
+          onClick={() => setMenuOpen(!isMenuOpen)}
+        />
+        <HeaderText>{currentListType}</HeaderText>
         {isMenuOpen && (
           <SlideMenu>
-            <MenuItem onClick={() => { setListType('관심목록'); setMenuOpen(false); }}>관심목록</MenuItem>
-            <MenuItem onClick={() => { setListType('투자목록'); setMenuOpen(false); }}>투자목록</MenuItem>
+            <MenuItem onClick={() => { onChangeListType('관심목록'); setMenuOpen(false); }}>관심목록</MenuItem>
+            <MenuItem onClick={() => { onChangeListType('투자목록'); setMenuOpen(false); }}>투자목록</MenuItem>
           </SlideMenu>
         )}
       </Header>
@@ -59,6 +65,11 @@ const WatchList = () => {
   );
 };
 
+type WatchListProps = {
+  currentListType: "관심목록" | "투자목록";
+  onChangeListType: (type: "관심목록" | "투자목록") => void;
+};
+
 const getColorByChange = (change: string) => {
   if (change.startsWith('+')) return 'red';
   if (change.startsWith('-')) return 'blue';
@@ -75,8 +86,9 @@ const Header = styled.div`
   position: relative;
 `;
 
-const Icon = styled.span`
-  font-size: 24px;
+const Icon = styled.img`
+  width: 24px; // 너비를 설정합니다. 원하는 크기로 조절 가능합니다.
+  height: 24px; // 높이를 설정합니다. 원하는 크기로 조절 가능합니다.
   cursor: pointer;
   margin-right: 10px;
 `;
