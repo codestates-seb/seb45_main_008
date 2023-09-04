@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import StockHolmLogo from "../../asset/images/StockHolmLogo.png";
 
-const LogoutHeader: React.FC = () => {
+const LogoutHeader: React.FC<LogoutHeaderProps> = ({ onLoginClick }) => {
   const [searchValue, setSearchValue] = useState<string>("");
 
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -21,7 +21,7 @@ const LogoutHeader: React.FC = () => {
         <LogoImage src={StockHolmLogo} />
       </LogoButton>
       <SearchBar value={searchValue} onChange={handleSearchChange} />
-      <LoginButton>{loginText}</LoginButton>
+      <LoginButton onClick={onLoginClick}>{loginText}</LoginButton>
     </HeaderContainer>
   );
 };
@@ -76,5 +76,8 @@ const LoginButton = styled.button`
     background-color: #f2f2f2; // 호버 시 약간 어두운 흰색으로 변경
   }
 `;
+interface LogoutHeaderProps {
+  onLoginClick: () => void;
+}
 
 export default LogoutHeader;
