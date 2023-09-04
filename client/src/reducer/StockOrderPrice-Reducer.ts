@@ -8,17 +8,11 @@ const stockPriceOrderSlice = createSlice({
   initialState: initialState,
   reducers: {
     setStockOrderPrice: (state, action) => {
-      return action.payload;
-    },
-    plusStockOrderPrice: (state, action) => {
-      return state + action.payload;
-    },
-    minusStockOrderPrice: (state, action) => {
-      if (state > action.payload) {
-        return state - action.payload;
-      }
+      state = action.payload;
       return state;
     },
+    plusStockOrderPrice: (state, action) => state + action.payload,
+    minusStockOrderPrice: (state, action) => (state > action.payload ? state - action.payload : state),
   },
 });
 

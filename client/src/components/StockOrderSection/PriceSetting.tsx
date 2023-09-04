@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
-import { setSpecifiedPrice, setMarketPrice } from "../../reducer/stockPriceType-Reducer";
+import { setSpecifiedPrice, setMarketPrice } from "../../reducer/StockPriceType-Reducer";
 import { plusStockOrderPrice, minusStockOrderPrice } from "../../reducer/StockOrderPrice-Reducer";
 import { StateProps } from "../../models/stateProps";
 

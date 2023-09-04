@@ -1,6 +1,6 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { stockOrderTypeReducer } from "../reducer/StockOrderType-Reducer";
-import { stockPriceTypeReducer } from "../reducer/stockPriceType-Reducer";
+import { stockPriceTypeReducer } from "../reducer/StockPriceType-Reducer";
 import { stockOrderPriceReducer } from "../reducer/StockOrderPrice-Reducer";
 
 const store = configureStore({
