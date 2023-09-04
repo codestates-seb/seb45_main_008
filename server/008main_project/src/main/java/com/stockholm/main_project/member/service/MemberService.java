@@ -4,8 +4,10 @@ import com.stockholm.main_project.auth.utils.CustomAuthorityUtils;
 import com.stockholm.main_project.member.dto.MemberPostDto;
 import com.stockholm.main_project.member.entity.Member;
 import com.stockholm.main_project.member.repository.MemberRepository;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,8 +33,9 @@ public class MemberService {
         String confirmPassword = member.getConfirmPassword();
 
         if (!password.equals(confirmPassword)) {
-            throw new IllegalArgumentException("비밀번호와 비밀번호 재확인이 일치하지 않습니다.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호와 비밀번호 재확인이 일치하지 않습니다.");
         }// 암호 재확인 기능
+
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
         member.setPassword(encryptedPassword);
 
