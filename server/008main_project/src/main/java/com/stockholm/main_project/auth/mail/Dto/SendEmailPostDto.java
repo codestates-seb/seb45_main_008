@@ -1,5 +1,6 @@
 package com.stockholm.main_project.auth.mail.Dto;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,5 +16,6 @@ public class SendEmailPostDto {
     @NotBlank
     @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$",
             message = "올바른 이메일 구성이 아닙니다.")
+    @Schema(description = "Email", defaultValue = "Test@example.com")
     private String email;
 }

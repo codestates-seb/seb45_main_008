@@ -37,7 +37,7 @@ springdoc:
   default-consumes-media-type: application/json
   default-produces-media-type: application/json
   paths-to-match:
-    - /stockholm/**
+    - /**
 
 token:
   app-key: "PSjMh9iyz0EFvbpWkvuYHfLiFuHyNAtLoG9h"

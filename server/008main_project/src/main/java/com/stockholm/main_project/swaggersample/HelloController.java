@@ -24,7 +24,7 @@ public class HelloController {
     })
     @PostMapping
     public ResponseEntity helloPost(
-            @RequestBody @Schema(implementation = HelloPostDto.class) HelloPostDto helloPostDto) {
+            @RequestBody HelloPostDto helloPostDto) {
         HelloResponse helloResponse = new HelloResponse();
 
         helloResponse.setId(1);
