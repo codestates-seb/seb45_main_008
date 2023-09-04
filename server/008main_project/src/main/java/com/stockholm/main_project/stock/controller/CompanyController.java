@@ -64,7 +64,7 @@ public class CompanyController {
     }
 
     // swagger 추가
-    @Operation(summary = "특정 회사의 주식 호가 정보 가져오기", description = "특정 회사의 주식 호가 정보를 Get해 옵니다", tags = { "StockAsbi" })
+    @Operation(summary = "특정 회사의 주식 호가 정보 가져오기", description = "특정 회사의 주식 호가 정보를 Get해 옵니다", tags = { "Stock" })
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(schema = @Schema(implementation = CompanyResponseDto.class))),
@@ -81,6 +81,14 @@ public class CompanyController {
         return new ResponseEntity<>(companyResponseDto, HttpStatus.OK);
     }
 
+    @Operation(summary = "주식 한개 분봉 차트 불러오기", description = "주식 하나의 분봉 30개를 불러옵니다", tags = { "Stock" })
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK",
+                    content = @Content(array = @ArraySchema(schema = @Schema(implementation = StockMinResponseDto.class)))),
+            @ApiResponse(responseCode = "400", description = "BAD REQUEST"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    })
     // 차트 하나 호출
     @GetMapping("/charts/{companyId}")
     public ResponseEntity getCompanyChart(@PathVariable("companyId") long companyId) {
