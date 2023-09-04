@@ -3,13 +3,6 @@ import styled from "styled-components";
 import Comments from "./Comments";
 import { DotIcon } from "../../asset/icon/Icon";
 
-interface BoardData {
-  id: number;
-  boardText: string;
-  comments: string;
-  nickname: string;
-}
-
 const TimeLineComponent = () => {
   //로컬스토리지 생성
   const [data, setData] = useState<string>("");
@@ -147,6 +140,13 @@ const TimeLineComponent = () => {
   );
 };
 export default TimeLineComponent;
+
+interface BoardData {
+  id: number;
+  boardText: string;
+  comments: string;
+  nickname: string;
+}
 
 //드롭다운 글작성 스타일 및 닫기버튼 스타일
 const DropdownInput = styled.input`

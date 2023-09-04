@@ -10,10 +10,7 @@ export const Community = () => {
   const [selectCommunity, setSelectCommunity] = useState("timeline");
 
   // 커뮤니티 페이지 텍스트문구 객체 정리
-  interface communityText {
-    timeline: string;
-    stockDisscussion: string;
-  }
+
   const communityText = {
     timeline: "타임라인",
     stockDisscussion: "종목토론",
@@ -49,7 +46,12 @@ export const Community = () => {
       {selectCommunity === "stockDisscussion" && <StockDisscussion />}
     </div>
   );
+  interface communityText {
+    timeline: string;
+    stockDisscussion: string;
+  }
 };
+
 // 커뮤니티 타임라인 , 종복정보 탭 전체영역 스타일
 const CommunityNav = styled.div`
   display: flex;
