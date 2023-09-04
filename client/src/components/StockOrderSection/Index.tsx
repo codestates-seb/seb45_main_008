@@ -24,7 +24,7 @@ export default StockOrderSection;
 
 const Container = styled.aside`
   position: fixed;
-  right: -500px;
+  right: 0px;
   transition: right 0.3s ease-in-out;
   display: flex;
   flex-direction: column;
