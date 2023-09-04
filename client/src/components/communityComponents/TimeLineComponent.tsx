@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Comments from "./Comments";
-import { DotIcon } from "../../asset/icon/Icon";
+import { DotIcon } from "./IconComponent/Icon";
 
 const TimeLineComponent = () => {
   //로컬스토리지 생성

@@ -1,5 +1,5 @@
 import React from "react";
-import myImage from "./dot_Icon.png"; // 이미지 파일 import
+import myImage from "../../../asset/icon/dot_Icon.png"; // 이미지 파일 import
 import styled from "styled-components";
 export const DotIcon: React.FC = () => {
   return (
