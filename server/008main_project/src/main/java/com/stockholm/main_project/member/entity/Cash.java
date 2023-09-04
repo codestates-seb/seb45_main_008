@@ -17,7 +17,7 @@ public class Cash extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long cashId;
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 

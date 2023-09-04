@@ -1,16 +1,18 @@
 spring:
-  h2:
-    console:
-      enabled: true
-      path: /h2
-      settings:
-        web-allow-others: true
   datasource:
-    url: jdbc:h2:mem:test
+    url: jdbc:mysql://stockholm.c9tdmcjx6fcv.ap-northeast-2.rds.amazonaws.com/stockholm?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: admin
+    password: 1q2w3e4r
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create-drop
+      ddl-auto: update
     show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        format_sql: true
+
   mail:
     host: smtp.gmail.com
     port: 587
@@ -36,6 +38,17 @@ springdoc:
   default-produces-media-type: application/json
   paths-to-match:
     - /stockholm/**
+
+token:
+  app-key: "PSjMh9iyz0EFvbpWkvuYHfLiFuHyNAtLoG9h"
+  app-secret: "vtzv7bG78qgtThPEujr1MWDJHKTawSoEDRfAJzB/lYvwj67HdzUsyUavVGD4kORIeGS5q6BJBwoICXy97h8d3RaSAvhK03Yu/seFm0t+22ZQBv4GKhxvU5jGwdMrsucyKuQ0EtXfkJxJoLFsqIO1UA1n3r4HX0D5RxIe8I8efwEYVbidAn4="
+
+stock-url:
+  token: "https://openapivts.koreainvestment.com:29443/oauth2/tokenP"
+  stockasbi: "https://openapivts.koreainvestment.com:29443/uapi/domestic-stock/v1/quotations/inquire-asking-price-exp-ccn"
+  stockhour: "https://openapivts.koreainvestment.com:29443/uapi/domestic-stock/v1/quotations/inquire-time-itemchartprice"
+  kospi: "https://openapivts.koreainvestment.com:29443/uapi/domestic-stock/v1/quotations/inquire-daily-indexchartprice"
+
 jwt:
   #key: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 40

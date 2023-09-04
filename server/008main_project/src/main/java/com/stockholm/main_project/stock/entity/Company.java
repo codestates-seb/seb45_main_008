@@ -17,11 +17,15 @@ public class Company extends Auditable {
     private long companyId;
 
     @Column
-    private int code;
+    private String code;
 
     @Column
     private String korName;
 
-    @Column
-    private String information;
+    @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
+    private StockAsBi stockAsBi;
+
+    @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
+    private StockInf stockInf;
+
 }
