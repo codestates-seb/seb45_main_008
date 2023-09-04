@@ -12,20 +12,22 @@ import java.util.List;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 public class Member extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long memberId;
 
-    @Column
+    @Column(length = 30, nullable = false)
     private String email;
 
-    @Column
+    @Column(length = 10, nullable = false)
     private String name;
 
-    @Column
+    @Column(length = 255, nullable = false)
     private String password;
+
+    @Transient
+    private String confirmPassword; //실제 저장을 하지 않기 위해 @Transient 사용
 
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
