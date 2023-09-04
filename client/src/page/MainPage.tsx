@@ -1,4 +1,5 @@
 import { useState, useCallback } from "react";
+import { useSelector } from "react-redux";
 import styled from "styled-components";
 import LogoutHeader from "../components/Headers/LogoutHeader";
 import LoginHeader from "../components/Headers/LoginHeader";
@@ -7,14 +8,18 @@ import EmailLoginModal from "../components/Logins/EmailLogin";
 import EmailSignupModal from "../components/Signups/EmailSignup";
 import EmailVerificationModal from "../components/Signups/EmailCertify";
 import PasswordSettingModal from "../components/Signups/Password";
-import CentralChartSection from "../components/CentralChartSection/Index";
+import CentralChart from "../components/CentralChart/Index";
 import WatchList from "../components/watchlist/WatchList";
 import Holdings from "../components/watchlist/Holdings"; // Assuming you have a Holdings component
 import CompareChartSection from "../components/CompareChartSection/Index";
 import StockOrderSection from "../components/StockOrderSection/Index";
 
+import { StateProps } from "../models/stateProps";
+
 import { TabContainerPage } from "./TabPages/TabContainerPage";
 const MainPage = () => {
+  const expandScreen = useSelector((state: StateProps) => state.expandScreen);
+
   const [isOAuthModalOpen, setOAuthModalOpen] = useState(false);
   const [isEmailLoginModalOpen, setEmailLoginModalOpen] = useState(false);
   const [isEmailSignupModalOpen, setEmailSignupModalOpen] = useState(false);
@@ -45,8 +50,7 @@ const MainPage = () => {
     setEmailSignupModalOpen(false);
   }, []);
 
-  const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] =
-    useState(false);
+  const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] = useState(false);
 
   const openEmailVerificationModal = useCallback(() => {
     setEmailSignupModalOpen(false); // 이메일 회원가입 모달 닫기
@@ -57,8 +61,7 @@ const MainPage = () => {
     setEmailVerificationModalOpen(false);
   }, []);
 
-  const [isPasswordSettingModalOpen, setPasswordSettingModalOpen] =
-    useState(false);
+  const [isPasswordSettingModalOpen, setPasswordSettingModalOpen] = useState(false);
 
   const openPasswordSettingModal = useCallback(() => {
     setEmailVerificationModalOpen(false); // 이메일 인증 모달 닫기
@@ -75,9 +78,7 @@ const MainPage = () => {
     setIsLoggedIn(true);
   };
 
-  const [selectedMenu, setSelectedMenu] = useState<"관심목록" | "투자목록">(
-    "투자목록"
-  ); // Default menu is 관심목록
+  const [selectedMenu, setSelectedMenu] = useState<"관심목록" | "투자목록">("투자목록"); // Default menu is 관심목록
 
   const handleMenuChange = (menu: "관심목록" | "투자목록") => {
     setSelectedMenu(menu);
@@ -89,55 +90,22 @@ const MainPage = () => {
 
   return (
     <Container>
-      {isLoggedIn ? (
-        <LoginHeader onLogoutClick={handleLogout} />
-      ) : (
-        <LogoutHeader onLoginClick={openOAuthModal} />
-      )}
+      {isLoggedIn ? <LoginHeader onLogoutClick={handleLogout} /> : <LogoutHeader onLoginClick={openOAuthModal} />}
       <Main>
         <CompareChartSection />
-        <LeftSection>
-          {selectedMenu === "관심목록" ? (
-            <WatchList
-              key="watchlist"
-              currentListType={selectedMenu}
-              onChangeListType={handleMenuChange}
-            />
-          ) : (
-            <Holdings
-              currentListType={selectedMenu}
-              onChangeListType={handleMenuChange}
-            />
-          )}
-        </LeftSection>
-        <CentralChartSection />
+        {!expandScreen.left && (
+          <LeftSection>{selectedMenu === "관심목록" ? <WatchList key="watchlist" currentListType={selectedMenu} onChangeListType={handleMenuChange} /> : <Holdings currentListType={selectedMenu} onChangeListType={handleMenuChange} />}</LeftSection>
+        )}
+        <CentralChart />
         <StockOrderSection />
-        <TabContainerPage></TabContainerPage>
+        {!expandScreen.right && <TabContainerPage></TabContainerPage>}
       </Main>
       {isOAuthModalOpen && (
-        <OAuthLoginModal
-          onClose={closeOAuthModal}
-          onEmailLoginClick={openEmailLoginModal}
-          onEmailSignupClick={openEmailSignupModal}
-          onWatchListClick={() => handleMenuChange("관심목록")}
-          onHoldingsClick={() => handleMenuChange("투자목록")}
-        />
+        <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} onEmailSignupClick={openEmailSignupModal} onWatchListClick={() => handleMenuChange("관심목록")} onHoldingsClick={() => handleMenuChange("투자목록")} />
       )}
-      {isEmailLoginModalOpen && (
-        <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} />
-      )}
-      {isEmailSignupModalOpen && (
-        <EmailSignupModal
-          onClose={closeEmailSignupModal}
-          onRequestVerification={openEmailVerificationModal}
-        />
-      )}
-      {isEmailVerificationModalOpen && (
-        <EmailVerificationModal
-          onClose={closeEmailVerificationModal}
-          onNextStep={openPasswordSettingModal}
-        />
-      )}
+      {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} />}
+      {isEmailSignupModalOpen && <EmailSignupModal onClose={closeEmailSignupModal} onRequestVerification={openEmailVerificationModal} />}
+      {isEmailVerificationModalOpen && <EmailVerificationModal onClose={closeEmailVerificationModal} onNextStep={openPasswordSettingModal} />}
       {isPasswordSettingModalOpen && (
         <PasswordSettingModal
           onClose={() => {

@@ -7,7 +7,7 @@ const orderPendingEmptyMessage: string = "미체결 내역이 없습니다";
 const OrderResult = () => {
   return (
     <Container>
-      <Title>{titleText}</Title>
+      <div className="Title">{titleText}</div>
       <OrderPending>
         <div className="orderPendingTitle">{orderPendingTitle}</div>
         <div className="emptyIndicator">{orderPendingEmptyMessage}</div>
@@ -23,13 +23,13 @@ const Container = styled.div`
   padding-top: 16px;
   display: flex;
   flex-direction: column;
-`;
 
-const Title = styled.div`
-  font-size: 16px;
-  font-weight: 500;
-  padding-left: 16px;
-  padding-bottom: 16px;
+  .Title {
+    font-size: 16px;
+    font-weight: 500;
+    padding-left: 16px;
+    padding-bottom: 16px;
+  }
 `;
 
 const OrderPending = styled.div`

@@ -16,19 +16,19 @@ const VolumeSetting = () => {
   return (
     <Container>
       <TitleContainer>
-        <Title>{volumeSettingTitle}</Title>
-        <MaximumVolumeBox>
+        <div className="Title">{volumeSettingTitle}</div>
+        <div className="MaximumVolumeContainer">
           <span>{maximumVolumeText01}</span>
           <span className="maximumVolume">{dummyMaximum}</span>
           <span>{maximumVolumeText02}</span>
-        </MaximumVolumeBox>
+        </div>
       </TitleContainer>
       <VolumeSettingBox>
         <VolumeController />
-        <DirectionBox>
+        <div className="DirectionContainer">
           <button className="VolumeUp">&#8896;</button>
           <button className="VolumeDown">&#8897;</button>
-        </DirectionBox>
+        </div>
       </VolumeSettingBox>
       <PercentageBox>
         <button>{percentageBtnText01}</button>
@@ -53,32 +53,57 @@ const TitleContainer = styled.div`
   flex-direction: row;
   justify-content: space-between;
   margin-bottom: 8px;
-`;
 
-const Title = styled.div`
-  padding-left: 5px;
-  font-size: 13px;
-  color: #999999;
-`;
-
-const MaximumVolumeBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  gap: 3px;
-
-  & span {
-    font-size: 14px;
+  .Title {
+    padding-left: 5px;
+    font-size: 13px;
     color: #999999;
   }
 
-  .maximumVolume {
-    color: #ed2926;
+  .MaximumVolumeContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+
+    & span {
+      font-size: 14px;
+      color: #999999;
+    }
+
+    .maximumVolume {
+      color: #ed2926;
+    }
   }
 `;
 
 const VolumeSettingBox = styled.div`
   display: flex;
   flex-direction: row;
+
+  .DirectionContainer {
+    display: flex;
+    flex-direction: column;
+
+    & button {
+      width: 31px;
+      height: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 10px;
+      border: 1px solid darkgray;
+      border-radius: 0%;
+
+      &.VolumeUp {
+        border-bottom: none;
+        border-radius: 0 0.2rem 0 0;
+      }
+
+      &.VolumeDown {
+        border-radius: 0 0 0.2rem 0;
+      }
+    }
+  }
 `;
 
 const VolumeController = styled.input`
@@ -87,31 +112,6 @@ const VolumeController = styled.input`
   border: 1px solid darkgray;
   border-right: none;
   border-radius: 0.2rem 0 0 0.2rem;
-`;
-
-const DirectionBox = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  & button {
-    width: 31px;
-    height: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 10px;
-    border: 1px solid darkgray;
-    border-radius: 0%;
-
-    &.VolumeUp {
-      border-bottom: none;
-      border-radius: 0 0.2rem 0 0;
-    }
-
-    &.VolumeDown {
-      border-radius: 0 0 0.2rem 0;
-    }
-  }
 `;
 
 const PercentageBox = styled.div`

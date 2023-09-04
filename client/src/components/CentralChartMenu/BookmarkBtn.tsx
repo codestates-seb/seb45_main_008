@@ -9,7 +9,7 @@ const BookmarkBtn = () => {
   return (
     <Container>
       <Button src={bookmarkOffImg} />
-      <div className="BtntextContainer">{buttonText}</div>
+      <div className="BtnTextContainer">{buttonText}</div>
     </Container>
   );
 };
@@ -23,11 +23,10 @@ const Container = styled.div`
   gap: 2px;
   padding-right: 14px;
 
-  .BtntextContainer {
+  .BtnTextContainer {
     display: flex;
     justify-content: center;
     align-items: center;
-
     font-size: 14.5px;
     color: darkgray;
   }

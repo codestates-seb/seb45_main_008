@@ -34,29 +34,29 @@ const PriceSetting = () => {
 
   return (
     <Container>
-      <PriceCategoryBox>
-        <Title>{priceSettingTitle}</Title>
-        <ButtonContainer>
+      <div className="PriceCategoryBox">
+        <div className="Title">{priceSettingTitle}</div>
+        <div className="ButtonContainer">
           <SepcifiedPriceBtn onClick={handleSetSepcifiedPrice} priceType={priceType}>
             {specifiedPriceBtnText}
           </SepcifiedPriceBtn>
           <MarketPriceBtn onClick={handleSetMarketPrice} priceType={priceType}>
             {marketPriceBtnText}
           </MarketPriceBtn>
-        </ButtonContainer>
-      </PriceCategoryBox>
-      <PriceSettingBox>
+        </div>
+      </div>
+      <div className="PriceSettingBox">
         <PriceController defaultValue={orderPrice} value={orderPrice} />
         <UnitContent>{unitText}</UnitContent>
-        <DirectionBox>
+        <div className="DirectionBox">
           <button className="PriceUp" onClick={handlePlusOrderPrice}>
             &#8896;
           </button>
           <button className="PriceDown" onClick={handleMinusOrderPrice}>
             &#8897;
           </button>
-        </DirectionBox>
-      </PriceSettingBox>
+        </div>
+      </div>
     </Container>
   );
 };
@@ -73,32 +73,62 @@ const Container = styled.div`
   width: 100%;
   margin-top: 16px;
   margin-bottom: 32px;
-`;
 
-const PriceCategoryBox = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin-bottom: 8px;
-`;
+  .PriceCategoryBox {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin-bottom: 8px;
 
-const Title = styled.div`
-  padding-left: 5px;
-  font-size: 13px;
-  color: #999999;
-`;
+    .Title {
+      padding-left: 5px;
+      font-size: 13px;
+      color: #999999;
+    }
 
-const ButtonContainer = styled.div`
-  position: relative;
-  width: 100px;
-  height: 25px;
-  background-color: #f2f2f2;
-  border-radius: 0.3rem;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  gap: 2px;
+    .ButtonContainer {
+      position: relative;
+      width: 100px;
+      height: 25px;
+      background-color: #f2f2f2;
+      border-radius: 0.3rem;
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 2px;
+    }
+  }
+
+  .PriceSettingBox {
+    display: flex;
+    flex-direction: row;
+
+    .DirectionBox {
+      display: flex;
+      flex-direction: column;
+
+      & button {
+        width: 31px;
+        height: 15px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 10px;
+        border: 1px solid darkgray;
+        border-radius: 0%;
+
+        &.PriceUp {
+          border-bottom: none;
+          border-radius: 0 0.2rem 0 0;
+        }
+
+        &.PriceDown {
+          border-radius: 0 0 0.2rem 0;
+        }
+      }
+    }
+  }
 `;
 
 const SepcifiedPriceBtn = styled.button<PriceTypeProps>`
@@ -122,11 +152,6 @@ const MarketPriceBtn = styled.button<PriceTypeProps>`
   background-color: ${(props) => (props.priceType ? "white" : "f2f2f2")};
   color: ${(props) => (props.priceType ? "black" : "#999999")};
   font-size: 13px;
-`;
-
-const PriceSettingBox = styled.div`
-  display: flex;
-  flex-direction: row;
 `;
 
 const PriceController = styled.input`
@@ -153,29 +178,4 @@ const UnitContent = styled.div`
   border-top: 1px solid darkgray;
   border-bottom: 1px solid darkgray;
   background-color: #ffffff;
-`;
-
-const DirectionBox = styled.div`
-  display: flex;
-  flex-direction: column;
-
-  & button {
-    width: 31px;
-    height: 15px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 10px;
-    border: 1px solid darkgray;
-    border-radius: 0%;
-
-    &.PriceUp {
-      border-bottom: none;
-      border-radius: 0 0.2rem 0 0;
-    }
-
-    &.PriceDown {
-      border-radius: 0 0 0.2rem 0;
-    }
-  }
 `;

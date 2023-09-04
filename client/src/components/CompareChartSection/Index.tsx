@@ -22,12 +22,14 @@ export default CompareChartSection;
 
 const Container = styled.div`
   position: fixed;
+  z-index: 1;
   left: -300px;
   transition: 0.3s left ease-in-out;
   display: flex;
   flex-direction: column;
   min-width: 248px;
   height: 100%;
+  background-color: #ffffff;
   border: 1px solid black;
 `;
 
