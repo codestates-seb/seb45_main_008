@@ -10,7 +10,7 @@ const useGetStockData = () => {
     const currentTime = new Date();
     const minute = currentTime.getMinutes();
 
-    (minute === 0 || minute === 30) && setFetching(false);
+    minute === 0 || minute === 30 ? setFetching(true) : setFetching(false);
     return minute;
   };
 
@@ -31,8 +31,13 @@ const useGetStockData = () => {
   // 30분 정각이 될경우 서버 데이터 호출 + 30분 마다 데이터 갱신
   const { data, isLoading, error } = useQuery("chartData", getChartData, {
     enabled: fetching,
-    refetchInterval: 60000 * 30,
+    // refetchInterval: 60000 * 30,
+    refetchInterval: 60000 * 10, // 10분에 한번씩 재호출
     refetchOnMount: true,
+    onSuccess: () => {
+      console.log(new Date());
+      console.log(data);
+    },
   });
 
   return { data, isLoading, error };
