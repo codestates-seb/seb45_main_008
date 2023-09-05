@@ -17,6 +17,7 @@ import StockOrderSection from "../components/StockOrderSection/Index";
 import { StateProps } from "../models/stateProps";
 
 import { TabContainerPage } from "./TabPages/TabContainerPage";
+
 const MainPage = () => {
   const expandScreen = useSelector((state: StateProps) => state.expandScreen);
 

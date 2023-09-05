@@ -2,15 +2,15 @@ import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
 import axios from "axios";
 
-const useGetStockData = () => {
-  const [fetching, setFetching] = useState(true);
+const useGetStockData = (companyId: number) => {
+  const [refetch, setRefetch] = useState(false);
 
   // 30분 or 정각여부 체크 함수
   const checkTime = () => {
     const currentTime = new Date();
     const minute = currentTime.getMinutes();
 
-    minute === 0 || minute === 30 ? setFetching(true) : setFetching(false);
+    minute === 0 || minute === 30 ? setRefetch(true) : setRefetch(false);
     return minute;
   };
 
@@ -28,16 +28,14 @@ const useGetStockData = () => {
     }
   }, []);
 
-  // 30분 정각이 될경우 서버 데이터 호출 + 30분 마다 데이터 갱신
-  const { data, isLoading, error } = useQuery("chartData", getChartData, {
-    enabled: fetching,
-    // refetchInterval: 60000 * 30,
-    refetchInterval: 60000 * 10, // 10분에 한번씩 재호출
+  const { data, isLoading, error } = useQuery([`chartData${companyId}`, companyId], () => getChartData(companyId), {
+    enabled: true,
+    refetchInterval: refetch && 60000 * 10, // 정각 혹은 30분에 맞춰서 10분 마다 데이터 리패칭
     refetchOnMount: true,
-    onSuccess: () => {
-      console.log(new Date());
-      console.log(data);
-    },
+    // onSuccess: () => {
+    //   console.log(new Date());
+    //   console.log(data);
+    // },
   });
 
   return { data, isLoading, error };
@@ -45,8 +43,8 @@ const useGetStockData = () => {
 
 export default useGetStockData;
 
-// 차트 데이터 받아오는 fetching 로직
-const getChartData = async () => {
-  const res = await axios.get("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/companies/charts/1");
+// 차트 데이터 받아오는 refetch 로직
+const getChartData = async (companyId: number) => {
+  const res = await axios.get(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/companies/charts/${companyId}`);
   return res.data;
 };

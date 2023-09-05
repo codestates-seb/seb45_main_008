@@ -1,15 +1,15 @@
 import { useState, useEffect } from "react";
 import useGetStockData from "./useGetStockData";
 
-const useGetChart = () => {
-  const { data } = useGetStockData();
+const useGetChart = (companyId: number) => {
+  const { data } = useGetStockData(companyId);
   const [chartData, setChartData] = useState([]);
 
   useEffect(() => {
     if (data) {
       setChartData(data);
     }
-  }, [data]);
+  }, [data, companyId]);
 
   const options = {
     xAxis: {
@@ -26,8 +26,8 @@ const useGetChart = () => {
       {
         type: "value",
         position: "right",
-        interval: 100,
-        min: 70000,
+        interval: 1000,
+        min: 100000,
       },
     ],
     dataZoom: [

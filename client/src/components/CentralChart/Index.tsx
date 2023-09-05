@@ -1,13 +1,17 @@
+import { useSelector } from "react-redux";
 import { styled } from "styled-components";
+import { StateProps } from "../../models/stateProps";
 
 import UpperMenuBar from "../CentralChartMenu/Index";
 import StockChart from "./StockChart";
 
 const CentralChart = () => {
+  const companyId = useSelector((state: StateProps) => state.companyId);
+
   return (
     <Container>
       <UpperMenuBar />
-      <StockChart />
+      {companyId === 0 ? <div>코스피 차트</div> : <StockChart />}
     </Container>
   );
 };
