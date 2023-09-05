@@ -31,7 +31,7 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) =
   const handleLoginClick = async () => {
     try {
       // 백엔드에 로그인 요청
-      const response = await axios.post("http://localhost:8080/login", {
+      const response = await axios.post("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/login", {
         email,
         password,
       });
