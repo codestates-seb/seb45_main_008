@@ -2,6 +2,7 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+// 고정 문자열을 정의
 const strings = {
     titleText: "이메일 인증요청",
     emailLabelText: "인증할 이메일",
@@ -11,21 +12,26 @@ const strings = {
     termsText: "개인정보 처리방침 및 서비스 이용약관에 동의합니다"
 };
 
+// 이메일 인증 모달 컴포넌트
 const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({ onClose, onNextStep }) => {
-    const [email, setEmail] = useState('sample@example.com');  // 이메일 상태
-    const [verificationCode, setVerificationCode] = useState('');  // 인증코드 상태
+    // 이메일 및 인증코드에 대한 상태를 선언합니다.
+    const [email, setEmail] = useState('sample@example.com');
+    const [verificationCode, setVerificationCode] = useState('');
 
+    // 이메일 입력값을 처리하는 함수
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.target.value);
     };
 
+    // 인증코드 입력값을 처리하는 함수
     const handleVerificationCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setVerificationCode(event.target.value);
     };
 
+    // 다음 단계 버튼 클릭시 이메일 인증을 처리하는 함수
     const handleNextStepClick = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/email/confirm', { email, code: verificationCode });
+            const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/email/confirm', { email, code: verificationCode });
             if (response.status === 200) {
                 onNextStep();
             } else {
@@ -60,11 +66,13 @@ const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({ onClose
 
 export default EmailVerificationModal;
 
+// 이메일 인증 모달의 Props 타입
 type EmailVerificationModalProps = {
     onClose: () => void;
     onNextStep: () => void;
 };
 
+// 모달의 배경 스타일
 const ModalBackground = styled.div`
   display: flex;
   justify-content: center;
@@ -77,6 +85,7 @@ const ModalBackground = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
 `;
 
+// 모달의 컨테이너 스타일
 const ModalContainer = styled.div`
 position: relative;
   background-color: white;
@@ -88,6 +97,7 @@ position: relative;
   align-items: center;
 `;
 
+// 모달의 닫기 버튼 스타일
 const CloseButton = styled.button`
   position: absolute;
   top: 10px;
@@ -98,17 +108,19 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
+// 제목의 스타일
 const Title = styled.h2`
   margin-bottom: 20px;
-  font-size: 1.6rem; // 크기를 줄입니다.
-  font-weight: 400;  // 굵기를 줄입니다.
+  font-size: 1.6rem;
 `;
 
+// 레이블의 스타일
 const Label = styled.label`
   align-self: flex-start;
   margin-top: 10px;
 `;
 
+// 입력 필드의 스타일
 const Input = styled.input`
   width: 100%;
   padding: 10px;
@@ -117,23 +129,26 @@ const Input = styled.input`
   border-radius: 5px;
 `;
 
+// 버튼의 스타일
 const SignupButton = styled.button`
   width: 100%;
   padding: 10px;
   margin-top: 10px;
-  background-color: darkslategray; // 배경색을 변경합니다.
+  background-color: darkslategray;
   color: white;
   border: none;
   border-radius: 5px;
   cursor: pointer;
 `;
 
+// 힌트 텍스트의 스타일
 const HintText = styled.p`
   color: red;
   font-size: 0.8rem;
   margin-top: 5px;
 `;
 
+// 이용약관 체크박스의 스타일
 const TermsCheckbox = styled.div`
   margin-top: 10px;
   display: flex;

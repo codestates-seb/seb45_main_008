@@ -2,6 +2,7 @@ import axios from 'axios';
 import styled from 'styled-components';
 import React, { useState } from 'react';
 
+// 문자열 상수 정의
 const strings = {
   titleText: "이메일로 회원가입",
   emailLabelText: "이메일",
@@ -9,15 +10,19 @@ const strings = {
 };
 
 const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestVerification }) => {
-  const [email, setEmail] = useState(''); // 입력된 이메일을 관리하는 상태
+  // 사용자가 입력한 이메일 상태
+  const [email, setEmail] = useState('');
 
+  // 이메일 입력 핸들러
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   };
 
+  // 이메일 인증 요청 핸들러
   const handleVerificationRequest = async () => {
     try {
-      const response = await axios.post('http://localhost:8080/email/send', { email });
+      // 백엔드 배포 주소로 입력받은 이메일 전송
+      const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/email/send', { email });
       if (response.status === 200) {
         onRequestVerification();
       } else {
@@ -45,12 +50,13 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
 
 export default EmailSignupModal;
 
-
+// 프롭 타입 정의
 type EmailSignupModalProps = {
   onClose: () => void;
   onRequestVerification: () => void;
 };
 
+// 스타일 컴포넌트 정의
 const ModalBackground = styled.div`
   display: flex;
   justify-content: center;
@@ -86,8 +92,7 @@ const CloseButton = styled.button`
 
 const Title = styled.h2`
   margin-bottom: 20px;
-  font-size: 1.6rem; // 크기를 줄입니다.
-  font-weight: 400;  // 굵기를 줄입니다.
+  font-size: 1.6rem;
 `;
 
 const Label = styled.label`
@@ -107,7 +112,7 @@ const SignupButton = styled.button`
   width: 100%;
   padding: 10px;
   margin-top: 10px;
-  background-color: darkslategray; // 배경색을 변경합니다.
+  background-color: darkslategray;
   color: white;
   border: none;
   border-radius: 5px;

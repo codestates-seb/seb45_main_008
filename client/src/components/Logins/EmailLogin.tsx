@@ -2,14 +2,9 @@ import axios from "axios";
 import styled from "styled-components";
 import React, { useState } from "react";
 
-const EmailLoginModal = ({
-  onClose,
-  onLogin,
-}: {
-  onClose: () => void;
-  onLogin: () => void;
-}) => {
-  // 문자열 변수 정의
+// 이메일 로그인 모달 컴포넌트
+const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) => {
+  // 상수 문자열 정의
   const titleText = "이메일로 로그인";
   const emailLabelText = "이메일";
   const passwordLabelText = "비밀번호";
@@ -18,53 +13,52 @@ const EmailLoginModal = ({
   const noAccountText = "계정이 없습니까?";
   const registerButtonText = "회원가입하기";
 
-  const [email, setEmail] = useState(""); // 입력된 이메일 상태
-  const [password, setPassword] = useState(""); // 입력된 비밀번호 상태
+  // 상태 변수 정의
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
+  // 이메일 변경 핸들러
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   };
 
+  // 비밀번호 변경 핸들러
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
   };
 
+  // 로그인 버튼 클릭 핸들러
   const handleLoginClick = async () => {
     try {
-      const response = await axios.post("http://localhost:8080/login", {
+      // 백엔드에 로그인 요청
+      const response = await axios.post("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/login", {
         email,
         password,
       });
       if (response.status === 200) {
+        // 성공적으로 로그인된 경우, 토큰을 로컬 스토리지에 저장
+        const authToken = response.data.authorization;
+        localStorage.setItem('authToken', authToken);
         onLogin();
         onClose();
       } else {
-        console.error("Error during login");
+        console.error("로그인 중 오류 발생");
       }
     } catch (error) {
-      console.error("Error during login:", error);
+      console.error("로그인 중 오류:", error);
     }
   };
 
   return (
+    // 모달 레이아웃
     <ModalBackground>
       <ModalContainer>
         <CloseButton onClick={onClose}>&times;</CloseButton>
         <Title>{titleText}</Title>
         <Label>{emailLabelText}</Label>
-        <Input
-          type="email"
-          placeholder="이메일을 입력하세요"
-          value={email}
-          onChange={handleEmailChange}
-        />
+        <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} />
         <Label>{passwordLabelText}</Label>
-        <Input
-          type="password"
-          placeholder="비밀번호를 입력하세요"
-          value={password}
-          onChange={handlePasswordChange}
-        />
+        <Input type="password" placeholder="비밀번호를 입력하세요" value={password} onChange={handlePasswordChange} />
         <RightAlignedButton>{findPasswordText}</RightAlignedButton>
         <LoginButton onClick={handleLoginClick}>{loginButtonText}</LoginButton>
         <BottomText>
@@ -77,6 +71,13 @@ const EmailLoginModal = ({
 
 export default EmailLoginModal;
 
+// 컴포넌트 props 타입 정의
+interface EmailLoginModalProps {
+  onClose: () => void;
+  onLogin: () => void;
+}
+
+// 스타일드 컴포넌트 정의
 const ModalBackground = styled.div`
   display: flex;
   justify-content: center;
@@ -112,8 +113,8 @@ const CloseButton = styled.button`
 
 const Title = styled.h2`
   margin-bottom: 20px;
-  font-size: 1.6rem; // 크기를 줄입니다.
-  font-weight: 400; // 굵기를 줄입니다.
+  font-size: 1.6rem;
+  font-weight: 400;
 `;
 
 const Label = styled.label`
@@ -134,7 +135,7 @@ const RightAlignedButton = styled.button`
   margin-top: 5px;
   background: none;
   border: none;
-  color: slategray; // 글자색을 변경합니다.
+  color: slategray;
   cursor: pointer;
 `;
 
@@ -142,7 +143,7 @@ const LoginButton = styled.button`
   width: 100%;
   padding: 10px;
   margin-top: 10px;
-  background-color: darkslategray; // 배경색을 변경합니다.
+  background-color: darkslategray;
   color: white;
   border: none;
   border-radius: 5px;
@@ -151,12 +152,12 @@ const LoginButton = styled.button`
 
 const BottomText = styled.div`
   margin-top: 10px;
-  font-size: 0.9rem; // 크기를 줄입니다.
+  font-size: 0.9rem;
 `;
 
 const RegisterButton = styled.button`
   background: none;
   border: none;
-  color: slategray; // 글자색을 변경합니다.
+  color: slategray;
   cursor: pointer;
 `;
