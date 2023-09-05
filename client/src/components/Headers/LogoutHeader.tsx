@@ -1,11 +1,11 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import StockHolmLogo from "../../asset/images/StockHolmLogo.png";
-import { useNavigate } from "react-router-dom";  // 라우터의 히스토리를 사용하기 위해 가져옴
+import { useNavigate } from "react-router-dom";  // 라우터의 네비게이션을 사용하기 위해 가져옴
 
 const LogoutHeader: React.FC<LogoutHeaderProps> = ({ onLoginClick }) => {
   const [searchValue, setSearchValue] = useState<string>("");  // 검색 값 상태 관리
-  const navigate = useNavigate();  // 라우터 히스토리 훅 사용
+  const navigate = useNavigate();  // 라우터 네비게이션 훅 사용
 
   // 검색 입력 변경 핸들러
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,6 +30,9 @@ const LogoutHeader: React.FC<LogoutHeaderProps> = ({ onLoginClick }) => {
     </HeaderContainer>
   );
 };
+
+export default LogoutHeader;
+
 
 // 스타일드 컴포넌트 정의
 const HeaderContainer = styled.div`
@@ -86,4 +89,3 @@ interface LogoutHeaderProps {
   onLoginClick: () => void;
 }
 
-export default LogoutHeader;
