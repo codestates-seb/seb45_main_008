@@ -34,7 +34,7 @@ const PasswordSettingModal: React.FC<{ onClose: () => void, email: string }> = (
     // 확인 버튼 클릭 시 데이터를 서버로 전송하는 함수
     const handleConfirmClick = async () => {
         try {
-            const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/members', {
+            const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members', {
                 email,
                 name,
                 password,
