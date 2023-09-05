@@ -18,7 +18,6 @@ const TimeLineComponent = () => {
     try {
       const response = await axios.get(serverUrl);
       const boardData = response.data;
-
       setBoardData(boardData);
     } catch (error) {
       console.error("데이터 가져오기 중 오류 발생:", error);
@@ -49,7 +48,8 @@ const TimeLineComponent = () => {
         id: new Date().getTime(),
         content: inputValue,
         comments: "",
-        nickname: `user${UserId}`,
+        title: `user${UserId}`,
+        boardId: 0,
       };
 
       try {
@@ -155,21 +155,21 @@ const TimeLineComponent = () => {
             .map((el) => (
               <BoardTextArea>
                 <Delete>
-                  <div onClick={() => handleDotOpen(el.id)}>
+                  <div onClick={() => handleDotOpen(el.boardId)}>
                     <DotIcon />
                   </div>
-                  {dotMenuOpenMap[el.id] && (
-                    <DeleteBoard onClick={() => handleDeleteClick(el.id)}>
+                  {dotMenuOpenMap[el.boardId] && (
+                    <DeleteBoard onClick={() => handleDeleteClick(el.boardId)}>
                       삭제하기
                     </DeleteBoard>
                   )}
                 </Delete>
                 <BoardText>
-                  {el.nickname}
+                  {el.title}
                   <br />
                   {el.content}
                 </BoardText>
-                <Comments postId={el.id}></Comments>
+                <Comments postId={el.boardId}></Comments>
               </BoardTextArea>
             ))
         )}
@@ -180,10 +180,11 @@ const TimeLineComponent = () => {
 export default TimeLineComponent;
 
 interface BoardData {
+  boardId: number;
   id: number;
   content: string;
   comments: string;
-  nickname: string;
+  title: string;
 }
 
 //드롭다운 글작성 스타일 및 닫기버튼 스타일
