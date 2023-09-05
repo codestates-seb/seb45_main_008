@@ -22,7 +22,7 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
   const handleVerificationRequest = async () => {
     try {
       // 백엔드 배포 주소로 입력받은 이메일 전송
-      const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/email/send', { email });
+      const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/email/send', { email });
       if (response.status === 200) {
         onRequestVerification();
       } else {

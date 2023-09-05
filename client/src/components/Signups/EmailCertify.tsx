@@ -31,7 +31,7 @@ const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({ onClose
     // 다음 단계 버튼 클릭시 이메일 인증을 처리하는 함수
     const handleNextStepClick = async () => {
         try {
-            const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/email/confirm', { email, code: verificationCode });
+            const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/email/confirm', { email, code: verificationCode });
             if (response.status === 200) {
                 onNextStep();
             } else {

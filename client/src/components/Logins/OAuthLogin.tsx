@@ -16,7 +16,7 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
     // 구글 로그인 핸들러
     const handleGoogleLogin = async () => {
       try {
-          const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/google');
+          const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google');
           if (response.status === 200) {
               console.log("Successfully logged in with Google!");
               onClose();
@@ -31,7 +31,7 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
     // 카카오 로그인 핸들러
     const handleKakaoLogin = async () => {
       try {
-          const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/oauth2/authorization/kakao');
+          const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/kakao');
           if (response.status === 200) {
               console.log("Successfully logged in with Kakao!");
               onClose();
