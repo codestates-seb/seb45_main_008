@@ -12,7 +12,7 @@ import javax.validation.constraints.*;
 public class MemberPostDto {
     @Email
     @NotBlank
-    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+$",
+    @Pattern(regexp = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]+$",
             message = "올바른 이메일 구성이 아닙니다.")
     @Schema(description = "Email", defaultValue = "Test@example.com")
     private String email;

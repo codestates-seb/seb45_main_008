@@ -1,6 +1,9 @@
 package com.stockholm.main_project.member.service;
 
+import com.stockholm.main_project.advice.GlobalExceptionAdvice;
 import com.stockholm.main_project.auth.utils.CustomAuthorityUtils;
+import com.stockholm.main_project.exception.BusinessLogicException;
+import com.stockholm.main_project.exception.ExceptionCode;
 import com.stockholm.main_project.member.dto.MemberPostDto;
 import com.stockholm.main_project.member.entity.Member;
 import com.stockholm.main_project.member.repository.MemberRepository;
@@ -33,7 +36,7 @@ public class MemberService {
         String confirmPassword = member.getConfirmPassword();
 
         if (!password.equals(confirmPassword)) {
-            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "비밀번호와 비밀번호 재확인이 일치하지 않습니다.");
+            throw new BusinessLogicException(ExceptionCode.INVALID_PASSWORD);
         }// 암호 재확인 기능
 
         String encryptedPassword = passwordEncoder.encode(member.getPassword());
@@ -50,25 +53,18 @@ public class MemberService {
     }
 
     public Member updateMember(Member member) {
-        Optional<Member> optionalMember = memberRepository.findById(member.getMemberId());
+        Member findMember = findVerifiedMember(member.getMemberId());
 
-        if (optionalMember.isPresent()) {
-            Member foundMember = optionalMember.get();
+        Optional.ofNullable(member.getName())
+                .ifPresent(name -> findMember.setName(name));
+            memberRepository.save(findMember);
 
-            if (member.getName() != null) {
-                foundMember.setName(member.getName());
-            }
-            memberRepository.save(foundMember);
-
-            return foundMember;
-        }
-
-        return null;
+        return findMember;
     }
 
-    public Member findMember(long memberId) {
+    public  Member findMember(long memberId) {
 
-        return memberRepository.findById(memberId).orElse(null);
+        return findVerifiedMember(memberId);
     }
 
     public void deleteMember(long memberId) {
@@ -76,10 +72,19 @@ public class MemberService {
         memberRepository.deleteById(memberId);
     }
 
+    public Member findVerifiedMember(long memberId) {
+        Optional<Member> optionalMember =
+                memberRepository.findById(memberId);
+        Member findMember =
+                optionalMember.orElseThrow(() ->
+                        new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
+        return findMember;
+    }
+
     private void verifyExistsEmail(String email) {
         Optional<Member> member = memberRepository.findByEmail(email);
         if (member.isPresent())
-            throw new RuntimeException("이미 가입된 이메일입니다.");
+            throw new BusinessLogicException(ExceptionCode.EMAIL_DUPLICATION);
     }
 }
 
