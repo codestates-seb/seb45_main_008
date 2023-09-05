@@ -8,8 +8,6 @@ const serverUrl =
   "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/boards";
 
 const TimeLineComponent = () => {
-  //로컬스토리지 생성
-
   const [boardData, setBoardData] = useState<BoardData[]>([]);
 
   useEffect(() => {
