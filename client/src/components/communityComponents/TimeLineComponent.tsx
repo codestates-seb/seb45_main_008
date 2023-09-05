@@ -3,11 +3,12 @@ import styled from "styled-components";
 import Comments from "./Comments";
 import { DotIcon } from "./IconComponent/Icon";
 import axios from "axios";
-
+import { useNavigate } from "react-router-dom";
 const serverUrl =
   "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/boards";
 
 const TimeLineComponent = () => {
+  const navigate = useNavigate();
   const [boardData, setBoardData] = useState<BoardData[]>([]);
 
   useEffect(() => {
@@ -69,7 +70,8 @@ const TimeLineComponent = () => {
       }
     } else {
       alert("내용이 없습니다");
-      window.location.href = "http://localhost:5173/community";
+      // window.location.href = "http://localhost:5173/community";.
+      navigate("/community");
     }
   };
 
