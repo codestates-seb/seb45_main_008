@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import useGetStockData from "./useGetStockData";
 
-const useGetChart = (companyId: number) => {
+const useGetStockChart = (companyId: number) => {
   const { data } = useGetStockData(companyId);
   const [chartData, setChartData] = useState([]);
 
@@ -59,7 +59,7 @@ const useGetChart = (companyId: number) => {
   return { options, chartStyle };
 };
 
-export default useGetChart;
+export default useGetStockChart;
 
 interface StockProps {
   stockMinId: number;

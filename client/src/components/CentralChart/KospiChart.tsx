@@ -1,11 +1,9 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { styled } from "styled-components";
 import EChartsReact from "echarts-for-react";
-import { StateProps } from "../../models/stateProps";
 import { changeCompanyId } from "../../reducer/CompanyId-Reducer";
 
-import useGetStockData from "../../hooks/useGetStockData";
-import useGetStockChart from "../../hooks/useGetStockChart";
+import useGetKospiChart from "../../hooks/useGetKospiChart";
 
 // 🔴 회사 목록 데이터 불러오는 로직
 import useGetCompanyList from "../../hooks/useGetCompanyList";
@@ -16,12 +14,10 @@ const errorText = "화면을 불러올 수 없습니다";
 //🔴 테스트
 import { useEffect, useState } from "react";
 
-const StockChart = () => {
-  const companyId = useSelector((state: StateProps) => state.companyId);
+const KospiChart = () => {
   const dispatch = useDispatch();
 
-  const { isLoading, error } = useGetStockData(companyId);
-  const { options, chartStyle } = useGetStockChart(companyId);
+  const { isLoading, error, options, chartStyle } = useGetKospiChart();
 
   // 🔴 차트 변환 테스트
 
@@ -34,6 +30,10 @@ const StockChart = () => {
   useEffect(() => {
     setCompanyLists(companyList);
   }, [companyList]);
+
+  useEffect(() => {
+    console.log(companyLists);
+  }, [companyLists]);
 
   const handleChangeSearchWord = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchWord(e.target.value);
@@ -53,10 +53,6 @@ const StockChart = () => {
       dispatch(changeCompanyId(-1));
     }
   };
-
-  useEffect(() => {
-    console.log(companyId);
-  }, [companyId]);
 
   // 🔴 2) 클릭 이벤트
   const handleKospi = () => {
@@ -97,7 +93,7 @@ const StockChart = () => {
   );
 };
 
-export default StockChart;
+export default KospiChart;
 
 const Container = styled.div`
   height: 100%;
