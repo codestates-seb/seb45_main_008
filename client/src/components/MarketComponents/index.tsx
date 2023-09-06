@@ -1,10 +1,28 @@
 import styled from "styled-components";
+import axios from "axios";
+import { useState, useEffect } from "react";
 
-// import { parseString } from "xml2js";
-// import axios from "axios";
 const MarketSummary: React.FC = () => {
   //컴포넌트 안쪽의 텍스트 변수
   //컴포넌트 내부 텍스트 변수로 치환후 사용
+  const KospiDataServerUrl =
+    "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/kospi";
+  useEffect(() => {
+    // 컴포넌트가 마운트될 때 데이터를 가져오도록 useEffect를 사용
+    KospiDataFromServer();
+  }, []);
+
+  const KospiDataFromServer = async () => {
+    try {
+      const response = await axios.get(KospiDataServerUrl);
+      const KospiData = response.data;
+      setKospiDatas(KospiData);
+      console.log(kospiDatas, "kospi");
+    } catch (error) {
+      console.error("데이터 가져오기 중 오류 발생:", error);
+    }
+  };
+  const [kospiDatas, setKospiDatas] = useState<string[]>([]);
 
   interface StockStatus {
     now: string;
@@ -27,6 +45,7 @@ const MarketSummary: React.FC = () => {
       <MarketH3>{SummaryText.now}</MarketH3>
       <Kospiul>
         <div>{SummaryText.kospi}</div>
+        <div></div>
       </Kospiul>
 
       <News>
