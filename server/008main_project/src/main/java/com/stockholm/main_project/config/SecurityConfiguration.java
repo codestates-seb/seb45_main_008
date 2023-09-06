@@ -21,6 +21,7 @@ import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.util.Arrays;
+import java.util.List;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
@@ -39,8 +40,9 @@ public class SecurityConfiguration {
         httpSecurity
                 .headers().frameOptions().sameOrigin() //H2 웹 콘솔에 정상적으로 접근 가능하도록 설정
                 .and()
+                .cors().configurationSource(corsConfigurationSource())// CORS 설정을 추가
+                .and()
                 .csrf().disable() //CSRF 공격에 대한 설정
-                .cors(withDefaults()) // CORS 설정을 추가
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)//.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)를 통해서 세션을 생성하지 않도록 설정
                 .and()
                 .formLogin().disable() // JSON 포맷 전달 방식 사용을 위해 비활성화
@@ -60,15 +62,20 @@ public class SecurityConfiguration {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder();
     }
     @Bean
-    CorsConfigurationSource corsConfigurationSource(){
+    CorsConfigurationSource corsConfigurationSource() {
         CorsConfiguration configuration = new CorsConfiguration();
-        configuration.setAllowedOrigins(Arrays.asList("*"));
-        configuration.setAllowedMethods(Arrays.asList("GET", "POST", "PATCH", "DELETE"));
+
         configuration.setAllowCredentials(true);
+        configuration.setAllowedOrigins(List.of(
+                "http://seb008stockholm.s3-website.ap-northeast-2.amazonaws.com/",
+                "http://localhost:5173", "http://localhost:3000"
+        ));
+        configuration.setAllowedMethods(List.of("GET","POST", "PATCH", "DELETE"));
+        configuration.setAllowedHeaders(List.of("*"));
+        configuration.setExposedHeaders(List.of("*"));
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", configuration);
-
         return source;
     }
     public class CustomFilterConfigurer extends AbstractHttpConfigurer<CustomFilterConfigurer, HttpSecurity> {
