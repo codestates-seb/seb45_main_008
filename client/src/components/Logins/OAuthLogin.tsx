@@ -1,3 +1,4 @@
+// client/src/components/Logins/OAuthLogin.tsx
 import styled from 'styled-components';
 import googleLogo from '../../asset/images/GoogleLogo.svg'; 
 import kakaoLogo from '../../asset/images/KakaoLogo.svg';  
@@ -16,7 +17,7 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
     // 구글 로그인 핸들러
     const handleGoogleLogin = async () => {
       try {
-          const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google');
+          const response = await axios.post('/oauth2/authorization/google');
           if (response.status === 200) {
               console.log("Successfully logged in with Google!");
               onClose();
@@ -31,7 +32,7 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
     // 카카오 로그인 핸들러
     const handleKakaoLogin = async () => {
       try {
-          const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/kakao');
+          const response = await axios.post('/oauth2/authorization/kakao');
           if (response.status === 200) {
               console.log("Successfully logged in with Kakao!");
               onClose();
@@ -84,12 +85,14 @@ const OrText = styled.span`
   color: grey;
 `;
 
+//제목 "로그인"
 const Title = styled.h2`
   margin-bottom: 20px;
   font-size: 1.6rem;
   font-weight: 400;
 `;
 
+//배경 어둡게
 const ModalBackground = styled.div`
   display: flex;
   justify-content: center;
@@ -102,6 +105,7 @@ const ModalBackground = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
 `;
 
+//모달 창 CSS
 const ModalContainer = styled.div`
   position: relative;
   background-color: white;
@@ -113,6 +117,7 @@ const ModalContainer = styled.div`
   align-items: center;
 `;
 
+//닫기 버튼
 const CloseButton = styled.button`
   position: absolute;
   top: 10px;
@@ -123,6 +128,7 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
+//OAuth 버튼
 const OAuthButton = styled.button`
   margin: 10px 0;
   padding: 10px 20px;
@@ -140,13 +146,22 @@ const GoogleButton = styled(OAuthButton)``;
 
 const KakaoButton = styled(OAuthButton)``;
 
+//구글과 카카오 로고 이미지 크기
+const LogoImage = styled.img`
+  margin-right: 30px;
+  width: 60px;
+  height: auto;
+`;
+//
+
+
 const EmailButtonsContainer = styled.div`
   display: flex;
   justify-content: space-around;
   width: 100%;
   margin: 5px 0;
 `;
-
+//이메일로 회원가입하기, 이메일로 로그인하기 버튼
 const EmailButton = styled.button`
   margin: 5px 0;
   padding: 10px 20px;
@@ -156,8 +171,4 @@ const EmailButton = styled.button`
   cursor: pointer;
 `;
 
-const LogoImage = styled.img`
-  margin-right: 30px;
-  width: 60px;
-  height: auto;
-`;
+
