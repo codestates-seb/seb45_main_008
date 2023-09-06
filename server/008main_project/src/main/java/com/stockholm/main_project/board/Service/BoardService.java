@@ -5,6 +5,8 @@ import com.stockholm.main_project.board.entity.Board;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+
+import org.springframework.transaction.annotation.Transactional;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -14,6 +16,8 @@ public class BoardService {
 
     @Autowired
     private BoardRepository boardRepository;
+
+    // 이하 메서드들은 그대로 유지합니다.
 
     public Board createBoard(Board board) {
         // 게시물 생성 로직 구현
@@ -32,7 +36,7 @@ public class BoardService {
 
     public Board updateBoard(Long boardId, Board board) {
         // 게시물 업데이트 로직 구현
-        board.setBoardId(boardId);
+        board.setId(boardId);
         return boardRepository.save(board);
     }
 
@@ -45,7 +49,6 @@ public class BoardService {
         return false;
     }
 
-    // 게시물 일부 업데이트를 처리하는 메서드 추가
     public Board patchBoard(Long boardId, Map<String, Object> updates) {
         Optional<Board> existingBoardOptional = boardRepository.findById(boardId);
 
@@ -66,4 +69,12 @@ public class BoardService {
             return null; // 게시물을 찾을 수 없음
         }
     }
+
+    // 아래 메서드는 게시물과 관련된 댓글을 함께 조회하는 메서드입니다.
+    @Transactional(readOnly = true)
+    public Board getBoardWithComments(Long boardId) {
+        Optional<Board> boardOptional = boardRepository.findByIdWithComments(boardId);
+        return boardOptional.orElse(null);
+    }
+
 }
