@@ -3,14 +3,21 @@ import { useQuery } from "react-query";
 import axios from "axios";
 
 const useGetStockData = (companyId: number) => {
-  const [refetch, setRefetch] = useState(false);
+  const [autoRefetch, setAutoRefetch] = useState(false);
 
-  // 30분 or 정각여부 체크 함수
+  // 30분 or 정각여부 체크 함수 -> 30분 혹은 정각일 경우 api 1회 수동 요청 + 자동 요청 기능 활성화
   const checkTime = () => {
     const currentTime = new Date();
     const minute = currentTime.getMinutes();
 
-    minute === 0 || minute === 30 ? setRefetch(true) : setRefetch(false);
+    console.log(currentTime);
+    console.log("checkTime 테스트");
+
+    if (minute === 0 || minute === 30) {
+      refetch();
+      setAutoRefetch(true);
+    }
+
     return minute;
   };
 
@@ -28,14 +35,14 @@ const useGetStockData = (companyId: number) => {
     }
   }, []);
 
-  const { data, isLoading, error } = useQuery([`chartData${companyId}`, companyId], () => getChartData(companyId), {
+  const { data, isLoading, error, refetch } = useQuery([`chartData${companyId}`, companyId], () => getChartData(companyId), {
     enabled: true,
-    refetchInterval: refetch && 60000 * 10, // 정각 혹은 30분에 맞춰서 10분 마다 데이터 리패칭
+    refetchInterval: autoRefetch && 60000 * 10, // 정각 혹은 30분에 맞춰서 10분 마다 데이터 리패칭
     refetchOnMount: true,
-    // onSuccess: () => {
-    //   console.log(new Date());
-    //   console.log(data);
-    // },
+    onSuccess: () => {
+      console.log(new Date());
+      console.log(data);
+    },
   });
 
   return { data, isLoading, error };
@@ -43,7 +50,7 @@ const useGetStockData = (companyId: number) => {
 
 export default useGetStockData;
 
-// 차트 데이터 받아오는 refetch 로직
+// 차트 데이터 받아오는 fetch 로직
 const getChartData = async (companyId: number) => {
   const res = await axios.get(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/companies/charts/${companyId}`);
   return res.data;

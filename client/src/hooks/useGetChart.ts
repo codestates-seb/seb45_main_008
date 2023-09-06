@@ -15,10 +15,8 @@ const useGetChart = (companyId: number) => {
     xAxis: {
       type: "category",
       data: chartData.map((stock: StockProps) => {
-        // const date = new Date(stock.stck_cntg_hour);
-        const hours = stock.stck_cntg_hour.substring(0, 2);
-        const minutes = stock.stck_cntg_hour.substring(2, 4);
-        const tradeTime = `${hours}:${minutes}`;
+        const date = new Date(stock.stockTradeTime);
+        const tradeTime = `${date.getHours()}시 ${date.getMinutes()}분`;
         return tradeTime;
       }),
     },
@@ -26,8 +24,8 @@ const useGetChart = (companyId: number) => {
       {
         type: "value",
         position: "right",
-        interval: 1000,
-        min: 100000,
+        interval: 100,
+        min: 69700,
       },
     ],
     dataZoom: [

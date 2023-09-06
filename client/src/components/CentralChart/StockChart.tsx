@@ -9,6 +9,7 @@ const errorText = "화면을 불러올 수 없습니다";
 
 // 🔴test
 import { useState } from "react";
+import axios from "axios";
 
 const StockChart = () => {
   // 🔴test
@@ -22,9 +23,17 @@ const StockChart = () => {
     setParams((state) => state - 1);
   };
 
+  // 코스피 데이터 정렬
+  const testKospi = async () => {
+    const res = await axios.get("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/kospi");
+    const kospi = res.data.output2;
+    return kospi.reverse();
+  };
+
   useEffect(() => {
-    console.log(params);
-  }, [params]);
+    const kospi = testKospi();
+    console.log(kospi);
+  }, []);
   // 테스트
 
   const { isLoading, error } = useGetStockData(params);

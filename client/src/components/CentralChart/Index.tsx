@@ -11,7 +11,7 @@ const CentralChart = () => {
   return (
     <Container>
       <UpperMenuBar />
-      {companyId === 0 ? <div>코스피 차트</div> : <StockChart />}
+      {companyId !== 0 ? <div>코스피 차트</div> : <StockChart />}
     </Container>
   );
 };
