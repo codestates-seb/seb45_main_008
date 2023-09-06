@@ -32,7 +32,7 @@ public class MemberController {
     @Operation(summary = "회원가입", description = "자체 회원가입 요청이 POST됩니다.", tags = { "Member" })
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(schema = @Schema(implementation = MemberResponseDto.class)))
-    @ApiResponse(responseCode = "400", description = "BAD REQUEST")
+    @ApiResponse(responseCode = "404", description = "BAD REQUEST")
     @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     @PostMapping
     public ResponseEntity postMember(@Schema(implementation = MemberPostDto.class)@Valid @RequestBody MemberPostDto memberPostDto){

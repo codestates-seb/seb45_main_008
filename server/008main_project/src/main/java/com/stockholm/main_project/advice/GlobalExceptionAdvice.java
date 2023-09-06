@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.validation.ConstraintViolationException;
+import java.util.List;
 
 @Slf4j
 @RestControllerAdvice
@@ -43,4 +44,6 @@ public class GlobalExceptionAdvice {
         System.out.println(e.getMessage());
         return new ResponseEntity<>(HttpStatus.valueOf(e.getExceptionCode().getStatus()));
     }
+
+
 }

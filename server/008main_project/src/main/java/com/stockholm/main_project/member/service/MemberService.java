@@ -85,4 +85,8 @@ public class MemberService {
         if (member.isPresent())
             throw new BusinessLogicException(ExceptionCode.EMAIL_DUPLICATION);
     }
+
+    public Member findMemberByEmail(String email) {
+        return memberRepository.findByEmail(email).orElse(null);
+    }
 }

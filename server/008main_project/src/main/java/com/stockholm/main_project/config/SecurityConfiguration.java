@@ -11,6 +11,7 @@ import com.stockholm.main_project.auth.utils.OAuth2MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -57,6 +58,8 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers("members/login").permitAll()
+                        .antMatchers(HttpMethod.POST, "/cash").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/cash").hasRole("USER")
                         .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2
