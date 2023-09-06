@@ -1,3 +1,4 @@
+// /client/src/components/Signups/EmailCertify.tsx
 import axios from 'axios';
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -13,10 +14,14 @@ const strings = {
 };
 
 // 이메일 인증 모달 컴포넌트
-const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({ onClose, onNextStep }) => {
+const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({ onClose, onNextStep, initialEmail }) => {
     // 이메일 및 인증코드에 대한 상태를 선언합니다.
-    const [email, setEmail] = useState('sample@example.com');
+    const [email, setEmail] = useState(initialEmail);
     const [verificationCode, setVerificationCode] = useState('');
+
+    // 동의 상태와 알림 상태를 선언합니다.
+    const [hasAgreed, setHasAgreed] = useState(false);
+    const [showAgreementError, setShowAgreementError] = useState(false);
 
     // 이메일 입력값을 처리하는 함수
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -28,8 +33,20 @@ const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({ onClose
         setVerificationCode(event.target.value);
     };
 
+    // 체크박스의 변경을 감지하는 핸들러
+    const handleAgreementChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+        setHasAgreed(event.target.checked);
+        setShowAgreementError(false); // 알림을 숨깁니다.
+    };
+
     // 다음 단계 버튼 클릭시 이메일 인증을 처리하는 함수
     const handleNextStepClick = async () => {
+        // 동의 확인
+        if (!hasAgreed) {
+            setShowAgreementError(true); // 알림을 표시합니다.
+            return;
+        }
+
         try {
             const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/email/confirm', { email, code: verificationCode });
             if (response.status === 200) {
@@ -53,9 +70,11 @@ const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({ onClose
                 <Input type="text" placeholder={strings.codeHintText} value={verificationCode} onChange={handleVerificationCodeChange} />
                 <HintText>{strings.codeHintText}</HintText>
                 <TermsCheckbox>
-                    <input type="checkbox" id="terms" />
+                    <input type="checkbox" id="terms" onChange={handleAgreementChange} />
                     <label htmlFor="terms">{strings.termsText}</label>
                 </TermsCheckbox>
+
+                {showAgreementError && <ErrorMessage>동의하지 않으면 진행할 수 없습니다</ErrorMessage>}
                 <SignupButton onClick={handleNextStepClick}>
                     {strings.nextStepText}
                 </SignupButton>
@@ -70,6 +89,7 @@ export default EmailVerificationModal;
 type EmailVerificationModalProps = {
     onClose: () => void;
     onNextStep: () => void;
+    initialEmail: string;  // 추가된 부분
 };
 
 // 모달의 배경 스타일
@@ -161,4 +181,12 @@ const TermsCheckbox = styled.div`
   label {
     font-size: 0.9rem;
   }
+`;
+
+// 오류 메시지 스타일을 추가합니다.
+const ErrorMessage = styled.p`
+  color: red;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
 `;
