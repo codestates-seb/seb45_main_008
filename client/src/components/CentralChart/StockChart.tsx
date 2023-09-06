@@ -66,6 +66,10 @@ const StockChart = () => {
     dispatch(changeCompanyId(0));
   };
 
+  const handlePlus = () => {
+    dispatch(changeCompanyId(companyId + 1));
+  };
+
   const handleStock1 = () => {
     dispatch(changeCompanyId(1));
   };
@@ -92,6 +96,7 @@ const StockChart = () => {
         <button onClick={handleSearchCompany}>검색</button>
       </label>
       <button onClick={handleKospi}>코스피 버튼</button>
+      <button onClick={handlePlus}>CompanyId +1</button>
       <button onClick={handleStock1}>1번 주식 버튼</button>
       <button onClick={handleStock10}>10번 주식 버튼</button>
       {/* 🔴 차트 변경 이벤트 테스트 */}

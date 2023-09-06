@@ -27,8 +27,11 @@ const useGetKospiChart = () => {
       {
         type: "value",
         position: "right",
-        interval: 100,
+        interval: 50,
         min: 2000,
+        splitLine: {
+          show: false,
+        },
       },
     ],
     dataZoom: [
@@ -52,6 +55,12 @@ const useGetKospiChart = () => {
         yAxisIndex: 0,
       },
     ],
+    grid: {
+      left: "3%",
+      right: "7%",
+      top: "3%",
+      bottom: "5%",
+    },
   };
 
   const chartStyle = {

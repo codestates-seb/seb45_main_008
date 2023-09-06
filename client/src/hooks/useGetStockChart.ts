@@ -33,6 +33,9 @@ const useGetStockChart = (companyId: number) => {
         position: "right",
         interval: yAxisInterval,
         min: yAxisMinPrice,
+        splitLine: {
+          show: false,
+        },
       },
     ],
     dataZoom: [
@@ -56,6 +59,12 @@ const useGetStockChart = (companyId: number) => {
         yAxisIndex: 0,
       },
     ],
+    grid: {
+      left: "3%",
+      right: "7%",
+      top: "3%",
+      bottom: "5%",
+    },
   };
 
   const chartStyle = {
