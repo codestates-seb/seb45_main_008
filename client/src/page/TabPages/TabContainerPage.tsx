@@ -3,7 +3,7 @@ import { Routes, Route, Link } from "react-router-dom";
 import styled from "styled-components";
 import { StockItems } from "../../components/stockListComponents/StockItems";
 import { Community } from "./communityPage";
-import { Status } from "../../components/statusComponents/Status";
+import { Status } from "../../components/statusComponents/index";
 import { useState } from "react";
 export const TabContainerPage = () => {
   const [activeTab, setActiveTab] = useState(1);
@@ -13,39 +13,20 @@ export const TabContainerPage = () => {
 
   return (
     <TabContainerStyle>
-      <style>
-        @import
-        url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@500&display=swap');
-      </style>
+      <style>@import url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@500&display=swap');</style>
 
       <div>
         <TabNavArea>
-          <Nav
-            to="/"
-            onClick={() => handleClickActiveTab(1)}
-            className={`tab ${activeTab === 1 ? "active-tab" : "inactive-tab"}`}
-          >
+          <Nav to="/" onClick={() => handleClickActiveTab(1)} className={`tab ${activeTab === 1 ? "active-tab" : "inactive-tab"}`}>
             시장정보
           </Nav>
-          <Nav
-            to="/stockitems"
-            onClick={() => handleClickActiveTab(2)}
-            className={`tab ${activeTab === 2 ? "active-tab" : "inactive-tab"}`}
-          >
+          <Nav to="/stockitems" onClick={() => handleClickActiveTab(2)} className={`tab ${activeTab === 2 ? "active-tab" : "inactive-tab"}`}>
             종목정보
           </Nav>
-          <Nav
-            to="/community"
-            onClick={() => handleClickActiveTab(3)}
-            className={`tab ${activeTab === 3 ? "active-tab" : "inactive-tab"}`}
-          >
+          <Nav to="/community" onClick={() => handleClickActiveTab(3)} className={`tab ${activeTab === 3 ? "active-tab" : "inactive-tab"}`}>
             커뮤니티
           </Nav>
-          <Nav
-            to="/status"
-            onClick={() => handleClickActiveTab(4)}
-            className={`tab ${activeTab === 4 ? "active-tab" : "inactive-tab"}`}
-          >
+          <Nav to="/status" onClick={() => handleClickActiveTab(4)} className={`tab ${activeTab === 4 ? "active-tab" : "inactive-tab"}`}>
             투자현황
           </Nav>
         </TabNavArea>

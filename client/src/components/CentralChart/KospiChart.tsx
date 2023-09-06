@@ -31,10 +31,6 @@ const KospiChart = () => {
     setCompanyLists(companyList);
   }, [companyList]);
 
-  useEffect(() => {
-    console.log(companyLists);
-  }, [companyLists]);
-
   const handleChangeSearchWord = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchWord(e.target.value);
   };
@@ -51,6 +47,13 @@ const KospiChart = () => {
 
     if (searchResult === "noExistCompany") {
       dispatch(changeCompanyId(-1));
+    }
+  };
+
+  const handlePressEmnterToSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.code === "Enter") {
+      handleSearchCompany();
+      setSearchWord("");
     }
   };
 
@@ -81,7 +84,7 @@ const KospiChart = () => {
       {/* 🔴 차트 변경 이벤트 테스트 */}
       <label>
         종목 검색
-        <input onChange={handleChangeSearchWord} />
+        <input onChange={handleChangeSearchWord} onKeyDown={handlePressEmnterToSearch} />
         <button onClick={handleSearchCompany}>검색</button>
       </label>
       <button onClick={handleKospi}>코스피 버튼</button>

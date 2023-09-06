@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React, { useState } from "react";
-import MarketSummary from "../../components/MarketComponents/MarketSummary";
+import MarketSummary from "../../components/MarketComponents/index";
 import MarketStockList from "../../components/MarketComponents/MarketStockList";
 import MarketIssue from "../../components/MarketComponents/MarketIssue";
 interface Props {}
@@ -15,30 +15,16 @@ const MarketInfo: React.FC<Props> = () => {
   };
   return (
     <div>
-      <style>
-        @import
-        url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@500&display=swap');
-      </style>
+      <style>@import url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@500&display=swap');</style>
 
       <MarketInfoStyle>
-        <TabStyle
-          onClick={() => handleTabStyle(1)}
-          className={`tab ${tabStyle === 1 ? "active-tab" : "inactive-tab"}`}
-        >
+        <TabStyle onClick={() => handleTabStyle(1)} className={`tab ${tabStyle === 1 ? "active-tab" : "inactive-tab"}`}>
           <Market onClick={() => handleTabClick("market")}>시장요약</Market>
         </TabStyle>
-        <TabStyle
-          onClick={() => handleTabStyle(2)}
-          className={`tab ${tabStyle === 2 ? "active-tab" : "inactive-tab"}`}
-        >
-          <StockList onClick={() => handleTabClick("stockList")}>
-            전체종목
-          </StockList>
+        <TabStyle onClick={() => handleTabStyle(2)} className={`tab ${tabStyle === 2 ? "active-tab" : "inactive-tab"}`}>
+          <StockList onClick={() => handleTabClick("stockList")}>전체종목</StockList>
         </TabStyle>
-        <TabStyle
-          onClick={() => handleTabStyle(3)}
-          className={`tab ${tabStyle === 3 ? "active-tab" : "inactive-tab"}`}
-        >
+        <TabStyle onClick={() => handleTabStyle(3)} className={`tab ${tabStyle === 3 ? "active-tab" : "inactive-tab"}`}>
           <Issue onClick={() => handleTabClick("issues")}>시장이슈</Issue>
         </TabStyle>
       </MarketInfoStyle>

@@ -10,9 +10,6 @@ const useGetStockData = (companyId: number) => {
     const currentTime = new Date();
     const minute = currentTime.getMinutes();
 
-    console.log(currentTime);
-    console.log("checkTime 테스트");
-
     if (minute === 0 || minute === 30) {
       refetch();
       setAutoRefetch(true);
@@ -39,10 +36,6 @@ const useGetStockData = (companyId: number) => {
     enabled: true,
     refetchInterval: autoRefetch && 60000 * 10, // 정각 혹은 30분에 맞춰서 10분 마다 데이터 리패칭
     refetchOnMount: true,
-    // onSuccess: () => {
-    //   console.log(new Date());
-    //   console.log(data);
-    // },
   });
 
   return { data, isLoading, error };

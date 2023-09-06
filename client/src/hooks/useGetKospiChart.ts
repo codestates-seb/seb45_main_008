@@ -5,11 +5,7 @@ import axios from "axios";
 const useGetKospiChart = () => {
   const [kospiData, setKospiData] = useState([]);
 
-  const { data, isLoading, error } = useQuery("kospi", getKospiData, {
-    // onSuccess: () => {
-    //   console.log(data);
-    // },
-  });
+  const { data, isLoading, error } = useQuery("kospi", getKospiData, {});
 
   useEffect(() => {
     if (data) {

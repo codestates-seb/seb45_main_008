@@ -3,13 +3,20 @@ import useGetStockData from "./useGetStockData";
 
 const useGetStockChart = (companyId: number) => {
   const { data } = useGetStockData(companyId);
-  const [chartData, setChartData] = useState([]);
+  const [chartData, setChartData] = useState<StockProps[]>([]);
+  const [yAxisInterval, setYAxisInterval] = useState(0);
+  const [yAxisMinPrice, setYAxisMinPrice] = useState(0);
 
+  // 서버에서 차트 데이터 fetching -> 클라이언트 화면에 활용할 차트 데이터 + 차트 y축 수치 상태 변화
   useEffect(() => {
     if (data) {
       setChartData(data);
+
+      const { interval, min } = calculateYAxisOptions(data);
+      setYAxisInterval(interval);
+      setYAxisMinPrice(min);
     }
-  }, [data, companyId]);
+  }, [data]);
 
   const options = {
     xAxis: {
@@ -24,8 +31,8 @@ const useGetStockChart = (companyId: number) => {
       {
         type: "value",
         position: "right",
-        interval: 100,
-        min: 69700,
+        interval: yAxisInterval,
+        min: yAxisMinPrice,
       },
     ],
     dataZoom: [
@@ -60,6 +67,20 @@ const useGetStockChart = (companyId: number) => {
 };
 
 export default useGetStockChart;
+
+// y축 눈금 옵션 설정하는 함수
+const calculateYAxisOptions = (data: StockProps[]) => {
+  const sampleData = data.filter((_, index) => index % 10 === 0);
+  const samplePrice = sampleData.map((stock) => parseFloat(stock.stck_prpr));
+
+  const maxPrice = Math.max(...samplePrice);
+  const minPrice = Math.min(...samplePrice);
+
+  const interval = Math.ceil((maxPrice - minPrice) / 10);
+  const min = Math.floor(minPrice - interval * 5);
+
+  return { interval, min };
+};
 
 interface StockProps {
   stockMinId: number;

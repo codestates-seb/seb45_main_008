@@ -1,7 +1,7 @@
 //import { TabNavArea } from "./TabNavArea";
 import { useState } from "react";
 import styled from "styled-components";
-import TimeLineComponent from "../../components/communityComponents/TimeLineComponent";
+import TimeLineComponent from "../../components/communityComponents/index";
 import { StockDisscussion } from "../../components/communityComponents/StockDisscussion";
 
 export const Community = () => {
@@ -20,25 +20,11 @@ export const Community = () => {
     <div>
       <CommunityNav>
         {/*커뮤니티 내부 탭 전환*/}
-        {selectCommunity === "timeline" ? (
-          <NavButtonFocus onClick={() => setSelectCommunity("timeline")}>
-            {communityText.timeline}
-          </NavButtonFocus>
-        ) : (
-          <NavButton onClick={() => setSelectCommunity("timeline")}>
-            {communityText.timeline}
-          </NavButton>
-        )}
+        {selectCommunity === "timeline" ? <NavButtonFocus onClick={() => setSelectCommunity("timeline")}>{communityText.timeline}</NavButtonFocus> : <NavButton onClick={() => setSelectCommunity("timeline")}>{communityText.timeline}</NavButton>}
         {selectCommunity === "stockDisscussion" ? (
-          <NavButtonFocus
-            onClick={() => setSelectCommunity("stockDisscussion")}
-          >
-            {communityText.stockDisscussion}
-          </NavButtonFocus>
+          <NavButtonFocus onClick={() => setSelectCommunity("stockDisscussion")}>{communityText.stockDisscussion}</NavButtonFocus>
         ) : (
-          <NavButton onClick={() => setSelectCommunity("stockDisscussion")}>
-            {communityText.stockDisscussion}
-          </NavButton>
+          <NavButton onClick={() => setSelectCommunity("stockDisscussion")}>{communityText.stockDisscussion}</NavButton>
         )}
       </CommunityNav>
 
