@@ -1,3 +1,4 @@
+// /client/src/pages/MainPage.tsx
 import { useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
@@ -13,6 +14,7 @@ import WatchList from "../components/watchlist/WatchList";
 import Holdings from "../components/watchlist/Holdings"; // Assuming you have a Holdings component
 import CompareChartSection from "../components/CompareChartSection/Index";
 import StockOrderSection from "../components/StockOrderSection/Index";
+import Welcome from "../components/Signups/Welcome";
 
 import { StateProps } from "../models/stateProps";
 
@@ -23,6 +25,8 @@ const MainPage = () => {
   const [isOAuthModalOpen, setOAuthModalOpen] = useState(false);
   const [isEmailLoginModalOpen, setEmailLoginModalOpen] = useState(false);
   const [isEmailSignupModalOpen, setEmailSignupModalOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
+  const [isWelcomeModalOpen, setWelcomeModalOpen] = useState(false);
 
   const openOAuthModal = useCallback(() => {
     setOAuthModalOpen(true);
@@ -50,12 +54,16 @@ const MainPage = () => {
     setEmailSignupModalOpen(false);
   }, []);
 
+
   const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] =
     useState(false);
 
-  const openEmailVerificationModal = useCallback(() => {
-    setEmailSignupModalOpen(false); // 이메일 회원가입 모달 닫기
-    setEmailVerificationModalOpen(true); // 이메일 인증 모달 열기
+
+  // 이메일 인증 모달을 열 때 사용자가 입력한 이메일을 저장하도록 변경
+  const openEmailVerificationModal = useCallback((enteredEmail: string) => {
+    setEmailSignupModalOpen(false); 
+    setEmailVerificationModalOpen(true);
+    setUserEmail(enteredEmail);  // 사용자가 입력한 이메일을 저장
   }, []);
 
   const closeEmailVerificationModal = useCallback(() => {
@@ -72,6 +80,15 @@ const MainPage = () => {
 
   const closePasswordSettingModal = useCallback(() => {
     setPasswordSettingModalOpen(false);
+}, []);
+
+  const openWelcomeModal = useCallback(() => {
+    setPasswordSettingModalOpen(false); // 비밀번호 설정 모달 닫기
+    setWelcomeModalOpen(true); // Welcome 모달 열기
+  }, []);
+
+  const closeWelcomeModal = useCallback(() => {
+    setWelcomeModalOpen(false);
   }, []);
 
   const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 관리
@@ -130,26 +147,23 @@ const MainPage = () => {
           onHoldingsClick={() => handleMenuChange("투자목록")}
         />
       )}
-      {isEmailLoginModalOpen && (
-        <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} />
-      )}
-      {isEmailSignupModalOpen && (
-        <EmailSignupModal
-          onClose={closeEmailSignupModal}
-          onRequestVerification={openEmailVerificationModal}
-        />
-      )}
-      {isEmailVerificationModalOpen && (
-        <EmailVerificationModal
-          onClose={closeEmailVerificationModal}
-          onNextStep={openPasswordSettingModal}
-        />
-      )}
+
+      {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} />}
+
+      {isEmailSignupModalOpen && <EmailSignupModal onClose={closeEmailSignupModal} onRequestVerification={openEmailVerificationModal} />}
+      {isEmailVerificationModalOpen && <EmailVerificationModal onClose={closeEmailVerificationModal} onNextStep={openPasswordSettingModal} initialEmail={userEmail} />}
+
       {isPasswordSettingModalOpen && (
         <PasswordSettingModal
+          onClose={closePasswordSettingModal} // Password 모달을 닫는다.
+          onNext={openWelcomeModal} // Welcome 모달을 연다.
+          email={userEmail} // email을 userEmail로 설정
+        />
+      )}
+      {isWelcomeModalOpen && (
+        <Welcome
           onClose={() => {
-            handleLogin();
-            closePasswordSettingModal();
+            closeWelcomeModal();
           }}
         />
       )}

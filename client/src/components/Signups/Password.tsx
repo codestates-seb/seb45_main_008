@@ -1,24 +1,25 @@
+// client/src/components/Signups/Password.tsx
 import axios from 'axios';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
-// 사용자에게 보여줄 문자열을 정의하는 객체
 const strings = {
     titleText: "비밀번호 설정",
     passwordLabelText: "비밀번호",
     confirmPasswordLabelText: "비밀번호 확인",
     nicknameLabelText: "닉네임",
-    confirmButtonText: "확인"
+    confirmButtonText: "확인",
+    passwordError: "비밀번호는 8~16자, 대문자, 소문자, 숫자, 특수문자를 포함해야 합니다.",
+    passwordMismatch: "비밀번호와 비밀번호 확인이 일치하지 않습니다."
 };
 
-// 비밀번호 설정 모달 컴포넌트
-const PasswordSettingModal: React.FC<{ onClose: () => void, email: string }> = ({ onClose, email }) => {
-    // 비밀번호, 비밀번호 확인, 닉네임에 대한 상태를 관리합니다.
+const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, onNext, email }) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [name, setName] = useState('');
+    const [passwordError, setPasswordError] = useState('');
+    const [confirmPasswordError, setConfirmPasswordError] = useState('');
 
-    // 각 입력값을 처리하는 핸들러 함수들
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
     };
@@ -31,8 +32,26 @@ const PasswordSettingModal: React.FC<{ onClose: () => void, email: string }> = (
         setName(e.target.value);
     };
 
-    // 확인 버튼 클릭 시 데이터를 서버로 전송하는 함수
+    const isValidPassword = (password: string) => {
+      const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,16}$/;
+      return passwordRegex.test(password);
+    };
+
     const handleConfirmClick = async () => {
+        if (!isValidPassword(password)) {
+            setPasswordError(strings.passwordError);
+            return;
+        } else {
+            setPasswordError('');
+        }
+
+        if (password !== confirmPassword) {
+            setConfirmPasswordError(strings.passwordMismatch);
+            return;
+        } else {
+            setConfirmPasswordError('');
+        }
+
         try {
             const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members', {
                 email,
@@ -44,6 +63,7 @@ const PasswordSettingModal: React.FC<{ onClose: () => void, email: string }> = (
             if (response.status === 200) {
                 console.log('Data sent successfully');
                 onClose();
+                onNext();
             } else {
                 console.error('Error sending data');
             }
@@ -53,15 +73,18 @@ const PasswordSettingModal: React.FC<{ onClose: () => void, email: string }> = (
     };
 
     return (
-        // 모달의 전체 구조를 정의하는 부분
         <ModalBackground>
             <ModalContainer>
                 <CloseButton onClick={onClose}>&times;</CloseButton>
                 <Title>{strings.titleText}</Title>
                 <Label>{strings.passwordLabelText}</Label>
                 <Input type="password" placeholder="8~16자리 비밀번호를 입력해주세요" value={password} onChange={handlePasswordChange} />
+                {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
+
                 <Label>{strings.confirmPasswordLabelText}</Label>
                 <Input type="password" placeholder="비밀번호를 다시 입력해주세요" value={confirmPassword} onChange={handleConfirmPasswordChange} />
+                {confirmPasswordError && <ErrorMessage>{confirmPasswordError}</ErrorMessage>}
+
                 <Label>{strings.nicknameLabelText}</Label>
                 <Input type="text" placeholder="닉네임을 입력해주세요" value={name} onChange={handleNameChange} />
                 <ConfirmButton onClick={handleConfirmClick}>{strings.confirmButtonText}</ConfirmButton>
@@ -70,6 +93,11 @@ const PasswordSettingModal: React.FC<{ onClose: () => void, email: string }> = (
     );
 };
 
+interface PasswordSettingModalProps {
+  onClose: () => void;
+  onNext: () => void; 
+  email: string;
+}
 export default PasswordSettingModal;
 
 // 모달 배경 스타일
@@ -140,4 +168,11 @@ const ConfirmButton = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+`;
+
+const ErrorMessage = styled.p`
+  color: red;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
 `;

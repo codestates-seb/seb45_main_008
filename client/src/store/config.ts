@@ -5,6 +5,8 @@ import { stockOrderPriceReducer } from "../reducer/StockOrderPrice-Reducer";
 import { expandScreenReducer } from "../reducer/ExpandScreen-Reducer";
 import { stockOrderSetReducer } from "../reducer/StockOrderSet-Reducer";
 
+
+
 const store = configureStore({
   reducer: {
     stockOrderType: stockOrderTypeReducer,
@@ -12,7 +14,10 @@ const store = configureStore({
     stockOrderPrice: stockOrderPriceReducer,
     expandScreen: expandScreenReducer,
     stockOrderSet: stockOrderSetReducer,
+
   },
 });
+
+
 
 export default store;
