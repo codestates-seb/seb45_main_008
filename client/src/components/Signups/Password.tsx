@@ -2,19 +2,23 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+// 사용자에게 보여줄 문자열을 정의하는 객체
 const strings = {
     titleText: "비밀번호 설정",
     passwordLabelText: "비밀번호",
     confirmPasswordLabelText: "비밀번호 확인",
     nicknameLabelText: "닉네임",
     confirmButtonText: "확인"
-  };
-  
-  const PasswordSettingModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+};
+
+// 비밀번호 설정 모달 컴포넌트
+const PasswordSettingModal: React.FC<{ onClose: () => void, email: string }> = ({ onClose, email }) => {
+    // 비밀번호, 비밀번호 확인, 닉네임에 대한 상태를 관리합니다.
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
-    const [nickname, setNickname] = useState('');
+    const [name, setName] = useState('');
 
+    // 각 입력값을 처리하는 핸들러 함수들
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
     };
@@ -23,16 +27,18 @@ const strings = {
         setConfirmPassword(e.target.value);
     };
 
-    const handleNicknameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        setNickname(e.target.value);
+    const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setName(e.target.value);
     };
 
+    // 확인 버튼 클릭 시 데이터를 서버로 전송하는 함수
     const handleConfirmClick = async () => {
         try {
-            const response = await axios.post('http://localhost:8080/members', {
+            const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members', {
+                email,
+                name,
                 password,
                 confirmPassword,
-                nickname
             });
 
             if (response.status === 200) {
@@ -47,6 +53,7 @@ const strings = {
     };
 
     return (
+        // 모달의 전체 구조를 정의하는 부분
         <ModalBackground>
             <ModalContainer>
                 <CloseButton onClick={onClose}>&times;</CloseButton>
@@ -56,15 +63,16 @@ const strings = {
                 <Label>{strings.confirmPasswordLabelText}</Label>
                 <Input type="password" placeholder="비밀번호를 다시 입력해주세요" value={confirmPassword} onChange={handleConfirmPasswordChange} />
                 <Label>{strings.nicknameLabelText}</Label>
-                <Input type="text" placeholder="닉네임을 입력해주세요" value={nickname} onChange={handleNicknameChange} />
+                <Input type="text" placeholder="닉네임을 입력해주세요" value={name} onChange={handleNameChange} />
                 <ConfirmButton onClick={handleConfirmClick}>{strings.confirmButtonText}</ConfirmButton>
             </ModalContainer>
         </ModalBackground>
     );
 };
-  
-  export default PasswordSettingModal;
-  
+
+export default PasswordSettingModal;
+
+// 모달 배경 스타일
 const ModalBackground = styled.div`
   display: flex;
   justify-content: center;
@@ -77,6 +85,7 @@ const ModalBackground = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
 `;
 
+// 모달 컨테이너 스타일
 const ModalContainer = styled.div`
   position: relative;
   background-color: white;
@@ -88,13 +97,14 @@ const ModalContainer = styled.div`
   align-items: center;
 `;
 
+// 모달 제목 스타일
 const Title = styled.h2`
   margin-bottom: 20px;
   font-size: 1.6rem;
   font-weight: 400;
 `;
 
-
+// 모달 닫기 버튼 스타일
 const CloseButton = styled.button`
   position: absolute;
   top: 10px;
@@ -105,11 +115,13 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
+// 레이블 스타일
 const Label = styled.label`
   align-self: flex-start;
   margin-top: 10px;
 `;
 
+// 입력 필드 스타일
 const Input = styled.input`
   width: 100%;
   padding: 10px;
@@ -118,7 +130,7 @@ const Input = styled.input`
   border-radius: 5px;
 `;
 
-
+// 확인 버튼 스타일
 const ConfirmButton = styled.button`
   width: 100%;
   padding: 10px;

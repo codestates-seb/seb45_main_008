@@ -3,9 +3,9 @@ import googleLogo from '../../asset/images/GoogleLogo.svg';
 import kakaoLogo from '../../asset/images/KakaoLogo.svg';  
 import axios from 'axios';
 
-
-
+// OAuth 로그인 모달 컴포넌트
 const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick, onEmailSignupClick }) => {
+    // 텍스트 상수
     const titleText = "로그인";
     const googleLoginText = "구글로 로그인";
     const kakaoLoginText = "카카오로 로그인";
@@ -13,12 +13,11 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
     const emailLoginText = "이메일로 로그인";
     const emailSignupText = "이메일로 회원가입";
 
-
+    // 구글 로그인 핸들러
     const handleGoogleLogin = async () => {
       try {
-          const response = await axios.post('http://localhost:8080/auth/google');
+          const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google');
           if (response.status === 200) {
-              // 로그인 처리
               console.log("Successfully logged in with Google!");
               onClose();
           } else {
@@ -27,13 +26,13 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
       } catch (error) {
           console.error("Error logging in with Google:", error);
       }
-  };
-
-  const handleKakaoLogin = async () => {
+    };
+  
+    // 카카오 로그인 핸들러
+    const handleKakaoLogin = async () => {
       try {
-          const response = await axios.post('http://localhost:8080/auth/kakao');
+          const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/kakao');
           if (response.status === 200) {
-              // 로그인 처리
               console.log("Successfully logged in with Kakao!");
               onClose();
           } else {
@@ -42,8 +41,9 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
       } catch (error) {
           console.error("Error logging in with Kakao:", error);
       }
-  };
-
+    };
+  
+    // 모달 반환
     return (
       <ModalBackground>
         <ModalContainer>
@@ -53,7 +53,6 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
             <LogoImage src={googleLogo} alt="Google Logo" />
             {googleLoginText}
           </GoogleButton>
-      
           <KakaoButton onClick={handleKakaoLogin}>
             <LogoImage src={kakaoLogo} alt="Kakao Logo" />
             {kakaoLoginText}
@@ -70,26 +69,26 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
 
 export default OAuthLoginModal;
 
+// 로그인 모달 인터페이스
 interface LoginModalProps {
     onClose: () => void;
     onEmailLoginClick: () => void;
-    onEmailSignupClick: () => void;  // 추가
-    onWatchListClick: () => void; // 추가
-    onHoldingsClick: () => void; // 추가
+    onEmailSignupClick: () => void;
+    onWatchListClick: () => void;
+    onHoldingsClick: () => void;
 }
 
+// 스타일 컴포넌트
 const OrText = styled.span`
   margin: 20px 0;
   color: grey;
 `;
 
-
 const Title = styled.h2`
   margin-bottom: 20px;
-  font-size: 1.6rem; // 크기를 줄입니다.
-  font-weight: 400;  // 굵기를 줄입니다.
+  font-size: 1.6rem;
+  font-weight: 400;
 `;
-
 
 const ModalBackground = styled.div`
   display: flex;
@@ -131,22 +130,15 @@ const OAuthButton = styled.button`
   border: 1px solid lightgray;
   border-radius: 5px;
   cursor: pointer;
-  width: 300px; // 버튼의 가로 너비를 동일하게 설정합니다.
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-const GoogleButton = styled(OAuthButton)`
+  width: 300px;
   display: flex;
   align-items: center;
   justify-content: center;
 `;
 
-const KakaoButton = styled(OAuthButton)`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
+const GoogleButton = styled(OAuthButton)``;
+
+const KakaoButton = styled(OAuthButton)``;
 
 const EmailButtonsContainer = styled.div`
   display: flex;
@@ -154,7 +146,6 @@ const EmailButtonsContainer = styled.div`
   width: 100%;
   margin: 5px 0;
 `;
-
 
 const EmailButton = styled.button`
   margin: 5px 0;
@@ -165,9 +156,8 @@ const EmailButton = styled.button`
   cursor: pointer;
 `;
 
-
 const LogoImage = styled.img`
   margin-right: 30px;
-  width: 60px; // 로고의 가로 크기를 조정합니다. 필요에 따라 값을 조절할 수 있습니다.
-  height: auto; // 가로 크기에 맞춰 세로 크기를 자동으로 조절합니다.
+  width: 60px;
+  height: auto;
 `;

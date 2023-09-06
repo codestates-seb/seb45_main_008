@@ -1,20 +1,25 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import StockHolmLogo from "../../asset/images/StockHolmLogo.png";
+import { useNavigate } from "react-router-dom";  // 라우터의 네비게이션을 사용하기 위해 가져옴
 
 const LogoutHeader: React.FC<LogoutHeaderProps> = ({ onLoginClick }) => {
-  const [searchValue, setSearchValue] = useState<string>("");
+  const [searchValue, setSearchValue] = useState<string>("");  // 검색 값 상태 관리
+  const navigate = useNavigate();  // 라우터 네비게이션 훅 사용
 
+  // 검색 입력 변경 핸들러
   const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setSearchValue(event.target.value);
   };
 
-  const loginText = "로그인";
+  const loginText = "로그인";  // 로그인 버튼 텍스트
 
+  // 로고 클릭 핸들러
   const handleLogoClick = () => {
-    console.log("Logo clicked");
+    navigate("/");  // 메인 페이지로 이동
   };
 
+  // 컴포넌트 렌더링
   return (
     <HeaderContainer>
       <LogoButton onClick={handleLogoClick}>
@@ -26,13 +31,17 @@ const LogoutHeader: React.FC<LogoutHeaderProps> = ({ onLoginClick }) => {
   );
 };
 
+export default LogoutHeader;
+
+
+// 스타일드 컴포넌트 정의
 const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
   background-color: #fff;
-  border-bottom: 1px solid #2f4f4f; // 다크 슬레이트 그레이 줄
+  border-bottom: 1px solid #2f4f4f;
   width: 100%;
   height: 51px;
 `;
@@ -42,7 +51,6 @@ const LogoButton = styled.button`
   border: none;
   cursor: pointer;
   padding: 0;
-
   &:focus {
     outline: none;
   }
@@ -64,20 +72,20 @@ const SearchBar = styled.input.attrs({
 `;
 
 const LoginButton = styled.button`
-  background-color: #fff; // 흰색 배경
-  color: #2f4f4f; // 글자색
-  border: 1px solid #2f4f4f; // 회색 테두리
+  background-color: #fff;
+  color: #2f4f4f;
+  border: 1px solid #2f4f4f;
   padding: 0.5rem 1rem;
-  border-radius: 5px; // 5px 둥글게
+  border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
-
   &:hover {
-    background-color: #f2f2f2; // 호버 시 약간 어두운 흰색으로 변경
+    background-color: #f2f2f2;
   }
 `;
+
+// 프롭스 타입 정의
 interface LogoutHeaderProps {
   onLoginClick: () => void;
 }
 
-export default LogoutHeader;

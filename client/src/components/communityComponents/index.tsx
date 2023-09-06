@@ -2,19 +2,28 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Comments from "./Comments";
 import { DotIcon } from "./IconComponent/Icon";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+const serverUrl =
+  "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/boards";
 
 const TimeLineComponent = () => {
-  //로컬스토리지 생성
-  const [data, setData] = useState<string>("");
+  const navigate = useNavigate();
+  const [boardData, setBoardData] = useState<BoardData[]>([]);
+
   useEffect(() => {
-    localStorage.setItem("boradData", data);
-    setData("");
+    fetchBoardDataFromServer();
   }, []);
 
-  const [boardData, setBoardData] = useState<BoardData[]>(() => {
-    const storedData = localStorage.getItem("boardData");
-    return storedData ? JSON.parse(storedData) : [];
-  });
+  const fetchBoardDataFromServer = async () => {
+    try {
+      const response = await axios.get(serverUrl);
+      const boardData = response.data;
+      setBoardData(boardData);
+    } catch (error) {
+      console.error("데이터 가져오기 중 오류 발생:", error);
+    }
+  };
 
   //드롭다운 버튼 텍스트 작성창 열기
   const [openDropDown, setOpenDropDown] = useState(false);
@@ -31,28 +40,43 @@ const TimeLineComponent = () => {
     console.log(inputValue);
   };
 
-  // 서브밋 버튼 클릭시 로컬스토리지에 작성된 텍스트 저장
-  const handleClickSubmit = () => {
+  // 서브밋 버튼 클릭
+  const handleClickSubmit = async () => {
     if (inputValue.length !== 0) {
       //if 문의 조건식에 inputValue만 사용해도 정상 작동하는
       //이유는 JavaScript와 TypeScript의 "Truthy"와 "Falsy" 값 변환 규칙때문
       const newBoardData: BoardData = {
         id: new Date().getTime(),
-        boardText: inputValue,
+        content: inputValue,
         comments: "",
-        nickname: `user${UserId}`,
+        title: `user${UserId}`,
+        boardId: 0,
       };
 
-      setBoardData((prevBoardData) => [...prevBoardData, newBoardData]);
+      try {
+        const response = await axios.post(`${serverUrl}`, newBoardData);
+        if (response.status === 201) {
+          // 서버에 성공적으로 데이터를 업로드한 경우
+          alert("작성완료");
+          setinputValue(""); // 입력 필드 초기화
+          // 서버에서 업데이트된 게시물 목록을 다시 가져오기
+          fetchBoardDataFromServer();
+        } else {
+          alert("작성실패");
+        }
+      } catch (error) {
+        console.log("데이터 추가 중 오류 발생:", error);
+        alert("작성실패");
+      }
     } else {
-      return alert("내용이 없습니다");
+      alert("내용이 없습니다");
+
+      navigate("/community");
     }
-    alert("작성완료");
-    window.location.href = "http://localhost:5173/community";
   };
 
   //닷버튼 클릭 및 삭제하기 기능
-  // const [dotMenuOpen, setDotMenuOpen] = useState(false);
+
   const [dotMenuOpenMap, setDotMenuOpenMap] = useState<{
     [key: number]: boolean;
   }>({});
@@ -61,14 +85,28 @@ const TimeLineComponent = () => {
       ...prevState,
       [id]: !prevState[id], // 해당 게시물의 상태를 토글
     }));
-    // setDotMenuOpen(!dotMenuOpen);
   };
 
-  const handleDeleteClick = (id: number) => {
-    // ID를 사용하여 해당 게시물을 식별하고 삭제
-    const deleteData = boardData.filter((el) => el.id !== id);
-    localStorage.setItem("boardData", JSON.stringify(deleteData));
-    window.location.href = "http://localhost:5173/community";
+  const handleDeleteClick = async (boardId: number) => {
+    // boardId로 수정
+    try {
+      const response = await axios.delete(`${serverUrl}/${boardId}`); // URL에 boardId 추가
+      if (response.status === 200) {
+        // 삭제 성공 처리
+        alert("삭제되었습니다");
+        // 삭제한 게시물을 클라이언트 데이터에서도 제거
+        const updatedBoardData = boardData.filter(
+          (el) => el.boardId !== boardId
+        ); // boardId로 수정
+        setBoardData(updatedBoardData);
+      } else {
+        alert("삭제 실패");
+      }
+    } catch (error) {
+      console.error("데이터 삭제 중 오류 발생:", error);
+      alert("삭제 실패");
+      console.log(boardData);
+    }
   };
   //유저 아이디 랜덤 설정
   const getRandomFourDigitNumber = () => {
@@ -79,9 +117,9 @@ const TimeLineComponent = () => {
   const UserId = getRandomFourDigitNumber();
 
   //boardData업데이트될때 마다 로컬스토리지 데이터 저장
-  useEffect(() => {
-    localStorage.setItem("boardData", JSON.stringify(boardData));
-  }, [boardData]);
+  // useEffect(() => {
+  //   localStorage.setItem("boardData", JSON.stringify(boardData));
+  // }, [boardData]);
 
   return (
     <TimeLine>
@@ -117,21 +155,21 @@ const TimeLineComponent = () => {
             .map((el) => (
               <BoardTextArea>
                 <Delete>
-                  <div onClick={() => handleDotOpen(el.id)}>
+                  <div onClick={() => handleDotOpen(el.boardId)}>
                     <DotIcon />
                   </div>
-                  {dotMenuOpenMap[el.id] && (
-                    <DeleteBoard onClick={() => handleDeleteClick(el.id)}>
+                  {dotMenuOpenMap[el.boardId] && (
+                    <DeleteBoard onClick={() => handleDeleteClick(el.boardId)}>
                       삭제하기
                     </DeleteBoard>
                   )}
                 </Delete>
                 <BoardText>
-                  {el.nickname}
+                  {el.title}
                   <br />
-                  {el.boardText}
+                  {el.content}
                 </BoardText>
-                <Comments postId={el.id}></Comments>
+                <Comments postId={el.boardId}></Comments>
               </BoardTextArea>
             ))
         )}
@@ -142,10 +180,11 @@ const TimeLineComponent = () => {
 export default TimeLineComponent;
 
 interface BoardData {
+  boardId: number;
   id: number;
-  boardText: string;
+  content: string;
   comments: string;
-  nickname: string;
+  title: string;
 }
 
 //드롭다운 글작성 스타일 및 닫기버튼 스타일
@@ -232,6 +271,7 @@ const SubmitButton = styled.button`
 //게시판 전체 영역
 const BoardArea = styled.div`
   text-align: center;
+
   margin-top: 25px;
   width: 90%;
 `;
