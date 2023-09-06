@@ -13,7 +13,7 @@ const strings = {
     passwordMismatch: "비밀번호와 비밀번호 확인이 일치하지 않습니다."
 };
 
-const PasswordSettingModal: React.FC<{ onClose: () => void, email: string }> = ({ onClose, email }) => {
+const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, onNext, email }) => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [name, setName] = useState('');
@@ -62,9 +62,8 @@ const PasswordSettingModal: React.FC<{ onClose: () => void, email: string }> = (
 
             if (response.status === 200) {
                 console.log('Data sent successfully');
-                // JWT 토큰을 localStorage에 저장
-                localStorage.setItem('jwtToken', response.data.token);
                 onClose();
+                onNext();
             } else {
                 console.error('Error sending data');
             }
@@ -94,7 +93,11 @@ const PasswordSettingModal: React.FC<{ onClose: () => void, email: string }> = (
     );
 };
 
-
+interface PasswordSettingModalProps {
+  onClose: () => void;
+  onNext: () => void; 
+  email: string;
+}
 export default PasswordSettingModal;
 
 // 모달 배경 스타일
