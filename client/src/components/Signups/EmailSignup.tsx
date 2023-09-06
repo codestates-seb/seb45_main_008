@@ -1,3 +1,4 @@
+// client/src/components/Signups/EmailSignup.tsx
 import axios from 'axios';
 import styled from 'styled-components';
 import React, { useState } from 'react';
@@ -71,7 +72,8 @@ type EmailSignupModalProps = {
   onRequestVerification: () => void;
 };
 
-// 스타일 컴포넌트 정의
+
+//모달 배경
 const ModalBackground = styled.div`
   display: flex;
   justify-content: center;
@@ -84,6 +86,7 @@ const ModalBackground = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
 `;
 
+//모달 컨테이너
 const ModalContainer = styled.div`
   position: relative;
   background-color: white;
@@ -95,6 +98,8 @@ const ModalContainer = styled.div`
   align-items: center;
 `;
 
+
+//닫기 버튼
 const CloseButton = styled.button`
   position: absolute;
   top: 10px;
@@ -105,16 +110,19 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
+//제목 :이메일로 회원가입
 const Title = styled.h2`
   margin-bottom: 20px;
   font-size: 1.6rem;
 `;
 
+//라벨 : 이메일
 const Label = styled.label`
   align-self: flex-start;
   margin-top: 10px;
 `;
 
+//이메일 입력창
 const Input = styled.input`
   width: 100%;
   padding: 10px;
@@ -123,6 +131,7 @@ const Input = styled.input`
   border-radius: 5px;
 `;
 
+//이메일 인증요청 버튼
 const SignupButton = styled.button`
   width: 100%;
   padding: 10px;

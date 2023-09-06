@@ -108,10 +108,11 @@ const MainPage = () => {
       {isEmailVerificationModalOpen && <EmailVerificationModal onClose={closeEmailVerificationModal} onNextStep={openPasswordSettingModal} />}
       {isPasswordSettingModalOpen && (
         <PasswordSettingModal
-          onClose={() => {
-            handleLogin();
-            closePasswordSettingModal();
-          }}
+        onClose={() => {
+          handleLogin();
+          closePasswordSettingModal();
+        }}
+        email="example@example.com"  // 예시 email 값을 전달. 실제 필요한 email 값을 사용하세요.
         />
       )}
     </Container>
