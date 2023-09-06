@@ -1,3 +1,4 @@
+// /client/src/pages/MainPage.tsx
 import { useState, useCallback } from "react";
 import { useSelector } from "react-redux";
 import styled from "styled-components";
@@ -23,6 +24,7 @@ const MainPage = () => {
   const [isOAuthModalOpen, setOAuthModalOpen] = useState(false);
   const [isEmailLoginModalOpen, setEmailLoginModalOpen] = useState(false);
   const [isEmailSignupModalOpen, setEmailSignupModalOpen] = useState(false);
+  const [userEmail, setUserEmail] = useState('');
 
   const openOAuthModal = useCallback(() => {
     setOAuthModalOpen(true);
@@ -52,9 +54,11 @@ const MainPage = () => {
 
   const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] = useState(false);
 
-  const openEmailVerificationModal = useCallback(() => {
-    setEmailSignupModalOpen(false); // 이메일 회원가입 모달 닫기
-    setEmailVerificationModalOpen(true); // 이메일 인증 모달 열기
+  // 이메일 인증 모달을 열 때 사용자가 입력한 이메일을 저장하도록 변경
+  const openEmailVerificationModal = useCallback((enteredEmail: string) => {
+    setEmailSignupModalOpen(false); 
+    setEmailVerificationModalOpen(true);
+    setUserEmail(enteredEmail);  // 사용자가 입력한 이메일을 저장
   }, []);
 
   const closeEmailVerificationModal = useCallback(() => {
@@ -104,15 +108,17 @@ const MainPage = () => {
         <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} onEmailSignupClick={openEmailSignupModal} onWatchListClick={() => handleMenuChange("관심목록")} onHoldingsClick={() => handleMenuChange("투자목록")} />
       )}
       {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} />}
+
       {isEmailSignupModalOpen && <EmailSignupModal onClose={closeEmailSignupModal} onRequestVerification={openEmailVerificationModal} />}
-      {isEmailVerificationModalOpen && <EmailVerificationModal onClose={closeEmailVerificationModal} onNextStep={openPasswordSettingModal} />}
+      {isEmailVerificationModalOpen && <EmailVerificationModal onClose={closeEmailVerificationModal} onNextStep={openPasswordSettingModal} initialEmail={userEmail} />}
+
       {isPasswordSettingModalOpen && (
         <PasswordSettingModal
-        onClose={() => {
-          handleLogin();
-          closePasswordSettingModal();
-        }}
-        email="example@example.com"  // 예시 email 값을 전달. 실제 필요한 email 값을 사용하세요.
+          onClose={() => {
+            handleLogin();
+            closePasswordSettingModal();
+          }}
+          email="example@example.com"
         />
       )}
     </Container>

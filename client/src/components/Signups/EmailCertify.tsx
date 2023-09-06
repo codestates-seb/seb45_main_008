@@ -1,3 +1,4 @@
+// /client/src/components/Signups/EmailCertify.tsx
 import axios from 'axios';
 import React, { useState } from 'react';
 import styled from 'styled-components';
@@ -13,9 +14,9 @@ const strings = {
 };
 
 // 이메일 인증 모달 컴포넌트
-const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({ onClose, onNextStep }) => {
-    // 이메일 및 인증코드에 대한 상태를 선언합니다.
-    const [email, setEmail] = useState('sample@example.com');
+const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({ onClose, onNextStep, initialEmail }) => {
+  // 이메일 및 인증코드에 대한 상태를 선언합니다.
+    const [email, setEmail] = useState(initialEmail);
     const [verificationCode, setVerificationCode] = useState('');
 
     // 이메일 입력값을 처리하는 함수
@@ -68,8 +69,9 @@ export default EmailVerificationModal;
 
 // 이메일 인증 모달의 Props 타입
 type EmailVerificationModalProps = {
-    onClose: () => void;
-    onNextStep: () => void;
+  onClose: () => void;
+  onNextStep: () => void;
+  initialEmail: string;  // 추가된 부분
 };
 
 // 모달의 배경 스타일

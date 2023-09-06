@@ -29,17 +29,15 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
 
   // 이메일 인증 요청 핸들러
   const handleVerificationRequest = async () => {
-
     if (!validateEmail(email)) {
       setIsInvalidEmail(true);
       return;
     }
 
     try {
-      // 백엔드 배포 주소로 입력받은 이메일 전송
       const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/email/send', { email });
       if (response.status === 200) {
-        onRequestVerification();
+        onRequestVerification(email);
       } else {
         console.error('Error sending verification email');
       }
@@ -69,7 +67,7 @@ export default EmailSignupModal;
 // 프롭 타입 정의
 type EmailSignupModalProps = {
   onClose: () => void;
-  onRequestVerification: () => void;
+  onRequestVerification: (email: string) => void;
 };
 
 
