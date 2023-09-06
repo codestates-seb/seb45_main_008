@@ -1,5 +1,6 @@
 package com.stockholm.main_project.board.dto;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.stockholm.main_project.comment.dto.CommentDto;
 
