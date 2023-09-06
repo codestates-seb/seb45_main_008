@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/boards")
+@RequestMapping("/api/boards")
 public class BoardController {
 
     @Autowired
@@ -106,15 +106,10 @@ public class BoardController {
 
 
     // 게시물 삭제
-    @DeleteMapping("/{boardId}") // 변수 이름도 수정
-    @Operation(summary = "게시물 삭제", description = "게시물을 삭제합니다.", tags = { "Board" })
-    @ApiResponses({
-            @ApiResponse(responseCode = "201", description = "Created", content = @Content(schema = @Schema(implementation = Board.class))),
-            @ApiResponse(responseCode = "400", description = "Bad Request"),
-            @ApiResponse(responseCode = "500", description = "Internal Server Error")
-    })
-    public ResponseEntity<Void> deleteBoard(@PathVariable Long boardId) { // 변수 이름도 수정
-        boolean deleted = boardService.deleteBoard(boardId); // 서비스 메서드도 수정
+
+    @DeleteMapping("/{boardId}")
+    public ResponseEntity<Void> deleteBoard(@PathVariable Long boardId) {
+        boolean deleted = boardService.deleteBoard(boardId);
         if (deleted) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {

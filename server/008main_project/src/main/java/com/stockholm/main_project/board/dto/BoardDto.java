@@ -1,25 +1,67 @@
 package com.stockholm.main_project.board.dto;
 
-import io.swagger.v3.oas.annotations.media.Schema;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.stockholm.main_project.comment.dto.CommentDto;
+
+import java.util.List;
 
 public class BoardDto {
-    @Schema(description = "게시물 ID", example = "1")
-    private long id;
-
-    @Schema(description = "게시물 제목", defaultValue = "제목 없음")
+    private Long boardId;
     private String title;
-
-    @Schema(description = "게시물 내용", defaultValue = "내용 없음")
-    private String body;
-
-    @Schema(description = "이미지 URL")
+    private String content;
     private String img;
+    private Long memberId;
 
-    @Schema(description = "회원 ID", example = "101")
-    private long memberId;
+    private List<CommentDto> comments; // 댓글 정보를 저장할 필드
 
-    @Schema(description = "댓글 ID", example = "201")
-    private long commentId;
+    // Getter 및 Setter 메서드
 
-    // Getter 및 Setter 메서드 생략
+    public Long getBoardId() {
+        return boardId;
+    }
+
+    public void setBoardId(Long boardId) {
+        this.boardId = boardId;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getContent() {
+        return content;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public String getImg() {
+        return img;
+    }
+
+    public void setImg(String img) {
+        this.img = img;
+    }
+
+    public Long getMemberId() {
+        return memberId;
+    }
+
+    public void setMemberId(Long memberId) {
+        this.memberId = memberId;
+    }
+
+    public List<CommentDto> getComments() {
+        return comments;
+    }
+
+    public void setComments(List<CommentDto> comments) {
+        this.comments = comments;
+    }
 }
