@@ -16,20 +16,34 @@ import java.net.URL;
 @Service
 public class AwsS3Service {
 
-    @Value("${cloud.aws.credentials.access-key}")
-    private String accessKey;
+//    @Value("${cloud.aws.credentials.access-key}")
+//    private String accessKey;
+//
+//    @Value("${cloud.aws.credentials.secret-key}")
+//    private String secretKey;
+//
+//    @Value("${cloud.aws.s3.bucket}")
+//    private String bucketName;
+//
+//    private S3Client s3Client;
+//
+//    @PostConstruct
+//    public void initializeS3Client() {
+//        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(accessKey, secretKey);
+//
+//        this.s3Client = S3Client.builder()
+//                .region(Region.AP_NORTHEAST_2)
+//                .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
+//                .build();
+//    }
+private final String bucketName = "stockholm-server";
+    private final S3Client s3Client;
 
-    @Value("${cloud.aws.credentials.secret-key}")
-    private String secretKey;
-
-    @Value("${cloud.aws.s3.bucket}")
-    private String bucketName;
-
-    private S3Client s3Client;
-
-    @PostConstruct
-    public void initializeS3Client() {
-        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(accessKey, secretKey);
+    public AwsS3Service() {
+        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(
+                "AKIA2NEJZLTF4KLMVO2L",
+                "P0jXsEgL2x+mf6GXD/+y5NTRHrTNiHmKm/8xwimV"
+        );
 
         this.s3Client = S3Client.builder()
                 .region(Region.AP_NORTHEAST_2)
