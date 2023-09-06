@@ -70,14 +70,13 @@ const TimeLineComponent = () => {
       }
     } else {
       alert("내용이 없습니다");
-      // window.location.href = "http://localhost:5173/community";.
+
       navigate("/community");
     }
   };
 
   //닷버튼 클릭 및 삭제하기 기능
 
-  // const [dotMenuOpen, setDotMenuOpen] = useState(false);
   const [dotMenuOpenMap, setDotMenuOpenMap] = useState<{
     [key: number]: boolean;
   }>({});
@@ -86,7 +85,6 @@ const TimeLineComponent = () => {
       ...prevState,
       [id]: !prevState[id], // 해당 게시물의 상태를 토글
     }));
-    // setDotMenuOpen(!dotMenuOpen);
   };
 
   const handleDeleteClick = async (boardId: number) => {
