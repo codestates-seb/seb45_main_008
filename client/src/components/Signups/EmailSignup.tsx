@@ -6,20 +6,34 @@ import React, { useState } from 'react';
 const strings = {
   titleText: "이메일로 회원가입",
   emailLabelText: "이메일",
-  requestVerificationText: "이메일 인증요청"
+  requestVerificationText: "이메일 인증요청",
+  invalidEmailText: "유효하지 않은 이메일입니다"
 };
 
 const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestVerification }) => {
   // 사용자가 입력한 이메일 상태
   const [email, setEmail] = useState('');
+  const [isInvalidEmail, setIsInvalidEmail] = useState(false);  // 이메일 유효성 상태
 
   // 이메일 입력 핸들러
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
+    setIsInvalidEmail(false);
+  };
+
+  //이메일 유효성 검사
+  const validateEmail = (email: string) => {
+    return email.includes('@') && email.includes('.com');
   };
 
   // 이메일 인증 요청 핸들러
   const handleVerificationRequest = async () => {
+
+    if (!validateEmail(email)) {
+      setIsInvalidEmail(true);
+      return;
+    }
+
     try {
       // 백엔드 배포 주소로 입력받은 이메일 전송
       const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/email/send', { email });
@@ -40,6 +54,7 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
         <Title>{strings.titleText}</Title>
         <Label>{strings.emailLabelText}</Label>
         <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} />
+        {isInvalidEmail && <ErrorMessage>{strings.invalidEmailText}</ErrorMessage>}
         <SignupButton onClick={handleVerificationRequest}>
           {strings.requestVerificationText}
         </SignupButton>
@@ -117,4 +132,12 @@ const SignupButton = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+`;
+
+// 오류 메시지 스타일
+const ErrorMessage = styled.p`
+  color: red;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
 `;
