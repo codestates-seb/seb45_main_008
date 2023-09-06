@@ -43,7 +43,7 @@ public class SwaggerConfig {
 
     @Bean
     public GroupedOpenApi chatOpenApi() {
-        String[] paths = {"/stockholm/**"};
+        String[] paths = {"/**"};
 
         return GroupedOpenApi.builder()
                 .group("stockholm API v1")
