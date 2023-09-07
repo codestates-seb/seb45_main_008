@@ -5,13 +5,28 @@ import axios from "axios";
 const useGetStockInfo = (companyId: number) => {
   const [autoRefetch, setAutoRefetch] = useState(false);
 
+  // 시간대별로 queryKey 다르게 적용
+  const month = new Date().getMonth();
+  const day = new Date().getDay();
+  const hour = new Date().getHours();
+  let queryKeyNum;
+  const queryKey = `${month}월 ${day}일 ${hour}시 ${queryKeyNum}`;
+
   // 30분 or 정각여부 체크 함수 -> 30분 혹은 정각일 경우 api 1회 수동 요청 + 자동 요청 기능 활성화
   const checkTime = () => {
     const currentTime = new Date();
     const minute = currentTime.getMinutes();
 
+    if (0 < minute && minute < 30) {
+      queryKeyNum = "01~29";
+    }
+
+    if (30 < minute && minute < 60) {
+      queryKeyNum = "31~59";
+    }
+
     if (minute === 0 || minute === 30) {
-      refetch();
+      queryKeyNum = "30 or 60";
       setAutoRefetch(true);
     }
 
@@ -32,7 +47,7 @@ const useGetStockInfo = (companyId: number) => {
     }
   }, []);
 
-  const { data, isLoading, error, refetch } = useQuery(`stockInfo${companyId}`, () => getStockInfo(companyId), {
+  const { data, isLoading, error } = useQuery(`stockInfo${companyId} ${queryKey}}`, () => getStockInfo(companyId), {
     enabled: true,
     refetchInterval: autoRefetch && 60000 * 10, // 정각 혹은 30분에 맞춰서 10분 마다 데이터 리패칭
     refetchOnMount: true,
