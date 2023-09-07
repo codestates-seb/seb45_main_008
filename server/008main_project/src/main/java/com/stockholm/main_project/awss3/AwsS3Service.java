@@ -21,8 +21,8 @@ public class AwsS3Service {
 
     public AwsS3Service() {
         AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(
-                "AKIA2NEJZLTFSSGV7M5J",
-                "/sRpldMiUXGYfNducGoEkxQlQhu6CcsgV+ACFahu"
+                "",
+                ""
         );
 
         this.s3Client = S3Client.builder()
@@ -30,8 +30,6 @@ public class AwsS3Service {
                 .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
                 .build();
     }
-
-
 
     // 이미지 업로드
     public URL uploadFile(MultipartFile file) throws Exception {

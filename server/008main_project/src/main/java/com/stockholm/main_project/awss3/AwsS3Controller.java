@@ -15,6 +15,7 @@ public class AwsS3Controller {
         this.s3Service = s3Service;
     }
 
+
     // 이미지 업로드
     @PostMapping("/upload")
     public URL uploadFile(@RequestParam MultipartFile file) throws Exception {
@@ -25,7 +26,7 @@ public class AwsS3Controller {
     @DeleteMapping("/delete/{fileName}")
     public ResponseEntity<String> deleteFile(@PathVariable String fileName) {
         s3Service.deleteFile(fileName);
-        return ResponseEntity.ok("File deleted successfully.");
+        return ResponseEntity.ok("파일이 삭제 되었습니다.");
     }
 
     // 이미지 URL 가져오기
