@@ -1,27 +1,20 @@
 package com.stockholm.main_project.board.mapper;
 
-import com.stockholm.main_project.board.dto.BoardDto;
+import com.stockholm.main_project.board.dto.BoardPostDto;
+import com.stockholm.main_project.board.dto.BoardResponseDto;
 import com.stockholm.main_project.board.entity.Board;
 
+import com.stockholm.main_project.comment.entity.CommentEntity;
 import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Mappings;
-import org.mapstruct.factory.Mappers;
 
 @Mapper(componentModel = "spring")
 public interface BoardMapper {
-    BoardMapper INSTANCE = Mappers.getMapper(BoardMapper.class);
 
-    @Mappings({
-            @Mapping(source = "member.memberId", target = "memberId"),
-            @Mapping(source = "comments", target = "comments"),
-    })
-    BoardDto boardToBoardDto(Board board);
 
-    @Mappings({
-            @Mapping(source = "memberId", target = "member.memberId"),
-            @Mapping(source = "comments", target = "comments"),
-    })
-    Board boardDtoToBoard(BoardDto boardDto);
+
+    Board boardPostToBoard(BoardPostDto requestBody);
+
+    Board boardToBoardResponseDto(Board board);
+    BoardResponseDto boardToBoardToCommnetResponseDto(CommentEntity commentEntity);
 }
 

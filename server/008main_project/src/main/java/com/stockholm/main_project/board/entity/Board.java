@@ -37,13 +37,4 @@ public class Board extends Auditable {
     @JsonIgnoreProperties("board") // board 필드는 JSON 직렬화에서 제외하지 않음
     private List<CommentEntity> comments = new ArrayList<>();
 
-    // getId() 메서드 추가
-    public Long getId() {
-        return id;
-    }
-
-    // setId() 메서드 추가
-    public void setId(Long id) {
-        this.id = id;
-    }
 }

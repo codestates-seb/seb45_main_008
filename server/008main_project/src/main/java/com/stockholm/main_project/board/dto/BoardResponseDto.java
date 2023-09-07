@@ -1,12 +1,16 @@
-package com.stockholm.main_project.board.Response;
+package com.stockholm.main_project.board.dto;
 
 
 import com.stockholm.main_project.comment.Response.CommentResponse;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 // 게시판 응답 형식 클래스
-public class BoardResponse {
+@Getter
+@Setter
+public class BoardResponseDto {
     private Long id;
     private String title;
     private String content;

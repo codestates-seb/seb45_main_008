@@ -1,8 +1,12 @@
 package com.stockholm.main_project.board.Controller;
 
 import com.stockholm.main_project.board.Service.BoardService;
+import com.stockholm.main_project.board.dto.BoardPostDto;
+import com.stockholm.main_project.board.dto.BoardResponseDto;
 import com.stockholm.main_project.board.entity.Board; // Board 클래스를 참조하도록 수정
-import com.stockholm.main_project.swaggersample.HelloResponse;
+import com.stockholm.main_project.board.mapper.BoardMapper;
+import com.stockholm.main_project.member.entity.Member;
+import com.stockholm.main_project.member.service.MemberService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -11,6 +15,8 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -22,7 +28,16 @@ import java.util.Map;
 public class BoardController {
 
     @Autowired
-    private BoardService boardService;
+    private final BoardService boardService;
+    private final MemberService memberService;
+
+    private final BoardMapper mapper;
+
+    public BoardController(BoardService boardService, MemberService memberService, BoardMapper mapper) {
+        this.boardService = boardService;
+        this.memberService = memberService;
+        this.mapper = mapper;
+    }
 
     // 게시물 생성
     @PostMapping
@@ -32,9 +47,19 @@ public class BoardController {
             @ApiResponse(responseCode = "400", description = "Bad Request"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
-    public ResponseEntity<Board> createPost(@RequestBody @Valid Board board) {
-        Board createdBoard = boardService.createBoard(board);
-        return new ResponseEntity<>(createdBoard, HttpStatus.CREATED);
+    public ResponseEntity createPost(@Valid @RequestBody BoardPostDto boardPostDto) {
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Member member = memberService.findMemberByEmail(auth.getPrincipal().toString());
+
+        Board boardToCreate = mapper.boardPostToBoard(boardPostDto);
+
+        boardToCreate.setMember(member);
+
+        Board createdBoard = boardService.createBoard(boardToCreate);
+        Board responseDto = mapper.boardToBoardResponseDto(createdBoard);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     // 모든 게시물 조회
