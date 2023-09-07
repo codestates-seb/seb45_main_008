@@ -51,7 +51,7 @@ const KospiChart = () => {
   };
 
   const handlePressEmnterToSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.code === "Enter") {
+    if (e.code === "Enter" && e.nativeEvent.isComposing === false) {
       handleSearchCompany();
       setSearchWord("");
     }

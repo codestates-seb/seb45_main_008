@@ -79,11 +79,10 @@ export default useGetStockChart;
 
 // y축 눈금 옵션 설정하는 함수
 const calculateYAxisOptions = (data: StockProps[]) => {
-  const sampleData = data.filter((_, index) => index % 10 === 0);
-  const samplePrice = sampleData.map((stock) => parseFloat(stock.stck_prpr));
+  const stockPrice = data.map((stock) => parseFloat(stock.stck_prpr));
 
-  const maxPrice = Math.max(...samplePrice);
-  const minPrice = Math.min(...samplePrice);
+  const maxPrice = Math.max(...stockPrice);
+  const minPrice = Math.min(...stockPrice);
 
   const interval = Math.ceil((maxPrice - minPrice) / 10);
   const min = Math.floor(minPrice - interval * 5);

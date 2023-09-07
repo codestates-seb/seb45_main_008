@@ -14,7 +14,7 @@ const loadingText = "로딩 중 입니다...";
 const errorText = "화면을 불러올 수 없습니다";
 
 //🔴 테스트
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 const StockChart = () => {
   const companyId = useSelector((state: StateProps) => state.companyId);
@@ -26,14 +26,16 @@ const StockChart = () => {
   // 🔴 차트 변환 테스트
 
   // 🔴 1) 검색 이벤트
-  const { companyList } = useGetCompanyList();
-  const [companyLists, setCompanyLists] = useState([]);
+  const { companyList, compnayListLoading, companyListError } = useGetCompanyList();
   const [searchWord, setSearchWord] = useState("");
 
-  // 회사 목록 불러오면 -> companyList 상태에 할당
-  useEffect(() => {
-    setCompanyLists(companyList);
-  }, [companyList]);
+  if (compnayListLoading) {
+    return <p>회사정보 불러오는 중</p>;
+  }
+
+  if (companyListError) {
+    return <p>에러 발생</p>;
+  }
 
   const handleChangeSearchWord = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchWord(e.target.value);
@@ -42,7 +44,7 @@ const StockChart = () => {
   const handleSearchCompany = () => {
     let searchResult: string = "noExistCompany";
 
-    companyLists.forEach((company: CompanyProps) => {
+    companyList.forEach((company: CompanyProps) => {
       if (company.korName === searchWord) {
         searchResult = "ExistCompany";
         dispatch(changeCompanyId(company.companyId));
@@ -55,7 +57,7 @@ const StockChart = () => {
   };
 
   const handlePressEmnterToSearch = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    if (e.code === "Enter") {
+    if (e.code === "Enter" && e.nativeEvent.isComposing === false) {
       handleSearchCompany();
       setSearchWord("");
     }

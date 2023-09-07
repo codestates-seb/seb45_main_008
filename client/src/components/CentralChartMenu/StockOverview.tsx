@@ -23,23 +23,37 @@ const StockOverview = () => {
     return <p>에러 발생</p>;
   }
 
+  const corpName = data.korName;
+  const stockCode = data.code;
+  const stockPrice = parseInt(data.stockInfResponseDto.stck_prpr, 10).toLocaleString();
+  const priceChageRate = parseFloat(data.stockInfResponseDto.prdy_ctrt);
+  const chageDirection = priceChageRate > 0 ? "▲" : "▼";
+  const priceChageAmount = Math.abs(parseInt(data.stockInfResponseDto.prdy_vrss, 10)).toLocaleString();
+  const transactionVolume = parseInt(data.stockInfResponseDto.acml_vol, 10).toLocaleString();
+  // 총 거래대금 계산
+  const amount = parseInt(data.stockInfResponseDto.acml_tr_pbmn, 10);
+  const [billions, tenThousands] = [Math.floor(amount / 100000000), Math.floor((amount % 100000000) / 10000)];
+  const transactionValue = `${billions.toLocaleString()}억 ${tenThousands.toLocaleString()}만`;
+
   return (
-    <Container>
+    <Container priceChangeRate={priceChageRate}>
       <img className="CorpLogo" src={dummyData.corpLogo} />
-      <div className="CorpName">{data.korName}</div>
+      <div className="CorpName">{corpName}</div>
       <div className="StockCode">
-        {data.code} <span>{marketType}</span>
+        {stockCode} <span>{marketType}</span>
       </div>
-      <div className="StockPrice">{data.stockInfResponseDto.stck_prpr}</div>
-      <div className="PriceChangeRate">{data.stockInfResponseDto.prdy_vrss}</div>
-      <div className="PriceChangeAmount">{data.stockInfResponseDto.prdy_ctrt}</div>
+      <div className="StockPrice">{stockPrice}</div>
+      <div className="PriceChangeRate">{priceChageRate}%</div>
+      <div className="PriceChangeAmount">
+        <div className="changeDirection">{chageDirection}</div> {priceChageAmount}
+      </div>
       <TransactionVolume>
         <span>{volumeText}</span>
-        {data.stockInfResponseDto.acml_vol}
+        {transactionVolume}
       </TransactionVolume>
       <TransactionValue>
         <span>{valueText}</span>
-        {data.stockInfResponseDto.acml_tr_pbmn}
+        {transactionValue}
       </TransactionValue>
     </Container>
   );
@@ -48,7 +62,7 @@ const StockOverview = () => {
 export default StockOverview;
 
 // component 생성
-const Container = styled.div`
+const Container = styled.div<{ priceChangeRate: number }>`
   flex: 7 0 0;
   overflow-x: scroll;
 
@@ -85,14 +99,25 @@ const Container = styled.div`
 
   .StockPrice {
     font-size: 18px;
-    color: #ed2926;
+    color: ${(props) => (props.priceChangeRate > 0 ? "#ed2926" : "#3177d7")};
     font-weight: 530;
   }
 
   .PriceChangeRate,
   .PriceChangeAmount {
     font-size: 14px;
-    color: #ed2926;
+    color: ${(props) => (props.priceChangeRate > 0 ? "#ed2926" : "#3177d7")};
+
+    display: flex;
+    flex-direction: row;
+    gap: 2px;
+
+    .changeDirection {
+      font-size: 8px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
   }
 `;
 
