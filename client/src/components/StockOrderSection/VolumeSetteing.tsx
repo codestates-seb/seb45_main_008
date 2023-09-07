@@ -119,6 +119,7 @@ const PercentageBox = styled.div`
   flex-direction: row;
   justify-content: space-between;
   margin-top: 8px;
+  gap: 8px;
 
   & button {
     width: 56px;

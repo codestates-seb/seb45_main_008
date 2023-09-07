@@ -19,7 +19,7 @@ const StockOrderBtn = () => {
 
   return (
     <Container>
-      <AvailableMoney>
+      <AvailableMoney orderType={stockOrderType}>
         <span>{availableMoneyText01}</span>
         <span className="availableMoney">{dummyMoney}</span>
         <span>{availableMoneyText02}</span>
@@ -38,7 +38,7 @@ export default StockOrderBtn;
 
 const Container = styled.div``;
 
-const AvailableMoney = styled.div`
+const AvailableMoney = styled.div<{ orderType: boolean }>`
   display: flex;
   flex-direction: row;
   justify-content: flex-end;
@@ -46,11 +46,11 @@ const AvailableMoney = styled.div`
 
   & span {
     font-size: 14px;
-    color: #999999;
+    color: ${(props) => (props.orderType ? "white" : "#999999")};
   }
 
   .availableMoney {
-    color: #ed2926;
+    color: ${(props) => (props.orderType ? "white" : "#ed2926")};
   }
 `;
 
