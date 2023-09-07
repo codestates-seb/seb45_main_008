@@ -2,7 +2,7 @@ import styled from "styled-components";
 import React, { useState } from "react";
 import MarketSummary from "../../components/MarketComponents/index";
 import MarketStockList from "../../components/MarketComponents/MarketStockList";
-import MarketIssue from "../../components/MarketComponents/MarketIssue";
+
 interface Props {}
 const MarketInfo: React.FC<Props> = () => {
   const [selectedTab, setSelectedTab] = useState<string>("market");
@@ -19,26 +19,25 @@ const MarketInfo: React.FC<Props> = () => {
 
       <MarketInfoStyle>
         <TabStyle onClick={() => handleTabStyle(1)} className={`tab ${tabStyle === 1 ? "active-tab" : "inactive-tab"}`}>
-          <Market onClick={() => handleTabClick("market")}>시장요약</Market>
+          <Market onClick={() => handleTabClick("market")}>{MarketInfoText.MarketSummary}</Market>
         </TabStyle>
         <TabStyle onClick={() => handleTabStyle(2)} className={`tab ${tabStyle === 2 ? "active-tab" : "inactive-tab"}`}>
-          <StockList onClick={() => handleTabClick("stockList")}>전체종목</StockList>
-        </TabStyle>
-        <TabStyle onClick={() => handleTabStyle(3)} className={`tab ${tabStyle === 3 ? "active-tab" : "inactive-tab"}`}>
-          <Issue onClick={() => handleTabClick("issues")}>시장이슈</Issue>
+          <StockList onClick={() => handleTabClick("stockList")}>{MarketInfoText.AllStockList}</StockList>
         </TabStyle>
       </MarketInfoStyle>
       <div>
         {selectedTab === "market" && <MarketSummary />}
         {selectedTab === "stockList" && <MarketStockList />}
-        {selectedTab === "issues" && <MarketIssue />}
       </div>
     </div>
   );
 };
 
 export default MarketInfo;
-
+const MarketInfoText = {
+  MarketSummary: "시장요약",
+  AllStockList: "전체종목",
+};
 // **스타일 옮기기
 
 const TabStyle = styled.div`
@@ -80,6 +79,3 @@ const StockList = styled.div`
   cursor: pointer;
 `;
 //시장정보 탭의 시장이슈 스타일
-const Issue = styled.div`
-  cursor: pointer;
-`;

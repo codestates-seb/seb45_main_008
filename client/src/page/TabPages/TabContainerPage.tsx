@@ -1,10 +1,11 @@
 import MarketInfo from "./MarketInfoPage";
 import { Routes, Route, Link } from "react-router-dom";
 import styled from "styled-components";
-import { StockItems } from "../../components/stockListComponents/StockItems";
-import { Community } from "./communityPage";
-import { Status } from "../../components/statusComponents/index";
+import { DetailStockInformation } from "../../components/stockListComponents/DetailStockInformation";
+import { Community } from "./CommunityPage";
+import { Status } from "../../components/statusComponents";
 import { useState } from "react";
+import { MarketImages, InfoImages, CommunityImages, InvestImage } from "../../components/communityComponents/IconComponent/Icon";
 export const TabContainerPage = () => {
   const [activeTab, setActiveTab] = useState(1);
   const handleClickActiveTab = (number: number) => {
@@ -18,21 +19,25 @@ export const TabContainerPage = () => {
       <div>
         <TabNavArea>
           <Nav to="/" onClick={() => handleClickActiveTab(1)} className={`tab ${activeTab === 1 ? "active-tab" : "inactive-tab"}`}>
-            시장정보
+            <MarketImages />
+            {TabContainerText.marketInfo}
           </Nav>
           <Nav to="/stockitems" onClick={() => handleClickActiveTab(2)} className={`tab ${activeTab === 2 ? "active-tab" : "inactive-tab"}`}>
-            종목정보
+            <InfoImages />
+            {TabContainerText.StockInfo}
           </Nav>
           <Nav to="/community" onClick={() => handleClickActiveTab(3)} className={`tab ${activeTab === 3 ? "active-tab" : "inactive-tab"}`}>
-            커뮤니티
+            <CommunityImages />
+            {TabContainerText.community}
           </Nav>
           <Nav to="/status" onClick={() => handleClickActiveTab(4)} className={`tab ${activeTab === 4 ? "active-tab" : "inactive-tab"}`}>
-            투자현황
+            <InvestImage />
+            {TabContainerText.myPortfolio}
           </Nav>
         </TabNavArea>
         <Routes>
           <Route path="/" element={<MarketInfo />} />
-          <Route path="/stockitems" element={<StockItems />} />
+          <Route path="/stockitems" element={<DetailStockInformation />} />
           <Route path="/community" element={<Community />} />
           <Route path="/status" element={<Status />} />
         </Routes>
@@ -40,7 +45,14 @@ export const TabContainerPage = () => {
     </TabContainerStyle>
   );
 };
+const TabContainerText = {
+  marketInfo: "시장정보",
+  StockInfo: "종목정보",
 
+  community: "커뮤니티",
+
+  myPortfolio: "투자현황",
+};
 const TabContainerStyle = styled.div`
   width: 26%;
   min-width: 400px;
