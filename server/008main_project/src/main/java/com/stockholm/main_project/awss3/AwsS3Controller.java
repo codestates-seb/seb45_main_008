@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import java.net.URL;
 
-
 @RestController
 @RequestMapping("/s3")
 public class AwsS3Controller {
