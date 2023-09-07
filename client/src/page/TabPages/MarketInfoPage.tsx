@@ -1,8 +1,8 @@
 import styled from "styled-components";
 import React, { useState } from "react";
-import MarketSummary from "../../components/MarketComponents/MarketSummary";
+import MarketSummary from "../../components/MarketComponents/index";
 import MarketStockList from "../../components/MarketComponents/MarketStockList";
-import MarketIssue from "../../components/MarketComponents/MarketIssue";
+
 interface Props {}
 const MarketInfo: React.FC<Props> = () => {
   const [selectedTab, setSelectedTab] = useState<string>("market");
@@ -35,17 +35,10 @@ const MarketInfo: React.FC<Props> = () => {
             전체종목
           </StockList>
         </TabStyle>
-        <TabStyle
-          onClick={() => handleTabStyle(3)}
-          className={`tab ${tabStyle === 3 ? "active-tab" : "inactive-tab"}`}
-        >
-          <Issue onClick={() => handleTabClick("issues")}>시장이슈</Issue>
-        </TabStyle>
       </MarketInfoStyle>
       <div>
         {selectedTab === "market" && <MarketSummary />}
         {selectedTab === "stockList" && <MarketStockList />}
-        {selectedTab === "issues" && <MarketIssue />}
       </div>
     </div>
   );
@@ -94,6 +87,3 @@ const StockList = styled.div`
   cursor: pointer;
 `;
 //시장정보 탭의 시장이슈 스타일
-const Issue = styled.div`
-  cursor: pointer;
-`;

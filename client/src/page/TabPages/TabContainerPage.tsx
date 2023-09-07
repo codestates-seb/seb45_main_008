@@ -1,9 +1,9 @@
 import MarketInfo from "./MarketInfoPage";
 import { Routes, Route, Link } from "react-router-dom";
 import styled from "styled-components";
-import { StockItems } from "../../components/stockListComponents/StockItems";
+import { DetailStockInformation } from "../../components/stockListComponents/DetailStockInformation";
 import { Community } from "./communityPage";
-import { Status } from "../../components/statusComponents/Status";
+import { Status } from "../../components/statusComponents";
 import { useState } from "react";
 export const TabContainerPage = () => {
   const [activeTab, setActiveTab] = useState(1);
@@ -51,7 +51,7 @@ export const TabContainerPage = () => {
         </TabNavArea>
         <Routes>
           <Route path="/" element={<MarketInfo />} />
-          <Route path="/stockitems" element={<StockItems />} />
+          <Route path="/stockitems" element={<DetailStockInformation />} />
           <Route path="/community" element={<Community />} />
           <Route path="/status" element={<Status />} />
         </Routes>

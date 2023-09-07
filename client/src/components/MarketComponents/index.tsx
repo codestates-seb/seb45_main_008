@@ -22,7 +22,7 @@ const MarketSummary: React.FC = () => {
       console.error("데이터 가져오기 중 오류 발생:", error);
     }
   };
-  const [kospiDatas, setKospiDatas] = useState<string[]>([]);
+  const [kospiDatas, setKospiDatas] = useState<string | object>({});
 
   interface StockStatus {
     now: string;
@@ -45,31 +45,46 @@ const MarketSummary: React.FC = () => {
       <MarketH3>{SummaryText.now}</MarketH3>
       <Kospiul>
         <div>{SummaryText.kospi}</div>
-        <div></div>
       </Kospiul>
 
       <News>
-        <A href="https://news.naver.com/main/main.naver?mode=LSD&mid=shm&sid1=101">
-          {SummaryText.news} &gt;
-        </A>
-        <div>newsList</div>
+        <h3>실시간 뉴스</h3>
+        <A href={NewsListLink.NaverNews}>네이버뉴스</A>
+        <A href={NewsListLink.DaumNews}>다음뉴스</A>
+        <A href={NewsListLink.chosunNews}>조선일보</A>
+        <A href={NewsListLink.dongaNews}>동아일보</A>
+        <A href={NewsListLink.jtbcNews}>JTBC</A>
       </News>
     </Market>
   );
 };
 export default MarketSummary;
+
+const NewsListLink = {
+  NaverNews: "https://news.naver.com/main/main.naver?mode=LSD&mid=shm&sid1=101",
+  DaumNews: "https://news.daum.net/economic#1",
+  chosunNews: "https://www.chosun.com/economy/",
+  dongaNews: "https://www.donga.com/news/Economy",
+  jtbcNews: "https://news.jtbc.co.kr/section/index.aspx?scode=20",
+};
+
 const Market = styled.div`
   text-align: center;
 `;
 const News = styled.div`
-  text-align: left;
-  height: 200px;
+  display: flex;
+  flex-direction: column;
+  height: 300px;
   width: 100%;
-  background-color: #f3f3f3;
   margin-top: 120px;
+  flex-wrap: wrap;
+  align-content: space-around;
 `;
 const A = styled.a`
   color: black;
+  padding: 10px 10px;
+  width: 80%;
+  border: 1px solid#333;
 `;
 const MarketH3 = styled.div`
   text-align: center;

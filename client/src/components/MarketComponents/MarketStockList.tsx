@@ -33,7 +33,7 @@ const MarketStockList: React.FC = () => {
   return (
     <div>
       <StockListTitle>
-        <StockListDetail>#종목명</StockListDetail>
+        <StockListDetail onClick={SortName}>#종목명</StockListDetail>
         <StockListDetail>#현재가</StockListDetail>
         <StockListDetail>#변동률</StockListDetail>
         <StockListDetail>#거래량</StockListDetail>
@@ -44,9 +44,7 @@ const MarketStockList: React.FC = () => {
           {isLoading === true ? (
             <div>isLoading...</div>
           ) : (
-            <StockName onClick={SortName} key={el.korName}>
-              {el.korName}
-            </StockName>
+            <StockName key={el.korName}>{el.korName}</StockName>
           )}
           <StockCode key={el.code}>{el.code}</StockCode>
           <br />
