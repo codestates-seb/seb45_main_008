@@ -130,7 +130,7 @@ const TimeLineComponent = () => {
       {openDropDown === true && (
         <>
           <DropDownClose onClick={handleSetOpenDropDown}>
-            <p>닫기</p>
+            <p>{timeLineText.close}</p>
           </DropDownClose>
           <DropdownInput
             type="text"
@@ -146,7 +146,7 @@ const TimeLineComponent = () => {
       <BoardArea>
         {boardData.length === 0 ? (
           <BoardTextAreaNoText>
-            아직 글이 작성되지 않았습니다
+            {timeLineText.notYetWriting}
           </BoardTextAreaNoText>
         ) : (
           boardData
@@ -160,7 +160,7 @@ const TimeLineComponent = () => {
                   </div>
                   {dotMenuOpenMap[el.boardId] && (
                     <DeleteBoard onClick={() => handleDeleteClick(el.boardId)}>
-                      삭제하기
+                      {timeLineText.delete}
                     </DeleteBoard>
                   )}
                 </Delete>
@@ -186,6 +186,11 @@ interface BoardData {
   comments: string;
   title: string;
 }
+const timeLineText = {
+  close: "닫기",
+  notYetWriting: "아직 글이 작성되지 않았습니다",
+  delete: "삭제하기",
+};
 
 //드롭다운 글작성 스타일 및 닫기버튼 스타일
 const DropdownInput = styled.input`

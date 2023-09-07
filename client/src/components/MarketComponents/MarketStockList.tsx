@@ -33,20 +33,20 @@ const MarketStockList: React.FC = () => {
   return (
     <div>
       <StockListTitle>
-        <StockListDetail>#종목명</StockListDetail>
-        <StockListDetail>#현재가</StockListDetail>
-        <StockListDetail>#변동률</StockListDetail>
-        <StockListDetail>#거래량</StockListDetail>
+        <StockListDetail onClick={SortName}>
+          {MarketStockLists.stockName}
+        </StockListDetail>
+        <StockListDetail>{MarketStockLists.stockPrice}</StockListDetail>
+        <StockListDetail>{MarketStockLists.stockRate}</StockListDetail>
+        <StockListDetail>{MarketStockLists.stockTrade}</StockListDetail>
       </StockListTitle>
 
       {marketStockList.map((el) => (
         <div>
           {isLoading === true ? (
-            <div>isLoading...</div>
+            <div>{MarketStockLists.isLoading}</div>
           ) : (
-            <StockName onClick={SortName} key={el.korName}>
-              {el.korName}
-            </StockName>
+            <StockName key={el.korName}>{el.korName}</StockName>
           )}
           <StockCode key={el.code}>{el.code}</StockCode>
           <br />
@@ -59,6 +59,13 @@ const MarketStockList: React.FC = () => {
 
 export default MarketStockList;
 
+const MarketStockLists = {
+  stockName: "#종목명",
+  stockPrice: "#현재가",
+  stockRate: "#변동률",
+  stockTrade: "#거래량",
+  isLoading: "isLoading...",
+};
 const StockListTitle = styled.div`
   display: flex;
   justify-content: space-around;

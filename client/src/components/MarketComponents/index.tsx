@@ -22,54 +22,129 @@ const MarketSummary: React.FC = () => {
       console.error("데이터 가져오기 중 오류 발생:", error);
     }
   };
-  const [kospiDatas, setKospiDatas] = useState<string[]>([]);
-
-  interface StockStatus {
-    now: string;
-    kospi: string;
-    kosdaq: string;
-    kospi200: string;
-    news: string;
-  }
-
-  const SummaryText: StockStatus = {
-    now: "증시현황",
-    kospi: "Kospi",
-    kosdaq: "kosdaq",
-    kospi200: "kospi200",
-    news: "주요 뉴스",
-  };
+  const [kospiDatas, setKospiDatas] = useState<string | object>({});
 
   return (
     <Market>
       <MarketH3>{SummaryText.now}</MarketH3>
       <Kospiul>
         <div>{SummaryText.kospi}</div>
-        <div></div>
       </Kospiul>
 
       <News>
-        <A href="https://news.naver.com/main/main.naver?mode=LSD&mid=shm&sid1=101">
-          {SummaryText.news} &gt;
+        <MarketH3>{SummaryText.liveNews}</MarketH3>
+        <A className="naver" href={NewsListLink.NaverNews}>
+          {SummaryText.naverNews}
         </A>
-        <div>newsList</div>
+        <A className="daum" href={NewsListLink.DaumNews}>
+          {SummaryText.daumNews}
+        </A>
+        <A className="chosun" href={NewsListLink.chosunNews}>
+          {SummaryText.chosunNews}
+        </A>
+        <A className="donga" href={NewsListLink.dongaNews}>
+          {SummaryText.dongaNews}
+        </A>
+        <A className="jtbc" href={NewsListLink.jtbcNews}>
+          {SummaryText.jtbcNews}
+        </A>
       </News>
     </Market>
   );
 };
 export default MarketSummary;
+
+interface StockStatus {
+  now: string;
+  kospi: string;
+  news: string;
+  liveNews: string;
+  naverNews: string;
+  daumNews: string;
+  chosunNews: string;
+  dongaNews: string;
+  jtbcNews: string;
+}
+
+const SummaryText: StockStatus = {
+  now: "증시현황",
+  kospi: "Kospi",
+  news: "주요 뉴스",
+  liveNews: "실시간 뉴스 바로가기",
+  naverNews: "네이버뉴스",
+  daumNews: "네이버뉴스",
+  chosunNews: "조선일보",
+  dongaNews: "동아일보",
+  jtbcNews: "jtbc",
+};
+const NewsListLink = {
+  NaverNews: "https://news.naver.com/main/main.naver?mode=LSD&mid=shm&sid1=101",
+  DaumNews: "https://news.daum.net/economic#1",
+  chosunNews: "https://www.chosun.com/economy/",
+  dongaNews: "https://www.donga.com/news/Economy",
+  jtbcNews: "https://news.jtbc.co.kr/section/index.aspx?scode=20",
+};
+
 const Market = styled.div`
   text-align: center;
 `;
 const News = styled.div`
-  text-align: left;
-  height: 200px;
+  display: flex;
+  flex-direction: column;
+
+  height: 500px;
   width: 100%;
-  background-color: #f3f3f3;
   margin-top: 120px;
+  flex-wrap: wrap;
+  align-content: space-around;
 `;
 const A = styled.a`
+  &.naver {
+    background-color: white;
+    border: 1px solid green;
+
+    &:hover {
+      background-color: green;
+      color: white;
+    }
+  }
+  &.daum {
+    background-color: white;
+    border: 1px solid blue;
+    &:hover {
+      background-color: blue;
+      color: white;
+    }
+  }
+  &.chosun {
+    background-color: white;
+    border: 1px solid red;
+    color: red;
+    &:hover {
+      color: white;
+      background-color: red;
+    }
+  }
+  &.donga {
+    &:hover {
+      background-color: #282b2c;
+      color: white;
+    }
+  }
+  &.jtbc {
+    border: 1px solid skyblue;
+    &:hover {
+      background-color: skyblue;
+      color: white;
+    }
+  }
+
+  margin-bottom: 20px;
   color: black;
+  padding: 10px 10px;
+  width: 80%;
+  border: 1px solid#333;
+  margin-top: 20px;
 `;
 const MarketH3 = styled.div`
   text-align: center;
