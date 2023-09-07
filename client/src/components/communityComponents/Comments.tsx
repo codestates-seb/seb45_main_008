@@ -57,10 +57,10 @@ const Comments = ({ postId }: { postId: number }) => {
           onChange={handleOnChange}
         />
         <CommentInputSubmit onClick={() => handleClickSubmit()}>
-          작성
+          {CommentText.write}
         </CommentInputSubmit>
         <CommentCount onClick={handleShowMoreComments}>
-          댓글{commentData.length}개 모두 보기
+          {CommentText.replyCount}
         </CommentCount>
         {commentData.slice(0, visibleComments).map((el) => (
           <CommentsDiv key={el.id}>&#187; {el.comments}</CommentsDiv>
@@ -71,6 +71,12 @@ const Comments = ({ postId }: { postId: number }) => {
 };
 
 export default Comments;
+
+const CommentText = {
+  write: "작성",
+  replyCount: `댓글${commentData.length}개 모두보기`,
+};
+
 const CommentInput = styled.input`
   border: 1px solid#40797c;
   outline: none;

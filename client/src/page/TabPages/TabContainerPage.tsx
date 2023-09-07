@@ -32,7 +32,7 @@ export const TabContainerPage = () => {
             className={`tab ${activeTab === 1 ? "active-tab" : "inactive-tab"}`}
           >
             <MarketImages />
-            시장정보
+            {TabContainerText.marketInfo}
           </Nav>
           <Nav
             to="/stockitems"
@@ -40,7 +40,7 @@ export const TabContainerPage = () => {
             className={`tab ${activeTab === 2 ? "active-tab" : "inactive-tab"}`}
           >
             <InfoImages />
-            종목정보
+            {TabContainerText.StockInfo}
           </Nav>
           <Nav
             to="/community"
@@ -48,7 +48,7 @@ export const TabContainerPage = () => {
             className={`tab ${activeTab === 3 ? "active-tab" : "inactive-tab"}`}
           >
             <CommunityImages />
-            커뮤니티
+            {TabContainerText.community}
           </Nav>
           <Nav
             to="/status"
@@ -56,7 +56,7 @@ export const TabContainerPage = () => {
             className={`tab ${activeTab === 4 ? "active-tab" : "inactive-tab"}`}
           >
             <InvestImage />
-            투자현황
+            {TabContainerText.myPortfolio}
           </Nav>
         </TabNavArea>
         <Routes>
@@ -69,7 +69,14 @@ export const TabContainerPage = () => {
     </TabContainerStyle>
   );
 };
+const TabContainerText = {
+  marketInfo: "시장정보",
+  StockInfo: "종목정보",
 
+  community: "커뮤니티",
+
+  myPortfolio: "투자현황",
+};
 const TabContainerStyle = styled.div`
   width: 26%;
   min-width: 400px;

@@ -25,14 +25,16 @@ const MarketInfo: React.FC<Props> = () => {
           onClick={() => handleTabStyle(1)}
           className={`tab ${tabStyle === 1 ? "active-tab" : "inactive-tab"}`}
         >
-          <Market onClick={() => handleTabClick("market")}>시장요약</Market>
+          <Market onClick={() => handleTabClick("market")}>
+            {MarketInfoText.MarketSummary}
+          </Market>
         </TabStyle>
         <TabStyle
           onClick={() => handleTabStyle(2)}
           className={`tab ${tabStyle === 2 ? "active-tab" : "inactive-tab"}`}
         >
           <StockList onClick={() => handleTabClick("stockList")}>
-            전체종목
+            {MarketInfoText.AllStockList}
           </StockList>
         </TabStyle>
       </MarketInfoStyle>
@@ -45,7 +47,10 @@ const MarketInfo: React.FC<Props> = () => {
 };
 
 export default MarketInfo;
-
+const MarketInfoText = {
+  MarketSummary: "시장요약",
+  AllStockList: "전체종목",
+};
 // **스타일 옮기기
 
 const TabStyle = styled.div`

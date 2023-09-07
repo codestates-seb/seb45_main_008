@@ -24,22 +24,6 @@ const MarketSummary: React.FC = () => {
   };
   const [kospiDatas, setKospiDatas] = useState<string | object>({});
 
-  interface StockStatus {
-    now: string;
-    kospi: string;
-    kosdaq: string;
-    kospi200: string;
-    news: string;
-  }
-
-  const SummaryText: StockStatus = {
-    now: "증시현황",
-    kospi: "Kospi",
-    kosdaq: "kosdaq",
-    kospi200: "kospi200",
-    news: "주요 뉴스",
-  };
-
   return (
     <Market>
       <MarketH3>{SummaryText.now}</MarketH3>
@@ -48,21 +32,21 @@ const MarketSummary: React.FC = () => {
       </Kospiul>
 
       <News>
-        <MarketH3>실시간 뉴스 바로가기</MarketH3>
+        <MarketH3>{SummaryText.liveNews}</MarketH3>
         <A className="naver" href={NewsListLink.NaverNews}>
-          네이버뉴스
+          {SummaryText.naverNews}
         </A>
         <A className="daum" href={NewsListLink.DaumNews}>
-          다음뉴스
+          {SummaryText.daumNews}
         </A>
         <A className="chosun" href={NewsListLink.chosunNews}>
-          조선일보
+          {SummaryText.chosunNews}
         </A>
         <A className="donga" href={NewsListLink.dongaNews}>
-          동아일보
+          {SummaryText.dongaNews}
         </A>
         <A className="jtbc" href={NewsListLink.jtbcNews}>
-          JTBC
+          {SummaryText.jtbcNews}
         </A>
       </News>
     </Market>
@@ -70,6 +54,29 @@ const MarketSummary: React.FC = () => {
 };
 export default MarketSummary;
 
+interface StockStatus {
+  now: string;
+  kospi: string;
+  news: string;
+  liveNews: string;
+  naverNews: string;
+  daumNews: string;
+  chosunNews: string;
+  dongaNews: string;
+  jtbcNews: string;
+}
+
+const SummaryText: StockStatus = {
+  now: "증시현황",
+  kospi: "Kospi",
+  news: "주요 뉴스",
+  liveNews: "실시간 뉴스 바로가기",
+  naverNews: "네이버뉴스",
+  daumNews: "네이버뉴스",
+  chosunNews: "조선일보",
+  dongaNews: "동아일보",
+  jtbcNews: "jtbc",
+};
 const NewsListLink = {
   NaverNews: "https://news.naver.com/main/main.naver?mode=LSD&mid=shm&sid1=101",
   DaumNews: "https://news.daum.net/economic#1",
