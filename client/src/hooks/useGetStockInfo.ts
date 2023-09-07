@@ -5,53 +5,40 @@ import axios from "axios";
 const useGetStockInfo = (companyId: number) => {
   const [autoRefetch, setAutoRefetch] = useState(false);
 
-  // 시간대별로 queryKey 다르게 적용
-  const month = new Date().getMonth();
-  const day = new Date().getDay();
-  const hour = new Date().getHours();
-  let queryKeyNum;
-  const queryKey = `${month}월 ${day}일 ${hour}시 ${queryKeyNum}`;
-
-  // 30분 or 정각여부 체크 함수 -> 30분 혹은 정각일 경우 api 1회 수동 요청 + 자동 요청 기능 활성화
-  const checkTime = () => {
-    const currentTime = new Date();
-    const minute = currentTime.getMinutes();
-
-    if (0 < minute && minute < 30) {
-      queryKeyNum = "01~29";
-    }
-
-    if (30 < minute && minute < 60) {
-      queryKeyNum = "31~59";
-    }
-
-    if (minute === 0 || minute === 30) {
-      queryKeyNum = "30 or 60";
-      setAutoRefetch(true);
-    }
-
-    return minute;
-  };
+  // 시간대 (timeZone) 별로 queryKey를 다르게 설정해서, 서버 데이터가 동일할 때는 캐싱된 데이터 활용하고 서버 데이터가 갱신됐을 때는 새롭게 받아옴 (서버 데이터 30분마다 갱신)
+  const currentTime = new Date();
+  const [month, day, hour, minute] = [currentTime.getMonth(), currentTime.getDay(), currentTime.getHours, currentTime.getMinutes()];
+  const timeZone = minute === 0 || minute === 30 ? "30 or 60" : 0 < minute && minute < 30 ? "1~29" : "31~59";
+  const queryKey = `${month}월 ${day}일 ${hour}시 ${timeZone}`;
 
   // 현재 시각이 30분, 정각이 아닌 경우 남은 시간 계산하여 checkTime 함수 다시 실행
   useEffect(() => {
-    const checkMinute = checkTime();
-
-    if (0 < checkMinute && checkMinute < 30) {
-      const delayTime = (30 - checkMinute) * 60000;
-      setTimeout(checkTime, delayTime);
+    if (minute === 0 || minute === 30) {
+      setAutoRefetch(true);
     }
-    if (30 < checkMinute && checkMinute < 60) {
-      const delayTime = (60 - checkMinute) * 60000;
-      setTimeout(checkTime, delayTime);
+
+    if (0 < minute && minute < 30) {
+      const delayTime = (30 - minute) * 60000;
+      setTimeout(() => {
+        refetch();
+        setAutoRefetch(true);
+      }, delayTime);
+    }
+
+    if (30 < minute && minute < 60) {
+      const delayTime = (60 - minute) * 60000;
+      setTimeout(() => {
+        refetch();
+        setAutoRefetch(true);
+      }, delayTime);
     }
   }, []);
 
-  const { data, isLoading, error } = useQuery(`stockInfo${companyId} ${queryKey}}`, () => getStockInfo(companyId), {
+  const { data, isLoading, error, refetch } = useQuery(`stockInfo${companyId} ${queryKey}}`, () => getStockInfo(companyId), {
     enabled: true,
     refetchInterval: autoRefetch && 60000 * 10, // 정각 혹은 30분에 맞춰서 10분 마다 데이터 리패칭
-    refetchOnMount: true,
     onSuccess: () => {
+      console.log(new Date());
       console.log(data);
     },
   });
