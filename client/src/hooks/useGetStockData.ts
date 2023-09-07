@@ -7,7 +7,7 @@ const useGetStockData = (companyId: number) => {
 
   // 시간대 (timeZone) 별로 queryKey를 다르게 설정해서, 서버 데이터가 동일할 때는 캐싱된 데이터 활용하고 서버 데이터가 갱신됐을 때는 새롭게 받아옴 (서버 데이터 30분마다 갱신)
   const currentTime = new Date();
-  const [month, day, hour, minute] = [currentTime.getMonth(), currentTime.getDay(), currentTime.getHours, currentTime.getMinutes()];
+  const [month, day, hour, minute] = [currentTime.getMonth(), currentTime.getDate(), currentTime.getHours, currentTime.getMinutes()];
   const timeZone = minute === 0 || minute === 30 ? "30 or 60" : 0 < minute && minute < 30 ? "1~29" : "31~59";
   const queryKey = `${month}월 ${day}일 ${hour}시 ${timeZone}`;
 
@@ -15,17 +15,13 @@ const useGetStockData = (companyId: number) => {
   useEffect(() => {
     if (minute === 0 || minute === 30) {
       setAutoRefetch(true);
-    }
-
-    if (0 < minute && minute < 30) {
+    } else if (0 < minute && minute < 30) {
       const delayTime = (30 - minute) * 60000;
       setTimeout(() => {
         refetch();
         setAutoRefetch(true);
       }, delayTime);
-    }
-
-    if (30 < minute && minute < 60) {
+    } else if (30 < minute && minute < 60) {
       const delayTime = (60 - minute) * 60000;
       setTimeout(() => {
         refetch();
@@ -36,7 +32,7 @@ const useGetStockData = (companyId: number) => {
 
   const { data, isLoading, error, refetch } = useQuery(`chartData${companyId} ${queryKey}`, () => getChartData(companyId), {
     enabled: true,
-    refetchInterval: autoRefetch && 60000 * 10, // 정각 혹은 30분에 맞춰서 10분 마다 데이터 리패칭
+    refetchInterval: autoRefetch ? 60000 * 10 : false, // 정각 혹은 30분에 맞춰서 10분 마다 데이터 리패칭
     onSuccess: () => {
       console.log(new Date());
       console.log(data);
