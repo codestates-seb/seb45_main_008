@@ -48,12 +48,22 @@ const MarketSummary: React.FC = () => {
       </Kospiul>
 
       <News>
-        <h3>실시간 뉴스</h3>
-        <A href={NewsListLink.NaverNews}>네이버뉴스</A>
-        <A href={NewsListLink.DaumNews}>다음뉴스</A>
-        <A href={NewsListLink.chosunNews}>조선일보</A>
-        <A href={NewsListLink.dongaNews}>동아일보</A>
-        <A href={NewsListLink.jtbcNews}>JTBC</A>
+        <MarketH3>실시간 뉴스 바로가기</MarketH3>
+        <A className="naver" href={NewsListLink.NaverNews}>
+          네이버뉴스
+        </A>
+        <A className="daum" href={NewsListLink.DaumNews}>
+          다음뉴스
+        </A>
+        <A className="chosun" href={NewsListLink.chosunNews}>
+          조선일보
+        </A>
+        <A className="donga" href={NewsListLink.dongaNews}>
+          동아일보
+        </A>
+        <A className="jtbc" href={NewsListLink.jtbcNews}>
+          JTBC
+        </A>
       </News>
     </Market>
   );
@@ -74,17 +84,60 @@ const Market = styled.div`
 const News = styled.div`
   display: flex;
   flex-direction: column;
-  height: 300px;
+
+  height: 500px;
   width: 100%;
   margin-top: 120px;
   flex-wrap: wrap;
   align-content: space-around;
 `;
 const A = styled.a`
+  &.naver {
+    background-color: white;
+    border: 1px solid green;
+
+    &:hover {
+      background-color: green;
+      color: white;
+    }
+  }
+  &.daum {
+    background-color: white;
+    border: 1px solid blue;
+    &:hover {
+      background-color: blue;
+      color: white;
+    }
+  }
+  &.chosun {
+    background-color: white;
+    border: 1px solid red;
+    color: red;
+    &:hover {
+      color: white;
+      background-color: red;
+    }
+  }
+  &.donga {
+    &:hover {
+      background-color: #282b2c;
+      color: white;
+    }
+  }
+  &.jtbc {
+    border: 1px solid skyblue;
+    &:hover {
+      background-color: skyblue;
+      color: white;
+    }
+  }
+
+  margin-bottom: 20px;
   color: black;
   padding: 10px 10px;
   width: 80%;
   border: 1px solid#333;
+  margin-top: 20px;
 `;
 const MarketH3 = styled.div`
   text-align: center;

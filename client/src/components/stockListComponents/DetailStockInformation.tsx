@@ -5,7 +5,7 @@ export const DetailStockInformation: React.FC = () => {
   const MarketServerUrl =
     "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/companies/1";
 
-  const [DetailStock, setDetailStock] = useState<any>({});
+  const [DetailStock, setDetailStock] = useState<string | object | any>({});
 
   const DetailStockDataFromServer = async () => {
     try {

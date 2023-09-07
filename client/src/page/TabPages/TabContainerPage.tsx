@@ -2,9 +2,15 @@ import MarketInfo from "./MarketInfoPage";
 import { Routes, Route, Link } from "react-router-dom";
 import styled from "styled-components";
 import { DetailStockInformation } from "../../components/stockListComponents/DetailStockInformation";
-import { Community } from "./communityPage";
+import { Community } from "./CommunityPage";
 import { Status } from "../../components/statusComponents";
 import { useState } from "react";
+import {
+  MarketImages,
+  InfoImages,
+  CommunityImages,
+  InvestImage,
+} from "../../components/communityComponents/IconComponent/Icon";
 export const TabContainerPage = () => {
   const [activeTab, setActiveTab] = useState(1);
   const handleClickActiveTab = (number: number) => {
@@ -25,6 +31,7 @@ export const TabContainerPage = () => {
             onClick={() => handleClickActiveTab(1)}
             className={`tab ${activeTab === 1 ? "active-tab" : "inactive-tab"}`}
           >
+            <MarketImages />
             시장정보
           </Nav>
           <Nav
@@ -32,6 +39,7 @@ export const TabContainerPage = () => {
             onClick={() => handleClickActiveTab(2)}
             className={`tab ${activeTab === 2 ? "active-tab" : "inactive-tab"}`}
           >
+            <InfoImages />
             종목정보
           </Nav>
           <Nav
@@ -39,6 +47,7 @@ export const TabContainerPage = () => {
             onClick={() => handleClickActiveTab(3)}
             className={`tab ${activeTab === 3 ? "active-tab" : "inactive-tab"}`}
           >
+            <CommunityImages />
             커뮤니티
           </Nav>
           <Nav
@@ -46,6 +55,7 @@ export const TabContainerPage = () => {
             onClick={() => handleClickActiveTab(4)}
             className={`tab ${activeTab === 4 ? "active-tab" : "inactive-tab"}`}
           >
+            <InvestImage />
             투자현황
           </Nav>
         </TabNavArea>
