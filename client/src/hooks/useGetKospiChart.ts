@@ -1,11 +1,11 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "react-query";
+import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
 
 const useGetKospiChart = () => {
   const [kospiData, setKospiData] = useState([]);
 
-  const { data, isLoading, error } = useQuery("kospi", getKospiData, {});
+  const { data, isLoading, error } = useQuery(["kospi"], getKospiData, {});
 
   if (isLoading) {
     console.log("데이터 로딩중");
