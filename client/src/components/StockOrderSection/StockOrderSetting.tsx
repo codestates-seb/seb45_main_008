@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import useGetStockInfo from "../../hooks/useGetStockInfo";
 import { orderTypeBuying, orderTypeSelling } from "../../reducer/StockOrderType-Reducer";
 import { styled } from "styled-components";
 import { StateProps } from "../../models/stateProps";
@@ -14,6 +15,17 @@ const orderType02: string = "매도";
 const StockOrderSetting = () => {
   const stockOrderType = useSelector((state: StateProps) => state.stockOrderType);
   const dispatch = useDispatch();
+
+  const companyId = useSelector((state: StateProps) => state.companyId);
+  const { stockInfo, stockInfoLoading, stockInfoError } = useGetStockInfo(companyId);
+
+  if (stockInfoLoading) {
+    return <></>;
+  }
+
+  if (stockInfoError) {
+    return <></>;
+  }
 
   const handleSetBuying = () => {
     dispatch(orderTypeBuying());
@@ -34,7 +46,7 @@ const StockOrderSetting = () => {
         </Selling>
       </div>
       <DecorationLine />
-      <PriceSetting />
+      <PriceSetting stockInfo={stockInfo.stockAsBiResponseDto} companyId={companyId} />
       <VolumeSetting />
       <StockOrderBtn />
     </Container>

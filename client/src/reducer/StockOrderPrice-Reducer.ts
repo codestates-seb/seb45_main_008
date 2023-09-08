@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+
 import { dummyPrice } from "../components/StockOrderSection/dummyData";
 
 const initialState: number = dummyPrice[10].price;

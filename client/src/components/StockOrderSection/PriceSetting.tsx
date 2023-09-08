@@ -1,22 +1,40 @@
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
-import { plusStockOrderPrice, minusStockOrderPrice } from "../../reducer/StockOrderPrice-Reducer";
+import { setStockOrderPrice, plusStockOrderPrice, minusStockOrderPrice } from "../../reducer/StockOrderPrice-Reducer";
 import { StateProps } from "../../models/stateProps";
+import { StockInfoprops } from "../../models/stockInfoProps";
 
 const priceSettingTitle: string = "가격";
 const unitText: string = "원";
 
-const PriceSetting = () => {
+const PriceSetting = (props: OwnProps) => {
+  const { stockInfo, companyId } = props;
+
   const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
   const dispatch = useDispatch();
 
+  // 초기 설정값 및 가격 변동폭 설정
+  const { askp1, askp2, askp3, askp4, askp5 } = stockInfo;
+  const sellingPrice = [parseInt(askp1), parseInt(askp2), parseInt(askp3), parseInt(askp4), parseInt(askp5)];
+  const existSellingPrice = sellingPrice.filter((price) => price !== 0);
+  const defaultPrice = existSellingPrice[0];
+  const priceChangeVariation = existSellingPrice[1] - existSellingPrice[0];
+
+  console.log(typeof priceChangeVariation);
+
+  // 초기 설정값 세팅
+  useEffect(() => {
+    dispatch(setStockOrderPrice(defaultPrice));
+  }, [companyId]);
+
   // 거래가 증가/감소
   const handlePlusOrderPrice = () => {
-    dispatch(plusStockOrderPrice(10));
+    dispatch(plusStockOrderPrice(priceChangeVariation));
   };
 
   const handleMinusOrderPrice = () => {
-    dispatch(minusStockOrderPrice(10));
+    dispatch(minusStockOrderPrice(priceChangeVariation));
   };
 
   return (
@@ -41,6 +59,11 @@ const PriceSetting = () => {
 };
 
 export default PriceSetting;
+
+interface OwnProps {
+  stockInfo: StockInfoprops;
+  companyId: number;
+}
 
 // component 생성
 const Container = styled.div`

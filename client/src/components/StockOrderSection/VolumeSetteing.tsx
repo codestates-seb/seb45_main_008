@@ -3,6 +3,7 @@ import { styled } from "styled-components";
 const volumeSettingTitle: string = "수량";
 const maximumVolumeText01: string = "최대";
 const maximumVolumeText02: string = "주";
+const unitText: string = "주";
 
 const percentageBtnText01: string = "10%";
 const percentageBtnText02: string = "25%";
@@ -24,7 +25,8 @@ const VolumeSetting = () => {
         </div>
       </TitleContainer>
       <VolumeSettingBox>
-        <VolumeController />
+        <VolumeController defaultValue={0} />
+        <UnitContent>{unitText}</UnitContent>
         <div className="DirectionContainer">
           <button className="VolumeUp">&#8896;</button>
           <button className="VolumeDown">&#8897;</button>
@@ -112,6 +114,10 @@ const VolumeController = styled.input`
   border: 1px solid darkgray;
   border-right: none;
   border-radius: 0.2rem 0 0 0.2rem;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: right;
+  padding-bottom: 3px;
 `;
 
 const PercentageBox = styled.div`
@@ -119,6 +125,7 @@ const PercentageBox = styled.div`
   flex-direction: row;
   justify-content: space-between;
   margin-top: 8px;
+  gap: 8px;
 
   & button {
     width: 56px;
@@ -126,4 +133,18 @@ const PercentageBox = styled.div`
     border: none;
     border-radius: 0.2rem;
   }
+`;
+
+const UnitContent = styled.div`
+  height: 30px;
+  color: #999999;
+  font-size: 13px;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 8px;
+  border-top: 1px solid darkgray;
+  border-bottom: 1px solid darkgray;
+  background-color: #ffffff;
 `;

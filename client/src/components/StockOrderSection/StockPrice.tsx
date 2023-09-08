@@ -1,26 +1,16 @@
-import { useEffect, useRef } from "react";
+import useGetStockData from "../../hooks/useGetStockData";
+import { StockProps } from "../../models/stockProps";
+
 import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
 import { setStockOrderPrice } from "../../reducer/StockOrderPrice-Reducer";
 import { StateProps } from "../../models/stateProps";
 
-// dummyData
-import { upperPriceVolumeSum, lowerPriceVolumeSum } from "./dummyData";
-
 const StockPrice = (props: StockPriceProps) => {
-  const { index, price, changeRate, volume } = props;
+  const { index, price, volume, totalSellingVolume, totalBuyingVolum } = props;
 
-  const changeRateText01: string = changeRate > 0 ? "+" : "";
-  const changeRateText02: string = "%";
-
-  // 11번째 StockPrice 지정 (index === 10)
-  const ref = useRef<HTMLDivElement | null>(null);
-
-  // 최초 렌더링 시, 11번째 StockPrice 화면 정중앙에 위치하도록 설정
-  useEffect(() => {
-    ref.current?.focus();
-    ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, []);
+  const companyId = useSelector((state: StateProps) => state.companyId);
+  const { stockPrice, stockPriceLoading, stockPriceError } = useGetStockData(companyId);
 
   const dispatch = useDispatch();
   const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
@@ -29,19 +19,50 @@ const StockPrice = (props: StockPriceProps) => {
     dispatch(setStockOrderPrice(price));
   };
 
+  if (stockPriceLoading) {
+    return <></>;
+  }
+
+  if (stockPriceError) {
+    return <></>;
+  }
+
+  // 전날 종가 데이터 -> 1) 일/월 : 금요일 종가로 설정  2) 화~토 : 전날 종가로 설정
+  let previousDayStockClosingPrice: number;
+
+  const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
+  const getToday = new Date().getDay();
+  const today = daysOfWeek[getToday];
+
+  if (today === "일" || today === "월") {
+    previousDayStockClosingPrice = stockPrice[stockPrice.length - 1].stck_prpr;
+  } else {
+    const yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+    const yesterdayYymmdd = yesterday.toISOString().slice(0, 10);
+
+    const yesterdayStockInfo = stockPrice.filter((stockInfo: StockProps) => {
+      const dayInfo = stockInfo.stockTradeTime.slice(0, 10);
+
+      if (dayInfo === yesterdayYymmdd) {
+        return stockInfo;
+      }
+    });
+
+    previousDayStockClosingPrice = parseInt(yesterdayStockInfo[yesterdayStockInfo.length - 1].stck_prpr);
+  }
+
+  // 전날 종가대비 매도/매수호가 변동률
+  const changeRate = `${(((price - previousDayStockClosingPrice) / previousDayStockClosingPrice) * 100).toFixed(2)}%`;
+
   return (
-    <Container index={index} ref={index === 10 ? ref : null} price={price} orderPrice={orderPrice} onClick={handleSetOrderPrice}>
+    <Container index={index} price={price} orderPrice={orderPrice} onClick={handleSetOrderPrice}>
       <Price>
-        <div className="price">{price}</div>
-        <div className="changeRate">
-          {changeRateText01}
-          {changeRate}
-          {changeRateText02}
-        </div>
+        <div className="price">{price.toLocaleString()}</div>
+        <div className="changeRate">{changeRate}</div>
       </Price>
       <Volume index={index}>
-        <div className="volume">{volume}</div>
-        <VolumePercentge index={index} volume={volume} upperPriceVolumeSum={upperPriceVolumeSum} lowerPriceVolumeSum={lowerPriceVolumeSum} />
+        <div className="volume">{volume.toLocaleString()}</div>
+        <VolumePercentge index={index} volume={volume} upperPriceVolumeSum={totalSellingVolume} lowerPriceVolumeSum={totalBuyingVolum} />
       </Volume>
     </Container>
   );
@@ -53,8 +74,9 @@ export default StockPrice;
 interface StockPriceProps {
   index: number;
   price: number;
-  changeRate: number;
   volume: number;
+  totalSellingVolume: number;
+  totalBuyingVolum: number;
 }
 
 // component 생성
@@ -62,8 +84,8 @@ const Container = styled.div<{ index: number; price: number; orderPrice: number 
   width: 100%;
   height: 36px;
   margin-bottom: 2px;
-  background-color: ${(props) => (props.index > 9 ? "#FDE8E7" : "#E7F0FD")};
-  border: ${(props) => (props.index === 10 ? "1px solid #2F4F4F" : "none")};
+  background-color: ${(props) => (props.index > 4 ? "#FDE8E7" : "#E7F0FD")};
+  border: ${(props) => (props.index === 4 ? "1px solid #2F4F4F" : "none")};
   border-left: ${(props) => (props.price === props.orderPrice ? "3px solid red" : props.index > 9 ? "3px solid #FDE8E7" : "3px solid #E7F0FD")};
   display: flex;
   flex-direction: row;
@@ -97,7 +119,7 @@ const Volume = styled.div<{ index: number }>`
   justify-content: space-between;
   align-items: flex-end;
   font-size: 12px;
-  color: ${(props) => (props.index < 10 ? "#2679ed" : "#e22926")};
+  color: ${(props) => (props.index < 5 ? "#2679ed" : "#e22926")};
 
   .volume {
     height: 100%;
@@ -108,7 +130,17 @@ const Volume = styled.div<{ index: number }>`
 `;
 
 const VolumePercentge = styled.span<{ index: number; volume: number; upperPriceVolumeSum: number; lowerPriceVolumeSum: number }>`
-  width: ${(props) => (props.volume / (props.index < 10 ? props.upperPriceVolumeSum : props.lowerPriceVolumeSum)) * 100}%;
+  width: ${(props) => (props.volume / (props.index < 5 ? props.upperPriceVolumeSum : props.lowerPriceVolumeSum)) * 100}%;
   height: 2px;
-  background-color: ${(props) => (props.index < 10 ? "#2679ed" : "#e22926")};
+  background-color: ${(props) => (props.index < 5 ? "#2679ed" : "#e22926")};
 `;
+
+// 🔴 보류
+// ref 생성 코드
+// const ref = useRef<HTMLDivElement | null>(null);
+
+// ref 지정 요소 -> 렌더링 시 화면 정중앙에 배치
+// useEffect(() => {
+//   ref.current?.focus();
+//   ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+// }, []);

@@ -1,41 +1,32 @@
 import { useSelector } from "react-redux";
 import useGetStockInfo from "../../hooks/useGetStockInfo";
-import useGetStockData from "../../hooks/useGetStockData";
+
 import { styled } from "styled-components";
 import { StateProps } from "../../models/stateProps";
-import { StockProps } from "../../models/stockProps";
 
 import StockPrice from "./StockPrice";
-
-// dummyData
-import { dummyPrice } from "./dummyData";
 
 const StockPriceList = () => {
   const companyId = useSelector((state: StateProps) => state.companyId);
   const { stockInfo, stockInfoLoading, stockInfoError } = useGetStockInfo(companyId);
-  const { stockPrice, stockPriceLoading, stockPriceError } = useGetStockData(companyId);
 
-  if (stockInfoLoading || stockPriceLoading) {
+  if (stockInfoLoading) {
     return <></>;
   }
 
-  if (stockInfoError || stockPriceError) {
+  if (stockInfoError) {
     return <></>;
   }
 
-  // 1) 당일 매수/매도호가 및 거래량  2) 전날 종가대비 주가 변동률
+  // 1) 당일 매도/매수호가 및 거래량
   const sellingPrice: PriceProps[] = [];
   const buyingPrice: PriceProps[] = [];
-  let previousDayStockClosingPrice: number = 0;
-
-  const sellingAndBuyingPrice = [...sellingPrice, ...buyingPrice];
-  const changeRate = (((sellingPrice[0].price - previousDayStockClosingPrice) / previousDayStockClosingPrice) * 100).toFixed(2);
 
   for (let i = 1; i < 6; i++) {
-    const sellingPriceProp = `askp${i}`;
-    const sellingVolumeProp = `askp_rsqn${i}`;
-    const buyingPriceProp = `bidp${i}`;
-    const buyingVolumeProp = `bidp_rsqn${i}`;
+    const sellingPriceProp = `askp${i}`; // 매도 호가
+    const sellingVolumeProp = `askp_rsqn${i}`; // 해당 매도호가 거래량
+    const buyingPriceProp = `bidp${i}`; // 매수 호가
+    const buyingVolumeProp = `bidp_rsqn${i}`; // 해당 매수호가 거래량
 
     const sellingInfo = {
       price: parseInt(stockInfo.stockAsBiResponseDto[sellingPriceProp]),
@@ -51,27 +42,14 @@ const StockPriceList = () => {
     buyingPrice.push(buyingInfo);
   }
 
-  // 전날 종가 데이터 -> 1) 일/월 : 금요일 종가로 설정  2) 화~토 : 전날 종가로 설정
-  const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
-  const getToday = new Date().getDay();
-  const today = daysOfWeek[getToday];
-
-  if (today === "일" || today === "월") {
-    previousDayStockClosingPrice = stockPrice[stockPrice.length - 1].stck_prpr;
-  } else {
-    const yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
-    const yesterdayYymmdd = yesterday.toISOString().slice(0, 10);
-
-    const yesterdayStockInfo = stockPrice.filter((stockInfo: StockProps) => {
-      const dayInfo = stockInfo.stockTradeTime.slice(0, 10);
-
-      if (dayInfo === yesterdayYymmdd) {
-        return stockInfo;
-      }
-    });
-
-    previousDayStockClosingPrice = parseInt(yesterdayStockInfo[yesterdayStockInfo.length - 1].stck_prpr);
-  }
+  // 1) 매도/매수호가 종합  2) 매수/매도호가 거래량 종합
+  const sellingAndBuyingPrice = [...sellingPrice, ...buyingPrice];
+  const totalSellingVolume = sellingPrice.reduce((acc, cur) => {
+    return (acc = acc + cur.volume);
+  }, 0);
+  const totalBuyingVolum = buyingPrice.reduce((acc, cur) => {
+    return (acc = acc + cur.volume);
+  }, 0);
 
   return (
     <Container>
@@ -80,8 +58,8 @@ const StockPriceList = () => {
         <div className="volume"></div>
       </HighFigure>
       <PriceList>
-        {dummyPrice.map((item, idx) => (
-          <StockPrice key={item.price} index={idx} price={item.price} changeRate={item.changeRate} volume={item.volume} />
+        {sellingAndBuyingPrice.map((item, idx) => (
+          <StockPrice key={item.price} index={idx} price={item.price} volume={item.volume} totalSellingVolume={totalSellingVolume} totalBuyingVolum={totalBuyingVolum} />
         ))}
       </PriceList>
       <LowerFigure>
