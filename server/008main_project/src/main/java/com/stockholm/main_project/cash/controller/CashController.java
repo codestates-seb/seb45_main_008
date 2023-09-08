@@ -1,5 +1,6 @@
 package com.stockholm.main_project.cash.controller;
 
+import com.stockholm.main_project.cash.dto.CashPatchDto;
 import com.stockholm.main_project.cash.dto.CashPostDto;
 import com.stockholm.main_project.cash.dto.CashResponseDto;
 import com.stockholm.main_project.cash.entity.Cash;
@@ -12,10 +13,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
 
@@ -49,5 +47,30 @@ public class CashController {
         CashResponseDto responseDto = mapper.cashToCashResponseDto(createdCash);
 
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+    }
+
+    @PatchMapping("{moneyId}")
+    public ResponseEntity patchCash(@Schema(implementation = CashPatchDto.class)@PathVariable long moneyId, @Valid @RequestBody CashPatchDto requestBody){
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Member member = memberService.findMemberByEmail(auth.getPrincipal().toString());
+
+//        stockOrderService.deleteStockOrdersByMemberId(member.getId());
+
+        Cash cashToUpdate = mapper.cashPatchToCash(requestBody);
+
+        cashToUpdate.setMember(member);
+
+        requestBody.setMoneyId(moneyId);
+
+        Cash cash = cashService.updateCash(moneyId, member);
+
+        return new ResponseEntity<>(mapper.cashToCashResponseDto(cash), HttpStatus.OK);
+    }
+
+    @GetMapping("{moneyId}")
+    private ResponseEntity getCash(@PathVariable long moneyId){
+        Cash response = cashService.findCash(moneyId);
+
+        return new ResponseEntity<>(mapper.cashToCashResponseDto(response), HttpStatus.OK);
     }
 }

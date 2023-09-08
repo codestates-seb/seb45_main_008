@@ -58,6 +58,7 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers("members/login").permitAll()
+
                         .antMatchers(HttpMethod.POST, "/cash").hasRole("USER")
                         .antMatchers(HttpMethod.DELETE, "/cash").hasRole("USER")
                         .anyRequest().permitAll()

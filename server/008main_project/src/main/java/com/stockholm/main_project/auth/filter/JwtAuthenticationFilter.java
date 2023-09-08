@@ -2,7 +2,7 @@ package com.stockholm.main_project.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stockholm.main_project.auth.jwt.JwtTokenizer;
-import com.stockholm.main_project.auth.logindto.LoginDto;
+import com.stockholm.main_project.auth.dto.LoginDto;
 import com.stockholm.main_project.member.entity.Member;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;

@@ -1,5 +1,6 @@
 package com.stockholm.main_project.cash.mapper;
 
+import com.stockholm.main_project.cash.dto.CashPatchDto;
 import com.stockholm.main_project.cash.dto.CashPostDto;
 import com.stockholm.main_project.cash.dto.CashResponseDto;
 import com.stockholm.main_project.cash.entity.Cash;
@@ -13,5 +14,7 @@ import org.mapstruct.Mapper;
 public interface CashMapper {
 
     Cash cashPostToCash(CashPostDto requestBody);
+
+    Cash cashPatchToCash(CashPatchDto requestBody);
     CashResponseDto cashToCashResponseDto(Cash cash);
 }

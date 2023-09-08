@@ -90,9 +90,9 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         return UriComponentsBuilder
                 .newInstance()
                 .scheme("http")
-                .host("localhost")
-//                .port(80)
-                .path("/receive-token.html")
+                .host("ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com")
+                .port(8080)
+                .path("/")
                 .queryParams(queryParams)
                 .build()
                 .toUri();
