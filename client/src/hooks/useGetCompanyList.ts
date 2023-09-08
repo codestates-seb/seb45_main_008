@@ -4,7 +4,7 @@ import axios from "axios";
 const useGetCompanyList = () => {
   const { data, isLoading, error } = useQuery("companyList", getCompanyList, {});
 
-  return { companyList: data, isLoading, error };
+  return { companyList: data, compnayListLoading: isLoading, companyListError: error };
 };
 
 export default useGetCompanyList;

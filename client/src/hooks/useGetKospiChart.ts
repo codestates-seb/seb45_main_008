@@ -68,7 +68,7 @@ const useGetKospiChart = () => {
     height: "100%",
   };
 
-  return { isLoading, error, options, chartStyle };
+  return { kospiLoading: isLoading, kospiError: error, options, chartStyle };
 };
 
 export default useGetKospiChart;
