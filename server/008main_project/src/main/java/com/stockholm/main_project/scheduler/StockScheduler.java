@@ -25,11 +25,39 @@ public class StockScheduler {
 
     public StockScheduler(StockAsBiService stockAsBiService, StockMinService stockMinService, CompanyService companyService, TokenService tokenService) {
         this.stockAsBiService = stockAsBiService;
-
         this.stockMinService = stockMinService;
         this.companyService = companyService;
         this.tokenService = tokenService;
     }
+
+//    @Scheduled(cron = "0 30/30 9-15 * * MON-FRI")
+//    public void myScheduledStockAsBiMethod() {
+//        LocalDateTime start = LocalDateTime.now();
+//        try {
+//            stockAsBiService.updateStockAsBi();
+//        } catch (Exception e) {
+//            log.error("myScheduledStockAsBiMethod 실행 중 오류가 발생했습니다: ", e);
+//        } finally {
+//            LocalDateTime end = LocalDateTime.now();
+//            Duration duration = Duration.between(start, end);
+//            log.info("myScheduledStockAsBiMethod 실행 시간: " + duration.getSeconds() + "초");
+//        }
+//    }
+//
+//    @Scheduled(cron = "0 30/30 9-15 * * MON-FRI")
+//    public void myScheduledStockMinMethod() {
+//        LocalDateTime start = LocalDateTime.now();
+//        try {
+//            stockMinService.updateStockMin();
+//        } catch (Exception e) {
+//            log.error("myScheduledStockMinMethod 실행 중 오류가 발생했습니다: ", e);
+//        } finally {
+//            LocalDateTime end = LocalDateTime.now();
+//            Duration duration = Duration.between(start, end);
+//            log.info("myScheduledStockMinMethod 실행 시간: " + duration.getSeconds() + "초");
+//        }
+//    }
+//
 
 //    @Scheduled(cron = "0 30/30 9-15 * * MON-FRI")
 //    public void myScheduledStockAsBiMethod() throws InterruptedException {

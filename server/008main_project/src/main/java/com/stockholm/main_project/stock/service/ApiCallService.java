@@ -1,5 +1,7 @@
 package com.stockholm.main_project.stock.service;
 
+import com.stockholm.main_project.exception.BusinessLogicException;
+import com.stockholm.main_project.exception.ExceptionCode;
 import com.stockholm.main_project.stock.dto.StockasbiDataDto;
 import com.stockholm.main_project.stock.dto.StockMinDto;
 import com.stockholm.main_project.stock.repository.CompanyRepository;
@@ -61,85 +63,187 @@ public class ApiCallService {
 
     private final CompanyRepository companyRepository;
 
-    public StockasbiDataDto getStockasbiDataFromApi(String stockCode){
-        String token = tokenService.getAccessToken();
+    public StockasbiDataDto getStockasbiDataFromApi(String stockCode) {
+        try {
+            String token = tokenService.getAccessToken();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + token);
-        headers.add("appkey", APP_KEY);
-        headers.add("appsecret", APP_SECRET);
-        headers.add("tr_id", "FHKST01010200");
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", "Bearer " + token);
+            headers.add("appkey", APP_KEY);
+            headers.add("appsecret", APP_SECRET);
+            headers.add("tr_id", "FHKST01010200");
 
-        String uri = STOCKASBI_URL + "?FID_COND_MRKT_DIV_CODE=J&FID_INPUT_ISCD=" + stockCode;
+            String uri = STOCKASBI_URL + "?FID_COND_MRKT_DIV_CODE=J&FID_INPUT_ISCD=" + stockCode;
 
-        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+            HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
 
-        ResponseEntity<StockasbiDataDto> response = restTemplate.exchange(uri, HttpMethod.GET, entity, new ParameterizedTypeReference<StockasbiDataDto>() {});
+            ResponseEntity<StockasbiDataDto> response = restTemplate.exchange(uri, HttpMethod.GET, entity, StockasbiDataDto.class);
 
-        if (response.getStatusCode().is2xxSuccessful()) {
-            StockasbiDataDto stockasbiDataDto = response.getBody();
-            return stockasbiDataDto;
-        } else {
-            log.info("error");
-            return null;
+            if (response.getStatusCode().is2xxSuccessful()) {
+                StockasbiDataDto stockasbiDataDto = response.getBody();
+                if (stockasbiDataDto == null) {
+                    throw new BusinessLogicException(ExceptionCode.API_RESPONSE_ERROR);
+                }
+                return stockasbiDataDto;
+            } else {
+                log.error("API response error: " + response.getStatusCode());
+                throw new BusinessLogicException(ExceptionCode.API_RESPONSE_ERROR);
+            }
+        } catch (Exception e) {
+            log.error("API call error: ", e);
+            throw new BusinessLogicException(ExceptionCode.API_CALL_ERROR);
         }
-
     }
+
+//    public StockasbiDataDto getStockasbiDataFromApi(String stockCode){
+//        String token = tokenService.getAccessToken();
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Authorization", "Bearer " + token);
+//        headers.add("appkey", APP_KEY);
+//        headers.add("appsecret", APP_SECRET);
+//        headers.add("tr_id", "FHKST01010200");
+//
+//        String uri = STOCKASBI_URL + "?FID_COND_MRKT_DIV_CODE=J&FID_INPUT_ISCD=" + stockCode;
+//
+//        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+//
+//        ResponseEntity<StockasbiDataDto> response = restTemplate.exchange(uri, HttpMethod.GET, entity, new ParameterizedTypeReference<StockasbiDataDto>() {});
+//
+//        if (response.getStatusCode().is2xxSuccessful()) {
+//            StockasbiDataDto stockasbiDataDto = response.getBody();
+//            return stockasbiDataDto;
+//        } else {
+//            log.info("error");
+//            return null;
+//        }
+//
+//    }
 
     public StockMinDto getStockMinDataFromApi(String stockCode, String strHour) {
-        String token = tokenService.getAccessToken();
+        try {
+            String token = tokenService.getAccessToken();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + token);
-        headers.add("appkey", APP_KEY);
-        headers.add("appsecret", APP_SECRET);
-        headers.add("tr_id", "FHKST03010200");
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", "Bearer " + token);
+            headers.add("appkey", APP_KEY);
+            headers.add("appsecret", APP_SECRET);
+            headers.add("tr_id", "FHKST03010200");
 
-        String uri = STOCKHOUR_URL + "?FID_COND_MRKT_DIV_CODE=" + FID_COND_MRKT_DIV_CODE + "&FID_INPUT_ISCD=" + stockCode +  "&FID_ETC_CLS_CODE=" + FID_ETC_CLS_CODE
-                + "&FID_INPUT_HOUR_1=" + strHour + "&FID_PW_DATA_INCU_YN=" +  FID_PW_DATA_INCU_YN;
+            String uri = STOCKHOUR_URL + "?FID_COND_MRKT_DIV_CODE=" + FID_COND_MRKT_DIV_CODE + "&FID_INPUT_ISCD=" + stockCode + "&FID_ETC_CLS_CODE=" + FID_ETC_CLS_CODE
+                    + "&FID_INPUT_HOUR_1=" + strHour + "&FID_PW_DATA_INCU_YN=" + FID_PW_DATA_INCU_YN;
 
-        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+            HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
 
-        ResponseEntity<StockMinDto> response = restTemplate.exchange(uri, HttpMethod.GET, entity, new ParameterizedTypeReference<StockMinDto>() {});
+            ResponseEntity<StockMinDto> response = restTemplate.exchange(uri, HttpMethod.GET, entity, StockMinDto.class);
 
-        if (response.getStatusCode().is2xxSuccessful()) {
-            StockMinDto stockMinDto = response.getBody();
-            return stockMinDto;
-
-        } else {
-            log.info("error");
-            return null;
+            if (response.getStatusCode().is2xxSuccessful()) {
+                StockMinDto stockMinDto = response.getBody();
+                if (stockMinDto == null) {
+                    throw new BusinessLogicException(ExceptionCode.API_RESPONSE_ERROR);
+                }
+                return stockMinDto;
+            } else {
+                log.error("API response error: " + response.getStatusCode());
+                throw new BusinessLogicException(ExceptionCode.API_RESPONSE_ERROR);
+            }
+        } catch (Exception e) {
+            log.error("API call error: ", e);
+            throw new BusinessLogicException(ExceptionCode.API_CALL_ERROR);
         }
-
     }
 
-    public String getKospiMonthFromApi(){
-        String token = tokenService.getAccessToken();
+//    public StockMinDto getStockMinDataFromApi(String stockCode, String strHour) {
+//        String token = tokenService.getAccessToken();
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Authorization", "Bearer " + token);
+//        headers.add("appkey", APP_KEY);
+//        headers.add("appsecret", APP_SECRET);
+//        headers.add("tr_id", "FHKST03010200");
+//
+//        String uri = STOCKHOUR_URL + "?FID_COND_MRKT_DIV_CODE=" + FID_COND_MRKT_DIV_CODE + "&FID_INPUT_ISCD=" + stockCode +  "&FID_ETC_CLS_CODE=" + FID_ETC_CLS_CODE
+//                + "&FID_INPUT_HOUR_1=" + strHour + "&FID_PW_DATA_INCU_YN=" +  FID_PW_DATA_INCU_YN;
+//
+//        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+//
+//        ResponseEntity<StockMinDto> response = restTemplate.exchange(uri, HttpMethod.GET, entity, new ParameterizedTypeReference<StockMinDto>() {});
+//
+//        if (response.getStatusCode().is2xxSuccessful()) {
+//            StockMinDto stockMinDto = response.getBody();
+//            return stockMinDto;
+//
+//        } else {
+//            log.info("error");
+//            return null;
+//        }
+//
+//    }
 
-        LocalDateTime localDateTime = LocalDateTime.now();
+    public String getKospiMonthFromApi() {
+        try {
+            String token = tokenService.getAccessToken();
 
-        String strMonth = Time.strMonth(localDateTime);
+            LocalDateTime localDateTime = LocalDateTime.now();
 
-        HttpHeaders headers = new HttpHeaders();
-        headers.add("Authorization", "Bearer " + token);
-        headers.add("appkey", APP_KEY);
-        headers.add("appsecret", APP_SECRET);
-        headers.add("tr_id", "FHKUP03500100");
+            String strMonth = Time.strMonth(localDateTime);
 
-        String uri = KOSPI_URL + "?FID_COND_MRKT_DIV_CODE=U&FID_INPUT_ISCD=" + "0001" + "&FID_INPUT_DATE_1=" + "20230101"
-                +"&FID_INPUT_DATE_2=" + strMonth + "&FID_PERIOD_DIV_CODE=" + "M";
+            HttpHeaders headers = new HttpHeaders();
+            headers.add("Authorization", "Bearer " + token);
+            headers.add("appkey", APP_KEY);
+            headers.add("appsecret", APP_SECRET);
+            headers.add("tr_id", "FHKUP03500100");
 
-        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+            String uri = KOSPI_URL + "?FID_COND_MRKT_DIV_CODE=U&FID_INPUT_ISCD=" + "0001" + "&FID_INPUT_DATE_1=" + "20230101"
+                    + "&FID_INPUT_DATE_2=" + strMonth + "&FID_PERIOD_DIV_CODE=" + "M";
 
-        ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
+            HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
 
-        if (response.getStatusCode().is2xxSuccessful()) {
-            return response.getBody();
-        } else {
-            log.info("error");
-            return null;
+            ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
+
+            if (response.getStatusCode().is2xxSuccessful()) {
+                String responseBody = response.getBody();
+                if (responseBody == null || responseBody.isEmpty()) {
+                    throw new BusinessLogicException(ExceptionCode.API_RESPONSE_ERROR);
+                }
+                return responseBody;
+            } else {
+                log.error("API response error: " + response.getStatusCode());
+                throw new BusinessLogicException(ExceptionCode.API_RESPONSE_ERROR);
+            }
+        } catch (Exception e) {
+            log.error("API call error: ", e);
+            throw new BusinessLogicException(ExceptionCode.API_CALL_ERROR);
         }
-
     }
+
+//    public String getKospiMonthFromApi(){
+//        String token = tokenService.getAccessToken();
+//
+//        LocalDateTime localDateTime = LocalDateTime.now();
+//
+//        String strMonth = Time.strMonth(localDateTime);
+//
+//        HttpHeaders headers = new HttpHeaders();
+//        headers.add("Authorization", "Bearer " + token);
+//        headers.add("appkey", APP_KEY);
+//        headers.add("appsecret", APP_SECRET);
+//        headers.add("tr_id", "FHKUP03500100");
+//
+//        String uri = KOSPI_URL + "?FID_COND_MRKT_DIV_CODE=U&FID_INPUT_ISCD=" + "0001" + "&FID_INPUT_DATE_1=" + "20230101"
+//                +"&FID_INPUT_DATE_2=" + strMonth + "&FID_PERIOD_DIV_CODE=" + "M";
+//
+//        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+//
+//        ResponseEntity<String> response = restTemplate.exchange(uri, HttpMethod.GET, entity, String.class);
+//
+//        if (response.getStatusCode().is2xxSuccessful()) {
+//            return response.getBody();
+//        } else {
+//            log.info("error");
+//            return null;
+//        }
+//
+//    }
 
 }

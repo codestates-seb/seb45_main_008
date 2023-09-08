@@ -1,5 +1,7 @@
 package com.stockholm.main_project.stock.service;
 
+import com.stockholm.main_project.exception.BusinessLogicException;
+import com.stockholm.main_project.exception.ExceptionCode;
 import com.stockholm.main_project.stock.dto.StockasbiDataDto;
 import com.stockholm.main_project.stock.entity.Company;
 import com.stockholm.main_project.stock.entity.StockAsBi;
@@ -9,10 +11,10 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
-
 @Service
 @Transactional
 public class CompanyService {
+
     private final CompanyRepository companyRepository;
     private final ApiCallService apiCallService;
     private final StockMapper stockMapper;
@@ -23,63 +25,135 @@ public class CompanyService {
         this.stockMapper = stockMapper;
     }
 
-    // 특정 회사  리턴
     public Company findCompanyByCode(String stockCode) {
         Company company = companyRepository.findByCode(stockCode);
+        if(company == null) {
+            throw new BusinessLogicException(ExceptionCode.COMPANY_NOT_FOUND);
+        }
         return company;
     }
 
     public Company findCompanyById(long companyId) {
         Company company = companyRepository.findByCompanyId(companyId);
+        if(company == null) {
+            throw new BusinessLogicException(ExceptionCode.COMPANY_NOT_FOUND);
+        }
         return company;
     }
 
-    // 모든 회사 리턴
     public List<Company> findCompanies() {
-        List<Company> companies = companyRepository.findAll();
-
-        return companies;
-    }
-
-
-    // 특정 회사 저장
-    public Company saveCompany(Company company) {
-        return companyRepository.save(company);
-    }
-
-    // 모든 회사 저장
-    public List<Company> saveCompanies(List<Company> companies) {
-        return companyRepository.saveAll(companies);
-    }
-
-    public void fillCompany() {
-        Company company = new Company();
-
-    }
-
-    public void fillCompaines() throws InterruptedException {
-        List<String> korName = List.of("삼성전자", "POSCO홀딩스", "셀트리온", "에코프로", "에코프로비엠", "디와이", "쿠쿠홀딩스", "카카오뱅크", "한세엠케이", "KG케미칼", "LG화학", "현대차", "LG전자", "기아");
-        List<String> code = List.of("005930", "005490", "068270", "086520", "247540", "013570", "192400", "323410", "069640", "001390", "051910", "005380", "066570", "000270");
-
-        for(int i = 0; i < code.size(); i++) {
-            Company company = new Company();
-            company.setCode(code.get(i));
-            company.setKorName(korName.get(i));
-            company.setStockAsBi(new StockAsBi());
-
-            StockasbiDataDto stockasbiDataDto = apiCallService.getStockasbiDataFromApi(company.getCode());
-            // mapper로 정리 된 값 받기
-            StockAsBi stockAsBi = stockMapper.stockAsBiOutput1ToStockAsBi(stockasbiDataDto.getOutput1());
-
-            company.setStockAsBi(stockAsBi);
-            stockAsBi.setCompany(company);
-
-            Thread.sleep(500);
-
-            companyRepository.save(company);
+        try {
+            return companyRepository.findAll();
+        } catch(Exception e) {
+            throw new BusinessLogicException(ExceptionCode.COMPANY_LIST_RETRIEVAL_ERROR);
         }
     }
 
+    public Company saveCompany(Company company) {
+        try {
+            return companyRepository.save(company);
+        } catch(Exception e) {
+            throw new BusinessLogicException(ExceptionCode.DATA_PERSISTENCE_ERROR);
+        }
+    }
+
+    public List<Company> saveCompanies(List<Company> companies) {
+        try {
+            return companyRepository.saveAll(companies);
+        } catch(Exception e) {
+            throw new BusinessLogicException(ExceptionCode.DATA_PERSISTENCE_ERROR);
+        }
+    }
+
+    public void fillCompaines() throws InterruptedException {
+        try {
+            List<String> korName = List.of("삼성전자", "POSCO홀딩스", "셀트리온", "에코프로", "에코프로비엠", "디와이", "쿠쿠홀딩스", "카카오뱅크", "한세엠케이", "KG케미칼", "LG화학", "현대차", "LG전자", "기아");
+            List<String> code = List.of("005930", "005490", "068270", "086520", "247540", "013570", "192400", "323410", "069640", "001390", "051910", "005380", "066570", "000270");
+
+            for(int i = 0; i < code.size(); i++) {
+                Company company = new Company();
+
+                StockasbiDataDto stockasbiDataDto = apiCallService.getStockasbiDataFromApi(company.getCode());
+                StockAsBi stockAsBi = stockMapper.stockAsBiOutput1ToStockAsBi(stockasbiDataDto.getOutput1());
+
+                company.setStockAsBi(stockAsBi);
+                stockAsBi.setCompany(company);
+
+                Thread.sleep(500);
+
+                companyRepository.save(company);
+            }
+        } catch(Exception e) {
+            throw new BusinessLogicException(ExceptionCode.API_CALL_ERROR);
+        }
+    }
 }
 
-
+//public class CompanyService {
+//    private final CompanyRepository companyRepository;
+//    private final ApiCallService apiCallService;
+//    private final StockMapper stockMapper;
+//
+//    public CompanyService(CompanyRepository companyRepository, ApiCallService apiCallService, StockMapper stockMapper) {
+//        this.companyRepository = companyRepository;
+//        this.apiCallService = apiCallService;
+//        this.stockMapper = stockMapper;
+//    }
+//
+//    // 특정 회사  리턴
+//    public Company findCompanyByCode(String stockCode) {
+//        Company company = companyRepository.findByCode(stockCode);
+//        return company;
+//    }
+//
+//    public Company findCompanyById(long companyId) {
+//        Company company = companyRepository.findByCompanyId(companyId);
+//        return company;
+//    }
+//
+//    // 모든 회사 리턴
+//    public List<Company> findCompanies() {
+//        List<Company> companies = companyRepository.findAll();
+//
+//        return companies;
+//    }
+//
+//
+//    // 특정 회사 저장
+//    public Company saveCompany(Company company) {
+//        return companyRepository.save(company);
+//    }
+//
+//    // 모든 회사 저장
+//    public List<Company> saveCompanies(List<Company> companies) {
+//        return companyRepository.saveAll(companies);
+//    }
+//
+//    public void fillCompany() {
+//        Company company = new Company();
+//
+//    }
+//
+//    public void fillCompaines() throws InterruptedException {
+//        List<String> korName = List.of("삼성전자", "POSCO홀딩스", "셀트리온", "에코프로", "에코프로비엠", "디와이", "쿠쿠홀딩스", "카카오뱅크", "한세엠케이", "KG케미칼", "LG화학", "현대차", "LG전자", "기아");
+//        List<String> code = List.of("005930", "005490", "068270", "086520", "247540", "013570", "192400", "323410", "069640", "001390", "051910", "005380", "066570", "000270");
+//
+//        for(int i = 0; i < code.size(); i++) {
+//            Company company = new Company();
+//            company.setCode(code.get(i));
+//            company.setKorName(korName.get(i));
+//            company.setStockAsBi(new StockAsBi());
+//
+//            StockasbiDataDto stockasbiDataDto = apiCallService.getStockasbiDataFromApi(company.getCode());
+//            // mapper로 정리 된 값 받기
+//            StockAsBi stockAsBi = stockMapper.stockAsBiOutput1ToStockAsBi(stockasbiDataDto.getOutput1());
+//
+//            company.setStockAsBi(stockAsBi);
+//            stockAsBi.setCompany(company);
+//
+//            Thread.sleep(500);
+//
+//            companyRepository.save(company);
+//        }
+//    }
+//}

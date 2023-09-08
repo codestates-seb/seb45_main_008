@@ -1,5 +1,7 @@
 package com.stockholm.main_project.awss3;
 
+import com.stockholm.main_project.exception.BusinessLogicException;
+import com.stockholm.main_project.exception.ExceptionCode;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
@@ -20,44 +22,105 @@ public class AwsS3Service {
     private final S3Client s3Client;
 
     public AwsS3Service() {
-        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(
-                "",
-                ""
-        );
+        try {
+            AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(
+                    "",
+                    ""
+            );
 
-        this.s3Client = S3Client.builder()
-                .region(Region.AP_NORTHEAST_2)
-                .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
-                .build();
+            this.s3Client = S3Client.builder()
+                    .region(Region.AP_NORTHEAST_2)
+                    .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
+                    .build();
+        } catch (Exception e) {
+            throw new BusinessLogicException(ExceptionCode.AWS_CREDENTIALS_ERROR);
+        }
     }
 
-    // 이미지 업로드
     public URL uploadFile(MultipartFile file) throws Exception {
-        String dirName = "Picture";  // 고정된 폴더명
-        String fileName = dirName + "/" + file.getOriginalFilename();
+        try {
+            String dirName = "Picture";
+            String fileName = dirName + "/" + file.getOriginalFilename();
 
-        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                .bucket(bucketName)
-                .contentType("image/jpeg")
-                .key(fileName)
-                .build();
+            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                    .bucket(bucketName)
+                    .contentType("image/jpeg")
+                    .key(fileName)
+                    .build();
 
-        s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+            s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
 
-        return s3Client.utilities().getUrl(builder -> builder.bucket(bucketName).key(fileName));
+            return s3Client.utilities().getUrl(builder -> builder.bucket(bucketName).key(fileName));
+        } catch (Exception e) {
+            throw new BusinessLogicException(ExceptionCode.S3_UPLOAD_ERROR);
+        }
     }
 
-    // 이미지 삭제
     public void deleteFile(String fileName) {
-        String dirName = "Picture";  // 고정된 폴더명
-        String fullFileName = dirName + "/" + fileName;
-        s3Client.deleteObject(builder -> builder.bucket(bucketName).key(fullFileName));
+        try {
+            String dirName = "Picture";
+            String fullFileName = dirName + "/" + fileName;
+            s3Client.deleteObject(builder -> builder.bucket(bucketName).key(fullFileName));
+        } catch (Exception e) {
+            throw new BusinessLogicException(ExceptionCode.S3_DELETE_ERROR);
+        }
     }
 
-    // 이미지 URL 가져오기
     public URL getFileUrl(String fileName) {
-        String dirName = "Picture";  // 고정된 폴더명
-        String fullFileName = dirName + "/" + fileName;
-        return s3Client.utilities().getUrl(builder -> builder.bucket(bucketName).key(fullFileName));
+        try {
+            String dirName = "Picture";
+            String fullFileName = dirName + "/" + fileName;
+            return s3Client.utilities().getUrl(builder -> builder.bucket(bucketName).key(fullFileName));
+        } catch (Exception e) {
+            throw new BusinessLogicException(ExceptionCode.S3_URL_RETRIEVE_ERROR);
+        }
     }
 }
+
+//public class AwsS3Service {
+//
+//    private final String bucketName = "stockholm-server";
+//    private final S3Client s3Client;
+//
+//    public AwsS3Service() {
+//        AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(
+//                "",
+//                ""
+//        );
+//
+//        this.s3Client = S3Client.builder()
+//                .region(Region.AP_NORTHEAST_2)
+//                .credentialsProvider(StaticCredentialsProvider.create(awsCredentials))
+//                .build();
+//    }
+//
+//    // 이미지 업로드
+//    public URL uploadFile(MultipartFile file) throws Exception {
+//        String dirName = "Picture";  // 고정된 폴더명
+//        String fileName = dirName + "/" + file.getOriginalFilename();
+//
+//        PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+//                .bucket(bucketName)
+//                .contentType("image/jpeg")
+//                .key(fileName)
+//                .build();
+//
+//        s3Client.putObject(putObjectRequest, RequestBody.fromInputStream(file.getInputStream(), file.getSize()));
+//
+//        return s3Client.utilities().getUrl(builder -> builder.bucket(bucketName).key(fileName));
+//    }
+//
+//    // 이미지 삭제
+//    public void deleteFile(String fileName) {
+//        String dirName = "Picture";  // 고정된 폴더명
+//        String fullFileName = dirName + "/" + fileName;
+//        s3Client.deleteObject(builder -> builder.bucket(bucketName).key(fullFileName));
+//    }
+//
+//    // 이미지 URL 가져오기
+//    public URL getFileUrl(String fileName) {
+//        String dirName = "Picture";  // 고정된 폴더명
+//        String fullFileName = dirName + "/" + fileName;
+//        return s3Client.utilities().getUrl(builder -> builder.bucket(bucketName).key(fullFileName));
+//    }
+//}
