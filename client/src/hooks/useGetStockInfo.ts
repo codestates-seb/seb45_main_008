@@ -15,17 +15,13 @@ const useGetStockInfo = (companyId: number) => {
   useEffect(() => {
     if (minute === 0 || minute === 30) {
       setAutoRefetch(true);
-    }
-
-    if (0 < minute && minute < 30) {
+    } else if (0 < minute && minute < 30) {
       const delayTime = (30 - minute) * 60000;
       setTimeout(() => {
         refetch();
         setAutoRefetch(true);
       }, delayTime);
-    }
-
-    if (30 < minute && minute < 60) {
+    } else if (30 < minute && minute < 60) {
       const delayTime = (60 - minute) * 60000;
       setTimeout(() => {
         refetch();
@@ -36,7 +32,7 @@ const useGetStockInfo = (companyId: number) => {
 
   const { data, isLoading, error, refetch } = useQuery([`stockInfo${companyId} ${queryKey}}`], () => getStockInfo(companyId), {
     enabled: true,
-    refetchInterval: autoRefetch && 60000 * 10, // 정각 혹은 30분에 맞춰서 10분 마다 데이터 리패칭
+    refetchInterval: autoRefetch ? 60000 * 10 : false, // 정각 혹은 30분에 맞춰서 10분 마다 데이터 리패칭
     onSuccess: (cachedData) => {
       console.log(new Date());
       console.log("Data successfully loaded:", cachedData);

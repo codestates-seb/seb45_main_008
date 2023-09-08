@@ -19,6 +19,14 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
       try {
           const response = await axios.post('/oauth2/authorization/google');
           if (response.status === 200) {
+            const authToken = response.headers['authorization'];
+            const accessToken = response.headers['accessToken'];
+            const refreshToken = response.headers['refreshToken'];
+
+            // 토큰들을 로컬 스토리지에 저장
+            if(authToken) localStorage.setItem('authToken', authToken);
+            if(accessToken) localStorage.setItem('accessToken', accessToken);
+            if(refreshToken) localStorage.setItem('refreshToken', refreshToken);
               console.log("Successfully logged in with Google!");
               onClose();
           } else {
@@ -34,6 +42,14 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
       try {
           const response = await axios.post('/oauth2/authorization/kakao');
           if (response.status === 200) {
+            const authToken = response.headers['authorization'];
+            const accessToken = response.headers['accessToken'];
+            const refreshToken = response.headers['refreshToken'];
+
+            // 토큰들을 로컬 스토리지에 저장
+            if(authToken) localStorage.setItem('authToken', authToken);
+            if(accessToken) localStorage.setItem('accessToken', accessToken);
+            if(refreshToken) localStorage.setItem('refreshToken', refreshToken);
               console.log("Successfully logged in with Kakao!");
               onClose();
           } else {
