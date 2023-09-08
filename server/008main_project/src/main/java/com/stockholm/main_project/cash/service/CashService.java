@@ -1,5 +1,6 @@
 package com.stockholm.main_project.cash.service;
 
+import com.stockholm.main_project.cash.dto.CashPatchDto;
 import com.stockholm.main_project.cash.entity.Cash;
 import com.stockholm.main_project.cash.repository.CashRepository;
 import com.stockholm.main_project.exception.BusinessLogicException;
@@ -28,11 +29,11 @@ public class CashService {
         return saveCash;
     }
 
-    public Cash updateCash(long moneyId, Member member){
+    public Cash updateCash(long moneyId, Member member, CashPatchDto patchDto){
         Cash cash = findCash(moneyId);
 
         validateAuthor(cash, member);
-        cash.setMoney(cash.getMoney());
+        cash.setMoney(patchDto.getMoney());
 
         return cashRepository.save(cash);
 

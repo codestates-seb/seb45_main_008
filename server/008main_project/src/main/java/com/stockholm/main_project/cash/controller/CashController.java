@@ -62,7 +62,7 @@ public class CashController {
 
         requestBody.setMoneyId(moneyId);
 
-        Cash cash = cashService.updateCash(moneyId, member);
+        Cash cash = cashService.updateCash(moneyId, member, requestBody);
 
         return new ResponseEntity<>(mapper.cashToCashResponseDto(cash), HttpStatus.OK);
     }
