@@ -10,7 +10,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -56,6 +55,7 @@ public class MemberService {
 
     public Member updateMember(Member member) {
 
+
         Member findMember = findVerifiedMember(member.getMemberId());
 
         Optional.ofNullable(member.getName())
@@ -89,6 +89,7 @@ public class MemberService {
         if (member.isPresent())
             throw new BusinessLogicException(ExceptionCode.EMAIL_DUPLICATION);
     }
+
 
     public Member findMemberByEmail(String email) {
         Optional<Member> optionalUser = memberRepository.findByEmail(email);

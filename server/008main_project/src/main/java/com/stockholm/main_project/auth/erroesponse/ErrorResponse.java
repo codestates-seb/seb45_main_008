@@ -24,7 +24,7 @@ public class ErrorResponse {
     }
 
     private ErrorResponse(List<FieldError> fieldErrors,
-                          List<ConstraintViolationError> violationErrors) {
+                            List<ConstraintViolationError> violationErrors) {
         this.fieldErrors = fieldErrors;
         this.violationErrors = violationErrors;
     }

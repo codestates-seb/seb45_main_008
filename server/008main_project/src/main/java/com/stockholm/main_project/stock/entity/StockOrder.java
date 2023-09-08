@@ -34,7 +34,7 @@ public class StockOrder extends Auditable {
 
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
-    private OrderStatus OrderStatus;
+    private OrderStates OrderStates;
 
     @Column
     private long price;
@@ -48,14 +48,14 @@ public class StockOrder extends Auditable {
         OrderTypes(String types) { this.types = types; }
     }
 
-    public enum OrderStatus {
+    public enum OrderStates {
         ORDER_COMPLETE("채결 완료"),
         ORDER_WAIT("체결 대기");
         @Getter
-        private String status;
+        private String states;
 
-        OrderStatus(String status) {
-            this.status = status;
+        OrderStates(String status) {
+            this.states = status;
         }
     }
 }
