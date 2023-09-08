@@ -31,14 +31,19 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) =
   const handleLoginClick = async () => {
     try {
       // 백엔드에 로그인 요청
-      const response = await axios.post("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/login", {
+      const response = await axios.post("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members/login", {
         email,
         password,
       });
       if (response.status === 200) {
-        // 성공적으로 로그인된 경우, 토큰을 로컬 스토리지에 저장
-        const authToken = response.data.authorization;
-        localStorage.setItem('authToken', authToken);
+        const authToken = response.headers['authorization'];
+        const accessToken = response.headers['accessToken'];
+        const refreshToken = response.headers['refreshToken'];
+
+        // 토큰들을 로컬 스토리지에 저장
+        if(authToken) localStorage.setItem('authToken', authToken);
+        if(accessToken) localStorage.setItem('accessToken', accessToken);
+        if(refreshToken) localStorage.setItem('refreshToken', refreshToken);
         onLogin();
         onClose();
       } else {

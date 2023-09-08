@@ -60,7 +60,7 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
                 confirmPassword,
             });
 
-            if (response.status === 200) {
+            if (response.status === 201) {
                 console.log('Data sent successfully');
                 onClose();
                 onNext();
