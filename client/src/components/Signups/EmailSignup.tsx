@@ -2,6 +2,8 @@
 import axios from 'axios';
 import styled from 'styled-components';
 import React, { useState } from 'react';
+import { useDispatch } from 'react-redux';
+import { setEmailForVerification } from '../../reducer/member/memberInfoSlice';
 
 // 문자열 상수 정의
 const strings = {
@@ -12,9 +14,11 @@ const strings = {
 };
 
 const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestVerification }) => {
+  const dispatch = useDispatch();
   // 사용자가 입력한 이메일 상태
   const [email, setEmail] = useState('');
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);  // 이메일 유효성 상태
+  
 
   // 이메일 입력 핸들러
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -37,6 +41,8 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
     try {
       const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/email/send', { email });
       if (response.status === 200) {
+        // 여기서 Redux store의 emailForVerification에 데이터 저장
+        dispatch(setEmailForVerification(email));
         onRequestVerification(email);
       } else {
         console.error('Error sending verification email');
