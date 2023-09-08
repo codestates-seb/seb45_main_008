@@ -3,6 +3,9 @@ import axios from 'axios';
 import React, { useState } from 'react';
 import styled from 'styled-components';
 
+import { useDispatch } from 'react-redux';
+import { setMemberInfo } from '../../reducer/member/memberInfoSlice';
+
 const strings = {
     titleText: "비밀번호 설정",
     passwordLabelText: "비밀번호",
@@ -14,6 +17,7 @@ const strings = {
 };
 
 const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, onNext, email }) => {
+    const dispatch = useDispatch();
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [name, setName] = useState('');
@@ -62,6 +66,9 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
 
             if (response.status === 201) {
                 console.log('Data sent successfully');
+
+                // 여기서 Redux store의 memberInfo에 데이터 저장
+                dispatch(setMemberInfo(response.data));
                 onClose();
                 onNext();
             } else {
