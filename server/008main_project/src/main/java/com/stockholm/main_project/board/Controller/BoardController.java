@@ -120,7 +120,11 @@ public class BoardController {
             @PathVariable Long boardId,
             @RequestBody Map<String, Object> updates) {
 
-        Board updatedBoard = boardService.patchBoard(boardId, updates);
+        // Authentication 객체를 사용하여 현재 사용자 정보 가져오기
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Member member = memberService.findMemberByEmail(auth.getPrincipal().toString());
+
+        Board updatedBoard = boardService.patchBoard(boardId, updates, member);
 
         if (updatedBoard != null) {
             return new ResponseEntity<>(updatedBoard, HttpStatus.OK);
@@ -134,7 +138,11 @@ public class BoardController {
 
     @DeleteMapping("/{boardId}")
     public ResponseEntity<Void> deleteBoard(@PathVariable Long boardId) {
-        boolean deleted = boardService.deleteBoard(boardId);
+        // Authentication 객체를 사용하여 현재 사용자 정보 가져오기
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Member member = memberService.findMemberByEmail(auth.getPrincipal().toString());
+
+        boolean deleted = boardService.deleteBoard(boardId, member);
         if (deleted) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
