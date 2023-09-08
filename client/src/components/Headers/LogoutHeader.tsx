@@ -32,6 +32,11 @@ const LogoutHeader: React.FC<LogoutHeaderProps> = ({ onLoginClick }) => {
 };
 
 export default LogoutHeader;
+// 프롭스 타입 정의
+interface LogoutHeaderProps {
+  onLoginClick: () => void;
+}
+
 
 
 // 스타일드 컴포넌트 정의
@@ -84,8 +89,4 @@ const LoginButton = styled.button`
   }
 `;
 
-// 프롭스 타입 정의
-interface LogoutHeaderProps {
-  onLoginClick: () => void;
-}
 
