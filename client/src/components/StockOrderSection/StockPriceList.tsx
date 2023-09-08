@@ -13,17 +13,18 @@ const StockPriceList = () => {
   const { data, isLoading, error } = useGetStockInfo(companyId);
 
   if (isLoading) {
-    return <p>로딩 중</p>;
+    return;
   }
 
   if (error) {
-    return <p>에러 발생</p>;
+    return;
   }
 
   // 주가 정보 fetching -> 매수/매도 호가 및 거래량 각각 구분하여 배열 생성
   // 🟢 추가적으로 필요한 정보 = 주가 변동률 + 🟢 해당 로직 외부로 빼서 처리하는 방법 고민
-  const sellingPrice = [];
-  const buyingPrice = [];
+  // 주가 변동률 -> 전날 종가 대비 상승/하략률
+  const sellingPrice: priceProps[] = [];
+  const buyingPrice: priceProps[] = [];
 
   for (let i = 1; i < 6; i++) {
     const sellingPriceProp = `askp${i}`;
@@ -41,9 +42,16 @@ const StockPriceList = () => {
       volume: data.stockAsBiResponseDto[buyingVolumeProp],
     };
 
-    sellingPrice.push(sellingInfo);
-    buyingPrice.unshift(buyingInfo);
+    sellingPrice.unshift(sellingInfo);
+    buyingPrice.push(buyingInfo);
   }
+
+  const testFun = () => {
+    console.log(sellingPrice);
+    console.log(buyingPrice);
+  };
+
+  testFun();
 
   return (
     <Container>
@@ -65,6 +73,12 @@ const StockPriceList = () => {
 };
 
 export default StockPriceList;
+
+// type 정의
+interface priceProps {
+  price: string;
+  volume: string;
+}
 
 // component 생성
 const Container = styled.div`

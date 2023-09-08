@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
+import useGetStockInfo from "../../hooks/useGetStockInfo";
 import { stockOrderClose } from "../../reducer/StockOrderSet-Reducer";
 import { StateProps } from "../../models/stateProps";
 
@@ -13,12 +14,26 @@ const marketType: string = "코스피";
 import { dummyStockName } from "./dummyData";
 
 const StockOrderSection = () => {
+  const companyId = useSelector((state: StateProps) => state.companyId);
   const stockOrderSet = useSelector((state: StateProps) => state.stockOrderSet);
   const dispatch = useDispatch();
+
+  const { data, isLoading, error } = useGetStockInfo(companyId);
 
   const handleStockOrderClose = () => {
     dispatch(stockOrderClose());
   };
+
+  if (isLoading) {
+    return <></>;
+  }
+
+  if (error) {
+    return <></>;
+  }
+
+  const corpName = data.korName;
+  const stockCode = data.code;
 
   return (
     <Container orderSet={stockOrderSet}>
@@ -31,9 +46,9 @@ const StockOrderSection = () => {
       <StockName>
         <img className="CorpLogo" src={dummyStockName.corpLogo} />
         <div className="NameContainer">
-          <div className="CorpName">{dummyStockName.corpName}</div>
+          <div className="CorpName">{corpName}</div>
           <div className="StockCode">
-            {dummyStockName.stockCode} {marketType}
+            {stockCode} {marketType}
           </div>
         </div>
       </StockName>

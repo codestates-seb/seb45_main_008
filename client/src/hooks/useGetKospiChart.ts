@@ -7,6 +7,14 @@ const useGetKospiChart = () => {
 
   const { data, isLoading, error } = useQuery("kospi", getKospiData, {});
 
+  if (isLoading) {
+    console.log("데이터 로딩중");
+  }
+
+  if (error) {
+    console.log("에러 발생");
+  }
+
   useEffect(() => {
     if (data) {
       setKospiData(data);
