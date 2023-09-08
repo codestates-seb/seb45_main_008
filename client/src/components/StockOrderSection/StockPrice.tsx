@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import useGetStockData from "../../hooks/useGetStockData";
 import { StockProps } from "../../models/stockProps";
 
@@ -70,6 +71,18 @@ const StockPrice = (props: StockPriceProps) => {
 
 export default StockPrice;
 
+// 전체 매도/도수 거래량 대비 개별가격 매도/매수 거래량 비율
+const VolumePercentge = (props: { index: number; volume: number; upperPriceVolumeSum: number; lowerPriceVolumeSum: number }) => {
+  const { index, volume, upperPriceVolumeSum, lowerPriceVolumeSum } = props;
+  const [width, setWidth] = useState(0);
+
+  useEffect(() => {
+    setWidth((volume / (index < 5 ? upperPriceVolumeSum : lowerPriceVolumeSum)) * 100);
+  }, [volume]);
+
+  return <StockVolumePercentge index={index} volume={volume} upperPriceVolumeSum={upperPriceVolumeSum} lowerPriceVolumeSum={lowerPriceVolumeSum} style={{ width: `${width}%` }} />;
+};
+
 // type 지정
 interface StockPriceProps {
   index: number;
@@ -129,10 +142,10 @@ const Volume = styled.div<{ index: number }>`
   }
 `;
 
-const VolumePercentge = styled.span<{ index: number; volume: number; upperPriceVolumeSum: number; lowerPriceVolumeSum: number }>`
-  width: ${(props) => (props.volume / (props.index < 5 ? props.upperPriceVolumeSum : props.lowerPriceVolumeSum)) * 100}%;
+const StockVolumePercentge = styled.span<{ index: number; volume: number; upperPriceVolumeSum: number; lowerPriceVolumeSum: number }>`
   height: 2px;
   background-color: ${(props) => (props.index < 5 ? "#2679ed" : "#e22926")};
+  transition: width 0.5s ease;
 `;
 
 // 🔴 보류
