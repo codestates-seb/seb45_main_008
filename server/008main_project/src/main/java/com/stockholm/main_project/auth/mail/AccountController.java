@@ -31,7 +31,7 @@ public class AccountController {
     @ApiResponse(responseCode = "400", description = "BAD REQUEST")
     @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     @PostMapping("/email/send")
-    public String emailConfirm(@Schema(implementation = SendEmailPostDto.class) @RequestBody SendEmailPostDto sendEmailPostDto) throws Exception {
+    public String emailSend(@Schema(implementation = SendEmailPostDto.class) @RequestBody SendEmailPostDto sendEmailPostDto) throws Exception {
 
         String confirm = emailService.sendSimpleMessage(sendEmailPostDto.getEmail());
 

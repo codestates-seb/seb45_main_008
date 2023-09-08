@@ -4,10 +4,14 @@ import com.stockholm.main_project.auth.filter.JwtAuthenticationFilter;
 import com.stockholm.main_project.auth.filter.JwtVerificationFilter;
 import com.stockholm.main_project.auth.handler.MemberAuthenticationFailureHandler;
 import com.stockholm.main_project.auth.handler.MemberAuthenticationSuccessHandler;
+import com.stockholm.main_project.auth.handler.OAuth2AuthenticationSuccessHandler;
 import com.stockholm.main_project.auth.jwt.JwtTokenizer;
 import com.stockholm.main_project.auth.utils.CustomAuthorityUtils;
+import com.stockholm.main_project.auth.utils.OAuth2MemberService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -30,10 +34,13 @@ import static org.springframework.security.config.Customizer.withDefaults;
 public class SecurityConfiguration {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
+    @Autowired
+    public final OAuth2MemberService oAuth2MemberService;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils) {
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, OAuth2MemberService oAuth2MemberService) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
+        this.oAuth2MemberService = oAuth2MemberService;
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -51,7 +58,16 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers("members/login").permitAll()
+
+                        .antMatchers(HttpMethod.POST, "/cash").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/cash").hasRole("USER")
                         .anyRequest().permitAll()
+                )
+                .oauth2Login(oauth2 -> oauth2
+                        .userInfoEndpoint()
+                        .userService(oAuth2MemberService)
+                        .and()
+                        .successHandler(new OAuth2AuthenticationSuccessHandler(jwtTokenizer, authorityUtils))
                 );
 
         return httpSecurity.build();

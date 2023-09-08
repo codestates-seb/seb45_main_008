@@ -1,12 +1,12 @@
 package com.stockholm.main_project.member.service;
 
-import com.stockholm.main_project.advice.GlobalExceptionAdvice;
 import com.stockholm.main_project.auth.utils.CustomAuthorityUtils;
 import com.stockholm.main_project.exception.BusinessLogicException;
 import com.stockholm.main_project.exception.ExceptionCode;
 import com.stockholm.main_project.member.dto.MemberPostDto;
 import com.stockholm.main_project.member.entity.Member;
 import com.stockholm.main_project.member.repository.MemberRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Slf4j
 public class MemberService {
 
     private final MemberRepository memberRepository;
@@ -53,13 +54,14 @@ public class MemberService {
     }
 
     public Member updateMember(Member member) {
+
+
         Member findMember = findVerifiedMember(member.getMemberId());
 
         Optional.ofNullable(member.getName())
                 .ifPresent(name -> findMember.setName(name));
-            memberRepository.save(findMember);
 
-        return findMember;
+        return memberRepository.save(findMember);
     }
 
     public  Member findMember(long memberId) {
@@ -73,8 +75,9 @@ public class MemberService {
     }
 
     public Member findVerifiedMember(long memberId) {
+
         Optional<Member> optionalMember =
-                memberRepository.findById(memberId);
+                memberRepository.findByMemberId(memberId);
         Member findMember =
                 optionalMember.orElseThrow(() ->
                         new BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND));
@@ -86,5 +89,15 @@ public class MemberService {
         if (member.isPresent())
             throw new BusinessLogicException(ExceptionCode.EMAIL_DUPLICATION);
     }
-}
 
+
+    public Member findMemberByEmail(String email) {
+        Optional<Member> optionalUser = memberRepository.findByEmail(email);
+
+        return optionalUser.orElse(null);
+    }
+
+//    public void deleteStockOrdersByMemberId(Long memberId) {
+//        stockOrderRepository.deleteAllByMemberId(memberId);
+//    }
+}

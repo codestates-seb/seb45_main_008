@@ -1,4 +1,4 @@
-package com.stockholm.main_project.auth.logindto;
+package com.stockholm.main_project.auth.dto;
 
 import lombok.Getter;
 
