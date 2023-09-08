@@ -23,10 +23,13 @@ const StockPriceList = () => {
     return <></>;
   }
 
-  // 당일 매수/매도 호가 정리
+  // 1) 당일 매수/매도호가 및 거래량  2) 전날 종가대비 주가 변동률
   const sellingPrice: PriceProps[] = [];
   const buyingPrice: PriceProps[] = [];
   let previousDayStockClosingPrice: number = 0;
+
+  const sellingAndBuyingPrice = [...sellingPrice, ...buyingPrice];
+  const changeRate = (((sellingPrice[0].price - previousDayStockClosingPrice) / previousDayStockClosingPrice) * 100).toFixed(2);
 
   for (let i = 1; i < 6; i++) {
     const sellingPriceProp = `askp${i}`;
@@ -69,18 +72,6 @@ const StockPriceList = () => {
 
     previousDayStockClosingPrice = parseInt(yesterdayStockInfo[yesterdayStockInfo.length - 1].stck_prpr);
   }
-
-  const testFun = () => {
-    console.log(sellingPrice);
-    console.log(buyingPrice);
-
-    console.log(sellingPrice[0].price);
-    console.log(previousDayStockClosingPrice);
-
-    console.log(sellingPrice[0].price - previousDayStockClosingPrice);
-  };
-
-  testFun();
 
   return (
     <Container>
