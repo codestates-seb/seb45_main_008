@@ -1,7 +1,7 @@
 import useGetStockData from "../../hooks/useGetStockData";
 import { StockProps } from "../../models/stockProps";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
 import { setStockOrderPrice } from "../../reducer/StockOrderPrice-Reducer";
@@ -15,10 +15,19 @@ const StockPrice = (props: StockPriceProps) => {
 
   const dispatch = useDispatch();
   const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
+  const ref = useRef<HTMLDivElement | null>(null);
 
   const handleSetOrderPrice = () => {
     dispatch(setStockOrderPrice(price));
   };
+
+  // 가격 리스트 중 10번째 순서인 요소가 화면 렌더링 시 정중앙에 오도록 설정
+  useEffect(() => {
+    if (!stockPriceLoading && !stockPriceError) {
+      ref.current?.focus();
+      ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    }
+  }, [stockPrice]);
 
   if (stockPriceLoading) {
     return <></>;
@@ -56,7 +65,7 @@ const StockPrice = (props: StockPriceProps) => {
   const changeRate = `${(((price - previousDayStockClosingPrice) / previousDayStockClosingPrice) * 100).toFixed(2)}%`;
 
   return (
-    <Container index={index} price={price} orderPrice={orderPrice} onClick={handleSetOrderPrice}>
+    <Container index={index} ref={index === 9 ? ref : null} price={price} orderPrice={orderPrice} onClick={handleSetOrderPrice}>
       <Price>
         <div className="price">{price.toLocaleString()}</div>
         <div className="changeRate">{changeRate}</div>
@@ -77,7 +86,7 @@ const VolumePercentge = (props: { index: number; volume: number; upperPriceVolum
   const [width, setWidth] = useState(0);
 
   useEffect(() => {
-    setWidth((volume / (index < 5 ? upperPriceVolumeSum : lowerPriceVolumeSum)) * 100);
+    setWidth((volume / (index < 10 ? upperPriceVolumeSum : lowerPriceVolumeSum)) * 100);
   }, [volume]);
 
   return <StockVolumePercentge index={index} volume={volume} upperPriceVolumeSum={upperPriceVolumeSum} lowerPriceVolumeSum={lowerPriceVolumeSum} style={{ width: `${width}%` }} />;
@@ -97,9 +106,9 @@ const Container = styled.div<{ index: number; price: number; orderPrice: number 
   width: 100%;
   height: 36px;
   margin-bottom: 2px;
-  background-color: ${(props) => (props.index > 4 ? "#FDE8E7" : "#E7F0FD")};
+  background-color: ${(props) => (props.index > 9 ? "#FDE8E7" : "#E7F0FD")};
   border: ${(props) => (props.price === props.orderPrice ? "1.5px solid #2F4F4F" : "none")};
-  border-left: ${(props) => (props.price === props.orderPrice ? "3px solid red" : props.index > 4 ? "3px solid #FDE8E7" : "3px solid #E7F0FD")};
+  border-left: ${(props) => (props.price === props.orderPrice ? "3px solid red" : props.index > 9 ? "3px solid #FDE8E7" : "3px solid #E7F0FD")};
   display: flex;
   flex-direction: row;
   transition: border 1s ease;
@@ -137,7 +146,7 @@ const Volume = styled.div<{ index: number }>`
   justify-content: space-between;
   align-items: flex-end;
   font-size: 12px;
-  color: ${(props) => (props.index < 5 ? "#2679ed" : "#e22926")};
+  color: ${(props) => (props.index < 10 ? "#2679ed" : "#e22926")};
 
   .volume {
     height: 100%;
@@ -149,16 +158,6 @@ const Volume = styled.div<{ index: number }>`
 
 const StockVolumePercentge = styled.span<{ index: number; volume: number; upperPriceVolumeSum: number; lowerPriceVolumeSum: number }>`
   height: 2px;
-  background-color: ${(props) => (props.index < 5 ? "#2679ed" : "#e22926")};
+  background-color: ${(props) => (props.index < 10 ? "#2679ed" : "#e22926")};
   transition: width 0.5s ease;
 `;
-
-// 🔴 보류
-// ref 생성 코드
-// const ref = useRef<HTMLDivElement | null>(null);
-
-// ref 지정 요소 -> 렌더링 시 화면 정중앙에 배치
-// useEffect(() => {
-//   ref.current?.focus();
-//   ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-// }, []);

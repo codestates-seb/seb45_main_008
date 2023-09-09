@@ -42,12 +42,30 @@ const StockPriceList = () => {
     buyingPrice.push(buyingInfo);
   }
 
+  /*
+  [문제점] 주가 리스트 개수가 너무 적음 (매도호가 5개 + 매수호가 5개 = 총 10개) → 더미데이터를 추가하여 가격 리스트 확장 (매도 10개 + 매수 10개 = 총 20개)
+  [해결방안] 1) fetching 해온 데이터 중 가격 0인 데이터 제외 (한국투자증권 API에서 간혹 보내는 경우 있음) → 호가 간격 계산 후, 더미 데이터 추가 (거래량은 0으로 설정)
+  */
+  const existSellingPrice = sellingPrice.filter((selling) => selling.price !== 0);
+  const existBuyingPrice = buyingPrice.filter((buyingPrice) => buyingPrice.price !== 0);
+  const priceInterval: number = existSellingPrice[existSellingPrice.length - 1].price - existBuyingPrice[0].price;
+
+  for (let i = 0; existSellingPrice.length < 10; i++) {
+    const dummySellingData = { price: existSellingPrice[0].price + priceInterval, volume: 0 };
+    existSellingPrice.unshift(dummySellingData);
+  }
+
+  for (let i = 0; existBuyingPrice.length < 10; i++) {
+    const dummyBuyingData = { price: existBuyingPrice[existBuyingPrice.length - 1].price - priceInterval, volume: 0 };
+    existBuyingPrice.push(dummyBuyingData);
+  }
+
   // 1) 매도/매수호가 종합  2) 매수/매도호가 거래량 종합
-  const sellingAndBuyingPrice = [...sellingPrice, ...buyingPrice];
-  const totalSellingVolume = sellingPrice.reduce((acc, cur) => {
+  const sellingAndBuyingPrice = [...existSellingPrice, ...existBuyingPrice];
+  const totalSellingVolume = existSellingPrice.reduce((acc, cur) => {
     return (acc = acc + cur.volume);
   }, 0);
-  const totalBuyingVolum = buyingPrice.reduce((acc, cur) => {
+  const totalBuyingVolum = existBuyingPrice.reduce((acc, cur) => {
     return (acc = acc + cur.volume);
   }, 0);
 
