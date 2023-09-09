@@ -7,13 +7,20 @@ import { StateProps } from "../../models/stateProps";
 import OrderRequest from "./OrderRequest";
 import OrderResult from "./OrderResult";
 
+const loginRequiredText: string = "로그인이 필요한 서비스입니다";
+const loginBtnText: string = "StockHolm 로그인";
+
 const titleText: string = "주식주문";
 const marketType: string = "코스피";
 
 // dummyData
 import { dummyStockName } from "./dummyData";
+import { useState } from "react";
 
 const StockOrderSection = () => {
+  // 🔴 로그인 구현될 때까지 임시
+  const [login, setLogin] = useState(true);
+
   const companyId = useSelector((state: StateProps) => state.companyId);
   const stockOrderSet = useSelector((state: StateProps) => state.stockOrderSet);
   const dispatch = useDispatch();
@@ -43,17 +50,26 @@ const StockOrderSection = () => {
           &#10005;
         </button>
       </UpperBar>
-      <StockName>
-        <img className="CorpLogo" src={dummyStockName.corpLogo} />
-        <div className="NameContainer">
-          <div className="CorpName">{corpName}</div>
-          <div className="StockCode">
-            {stockCode} {marketType}
-          </div>
-        </div>
-      </StockName>
-      <OrderRequest />
-      <OrderResult />
+      {!login ? (
+        <LoginRequiredIndicator>
+          <div className="Notification">{loginRequiredText}</div>
+          <button className="LoginButton">{loginBtnText}</button>
+        </LoginRequiredIndicator>
+      ) : (
+        <>
+          <StockName>
+            <img className="CorpLogo" src={dummyStockName.corpLogo} />
+            <div className="NameContainer">
+              <div className="CorpName">{corpName}</div>
+              <div className="StockCode">
+                {stockCode} {marketType}
+              </div>
+            </div>
+          </StockName>
+          <OrderRequest />
+          <OrderResult />
+        </>
+      )}
     </Container>
   );
 };
@@ -100,6 +116,31 @@ const UpperBar = styled.div`
     font-size: 20px;
     color: #525252;
     background-color: #ffff;
+  }
+`;
+
+const LoginRequiredIndicator = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 8px;
+
+  .Notification {
+    color: #999999;
+  }
+
+  .LoginButton {
+    width: 170px;
+    height: 32px;
+    font-size: 15px;
+    font-weight: 400;
+    color: white;
+    background-color: #e22926;
+    border: none;
+    border-radius: 0.3rem;
   }
 `;
 
