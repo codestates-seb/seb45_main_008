@@ -106,7 +106,7 @@ const UpperBar = styled.div`
   align-items: center;
   width: 100%;
   min-height: 44px;
-  border-bottom: 1px solid darkgray;
+  border-bottom: 1px solid #2f4f4f;
 
   .Title {
     font-size: 17px;
