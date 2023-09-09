@@ -11,17 +11,15 @@ const unitText: string = "원";
 const PriceSetting = (props: OwnProps) => {
   const { stockInfo, companyId } = props;
 
-  const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
   const dispatch = useDispatch();
+  const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
 
   // 초기 설정값 및 가격 변동폭 설정
   const { askp1, askp2, askp3, askp4, askp5 } = stockInfo;
   const sellingPrice = [parseInt(askp1), parseInt(askp2), parseInt(askp3), parseInt(askp4), parseInt(askp5)];
-  const existSellingPrice = sellingPrice.filter((price) => price !== 0);
+  const existSellingPrice = sellingPrice.filter((price) => price !== 0); // price 0인 경우 제거
   const defaultPrice = existSellingPrice[0];
-  const priceChangeVariation = existSellingPrice[1] - existSellingPrice[0];
-
-  console.log(typeof priceChangeVariation);
+  const priceInterval = existSellingPrice[1] - existSellingPrice[0];
 
   // 초기 설정값 세팅
   useEffect(() => {
@@ -30,11 +28,11 @@ const PriceSetting = (props: OwnProps) => {
 
   // 거래가 증가/감소
   const handlePlusOrderPrice = () => {
-    dispatch(plusStockOrderPrice(priceChangeVariation));
+    dispatch(plusStockOrderPrice(priceInterval));
   };
 
   const handleMinusOrderPrice = () => {
-    dispatch(minusStockOrderPrice(priceChangeVariation));
+    dispatch(minusStockOrderPrice(priceInterval));
   };
 
   return (

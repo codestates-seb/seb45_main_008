@@ -3,7 +3,6 @@ import { styled } from "styled-components";
 import useGetStockInfo from "../../hooks/useGetStockInfo";
 import { stockOrderClose } from "../../reducer/StockOrderSet-Reducer";
 import { StateProps } from "../../models/stateProps";
-
 import StockOrder from "./StockOrder";
 import OrderResult from "./OrderResult";
 
@@ -21,9 +20,9 @@ const StockOrderSection = () => {
   // 🔴 로그인 구현될 때까지 임시
   const [login, setLogin] = useState(true);
 
+  const dispatch = useDispatch();
   const companyId = useSelector((state: StateProps) => state.companyId);
   const stockOrderSet = useSelector((state: StateProps) => state.stockOrderSet);
-  const dispatch = useDispatch();
 
   const { stockInfo, stockInfoLoading, stockInfoError } = useGetStockInfo(companyId);
 
@@ -83,6 +82,7 @@ const LoginRequestIndicator = () => {
   );
 };
 
+// component 생성
 const Container = styled.aside<{ orderSet: boolean }>`
   position: fixed;
   z-index: 1;

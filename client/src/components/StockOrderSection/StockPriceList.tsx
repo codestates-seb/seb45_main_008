@@ -7,8 +7,8 @@ import { StateProps } from "../../models/stateProps";
 import StockPrice from "./StockPrice";
 
 const StockPriceList = () => {
-  const stockOrderType = useSelector((state: StateProps) => state.stockOrderType);
   const companyId = useSelector((state: StateProps) => state.companyId);
+  const stockOrderType = useSelector((state: StateProps) => state.stockOrderType);
   const { stockInfo, stockInfoLoading, stockInfoError } = useGetStockInfo(companyId);
 
   if (stockInfoLoading) {

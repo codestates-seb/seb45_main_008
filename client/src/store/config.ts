@@ -5,6 +5,7 @@ import { expandScreenReducer } from "../reducer/ExpandScreen-Reducer";
 import { stockOrderSetReducer } from "../reducer/StockOrderSet-Reducer";
 import { companyIdReducer } from "../reducer/CompanyId-Reducer";
 import memberInfoReducer from "../reducer/member/memberInfoSlice";
+import { stockOrderVolumeReducer } from "../reducer/StockOrderVolume-Reducer";
 
 const store = configureStore({
   reducer: {
@@ -14,6 +15,7 @@ const store = configureStore({
     stockOrderSet: stockOrderSetReducer,
     companyId: companyIdReducer,
     memberInfo: memberInfoReducer,
+    stockOrderVolume: stockOrderVolumeReducer,
   },
 });
 

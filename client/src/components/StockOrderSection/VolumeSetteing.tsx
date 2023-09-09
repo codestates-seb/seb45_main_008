@@ -1,7 +1,8 @@
 import { useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
 import { StateProps } from "../../models/stateProps";
+import { setStockOrderVolume, plusStockOrderVolume, minusStockOrderVolume } from "../../reducer/StockOrderVolume-Reducer";
 
 const volumeSettingTitle: string = "수량";
 const maximumVolumeText01: string = "최대";
@@ -17,26 +18,29 @@ const percentageUnit: string = "%";
 const dummyMoney: number = 10000000;
 const dummyholdingStock = 10;
 
-const VolumeSetting = (props: OwnProps) => {
-  const { orderVolume, setOrderVolume } = props;
+const VolumeSetting = () => {
+  const dispatch = useDispatch();
   const orderType = useSelector((state: StateProps) => state.stockOrderType);
   const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
+  const orderVolume = useSelector((state: StateProps) => state.stockOrderVolume);
+
   const maximumBuyingVolume = Math.trunc(dummyMoney / orderPrice);
 
   const handlePlusOrderVolume = () => {
     // 매수 -> 증가 버튼 클릭 시, 최대 구매수량 보다 낮으면 개수 1증가
     if (!orderType) {
-      orderVolume < maximumBuyingVolume && setOrderVolume((previousState: number) => previousState + 1);
+      orderVolume < maximumBuyingVolume && dispatch(plusStockOrderVolume());
     }
     // 매도 -> 증가 버튼 클릭 시, 보유 주식수량 보다 낮으면 개수 1증가
     if (orderType) {
-      orderVolume < dummyholdingStock && setOrderVolume((previousState: number) => previousState + 1);
+      orderVolume < dummyholdingStock && dispatch(plusStockOrderVolume());
     }
   };
 
   const handleMinusOrderVolume = () => {
     if (0 < orderVolume) {
-      setOrderVolume((previousState: number) => previousState - 1);
+      // setOrderVolume((previousState: number) => previousState - 1);
+      dispatch(minusStockOrderVolume());
     }
   };
 
@@ -44,29 +48,20 @@ const VolumeSetting = (props: OwnProps) => {
     // 매수 -> percentage 버튼 클릭 시, 최대 구매수량 내에서 계산
     if (!orderType) {
       const orderVolume = Math.trunc(maximumBuyingVolume * (volumePerentage / 100));
-      setOrderVolume((previousState) => {
-        previousState = orderVolume;
-        return previousState;
-      });
+      dispatch(setStockOrderVolume(orderVolume));
     }
 
     // 매도 -> percentage 버튼 클릭 시, 보유 주식수량 내에서 계산
     if (orderType) {
       const orderVolume = Math.trunc(dummyholdingStock * (volumePerentage / 100));
-      setOrderVolume((previousState) => {
-        previousState = orderVolume;
-        return previousState;
-      });
+      dispatch(setStockOrderVolume(orderVolume));
     }
   };
 
   // 지정가 증가 -> (현재 주문수량 > 최대 주문가능 수량)일 경우 -> 현재 주문수량을 최대 주문수량으로 변경
   useEffect(() => {
     if (maximumBuyingVolume < orderVolume) {
-      setOrderVolume((previousState) => {
-        previousState = maximumBuyingVolume;
-        return previousState;
-      });
+      dispatch(setStockOrderVolume(maximumBuyingVolume));
     }
   }, [maximumBuyingVolume]);
 
@@ -115,12 +110,6 @@ const VolumeSetting = (props: OwnProps) => {
 };
 
 export default VolumeSetting;
-
-// type 정의
-interface OwnProps {
-  orderVolume: number;
-  setOrderVolume: (updateFunction: (previousState: number) => number) => void;
-}
 
 // component 생성
 const Container = styled.div`

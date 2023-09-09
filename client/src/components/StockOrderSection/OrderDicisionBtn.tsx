@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { useSelector } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
 import { StateProps } from "../../models/stateProps";
 import { OrderTypeProps } from "../../models/orderTypeProps";
+import { setStockOrderVolume } from "../../reducer/StockOrderVolume-Reducer";
 
 const availableMoneyText01: string = "최대";
 const availableMoneyText02: string = "원";
@@ -12,26 +13,27 @@ const totalAmountUnit: string = "원";
 // dummyData
 const dummyMoney = 10000000;
 
-const OrderDicisionBtn = (props: OwnProps) => {
-  const { orderVolume, setOrderVolume } = props;
-
-  const stockOrderType = useSelector((state: StateProps) => state.stockOrderType);
+const OrderDicisionBtn = () => {
+  const dispatch = useDispatch();
+  const orderType = useSelector((state: StateProps) => state.stockOrderType);
   const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
+  const orderVolume = useSelector((state: StateProps) => state.stockOrderVolume);
   const [totalOrderAmout, setTotalOrderAmout] = useState(0);
-  const orderBtnText: string = stockOrderType ? "매도" : "매수";
+
+  const orderBtnText: string = orderType ? "매도" : "매수";
 
   useEffect(() => {
     setTotalOrderAmout(orderPrice * orderVolume);
   }, [orderPrice, orderVolume]);
 
   useEffect(() => {
-    setOrderVolume(0);
+    dispatch(setStockOrderVolume(0));
     setTotalOrderAmout(0);
-  }, [stockOrderType]);
+  }, [orderType]);
 
   return (
     <div className="container">
-      <AvailableMoney orderType={stockOrderType}>
+      <AvailableMoney orderType={orderType}>
         <span>{availableMoneyText01}</span>
         <span className="availableMoney">{dummyMoney.toLocaleString()}</span>
         <span>{availableMoneyText02}</span>
@@ -41,18 +43,12 @@ const OrderDicisionBtn = (props: OwnProps) => {
         <div className="totalAmount">{totalOrderAmout.toLocaleString()}</div>
         <div>{totalAmountUnit}</div>
       </TotalAmount>
-      <OrderBtn ordertype={stockOrderType}>{orderBtnText}</OrderBtn>
+      <OrderBtn ordertype={orderType}>{orderBtnText}</OrderBtn>
     </div>
   );
 };
 
 export default OrderDicisionBtn;
-
-// type 선언
-interface OwnProps {
-  orderVolume: number;
-  setOrderVolume: (orderVolume: number) => void;
-}
 
 // component 생성
 const AvailableMoney = styled.div<{ orderType: boolean }>`

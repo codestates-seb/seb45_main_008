@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import useGetStockInfo from "../../hooks/useGetStockInfo";
 import { orderTypeBuying, orderTypeSelling } from "../../reducer/StockOrderType-Reducer";
@@ -14,13 +13,10 @@ const orderType01: string = "매수";
 const orderType02: string = "매도";
 
 const StockOrderSetting = () => {
-  const stockOrderType = useSelector((state: StateProps) => state.stockOrderType);
   const dispatch = useDispatch();
-
+  const orderType = useSelector((state: StateProps) => state.stockOrderType);
   const companyId = useSelector((state: StateProps) => state.companyId);
   const { stockInfo, stockInfoLoading, stockInfoError } = useGetStockInfo(companyId);
-
-  const [orderVolume, setOrderVolume] = useState(0);
 
   if (stockInfoLoading) {
     return <></>;
@@ -41,17 +37,17 @@ const StockOrderSetting = () => {
   return (
     <Container>
       <div className="OrderType">
-        <Buying onClick={handleSetBuying} ordertype={stockOrderType}>
+        <Buying onClick={handleSetBuying} ordertype={orderType}>
           {orderType01}
         </Buying>
-        <Selling onClick={handleSetSelling} ordertype={stockOrderType}>
+        <Selling onClick={handleSetSelling} ordertype={orderType}>
           {orderType02}
         </Selling>
       </div>
       <OrderTypeChangeEffetLine />
       <PriceSetting stockInfo={stockInfo.stockAsBiResponseDto} companyId={companyId} />
-      <VolumeSetting orderVolume={orderVolume} setOrderVolume={setOrderVolume} />
-      <OrderDicisionBtn orderVolume={orderVolume} setOrderVolume={setOrderVolume} />
+      <VolumeSetting />
+      <OrderDicisionBtn />
     </Container>
   );
 };
@@ -60,12 +56,12 @@ export default StockOrderSetting;
 
 // 매수/매도 탭 전환 시 하단에 시각화 되는 선
 const OrderTypeChangeEffetLine = () => {
-  const stockOrderType = useSelector((state: StateProps) => state.stockOrderType);
+  const orderType = useSelector((state: StateProps) => state.stockOrderType);
 
   return (
-    <DividingContainer ordertype={stockOrderType}>
-      <DefaultLine ordertype={stockOrderType}>
-        <DivdingLine ordertype={stockOrderType} />
+    <DividingContainer ordertype={orderType}>
+      <DefaultLine ordertype={orderType}>
+        <DivdingLine ordertype={orderType} />
       </DefaultLine>
     </DividingContainer>
   );
