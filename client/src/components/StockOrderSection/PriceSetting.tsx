@@ -66,8 +66,8 @@ interface OwnProps {
 // component 생성
 const Container = styled.div`
   width: 100%;
-  margin-top: 16px;
-  margin-bottom: 32px;
+  margin-top: 21px;
+  margin-bottom: 34px;
 
   .PriceCategoryBox {
     display: flex;

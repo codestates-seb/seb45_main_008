@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-// 🟢 코스피 API 요청 500번 에러로 인한 임시수정
-// const initialState: number = 0;
-const initialState: number = 1;
+const initialState: number = 0;
 
 const companyIdSlice = createSlice({
   name: "companyId",

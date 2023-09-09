@@ -115,7 +115,7 @@ export default VolumeSetting;
 const Container = styled.div`
   width: 100%;
   margin-top: 16px;
-  margin-bottom: 46px;
+  margin-bottom: 56px;
 `;
 
 const TitleContainer = styled.div<{ orderType: boolean }>`
