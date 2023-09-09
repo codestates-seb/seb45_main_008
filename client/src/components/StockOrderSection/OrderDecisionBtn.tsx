@@ -4,6 +4,7 @@ import { styled } from "styled-components";
 import { StateProps } from "../../models/stateProps";
 import { OrderTypeProps } from "../../models/orderTypeProps";
 import { setStockOrderVolume } from "../../reducer/StockOrderVolume-Reducer";
+import { openDecisionWindow } from "../../reducer/setDecisionWindow-Reducer";
 
 const availableMoneyText01: string = "최대";
 const availableMoneyText02: string = "원";
@@ -13,7 +14,7 @@ const totalAmountUnit: string = "원";
 // dummyData
 const dummyMoney = 10000000;
 
-const OrderDicisionBtn = () => {
+const OrderDecisionBtn = () => {
   const dispatch = useDispatch();
   const orderType = useSelector((state: StateProps) => state.stockOrderType);
   const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
@@ -21,6 +22,10 @@ const OrderDicisionBtn = () => {
   const [totalOrderAmout, setTotalOrderAmout] = useState(0);
 
   const orderBtnText: string = orderType ? "매도" : "매수";
+
+  const handleOpenDecisionWindow = () => {
+    dispatch(openDecisionWindow());
+  };
 
   useEffect(() => {
     setTotalOrderAmout(orderPrice * orderVolume);
@@ -43,12 +48,14 @@ const OrderDicisionBtn = () => {
         <div className="totalAmount">{totalOrderAmout.toLocaleString()}</div>
         <div>{totalAmountUnit}</div>
       </TotalAmount>
-      <OrderBtn ordertype={orderType}>{orderBtnText}</OrderBtn>
+      <OrderBtn ordertype={orderType} onClick={handleOpenDecisionWindow}>
+        {orderBtnText}
+      </OrderBtn>
     </div>
   );
 };
 
-export default OrderDicisionBtn;
+export default OrderDecisionBtn;
 
 // component 생성
 const AvailableMoney = styled.div<{ orderType: boolean }>`

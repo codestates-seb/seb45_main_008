@@ -6,6 +6,7 @@ import { stockOrderSetReducer } from "../reducer/StockOrderSet-Reducer";
 import { companyIdReducer } from "../reducer/CompanyId-Reducer";
 import memberInfoReducer from "../reducer/member/memberInfoSlice";
 import { stockOrderVolumeReducer } from "../reducer/StockOrderVolume-Reducer";
+import { setDecisionWindowReducer } from "../reducer/setDecisionWindow-Reducer";
 
 const store = configureStore({
   reducer: {
@@ -16,6 +17,7 @@ const store = configureStore({
     companyId: companyIdReducer,
     memberInfo: memberInfoReducer,
     stockOrderVolume: stockOrderVolumeReducer,
+    decisionWindow: setDecisionWindowReducer,
   },
 });
 
