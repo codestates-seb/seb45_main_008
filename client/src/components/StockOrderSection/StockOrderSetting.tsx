@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import useGetStockInfo from "../../hooks/useGetStockInfo";
 import { orderTypeBuying, orderTypeSelling } from "../../reducer/StockOrderType-Reducer";
@@ -18,6 +19,8 @@ const StockOrderSetting = () => {
 
   const companyId = useSelector((state: StateProps) => state.companyId);
   const { stockInfo, stockInfoLoading, stockInfoError } = useGetStockInfo(companyId);
+
+  const [orderVolume, setOrderVolume] = useState(0);
 
   if (stockInfoLoading) {
     return <></>;
@@ -45,17 +48,18 @@ const StockOrderSetting = () => {
           {orderType02}
         </Selling>
       </div>
-      <DecorationLine />
+      <OrderTypeChangeEffetLine />
       <PriceSetting stockInfo={stockInfo.stockAsBiResponseDto} companyId={companyId} />
-      <VolumeSetting />
-      <StockOrderBtn />
+      <VolumeSetting orderVolume={orderVolume} setOrderVolume={setOrderVolume} />
+      <StockOrderBtn orderVolume={orderVolume} setOrderVolume={setOrderVolume} />
     </Container>
   );
 };
 
 export default StockOrderSetting;
 
-const DecorationLine = () => {
+// 매수/매도 탭 전환 시 하단에 시각화 되는 선
+const OrderTypeChangeEffetLine = () => {
   const stockOrderType = useSelector((state: StateProps) => state.stockOrderType);
 
   return (

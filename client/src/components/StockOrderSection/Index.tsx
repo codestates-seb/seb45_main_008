@@ -70,7 +70,8 @@ const Container = styled.aside<{ orderSet: boolean }>`
   width: 26%;
   min-width: 400px;
   height: 100%;
-  border-left: 1px solid black;
+  box-shadow: -1px 0px 10px darkgray;
+
   background-color: #ffffff;
 `;
 
@@ -81,8 +82,8 @@ const UpperBar = styled.div`
   justify-content: center;
   align-items: center;
   width: 100%;
-  min-height: 43px;
-  border-bottom: 1px solid black;
+  min-height: 44px;
+  border-bottom: 1px solid darkgray;
 
   .Title {
     font-size: 17px;
@@ -112,7 +113,6 @@ const StockName = styled.section`
   padding-bottom: 8px;
   padding-left: 16px;
   gap: 9px;
-  border-bottom: 1px solid black;
 
   .CorpLogo {
     width: 28px;

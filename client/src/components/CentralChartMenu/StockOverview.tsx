@@ -99,14 +99,14 @@ const Container = styled.div<{ priceChangeRate: number }>`
 
   .StockPrice {
     font-size: 18px;
-    color: ${(props) => (props.priceChangeRate > 0 ? "#ed2926" : "#3177d7")};
+    color: ${(props) => (props.priceChangeRate > 0 ? "#ed2926" : props.priceChangeRate === 0 ? "black" : "#3177d7")};
     font-weight: 530;
   }
 
   .PriceChangeRate,
   .PriceChangeAmount {
     font-size: 14px;
-    color: ${(props) => (props.priceChangeRate > 0 ? "#ed2926" : "#3177d7")};
+    color: ${(props) => (props.priceChangeRate > 0 ? "#ed2926" : props.priceChangeRate === 0 ? "black" : "#3177d7")};
 
     display: flex;
     flex-direction: row;

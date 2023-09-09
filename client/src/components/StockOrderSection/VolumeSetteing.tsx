@@ -1,42 +1,114 @@
+import { useEffect } from "react";
+import { useSelector } from "react-redux";
 import { styled } from "styled-components";
+import { StateProps } from "../../models/stateProps";
 
 const volumeSettingTitle: string = "수량";
 const maximumVolumeText01: string = "최대";
-const maximumVolumeText02: string = "주";
-const unitText: string = "주";
+const volumeUnit: string = "주";
 
-const percentageBtnText01: string = "10%";
-const percentageBtnText02: string = "25%";
-const percentageBtnText03: string = "50%";
-const percentageBtnText04: string = "100%";
+const volumPercentage01: number = 10;
+const volumPercentage02: number = 25;
+const volumPercentage03: number = 50;
+const volumPercentage04: number = 100;
+const percentageUnit: string = "%";
 
 // dummyData
-const dummyMaximum: number = 203;
+const dummyMoney: number = 10000000;
+const dummyholdingStock = 10;
 
-const VolumeSetting = () => {
+const VolumeSetting = (props: OwnProps) => {
+  const { orderVolume, setOrderVolume } = props;
+  const orderType = useSelector((state: StateProps) => state.stockOrderType);
+  const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
+  const maximumBuyingVolume = Math.trunc(dummyMoney / orderPrice);
+
+  const handlePlusOrderVolume = () => {
+    // 매수 -> 증가 버튼 클릭 시, 최대 구매수량 보다 낮으면 개수 1증가
+    if (!orderType) {
+      orderVolume < maximumBuyingVolume && setOrderVolume((previousState: number) => previousState + 1);
+    }
+    // 매도 -> 증가 버튼 클릭 시, 보유 주식수량 보다 낮으면 개수 1증가
+    if (orderType) {
+      orderVolume < dummyholdingStock && setOrderVolume((previousState: number) => previousState + 1);
+    }
+  };
+
+  const handleMinusOrderVolume = () => {
+    if (0 < orderVolume) {
+      setOrderVolume((previousState: number) => previousState - 1);
+    }
+  };
+
+  const handleSetVolumePercentage = (volumePerentage: number) => {
+    // 매수 -> percentage 버튼 클릭 시, 최대 구매수량 내에서 계산
+    if (!orderType) {
+      const orderVolume = Math.trunc(maximumBuyingVolume * (volumePerentage / 100));
+      setOrderVolume((previousState) => {
+        previousState = orderVolume;
+        return previousState;
+      });
+    }
+
+    // 매도 -> percentage 버튼 클릭 시, 보유 주식수량 내에서 계산
+    if (orderType) {
+      const orderVolume = Math.trunc(dummyholdingStock * (volumePerentage / 100));
+      setOrderVolume((previousState) => {
+        previousState = orderVolume;
+        return previousState;
+      });
+    }
+  };
+
+  // 지정가 증가 -> (현재 주문수량 > 최대 주문가능 수량)일 경우 -> 현재 주문수량을 최대 주문수량으로 변경
+  useEffect(() => {
+    if (maximumBuyingVolume < orderVolume) {
+      setOrderVolume((previousState) => {
+        previousState = maximumBuyingVolume;
+        return previousState;
+      });
+    }
+  }, [maximumBuyingVolume]);
+
   return (
     <Container>
-      <TitleContainer>
+      <TitleContainer orderType={orderType}>
         <div className="Title">{volumeSettingTitle}</div>
         <div className="MaximumVolumeContainer">
           <span>{maximumVolumeText01}</span>
-          <span className="maximumVolume">{dummyMaximum}</span>
-          <span>{maximumVolumeText02}</span>
+          <span className="maximumVolume">{orderType ? dummyholdingStock : maximumBuyingVolume}</span>
+          <span>{volumeUnit}</span>
         </div>
       </TitleContainer>
       <VolumeSettingBox>
-        <VolumeController defaultValue={0} />
-        <UnitContent>{unitText}</UnitContent>
+        <VolumeController defaultValue={orderVolume} value={orderVolume} />
+        <UnitContent>{volumeUnit}</UnitContent>
         <div className="DirectionContainer">
-          <button className="VolumeUp">&#8896;</button>
-          <button className="VolumeDown">&#8897;</button>
+          <button className="VolumeUp" onClick={handlePlusOrderVolume}>
+            &#8896;
+          </button>
+          <button className="VolumeDown" onClick={handleMinusOrderVolume}>
+            &#8897;
+          </button>
         </div>
       </VolumeSettingBox>
       <PercentageBox>
-        <button>{percentageBtnText01}</button>
-        <button>{percentageBtnText02}</button>
-        <button>{percentageBtnText03}</button>
-        <button>{percentageBtnText04}</button>
+        <button onClick={() => handleSetVolumePercentage(volumPercentage01)}>
+          {volumPercentage01}
+          {percentageUnit}
+        </button>
+        <button onClick={() => handleSetVolumePercentage(volumPercentage02)}>
+          {volumPercentage02}
+          {percentageUnit}
+        </button>
+        <button onClick={() => handleSetVolumePercentage(volumPercentage03)}>
+          {volumPercentage03}
+          {percentageUnit}
+        </button>
+        <button onClick={() => handleSetVolumePercentage(volumPercentage04)}>
+          {volumPercentage04}
+          {percentageUnit}
+        </button>
       </PercentageBox>
     </Container>
   );
@@ -44,13 +116,20 @@ const VolumeSetting = () => {
 
 export default VolumeSetting;
 
+// type 정의
+interface OwnProps {
+  orderVolume: number;
+  setOrderVolume: (updateFunction: (previousState: number) => number) => void;
+}
+
+// component 생성
 const Container = styled.div`
   width: 100%;
   margin-top: 16px;
   margin-bottom: 46px;
 `;
 
-const TitleContainer = styled.div`
+const TitleContainer = styled.div<{ orderType: boolean }>`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -73,7 +152,7 @@ const TitleContainer = styled.div`
     }
 
     .maximumVolume {
-      color: #ed2926;
+      color: ${(props) => (props.orderType ? "#3177d7" : "#ed2926")};
     }
   }
 `;

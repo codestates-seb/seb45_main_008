@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import { styled } from "styled-components";
 import { StateProps } from "../../models/stateProps";
@@ -5,17 +6,29 @@ import { OrderTypeProps } from "../../models/orderTypeProps";
 
 const availableMoneyText01: string = "최대";
 const availableMoneyText02: string = "원";
-const totalAmountText01: string = "주문총액";
-const totalAmountText02: string = "원";
+const totalAmountText: string = "주문총액";
+const totalAmountUnit: string = "원";
 
 // dummyData
 import { availableMoney } from "./dummyData";
-const dummyAmount: string = "0";
 const dummyMoney = availableMoney.toLocaleString();
 
-const StockOrderBtn = () => {
+const StockOrderBtn = (props: OwnProps) => {
+  const { orderVolume, setOrderVolume } = props;
+
   const stockOrderType = useSelector((state: StateProps) => state.stockOrderType);
+  const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
+  const [totalOrderAmout, setTotalOrderAmout] = useState(0);
   const orderBtnText: string = stockOrderType ? "매도" : "매수";
+
+  useEffect(() => {
+    setTotalOrderAmout(orderPrice * orderVolume);
+  }, [orderPrice, orderVolume]);
+
+  useEffect(() => {
+    setOrderVolume(0);
+    setTotalOrderAmout(0);
+  }, [stockOrderType]);
 
   return (
     <Container>
@@ -25,9 +38,9 @@ const StockOrderBtn = () => {
         <span>{availableMoneyText02}</span>
       </AvailableMoney>
       <TotalAmount>
-        <div className="totalAmountText01">{totalAmountText01}</div>
-        <div className="totalAmount">{dummyAmount}</div>
-        <div>{totalAmountText02}</div>
+        <div className="totalAmountText">{totalAmountText}</div>
+        <div className="totalAmount">{totalOrderAmout.toLocaleString()}</div>
+        <div>{totalAmountUnit}</div>
       </TotalAmount>
       <OrderBtn ordertype={stockOrderType}>{orderBtnText}</OrderBtn>
     </Container>
@@ -35,6 +48,11 @@ const StockOrderBtn = () => {
 };
 
 export default StockOrderBtn;
+
+interface OwnProps {
+  orderVolume: number;
+  setOrderVolume: (orderVolume: number) => void;
+}
 
 const Container = styled.div``;
 
@@ -67,7 +85,7 @@ const TotalAmount = styled.div`
     align-items: center;
   }
 
-  .totalAmountText01 {
+  .totalAmountText {
     flex: 8 0 0;
   }
 

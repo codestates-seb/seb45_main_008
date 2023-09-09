@@ -7,6 +7,7 @@ import { StateProps } from "../../models/stateProps";
 import StockPrice from "./StockPrice";
 
 const StockPriceList = () => {
+  const stockOrderType = useSelector((state: StateProps) => state.stockOrderType);
   const companyId = useSelector((state: StateProps) => state.companyId);
   const { stockInfo, stockInfoLoading, stockInfoError } = useGetStockInfo(companyId);
 
@@ -43,7 +44,7 @@ const StockPriceList = () => {
   }
 
   /*
-  [문제점] 주가 리스트 개수가 너무 적음 (매도호가 5개 + 매수호가 5개 = 총 10개) → 더미데이터를 추가하여 가격 리스트 확장 (매도 10개 + 매수 10개 = 총 20개)
+  [문제점] 주가 리스트 개수가 너무 적음 (매도호가 5개 + 매수호가 5개 = 총 10개) → UX를 저해하는 요소로 판단되어, 더미데이터를 추가 (매도/매수 각각 5개씩)
   [해결방안] 1) fetching 해온 데이터 중 가격 0인 데이터 제외 (한국투자증권 API에서 간혹 보내는 경우 있음) → 호가 간격 계산 후, 더미 데이터 추가 (거래량은 0으로 설정)
   */
   const existSellingPrice = sellingPrice.filter((selling) => selling.price !== 0);
@@ -70,20 +71,20 @@ const StockPriceList = () => {
   }, 0);
 
   return (
-    <Container>
-      <HighFigure>
-        <div className="price"></div>
-        <div className="volume"></div>
-      </HighFigure>
+    <Container orderType={stockOrderType}>
+      <div className="priceIndicator">
+        <div className="sellingPrice">매도호가</div>
+        <div className="sellingVolume">거래량</div>
+      </div>
       <PriceList>
         {sellingAndBuyingPrice.map((item, idx) => (
           <StockPrice key={item.price} index={idx} price={item.price} volume={item.volume} totalSellingVolume={totalSellingVolume} totalBuyingVolum={totalBuyingVolum} />
         ))}
       </PriceList>
-      <LowerFigure>
-        <div className="price"></div>
-        <div className="volume"></div>
-      </LowerFigure>
+      <div className="priceIndicator">
+        <div className="buyingPrice">매수호가</div>
+        <div className="buyingVolume">거래량</div>
+      </div>
     </Container>
   );
 };
@@ -97,31 +98,45 @@ interface PriceProps {
 }
 
 // component 생성
-const Container = styled.div`
+const Container = styled.div<{ orderType: boolean }>`
   width: 40%;
   height: 100%;
   margin-right: 16px;
-`;
 
-const HighFigure = styled.div`
-  width: 100%;
-  height: 32px;
-  border-bottom: 1px solid black;
+  .priceIndicator {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    height: 32px;
+    font-size: 13px;
+    padding-left: 15px;
+
+    & div {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .sellingPrice,
+    .sellingVolume {
+      color: ${(props) => (props.orderType ? "#9999" : "#e22926")};
+    }
+
+    .buyingPrice,
+    .buyingVolume {
+      color: ${(props) => (props.orderType ? "#2679ed" : "#9999")};
+    }
+  }
 `;
 
 const PriceList = styled.ul`
   width: 100%;
   height: 348px;
   padding: 0px;
-  border-bottom: 1px solid black;
   overflow-y: scroll;
 
   &::-webkit-scrollbar {
     display: none;
   }
-`;
-
-const LowerFigure = styled.div`
-  width: 100%;
-  height: 32px;
 `;

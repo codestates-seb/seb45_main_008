@@ -7,6 +7,8 @@ import { styled } from "styled-components";
 import { setStockOrderPrice } from "../../reducer/StockOrderPrice-Reducer";
 import { StateProps } from "../../models/stateProps";
 
+const changeRateUnit = `%`;
+
 const StockPrice = (props: StockPriceProps) => {
   const { index, price, volume, totalSellingVolume, totalBuyingVolum } = props;
 
@@ -62,13 +64,16 @@ const StockPrice = (props: StockPriceProps) => {
   }
 
   // 전날 종가대비 매도/매수호가 변동률
-  const changeRate = `${(((price - previousDayStockClosingPrice) / previousDayStockClosingPrice) * 100).toFixed(2)}%`;
+  const changeRate = (((price - previousDayStockClosingPrice) / previousDayStockClosingPrice) * 100).toFixed(2);
 
   return (
     <Container index={index} ref={index === 9 ? ref : null} price={price} orderPrice={orderPrice} onClick={handleSetOrderPrice}>
-      <Price>
+      <Price changeRate={parseFloat(changeRate)}>
         <div className="price">{price.toLocaleString()}</div>
-        <div className="changeRate">{changeRate}</div>
+        <div className="changeRate">
+          {changeRate}
+          {changeRateUnit}
+        </div>
       </Price>
       <Volume index={index}>
         <div className="volume">{volume.toLocaleString()}</div>
@@ -118,7 +123,7 @@ const Container = styled.div<{ index: number; price: number; orderPrice: number 
   }
 `;
 
-const Price = styled.div`
+const Price = styled.div<{ changeRate: number }>`
   width: 50%;
   display: flex;
   padding-right: 11px;
@@ -134,7 +139,7 @@ const Price = styled.div`
   .changeRate {
     font-size: 12px;
     font-weight: 400;
-    color: #e22926;
+    color: ${(props) => (props.changeRate > 0 ? "#ed2926" : props.changeRate === 0 ? "black" : "#3177d7")};
     padding-top: 1px;
   }
 `;
