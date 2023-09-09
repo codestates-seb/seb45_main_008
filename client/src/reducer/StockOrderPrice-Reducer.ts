@@ -1,8 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-import { dummyPrice } from "../components/StockOrderSection/dummyData";
-
-const initialState: number = dummyPrice[10].price;
+const initialState: number = 0;
 
 const stockPriceOrderSlice = createSlice({
   name: "stockOrderPrice",

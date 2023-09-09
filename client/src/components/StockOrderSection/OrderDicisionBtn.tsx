@@ -10,10 +10,9 @@ const totalAmountText: string = "주문총액";
 const totalAmountUnit: string = "원";
 
 // dummyData
-import { availableMoney } from "./dummyData";
-const dummyMoney = availableMoney.toLocaleString();
+const dummyMoney = 10000000;
 
-const StockOrderBtn = (props: OwnProps) => {
+const OrderDicisionBtn = (props: OwnProps) => {
   const { orderVolume, setOrderVolume } = props;
 
   const stockOrderType = useSelector((state: StateProps) => state.stockOrderType);
@@ -31,10 +30,10 @@ const StockOrderBtn = (props: OwnProps) => {
   }, [stockOrderType]);
 
   return (
-    <Container>
+    <div className="container">
       <AvailableMoney orderType={stockOrderType}>
         <span>{availableMoneyText01}</span>
-        <span className="availableMoney">{dummyMoney}</span>
+        <span className="availableMoney">{dummyMoney.toLocaleString()}</span>
         <span>{availableMoneyText02}</span>
       </AvailableMoney>
       <TotalAmount>
@@ -43,19 +42,19 @@ const StockOrderBtn = (props: OwnProps) => {
         <div>{totalAmountUnit}</div>
       </TotalAmount>
       <OrderBtn ordertype={stockOrderType}>{orderBtnText}</OrderBtn>
-    </Container>
+    </div>
   );
 };
 
-export default StockOrderBtn;
+export default OrderDicisionBtn;
 
+// type 선언
 interface OwnProps {
   orderVolume: number;
   setOrderVolume: (orderVolume: number) => void;
 }
 
-const Container = styled.div``;
-
+// component 생성
 const AvailableMoney = styled.div<{ orderType: boolean }>`
   display: flex;
   flex-direction: row;

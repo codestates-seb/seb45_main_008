@@ -30,6 +30,7 @@ const StockOverview = () => {
   const chageDirection = priceChageRate > 0 ? "▲" : "▼";
   const priceChageAmount = Math.abs(parseInt(stockInfo.stockInfResponseDto.prdy_vrss, 10)).toLocaleString();
   const transactionVolume = parseInt(stockInfo.stockInfResponseDto.acml_vol, 10).toLocaleString();
+
   // 총 거래대금 계산
   const amount = parseInt(stockInfo.stockInfResponseDto.acml_tr_pbmn, 10);
   const [billions, tenThousands] = [Math.floor(amount / 100000000), Math.floor((amount % 100000000) / 10000)];

@@ -4,7 +4,7 @@ import useGetStockInfo from "../../hooks/useGetStockInfo";
 import { stockOrderClose } from "../../reducer/StockOrderSet-Reducer";
 import { StateProps } from "../../models/stateProps";
 
-import OrderRequest from "./OrderRequest";
+import StockOrder from "./StockOrder";
 import OrderResult from "./OrderResult";
 
 const loginRequiredText: string = "로그인이 필요한 서비스입니다";
@@ -14,7 +14,7 @@ const titleText: string = "주식주문";
 const marketType: string = "코스피";
 
 // dummyData
-import { dummyStockName } from "./dummyData";
+import dummyLogo from "../../asset/CentralSectionMenu-dummyImg.png";
 import { useState } from "react";
 
 const StockOrderSection = () => {
@@ -50,15 +50,10 @@ const StockOrderSection = () => {
           &#10005;
         </button>
       </UpperBar>
-      {!login ? (
-        <LoginRequiredIndicator>
-          <div className="Notification">{loginRequiredText}</div>
-          <button className="LoginButton">{loginBtnText}</button>
-        </LoginRequiredIndicator>
-      ) : (
+      {login ? (
         <>
           <StockName>
-            <img className="CorpLogo" src={dummyStockName.corpLogo} />
+            <img className="CorpLogo" src={dummyLogo} />
             <div className="NameContainer">
               <div className="CorpName">{corpName}</div>
               <div className="StockCode">
@@ -66,15 +61,27 @@ const StockOrderSection = () => {
               </div>
             </div>
           </StockName>
-          <OrderRequest />
+          <StockOrder />
           <OrderResult />
         </>
+      ) : (
+        <LoginRequestIndicator />
       )}
     </Container>
   );
 };
 
 export default StockOrderSection;
+
+// 미로그인 시 -> 로그인 요청 화면
+const LoginRequestIndicator = () => {
+  return (
+    <LoginRequestContainer>
+      <div className="Notification">{loginRequiredText}</div>
+      <button className="LoginButton">{loginBtnText}</button>
+    </LoginRequestContainer>
+  );
+};
 
 const Container = styled.aside<{ orderSet: boolean }>`
   position: fixed;
@@ -119,7 +126,7 @@ const UpperBar = styled.div`
   }
 `;
 
-const LoginRequiredIndicator = styled.div`
+const LoginRequestContainer = styled.div`
   width: 100%;
   height: 100%;
   display: flex;
@@ -138,7 +145,7 @@ const LoginRequiredIndicator = styled.div`
     font-size: 15px;
     font-weight: 400;
     color: white;
-    background-color: #e22926;
+    background-color: #2f4f4f;
     border: none;
     border-radius: 0.3rem;
   }

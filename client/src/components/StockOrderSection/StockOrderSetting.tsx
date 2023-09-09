@@ -8,7 +8,7 @@ import { OrderTypeProps } from "../../models/orderTypeProps";
 
 import PriceSetting from "./PriceSetting";
 import VolumeSetting from "./VolumeSetteing";
-import StockOrderBtn from "./StockOrderBtn";
+import OrderDicisionBtn from "./OrderDicisionBtn";
 
 const orderType01: string = "매수";
 const orderType02: string = "매도";
@@ -51,7 +51,7 @@ const StockOrderSetting = () => {
       <OrderTypeChangeEffetLine />
       <PriceSetting stockInfo={stockInfo.stockAsBiResponseDto} companyId={companyId} />
       <VolumeSetting orderVolume={orderVolume} setOrderVolume={setOrderVolume} />
-      <StockOrderBtn orderVolume={orderVolume} setOrderVolume={setOrderVolume} />
+      <OrderDicisionBtn orderVolume={orderVolume} setOrderVolume={setOrderVolume} />
     </Container>
   );
 };
