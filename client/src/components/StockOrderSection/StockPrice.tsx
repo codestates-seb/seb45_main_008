@@ -1,7 +1,7 @@
-import { useState, useEffect } from "react";
 import useGetStockData from "../../hooks/useGetStockData";
 import { StockProps } from "../../models/stockProps";
 
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
 import { setStockOrderPrice } from "../../reducer/StockOrderPrice-Reducer";
@@ -98,10 +98,15 @@ const Container = styled.div<{ index: number; price: number; orderPrice: number 
   height: 36px;
   margin-bottom: 2px;
   background-color: ${(props) => (props.index > 4 ? "#FDE8E7" : "#E7F0FD")};
-  border: ${(props) => (props.index === 4 ? "1px solid #2F4F4F" : "none")};
-  border-left: ${(props) => (props.price === props.orderPrice ? "3px solid red" : props.index > 9 ? "3px solid #FDE8E7" : "3px solid #E7F0FD")};
+  border: ${(props) => (props.price === props.orderPrice ? "1.5px solid #2F4F4F" : "none")};
+  border-left: ${(props) => (props.price === props.orderPrice ? "3px solid red" : props.index > 4 ? "3px solid #FDE8E7" : "3px solid #E7F0FD")};
   display: flex;
   flex-direction: row;
+  transition: border 1s ease;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
 const Price = styled.div`

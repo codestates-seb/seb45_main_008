@@ -4,10 +4,8 @@ import { StateProps } from "../../models/stateProps";
 
 import ExpandScreenBtn from "./ExpandScreenBtn";
 import StockOverview from "./StockOverview";
-import BookmarkBtn from "./BookmarkBtn";
 import StockOrderBtn from "./StockOrderBtn";
 import CompareChartBtn from "./CompareChartBtn";
-import ChangeChartCycleBtn from "./ChangeChartCycleBtn";
 
 const UpperMenuBar = () => {
   const companyId = useSelector((state: StateProps) => state.companyId);
@@ -21,7 +19,7 @@ const UpperMenuBar = () => {
         ) : (
           <>
             <StockOverview />
-            <BookmarkBtn />
+            {/* <BookmarkBtn /> */}
             <StockOrderBtn type="buying" />
             <StockOrderBtn type="selling" />
           </>
@@ -30,7 +28,7 @@ const UpperMenuBar = () => {
       </div>
       <div className="SecondLine">
         <CompareChartBtn />
-        <ChangeChartCycleBtn />
+        {/* <ChangeChartCycleBtn /> */}
       </div>
     </Container>
   );
