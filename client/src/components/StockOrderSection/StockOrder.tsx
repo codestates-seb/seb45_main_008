@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { closeDecisionWindow } from "../../reducer/setDecisionWindow-Reducer";
+import { closeDecisionWindow } from "../../reducer/SetDecisionWindow-Reducer";
 import { styled } from "styled-components";
 import { StateProps } from "../../models/stateProps";
 

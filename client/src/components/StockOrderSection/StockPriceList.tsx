@@ -12,11 +12,11 @@ const StockPriceList = () => {
   const { stockInfo, stockInfoLoading, stockInfoError } = useGetStockInfo(companyId);
 
   if (stockInfoLoading) {
-    return <></>;
+    return;
   }
 
   if (stockInfoError) {
-    return <></>;
+    return;
   }
 
   // 1) 당일 매도/매수호가 및 거래량

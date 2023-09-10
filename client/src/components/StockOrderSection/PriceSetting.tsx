@@ -4,7 +4,6 @@ import { styled } from "styled-components";
 import { setStockOrderPrice, plusStockOrderPrice, minusStockOrderPrice } from "../../reducer/StockOrderPrice-Reducer";
 import { StateProps } from "../../models/stateProps";
 import { StockInfoprops } from "../../models/stockInfoProps";
-import { number } from "echarts";
 
 const priceSettingTitle: string = "가격";
 const unitText: string = "원";
@@ -33,19 +32,16 @@ const PriceSetting = (props: OwnProps) => {
 
   // 거래가 직접 기입 시  1) 음수 => 0으로 재설정  2) priceInteval로 나누어 떨어지지 않으면 => 나누어 떨어지는 수로 변경
   const handleWriteOrderPrice = (event: React.ChangeEvent<HTMLInputElement>) => {
-
     const inputValue = event.target.value;
-    const numberInputValue = parseInt(inputValue, 10);
+    // const numberInputValue = parseInt(inputValue, 10);
 
-    if(inputValue === ''){
+    if (inputValue === "") {
       dispatch(setStockOrderPrice(0));
     }
 
-    
-
-    if(event.target.value !== ''){
-    const inputValue = parseInt(event.target.value, 10);
-    dispatch(setStockOrderPrice(inputValue));
+    if (event.target.value !== "") {
+      const inputValue = parseInt(event.target.value, 10);
+      dispatch(setStockOrderPrice(inputValue));
     }
 
     // if(inputValue < 0) {
@@ -57,7 +53,7 @@ const PriceSetting = (props: OwnProps) => {
     //   const modifiedInputValue = inputValue - remainder;
     //   dispatch(setStockOrderPrice(modifiedInputValue));
     // }
-  }
+  };
 
   // 종목이 달리지면 -> 가격도 변경
   useEffect(() => {
@@ -66,9 +62,9 @@ const PriceSetting = (props: OwnProps) => {
 
   // 입력 값 -> event 속성에 담겨 있음
   // onChange 이벤트 발생할 때 -> 해당 입력값을 Price 관련 전역 상태로 (전역 상태 관리함수 활용)
-  // set => 으로 actionPayload를 설정해야하는데,,, 
-  // payload에 넘기기 전에 1) 0보다 큰 값인지, 2) PriceInterval로 나누어 떨어지는지 => 안된다면 
-  // 전역 상태관리 함수를 2번 사용? 1) 일단 입력값으로 바꾸고 2) 2차로 필터링 해서 바꾸고?  
+  // set => 으로 actionPayload를 설정해야하는데,,,
+  // payload에 넘기기 전에 1) 0보다 큰 값인지, 2) PriceInterval로 나누어 떨어지는지 => 안된다면
+  // 전역 상태관리 함수를 2번 사용? 1) 일단 입력값으로 바꾸고 2) 2차로 필터링 해서 바꾸고?
   // 2차 변경 때 -> 음수면 0으로 바꾸고,,, Iterval이랑 안맞으면 -> Interval로 나눈 나머지 값 차감
 
   return (
@@ -77,7 +73,7 @@ const PriceSetting = (props: OwnProps) => {
         <div className="Title">{priceSettingTitle}</div>
       </div>
       <div className="PriceSettingBox">
-        <PriceController defaultValue={orderPrice} value={orderPrice} onChange={handleWriteOrderPrice}/>
+        <PriceController defaultValue={orderPrice} value={orderPrice} onChange={handleWriteOrderPrice} />
         <UnitContent>{unitText}</UnitContent>
         <div className="DirectionBox">
           <button className="PriceUp" onClick={handlePlusOrderPrice}>
