@@ -24,7 +24,9 @@ const VolumeSetting = () => {
   const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
   const orderVolume = useSelector((state: StateProps) => state.stockOrderVolume);
 
-  const maximumBuyingVolume = Math.trunc(dummyMoney / orderPrice);
+  // 🎾 임시로직 추가
+  // const maximumBuyingVolume = Math.trunc(dummyMoney / orderPrice);
+  const maximumBuyingVolume = orderPrice !==0 ? Math.trunc(dummyMoney / orderPrice) : Math.trunc(dummyMoney/1);
 
   const handlePlusOrderVolume = () => {
     // 매수 -> 증가 버튼 클릭 시, 최대 구매수량 보다 낮으면 개수 1증가
@@ -59,6 +61,8 @@ const VolumeSetting = () => {
 
   // 지정가 증가 -> (현재 주문수량 > 최대 주문가능 수량)일 경우 -> 현재 주문수량을 최대 주문수량으로 변경
   useEffect(() => {
+    
+
     if (maximumBuyingVolume < orderVolume) {
       dispatch(setStockOrderVolume(maximumBuyingVolume));
     }
