@@ -1,14 +1,13 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import StockHolmLogo from "../../asset/images/StockHolmLogo.png";
 import { useNavigate } from "react-router-dom";  // 라우터의 네비게이션을 사용하기 위해 가져옴
 import { setLogoutState } from '../../reducer/member/loginSlice';
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch} from 'react-redux';
 
 const LogoutHeader: React.FC<LogoutHeaderProps> = ({ onLoginClick }) => {
   //reduc-toolkit 활용
   const dispatch = useDispatch();
-  const isLoggedOut = useSelector((state: RootState) => state.login.isLoggedOut);
 
   const [searchValue, setSearchValue] = useState<string>("");  // 검색 값 상태 관리
   const navigate = useNavigate();  // 라우터 네비게이션 훅 사용
@@ -26,12 +25,8 @@ const LogoutHeader: React.FC<LogoutHeaderProps> = ({ onLoginClick }) => {
     navigate("/");  // 메인 페이지로 이동
   };
 
-  //isLoggedOut 변수를 0으로 만든다.
-  useEffect(() => {
-    if (isLoggedOut !== 0) {
-      dispatch(setLogoutState());
-    }
-  }, [dispatch, isLoggedOut]);
+  // isLoggedOut 변수를 항상 0으로 설정
+  dispatch(setLogoutState());
 
 
   // 컴포넌트 렌더링
@@ -51,11 +46,7 @@ export default LogoutHeader;
 interface LogoutHeaderProps {
   onLoginClick: () => void;
 }
-interface RootState {
-  login: {
-    isLoggedOut: number;
-  }
-}
+
 
 
 // 스타일드 컴포넌트 정의

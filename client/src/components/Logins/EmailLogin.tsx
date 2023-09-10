@@ -1,6 +1,8 @@
 import axios from "axios";
 import styled from "styled-components";
 import React, { useState } from "react";
+import { setLoginState, updateMemberId} from '../../reducer/member/loginSlice';
+import { useDispatch } from 'react-redux';
 
 // 이메일 로그인 모달 컴포넌트
 const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) => {
@@ -12,6 +14,9 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) =
   const loginButtonText = "로그인";
   const noAccountText = "계정이 없습니까?";
   const registerButtonText = "회원가입하기";
+
+  //디스패치 함수 가져오기
+  const dispatch = useDispatch();
 
   // 상태 변수 정의
   const [email, setEmail] = useState("");
@@ -36,6 +41,13 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) =
         password,
       });
       if (response.status === 200) {
+
+        // 로그인 상태로 만들기
+        dispatch(setLoginState(true)); 
+
+        // memberId 상태 업데이트하기
+        dispatch(updateMemberId(response.data.memberId));
+
         const authToken = response.headers['authorization'];
         const accessToken = response.headers['accessToken'];
         const refreshToken = response.headers['refreshToken'];
