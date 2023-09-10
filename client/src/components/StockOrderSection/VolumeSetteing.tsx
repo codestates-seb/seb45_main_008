@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
 import { StateProps } from "../../models/stateProps";
@@ -26,7 +27,14 @@ const VolumeSetting = () => {
   const maximumBuyingVolume = Math.trunc(dummyMoney / orderPrice);
 
   const handlePlusOrderVolume = () => {
-    dispatch(plusStockOrderVolume());
+    // 매수 -> 증가 버튼 클릭 시, 최대 구매수량 보다 낮으면 개수 1증가
+    if (!orderType) {
+      orderVolume < maximumBuyingVolume && dispatch(plusStockOrderVolume());
+    }
+    // 매도 -> 증가 버튼 클릭 시, 보유 주식수량 보다 낮으면 개수 1증가
+    if (orderType) {
+      orderVolume < dummyholdingStock && dispatch(plusStockOrderVolume());
+    }
   };
 
   const handleMinusOrderVolume = () => {
@@ -48,6 +56,13 @@ const VolumeSetting = () => {
       dispatch(setStockOrderVolume(orderVolume));
     }
   };
+
+  // 지정가 증가 -> (현재 주문수량 > 최대 주문가능 수량)일 경우 -> 현재 주문수량을 최대 주문수량으로 변경
+  useEffect(() => {
+    if (maximumBuyingVolume < orderVolume) {
+      dispatch(setStockOrderVolume(maximumBuyingVolume));
+    }
+  }, [maximumBuyingVolume]);
 
   return (
     <Container>
