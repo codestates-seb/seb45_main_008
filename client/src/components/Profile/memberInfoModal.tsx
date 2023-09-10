@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components'; 
 import { useSelector } from 'react-redux';
-import useGetMemberInfo from '../../hooks/useGetmemberInfo'; 
+import { useGetMemberInfo } from '../../hooks/useGetMemberInfo.ts'; 
 import { RootState } from '../../store/config'; 
 
 const MemberInfoModal: React.FC<MemberInfoModalProps> = ({ onClose }) => {

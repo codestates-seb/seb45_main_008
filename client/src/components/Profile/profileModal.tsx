@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import MemberInfoModal from './memberInfoModal'; // 경로는 실제 파일 위치에 따라 수정해야 합니다.
+import MemberWithdrawalModal from './memberWithdrawalModal'; // 경로는 실제 파일 위치에 따라 수정해야 합니다.
 
 const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
     const [selectedTab, setSelectedTab] = useState<number>(1);
@@ -21,12 +22,12 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
                 <TabContent>
                     {selectedTab === 1 && <MemberInfoModal onClose={onClose}/>}
                     {selectedTab === 2 && <div>현금 Content</div>}
-                    {selectedTab === 3 && <div>회원탈퇴 Content</div>}
+                    {selectedTab === 3 && <MemberWithdrawalModal onClose={onClose}/>} {/* 회원탈퇴 모달 추가 */}
                 </TabContent>
             </ModalContainer>
         </ModalBackground>
     );
-};
+}
 
 interface ProfileModalProps {
     onClose: () => void;

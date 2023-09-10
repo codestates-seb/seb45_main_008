@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux';
 import { setMemberInfo } from '../../reducer/member/memberInfoSlice.ts';
-import useGetMemberInfo from '../../hooks/useGetmemberInfo.ts';
+import { useGetMemberInfo } from '../../hooks/useGetMemberInfo.ts';
 import { RootState } from '../../reducer/member/rootReducer';
 
 const LoginConfirmationModal: React.FC<LoginConfirmationProps> = ({ onClose }) => {
