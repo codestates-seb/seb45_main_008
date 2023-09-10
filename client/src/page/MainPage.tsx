@@ -6,6 +6,7 @@ import LogoutHeader from "../components/Headers/LogoutHeader";
 import LoginHeader from "../components/Headers/LoginHeader";
 import OAuthLoginModal from "../components/Logins/OAuthLogin";
 import EmailLoginModal from "../components/Logins/EmailLogin";
+import LoginConfirmationModal from "../components/Logins/LoginConfirmatationModal";
 import EmailSignupModal from "../components/Signups/EmailSignup";
 import EmailVerificationModal from "../components/Signups/EmailCertify";
 import PasswordSettingModal from "../components/Signups/Password";
@@ -90,7 +91,17 @@ const MainPage = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 관리
 
+
+
+  const [isLoginConfirmationModalOpen, setLoginConfirmationModalOpen] = useState(false);
+
   const handleLogin = () => {
+    closeEmailLoginModal();
+    setLoginConfirmationModalOpen(true);
+  };
+
+  const handleLoginConfirmationClose = () => {
+    setLoginConfirmationModalOpen(false);
     setIsLoggedIn(true);
   };
 
@@ -121,6 +132,9 @@ const MainPage = () => {
       )}
 
       {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} />}
+      {isLoginConfirmationModalOpen && (
+        <LoginConfirmationModal onClose={handleLoginConfirmationClose} />
+      )}
 
       {isEmailSignupModalOpen && <EmailSignupModal onClose={closeEmailSignupModal} onRequestVerification={openEmailVerificationModal} />}
       {isEmailVerificationModalOpen && <EmailVerificationModal onClose={closeEmailVerificationModal} onNextStep={openPasswordSettingModal} initialEmail={userEmail} />}

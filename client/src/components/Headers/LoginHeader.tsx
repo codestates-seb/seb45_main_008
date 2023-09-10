@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import StockHolmLogo from "../../asset/images/StockHolmLogo.png";
 import SampleProfile from "../../asset/images/ProfileSample.png"; 
+import { useNavigate } from "react-router-dom";  
 import AlarmImage from "../../asset/images/alarm.png"; 
-import { useNavigate } from "react-router-dom";  // 페이지 이동을 위한 훅 가져오기
+
 
 // 로그인 상태일 때의 헤더 컴포넌트
 const LoginHeader: React.FC<LoginHeaderProps> = ({ onLogoutClick }) => {
