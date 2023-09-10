@@ -1,12 +1,12 @@
 // memberInfoSlice.ts
 
-import { createSlice, PayloadAction } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 interface MemberInfo {
+  memberId: number;
   email: string;
   name: string;
-  password: string;
-  confirmPassword: string;
+  createdAt: string;
 }
 
 interface MemberInfoState {
@@ -20,16 +20,18 @@ const initialState: MemberInfoState = {
 };
 
 const memberInfoSlice = createSlice({
-  name: 'memberInfo',
-  initialState,
-  reducers: {
-    setMemberInfo: (state, action: PayloadAction<MemberInfo>) => {
-      state.memberInfo = action.payload;
+    name: 'memberInfo',
+    initialState,
+    reducers: {
+        setMemberInfo: (state, action: PayloadAction<MemberInfo>) => {
+            state.memberInfo = action.payload;
+        },
+        setEmailForVerification: (state, action: PayloadAction<string>) => {
+            state.emailForVerification = action.payload;
+        },
     },
-    setEmailForVerification: (state, action: PayloadAction<string>) => {
-        state.emailForVerification = action.payload;  // 액션 추가
-      },
-  },
+
+    
 });
 
 export const { setMemberInfo, setEmailForVerification } = memberInfoSlice.actions;

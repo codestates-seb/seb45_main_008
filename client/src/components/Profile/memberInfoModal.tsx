@@ -1,27 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import axios from 'axios';
+import React from 'react';
+import styled from 'styled-components'; 
+import { useSelector } from 'react-redux';
+import useGetMemberInfo from '../../hooks/useGetmemberInfo'; 
+import { RootState } from '../../store/config'; 
 
-const MemberInfoModal: React.FC<MemberInfoModalProps> = ({ onClose, memberId }) => {
-    const [memberInfo, setMemberInfo] = useState<MemberData | null>(null);  // Use the MemberData type
+const MemberInfoModal: React.FC<MemberInfoModalProps> = ({ onClose }) => {
+    // loginSlice에서 memberId 값을 가져옵니다.
+    const memberId = useSelector((state: RootState) => state.login.memberId);
+    
+    // memberId 값을 useGetMemberInfo 훅에 전달하여 회원 정보를 가져옵니다.
+    const { data: memberInfo } = useGetMemberInfo(memberId); 
 
     const titleText = "회원정보";
-    const loadingText = "Loading...";
     const nameText = "이름: ";
     const emailText = "이메일: ";
     const createdAtText = "회원 가입 일시: ";
     const memberIdText = "회원 ID: ";
-
-    useEffect(() => {
-        // Fetch member info when the modal is opened
-        axios.get<MemberData>(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/members/${memberId}`)
-            .then(response => {
-                setMemberInfo(response.data);
-            })
-            .catch(error => {
-                console.error("Error fetching member info:", error);
-            });
-    }, [memberId]);
 
     return (
         <ModalBackground>
@@ -30,14 +24,13 @@ const MemberInfoModal: React.FC<MemberInfoModalProps> = ({ onClose, memberId }) 
                 <Title>{titleText}</Title>
                 {memberInfo ? (
                     <div>
-                        {/* Display member information */}
                         <p>{memberIdText}{memberInfo.memberId}</p>
                         <p>{nameText}{memberInfo.name}</p>
                         <p>{emailText}{memberInfo.email}</p>
                         <p>{createdAtText}{memberInfo.createdAt}</p>
                     </div>
                 ) : (
-                    <p>{loadingText}</p>
+                    <div>Data not available</div>
                 )}
             </ModalContainer>
         </ModalBackground>
@@ -46,14 +39,9 @@ const MemberInfoModal: React.FC<MemberInfoModalProps> = ({ onClose, memberId }) 
 
 interface MemberInfoModalProps {
     onClose: () => void;
-    memberId: string;
 }
-interface MemberData {
-    memberId: number;
-    email: string;
-    name: string;
-    createdAt: string;
-}
+
+
 
 // Styled Components Definitions:
 

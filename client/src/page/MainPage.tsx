@@ -17,6 +17,8 @@ import CompareChartSection from "../components/CompareChartSection/Index";
 import StockOrderSection from "../components/StockOrderSection/Index";
 import Welcome from "../components/Signups/Welcome";
 
+import ProfileModal from "../components/Profile/profileModal";
+
 import { StateProps } from "../models/stateProps";
 
 import { TabContainerPage } from "./TabPages/TabContainerPage";
@@ -29,6 +31,7 @@ const MainPage = () => {
   const [isEmailSignupModalOpen, setEmailSignupModalOpen] = useState(false);
   const [userEmail, setUserEmail] = useState("");
   const [isWelcomeModalOpen, setWelcomeModalOpen] = useState(false);
+  const [isProfileModalOpen, setProfileModalOpen] = useState(false); //프로필 모달 보이기/숨기기
 
   const openOAuthModal = useCallback(() => {
     setOAuthModalOpen(true);
@@ -91,7 +94,10 @@ const MainPage = () => {
 
   const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 관리
 
-
+  //프로필 모달 열고닫는 매커니즘
+  const openProfileModal = useCallback(() => {
+    setProfileModalOpen(true);
+  }, []); 
 
   const [isLoginConfirmationModalOpen, setLoginConfirmationModalOpen] = useState(false);
 
@@ -117,7 +123,7 @@ const MainPage = () => {
 
   return (
     <Container>
-      {isLoggedIn ? <LoginHeader onLogoutClick={handleLogout} /> : <LogoutHeader onLoginClick={openOAuthModal} />}
+      {isLoggedIn ? <LoginHeader onLogoutClick={handleLogout} onProfileClick={openProfileModal} /> : <LogoutHeader onLoginClick={openOAuthModal} />}
       <Main>
         <CompareChartSection />
         {!expandScreen.left && (
@@ -152,7 +158,9 @@ const MainPage = () => {
             closeWelcomeModal();
           }}
         />
-      )}
+        )}
+      {isProfileModalOpen && <ProfileModal onClose={() => setProfileModalOpen(false)} />} //프로필 모달 컴포넌트 렌더링
+
     </Container>
   );
 };
