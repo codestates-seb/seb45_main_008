@@ -17,22 +17,20 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/stockorders")
+@RequestMapping("/stock")
 public class StockOrderController {
 
     private final StockOrderService stockOrderService;
-    private final MemberService memberService;
     private final CompanyMapper companyMapper;
     private final StockHoldService stockHoldService;
 
-    public StockOrderController(StockOrderService stockOrderService, MemberService memberService, CompanyMapper companyMapper, StockHoldService stockHoldService) {
+    public StockOrderController(StockOrderService stockOrderService, CompanyMapper companyMapper, StockHoldService stockHoldService) {
         this.stockOrderService = stockOrderService;
-        this.memberService = memberService;
         this.companyMapper = companyMapper;
         this.stockHoldService = stockHoldService;
     }
 
-    // @AuthenticationPrincipal 불러와야 함,
+    // 매수 api
     @PostMapping("/buy")
     public ResponseEntity buyStocks(@RequestParam(name = "companyId") long companyId,
                                     @RequestParam(name = "price") long price,
@@ -44,7 +42,7 @@ public class StockOrderController {
         return new ResponseEntity<>(stockOrderResponseDto, HttpStatus.CREATED);
     }
 
-    // @AuthenticationPrincipal 불러와야 함
+    // 매도 api
     @PostMapping("/sell")
     public ResponseEntity sellStocks(@RequestParam(name = "companyId") long companyId,
                                      @RequestParam(name = "price") long price,
@@ -57,7 +55,6 @@ public class StockOrderController {
     }
 
     // 보유 주식 정보들 반환하는 api
-    // @AuthenticationPrincipal 불러와야 함
     @GetMapping("/stockholds")
     public ResponseEntity getStockHolds(@AuthenticationPrincipal Member member) {
         List<StockHold> stockHoldList = stockHoldService.findStockHolds(member.getMemberId());
@@ -65,5 +62,19 @@ public class StockOrderController {
         stockHoldResponseDtos = stockHoldService.setPercentage(stockHoldResponseDtos);
 
         return new ResponseEntity<>(stockHoldResponseDtos, HttpStatus.OK);
+    }
+
+    // 멤버의 stockOrder를 반환하는 api
+    @GetMapping("/stockorders")
+    public ResponseEntity getStockOrders(@AuthenticationPrincipal Member member) {
+        List<StockOrderResponseDto> stockOrderResponseDtos = stockOrderService.getMemberStockOrders(member.getMemberId());
+
+        return new ResponseEntity<>(stockOrderResponseDtos, HttpStatus.OK);
+    }
+
+    // 미 체결된 매수, 매도 삭제하는 api
+    @DeleteMapping("/stockorders/{stockOrderId}")
+    public void deleteStockOrders(@AuthenticationPrincipal Member member, @PathVariable("stockOrderId") long stockOrderId) {
+        stockOrderService.deleteStockOrder(member, stockOrderId);
     }
 }

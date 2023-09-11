@@ -1,14 +1,17 @@
 package com.stockholm.main_project.stock.service;
 
 import com.stockholm.main_project.cash.entity.Cash;
+import com.stockholm.main_project.cash.service.CashService;
 import com.stockholm.main_project.exception.BusinessLogicException;
 import com.stockholm.main_project.exception.ExceptionCode;
 import com.stockholm.main_project.member.entity.Member;
 import com.stockholm.main_project.member.repository.MemberRepository;
+import com.stockholm.main_project.stock.dto.StockOrderResponseDto;
 import com.stockholm.main_project.stock.entity.Company;
 import com.stockholm.main_project.stock.entity.StockAsBi;
 import com.stockholm.main_project.stock.entity.StockHold;
 import com.stockholm.main_project.stock.entity.StockOrder;
+import com.stockholm.main_project.stock.mapper.CompanyMapper;
 import com.stockholm.main_project.stock.repository.StockHoldRepository;
 import com.stockholm.main_project.stock.repository.StockOrderRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -19,6 +22,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.Optional;
 import java.util.Queue;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional
@@ -30,20 +34,25 @@ public class StockOrderService {
     private final MemberRepository memberRepository;
     private final StockHoldService stockHoldService;
     private final StockHoldRepository stockHoldRepository;
+    private final CashService cashService;
 
-    public StockOrderService(StockAsBiService stockAsBiService, CompanyService companyService, StockOrderRepository stockOrderRepository, MemberRepository memberRepository, StockHoldService stockHoldService, StockHoldRepository stockHoldRepository) {
+    private final CompanyMapper companyMapper;
+
+    public StockOrderService(StockAsBiService stockAsBiService, CompanyService companyService, StockOrderRepository stockOrderRepository, MemberRepository memberRepository, StockHoldService stockHoldService, StockHoldRepository stockHoldRepository, CashService cashService, CompanyMapper companyMapper) {
         this.stockAsBiService = stockAsBiService;
         this.companyService = companyService;
         this.stockOrderRepository = stockOrderRepository;
         this.memberRepository = memberRepository;
         this.stockHoldService = stockHoldService;
         this.stockHoldRepository = stockHoldRepository;
+        this.cashService = cashService;
+        this.companyMapper = companyMapper;
     }
 
     // 멤버, 회사 id, 가격
     public StockOrder buyStocks(Member member, long companyId, long price, int stockCount) {
         //회원 캐쉬 잔량 비교
-        //CheckCash(price * stockCount, Member) -> 부족할 시 예외 처리
+        cashService.checkCash(price * stockCount, member); // -> 부족할 시 예외 처리
         //호가 불러오기
         StockAsBi stockAsBi = stockAsBiService.getStockAsBi(companyId);
         // 예약 구매인지 바로 구매인지 판별
@@ -340,4 +349,35 @@ public class StockOrderService {
         return stockOrderQueue;
    }
 
+    // 멤버의 모든 주식 거래내역 삭제하기
+    public void deleteStockOrders(Member member) {
+        List<StockOrder> stockOrders = stockOrderRepository.findAllByMember_MemberId(member.getMemberId());
+
+        stockOrderRepository.deleteAll(stockOrders);
+    }
+
+    // 멤버의 모든 StockOrders 불러오기
+    public List<StockOrderResponseDto> getMemberStockOrders(long memberId) {
+        List<StockOrder> stockOrders = stockOrderRepository.findAllByMember_MemberId(memberId);
+        List<StockOrderResponseDto> stockOrderRepositories = stockOrders.stream()
+                .map(stockOrder -> companyMapper.stockOrderToStockOrderResponseDto(stockOrder)).collect(Collectors.toList());
+
+        return stockOrderRepositories;
+    }
+
+    // 미체결 stockOrder 삭제하는 메소드
+    public void deleteStockOrder(Member member, long stockOrderId) {
+        Optional<StockOrder> optionalStockOrder = stockOrderRepository.findById(stockOrderId);
+        StockOrder stockOrder = optionalStockOrder.orElseThrow(() -> new BusinessLogicException(ExceptionCode.STOCKORDER_NOT_FOUND));
+
+        if(stockOrder.getMember().getMemberId() != member.getMemberId()) {
+            throw new BusinessLogicException(ExceptionCode.STOCKORDER_PERMISSION_DENIED);
+        }
+        else if(!stockOrder.getOrderStates().equals(StockOrder.OrderStates.ORDER_WAIT))
+            throw new BusinessLogicException(ExceptionCode.STOCKORDER_ALREADY_FINISH);
+
+        else
+            stockOrderRepository.delete(stockOrder);
+
+    }
 }

@@ -46,6 +46,13 @@ public class CashService {
         return cashOptional.orElseThrow(() -> new BusinessLogicException(ExceptionCode.INVALID_CASH));
     }
 
+    public void checkCash(long price, Member member) {
+        if(price > member.getCash().getMoney())
+            throw new BusinessLogicException(ExceptionCode.NOT_ENOUGH_MONEY);
+        else
+            return;
+    }
+
     private void validateAuthor(Cash cash, Member member) {
 
         if (!cash.getMember().equals(member)) {
