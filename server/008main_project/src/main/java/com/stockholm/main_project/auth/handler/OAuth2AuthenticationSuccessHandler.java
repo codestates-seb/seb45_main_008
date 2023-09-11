@@ -91,9 +91,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     private URI createURI(String accessToken, String refreshToken) {
-        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add("access_token", "Bearer " + accessToken);
-        queryParams.add("refresh_token", refreshToken);
+
 
 //        return UriComponentsBuilder
 //                .newInstance()
@@ -101,7 +99,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 //                .host("localhost")
 ////                .port(80)
 //                .path("/receive-token.html")
-//                .queryParams(queryParams)
 //                .build()
 //                .toUri();
 //    }
@@ -111,7 +108,6 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                 .host("seb008stockholm.s3-website.ap-northeast-2.amazonaws.com")
 //                .port(8080)
                 .path("/")
-                .queryParams(queryParams)
                 .build()
                 .toUri();
    }

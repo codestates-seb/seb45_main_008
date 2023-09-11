@@ -90,7 +90,6 @@ public class MemberService {
             throw new BusinessLogicException(ExceptionCode.EMAIL_DUPLICATION);
     }
 
-
     public Member findMemberByEmail(String email) {
         Optional<Member> optionalUser = memberRepository.findByEmail(email);
 

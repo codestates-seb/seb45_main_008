@@ -12,6 +12,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -31,11 +32,12 @@ public class CashController {
         this.memberService = memberService;
     }
     @PostMapping
-    public ResponseEntity postCash(@Schema(implementation = CashPostDto.class)@Valid @RequestBody CashPostDto cashPostDto){
+    public ResponseEntity postCash(@Schema(implementation = CashPostDto.class)@Valid @RequestBody CashPostDto cashPostDto,
+                                   @AuthenticationPrincipal Member member){
 
         // 현재 인증된 사용자 정보 가져오기
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Member member = memberService.findMemberByEmail(auth.getPrincipal().toString());
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        Member member = memberService.findMemberByEmail(auth.getPrincipal().toString());
 
         // DTO에서 Entity로 변환
         Cash cashToCreate = mapper.cashPostToCash(cashPostDto);
@@ -50,9 +52,10 @@ public class CashController {
     }
 
     @PatchMapping("{moneyId}")
-    public ResponseEntity patchCash(@Schema(implementation = CashPatchDto.class)@PathVariable long moneyId, @Valid @RequestBody CashPatchDto requestBody){
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Member member = memberService.findMemberByEmail(auth.getPrincipal().toString());
+    public ResponseEntity patchCash(@Schema(implementation = CashPatchDto.class)@PathVariable long moneyId, @Valid @RequestBody CashPatchDto requestBody,
+                                    @AuthenticationPrincipal Member member){
+//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+//        Member member = memberService.findMemberByEmail(auth.getPrincipal().toString());
 
 //        stockOrderService.deleteStockOrdersByMemberId(member.getId());
 
