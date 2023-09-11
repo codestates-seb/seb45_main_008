@@ -11,6 +11,7 @@ import com.stockholm.main_project.stock.service.StockHoldService;
 import com.stockholm.main_project.stock.service.StockOrderService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,8 +36,8 @@ public class StockOrderController {
     @PostMapping("/buy")
     public ResponseEntity buyStocks(@RequestParam(name = "companyId") long companyId,
                                     @RequestParam(name = "price") long price,
-                                    @RequestParam(name = "stockCount") int stockCount) {
-        Member member = memberService.findMember(1L);
+                                    @RequestParam(name = "stockCount") int stockCount,
+                                    @AuthenticationPrincipal Member member) {
         StockOrder stockOrder = stockOrderService.buyStocks(member, companyId, price, stockCount);
         StockOrderResponseDto stockOrderResponseDto = companyMapper.stockOrderToStockOrderResponseDto(stockOrder);
 
@@ -47,8 +48,8 @@ public class StockOrderController {
     @PostMapping("/sell")
     public ResponseEntity sellStocks(@RequestParam(name = "companyId") long companyId,
                                      @RequestParam(name = "price") long price,
-                                     @RequestParam(name = "stockCount") int stockCount) {
-        Member member = memberService.findMember(1L);
+                                     @RequestParam(name = "stockCount") int stockCount,
+                                     @AuthenticationPrincipal Member member) {
         StockOrder stockOrder = stockOrderService.sellStocks(member, companyId, price, stockCount);
         StockOrderResponseDto stockOrderResponseDto = companyMapper.stockOrderToStockOrderResponseDto(stockOrder);
 
@@ -58,8 +59,7 @@ public class StockOrderController {
     // 보유 주식 정보들 반환하는 api
     // @AuthenticationPrincipal 불러와야 함
     @GetMapping("/stockholds")
-    public ResponseEntity getStockHolds() {
-        Member member = memberService.findMember(1L);
+    public ResponseEntity getStockHolds(@AuthenticationPrincipal Member member) {
         List<StockHold> stockHoldList = stockHoldService.findStockHolds(member.getMemberId());
         List<StockHoldResponseDto> stockHoldResponseDtos = companyMapper.stockHoldToStockHoldResponseDto(stockHoldList);
         stockHoldResponseDtos = stockHoldService.setPercentage(stockHoldResponseDtos);

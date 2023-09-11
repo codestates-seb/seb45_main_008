@@ -5,12 +5,15 @@ import com.stockholm.main_project.member.dto.MemberPostDto;
 import com.stockholm.main_project.member.dto.MemberResponseDto;
 import com.stockholm.main_project.member.entity.Member;
 import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
 
 @Mapper(componentModel = "spring")
 public interface MemberMapper {
 
+
     Member memberPostToMember(MemberPostDto requestBody);
     Member memberPatchToMember(MemberPatchDto requestBody);
+
     MemberResponseDto memberToMemberResponseDto(Member member);
 }
 

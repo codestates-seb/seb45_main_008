@@ -37,6 +37,7 @@ public class GlobalExceptionAdvice {
         return response;
     }
 
+    //추가 작업 필요
     @ExceptionHandler
     public ResponseEntity handleBusinessLogicException(BusinessLogicException e) {
         System.out.println(e.getExceptionCode().getStatus());

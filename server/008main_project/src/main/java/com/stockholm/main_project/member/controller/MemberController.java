@@ -11,6 +11,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,6 +20,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/members")
+@Slf4j
 public class MemberController {
     private final MemberService memberService;
     private final MemberMapper mapper;
@@ -30,9 +32,9 @@ public class MemberController {
     }
 
     @Operation(summary = "회원가입", description = "자체 회원가입 요청이 POST됩니다.", tags = { "Member" })
-    @ApiResponse(responseCode = "200", description = "OK",
+    @ApiResponse(responseCode = "201", description = "CREATED",
             content = @Content(schema = @Schema(implementation = MemberResponseDto.class)))
-    @ApiResponse(responseCode = "400", description = "BAD REQUEST")
+    @ApiResponse(responseCode = "404", description = "BAD REQUEST")
     @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     @PostMapping
     public ResponseEntity postMember(@Schema(implementation = MemberPostDto.class)@Valid @RequestBody MemberPostDto memberPostDto){
@@ -52,13 +54,19 @@ public class MemberController {
     @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     @PatchMapping("{memberId}")
     private ResponseEntity patchMember(@Schema(implementation = MemberPatchDto.class)@PathVariable long memberId, @RequestBody MemberPatchDto memberPatchDto){
+        // Mapper 문제로 직접 주입으로 수정
         memberPatchDto.setMemberId(memberId);
 
-        Member response = memberService.updateMember(mapper.memberPatchToMember(memberPatchDto));
+        Member member = new Member();
+        member.setMemberId(memberPatchDto.getMemberId());
+        member.setName(memberPatchDto.getName());
+        member.setEmail(memberPatchDto.getEmail());
 
-        return new ResponseEntity<>(mapper.memberToMemberResponseDto(response),
-                HttpStatus.OK);
+        Member response = memberService.updateMember(member);
+
+        return new ResponseEntity<>(mapper.memberToMemberResponseDto(response), HttpStatus.OK);
     }
+
 
     @Operation(summary = "회원 조회", description = "가입한 계정 중 하나가 GET됩니다.", tags = { "Member" })
     @ApiResponse(responseCode = "200", description = "OK",

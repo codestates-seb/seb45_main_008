@@ -1,8 +1,8 @@
 package com.stockholm.main_project.stock.service;
 
+import com.stockholm.main_project.cash.entity.Cash;
 import com.stockholm.main_project.exception.BusinessLogicException;
 import com.stockholm.main_project.exception.ExceptionCode;
-import com.stockholm.main_project.member.entity.Cash;
 import com.stockholm.main_project.member.entity.Member;
 import com.stockholm.main_project.member.repository.MemberRepository;
 import com.stockholm.main_project.stock.entity.Company;
