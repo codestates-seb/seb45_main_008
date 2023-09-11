@@ -3,7 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
 import { setStockOrderPrice, plusStockOrderPrice, minusStockOrderPrice } from "../../reducer/StockOrderPrice-Reducer";
 import { StateProps } from "../../models/stateProps";
-import { StockInfoprops } from "../../models/stockInfoProps";
+import { StockInfoProps } from "../../models/stockInfoProps";
 
 const priceSettingTitle: string = "가격";
 const unitText: string = "원";
@@ -14,13 +14,52 @@ const PriceSetting = (props: OwnProps) => {
   const dispatch = useDispatch();
   const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
 
+  // 가격 조정 관련 타이머 상태
+  const [priceChangeTimer, setPriceChangeTimer] = useState<NodeJS.Timeout | null>(null);
+
   // 초기 설정값 및 가격 변동폭 설정
   const { askp1, askp2, askp3, askp4, askp5 } = stockInfo;
-  const [priceChangeTimer, setPriceChangeTimer] = useState<NodeJS.Timeout | null>(null);
   const sellingPrice = [parseInt(askp1), parseInt(askp2), parseInt(askp3), parseInt(askp4), parseInt(askp5)];
   const existSellingPrice = sellingPrice.filter((price) => price !== 0); // price 0인 경우 제거
   const defaultPrice = existSellingPrice[0];
   const priceInterval = existSellingPrice[1] - existSellingPrice[0];
+
+  // 🔴 [TestCode] 거래가능 안내 메세지 테스트 -> 🟢 구현 성공하여 코드 정리할 예정
+  const orderType = useSelector((state: StateProps) => state.stockOrderType);
+  const [orderPossibility, setOrderPossibility] = useState(true);
+
+  const { bidp1, bidp2, bidp3, bidp4, bidp5 } = stockInfo;
+  const buyingPrice = [parseInt(bidp1), parseInt(bidp2), parseInt(bidp3), parseInt(bidp4), parseInt(bidp5)];
+  const existBuyingPrice = buyingPrice.filter((price) => price !== 0); // price 0인 경우 제거
+
+  // 거래 가능여부 판별 함수
+  const handleCheckTradePossibility = () => {
+    if (orderType) {
+      // 매수 주문
+      if (orderPrice !== 0 && !existBuyingPrice.includes(orderPrice)) {
+        setOrderPossibility(false);
+      } else {
+        setOrderPossibility(true);
+      }
+    } else {
+      // 매도 주문
+      if (orderPrice !== 0 && !existSellingPrice.includes(orderPrice)) {
+        setOrderPossibility(false);
+      } else {
+        setOrderPossibility(true);
+      }
+    }
+  };
+
+  useEffect(() => {
+    handleCheckTradePossibility();
+  }, [orderPrice]);
+
+  // 가격 설정란에서 포커스 제거 -> 안내 메세지 제거
+  const handleRemoveNoVolumeNotification = () => {
+    setOrderPossibility(true);
+  };
+  // 🔴 [TestCode] 거래가능 안내 메세지 테스트 -> 🟢 구현 성공하여 코드 정리할 예정
 
   // 거래가 증가/감소
   const handlePlusOrderPrice = () => {
@@ -31,7 +70,7 @@ const PriceSetting = (props: OwnProps) => {
     dispatch(minusStockOrderPrice(priceInterval));
   };
 
-  // 방향키 입력 시
+  // 위-아래 방향키 입력 시
   const handleInputArrowBtn = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.code === "ArrowUp") {
       handlePlusOrderPrice();
@@ -77,30 +116,43 @@ const PriceSetting = (props: OwnProps) => {
   }, [companyId]);
 
   return (
-    <Container>
-      <div className="PriceCategoryBox">
-        <div className="Title">{priceSettingTitle}</div>
-      </div>
-      <div className="PriceSettingBox">
-        <PriceController defaultValue={orderPrice} value={orderPrice} onChange={handleWriteOrderPrice} onKeyDown={handleInputArrowBtn} />
-        <UnitContent>{unitText}</UnitContent>
-        <div className="DirectionBox">
-          <button className="PriceUp" onClick={handlePlusOrderPrice}>
-            &#8896;
-          </button>
-          <button className="PriceDown" onClick={handleMinusOrderPrice}>
-            &#8897;
-          </button>
+    <>
+      <Container>
+        <div className="PriceCategoryBox">
+          <div className="Title">{priceSettingTitle}</div>
         </div>
-      </div>
-    </Container>
+        <div className="PriceSettingBox">
+          <PriceController defaultValue={orderPrice} value={orderPrice} onChange={handleWriteOrderPrice} onKeyDown={handleInputArrowBtn} onFocus={handleCheckTradePossibility} onBlur={handleRemoveNoVolumeNotification} />
+          <UnitContent>{unitText}</UnitContent>
+          <div className="DirectionBox">
+            <button className="PriceUp" onClick={handlePlusOrderPrice} onBlur={handleRemoveNoVolumeNotification}>
+              &#8896;
+            </button>
+            <button className="PriceDown" onClick={handleMinusOrderPrice} onBlur={handleRemoveNoVolumeNotification}>
+              &#8897;
+            </button>
+          </div>
+        </div>
+      </Container>
+
+      {/* 거래 불가 테스트 */}
+      {!orderPossibility && (
+        <NoTradingVolume>
+          <div className="container">
+            거래 불가하며 예약 거래 됨을 공지
+            <div></div>
+            <div></div>
+          </div>
+        </NoTradingVolume>
+      )}
+    </>
   );
 };
 
 export default PriceSetting;
 
 interface OwnProps {
-  stockInfo: StockInfoprops;
+  stockInfo: StockInfoProps;
   companyId: number;
 }
 
@@ -191,4 +243,10 @@ const UnitContent = styled.div`
   border-top: 1px solid darkgray;
   border-bottom: 1px solid darkgray;
   background-color: #ffffff;
+`;
+
+const NoTradingVolume = styled.div`
+  position: absolute;
+  top: 222px;
+  right: 10px;
 `;
