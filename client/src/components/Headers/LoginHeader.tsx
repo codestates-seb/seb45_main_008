@@ -6,18 +6,15 @@ import SampleProfile from "../../asset/images/ProfileSample.png";
 import { useNavigate } from "react-router-dom";  
 import AlarmImage from "../../asset/images/alarm.png"; 
 import ProfileModal from "../Profile/profileModal";
+import StockSearchComponent from './stockSearchComponent';
 
 
 // 로그인 상태일 때의 헤더 컴포넌트
 const LoginHeader: React.FC<LoginHeaderProps> = ({ onLogoutClick }) => {
   const [isProfileModalOpen, setProfileModalOpen] = useState(false); // 프로필 모달 상태
-  const [searchValue, setSearchValue] = useState<string>('');  // 검색어 상태
   const navigate = useNavigate();  // 페이지 이동 함수
 
-  // 검색어 입력 처리 함수
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
-  };
+
 
   const logoutText = "로그아웃";
   // 프로필 모달 열기 함수
@@ -40,7 +37,8 @@ const LoginHeader: React.FC<LoginHeaderProps> = ({ onLogoutClick }) => {
       <LogoButton onClick={handleLogoClick}>
         <LogoImage src={StockHolmLogo} />
       </LogoButton>
-      <SearchBar value={searchValue} onChange={handleSearchChange} />
+      {/* <SearchBar value={searchValue} onChange={handleSearchChange} /> */}
+      <StockSearchComponent/>
       <UserActions>
         <NotificationButton> 
           <img src={AlarmImage} alt="Notification" />
@@ -92,16 +90,6 @@ const LogoImage = styled.img`
   width: auto;
 `;
 
-// 검색창 스타일
-const SearchBar = styled.input.attrs({
-  type: 'text',
-  placeholder: '검색...'
-})`
-  width: 50%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
 
 // 사용자 액션 버튼들의 스타일
 const UserActions = styled.div`

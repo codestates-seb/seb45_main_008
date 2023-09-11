@@ -1,22 +1,17 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import StockHolmLogo from "../../asset/images/StockHolmLogo.png";
 import { useNavigate } from "react-router-dom";  // 라우터의 네비게이션을 사용하기 위해 가져옴
 import { setLogoutState } from '../../reducer/member/loginSlice';
 import { useDispatch} from 'react-redux';
+import StockSearchComponent from './stockSearchComponent';
 
 const LogoutHeader: React.FC<LogoutHeaderProps> = ({ onLoginClick }) => {
   //reduc-toolkit 활용
   const dispatch = useDispatch();
 
-  const [searchValue, setSearchValue] = useState<string>("");  // 검색 값 상태 관리
   const navigate = useNavigate();  // 라우터 네비게이션 훅 사용
   
-
-  // 검색 입력 변경 핸들러
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
-  };
 
   const loginText = "로그인";  // 로그인 버튼 텍스트
 
@@ -28,14 +23,14 @@ const LogoutHeader: React.FC<LogoutHeaderProps> = ({ onLoginClick }) => {
   // isLoggedOut 변수를 항상 0으로 설정
   dispatch(setLogoutState());
 
-
   // 컴포넌트 렌더링
   return (
     <HeaderContainer>
       <LogoButton onClick={handleLogoClick}>
         <LogoImage src={StockHolmLogo} />
       </LogoButton>
-      <SearchBar value={searchValue} onChange={handleSearchChange} />
+      {/* <SearchBar value={searchValue} onChange={handleSearchChange} /> */}
+      <StockSearchComponent/>
       <LoginButton onClick={onLoginClick}>{loginText}</LoginButton>
     </HeaderContainer>
   );
@@ -76,16 +71,6 @@ const LogoImage = styled.img`
   width: auto;
 `;
 
-const SearchBar = styled.input.attrs({
-  type: "text",
-  placeholder: "검색...",
-})`
-  width: 50%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
-
 const LoginButton = styled.button`
   background-color: #fff;
   color: #2f4f4f;
@@ -98,5 +83,3 @@ const LoginButton = styled.button`
     background-color: #f2f2f2;
   }
 `;
-
-
