@@ -7,6 +7,7 @@ import { stockOrderSetReducer } from "../reducer/StockOrderSet-Reducer";
 import { companyIdReducer } from "../reducer/CompanyId-Reducer";
 import  memberInfoReducer from '../reducer/member/memberInfoSlice';
 import loginReducer from '../reducer/member/loginSlice';
+import cashSlice from '../reducer/cash/cashSlice';
 
 
 const store = configureStore({
@@ -19,6 +20,7 @@ const store = configureStore({
     companyId: companyIdReducer,
     memberInfo: memberInfoReducer,
     login: loginReducer,
+    cash: cashSlice,
   },
 });
 

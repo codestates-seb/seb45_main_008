@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import MemberInfoModal from './memberInfoModal'; // 경로는 실제 파일 위치에 따라 수정해야 합니다.
 import MemberWithdrawalModal from './memberWithdrawalModal'; // 경로는 실제 파일 위치에 따라 수정해야 합니다.
+import CashModal from './cashModal'; 
+import { RootState } from '../../store/config'; 
 
 const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
     const [selectedTab, setSelectedTab] = useState<number>(1);
+    const cashId = useSelector((state: RootState) => state.cash.cashId); // Get cashId from Redux store
 
     const handleTabChange = (tabNumber: number) => {
         setSelectedTab(tabNumber);
@@ -21,7 +25,7 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
                 </Tabs>
                 <TabContent>
                     {selectedTab === 1 && <MemberInfoModal onClose={onClose}/>}
-                    {selectedTab === 2 && <div>현금 Content</div>}
+                    <CashModal onClose={onClose} cashId={cashId} />
                     {selectedTab === 3 && <MemberWithdrawalModal onClose={onClose}/>} {/* 회원탈퇴 모달 추가 */}
                 </TabContent>
             </ModalContainer>
