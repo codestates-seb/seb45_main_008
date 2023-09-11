@@ -2,21 +2,21 @@ import { useState, useEffect } from "react";
 import useGetStockData from "./useGetStockData";
 
 const useGetStockChart = (companyId: number) => {
-  const { data } = useGetStockData(companyId);
+  const { stockPrice } = useGetStockData(companyId);
   const [chartData, setChartData] = useState<StockProps[]>([]);
   const [yAxisInterval, setYAxisInterval] = useState(0);
   const [yAxisMinPrice, setYAxisMinPrice] = useState(0);
 
   // 서버에서 차트 데이터 fetching -> 클라이언트 화면에 활용할 차트 데이터 + 차트 y축 수치 상태 변화
   useEffect(() => {
-    if (data) {
-      setChartData(data);
+    if (stockPrice) {
+      setChartData(stockPrice);
 
-      const { interval, min } = calculateYAxisOptions(data);
+      const { interval, min } = calculateYAxisOptions(stockPrice);
       setYAxisInterval(interval);
       setYAxisMinPrice(min);
     }
-  }, [data]);
+  }, [stockPrice]);
 
   const options = {
     xAxis: {

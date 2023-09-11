@@ -6,7 +6,6 @@ import { orderTypeBuying, orderTypeSelling } from "../../reducer/StockOrderType-
 const StockOrderBtn = (props: OwnProps) => {
   const { type } = props;
   const buttonText: string = type === "buying" ? "매수" : "매도";
-
   const dispatch = useDispatch();
 
   const handleStockOrderSet = () => {

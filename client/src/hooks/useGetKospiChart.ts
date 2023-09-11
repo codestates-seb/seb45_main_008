@@ -68,13 +68,13 @@ const useGetKospiChart = () => {
     height: "100%",
   };
 
-  return { isLoading, error, options, chartStyle };
+  return { kospiLoading: isLoading, kospiError: error, options, chartStyle };
 };
 
 export default useGetKospiChart;
 
 // kospi 차트 데이터 fetch 로직
-const getKospiData = async () => {
+export const getKospiData = async () => {
   const res = await axios.get("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/kospi");
   const chartData = res.data.output2;
   const kospiData = chartData.reverse();
