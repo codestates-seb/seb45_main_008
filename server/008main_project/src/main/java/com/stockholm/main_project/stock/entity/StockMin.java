@@ -38,7 +38,9 @@ public class StockMin {
     @Column
     //주식 최저가
     private String stck_lwpr;
-
+    @Column
+    //체결 거래량
+    private String cntg_vol;
     public void setTradeTime(LocalDateTime now) {
 
         // 문자열에서 시, 분, 초 추출

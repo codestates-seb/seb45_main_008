@@ -31,4 +31,6 @@ public class StockMinResponseDto {
     //주식 최저가
     @Schema(description = "주식 최저가", defaultValue = "7200")
     private String stck_lwpr;
+    @Schema(description = "체결 거래량", defaultValue = "32000")
+    private String cntg_vol;
 }

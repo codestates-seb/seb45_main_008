@@ -1,13 +1,8 @@
 package com.stockholm.main_project.stock.mapper;
 
-import com.stockholm.main_project.stock.dto.CompanyResponseDto;
-import com.stockholm.main_project.stock.dto.StockAsBiResponseDto;
-import com.stockholm.main_project.stock.dto.StockInfResponseDto;
-import com.stockholm.main_project.stock.dto.StockMinResponseDto;
-import com.stockholm.main_project.stock.entity.Company;
-import com.stockholm.main_project.stock.entity.StockAsBi;
-import com.stockholm.main_project.stock.entity.StockInf;
-import com.stockholm.main_project.stock.entity.StockMin;
+import com.stockholm.main_project.stock.dto.*;
+import com.stockholm.main_project.stock.entity.*;
+import com.stockholm.main_project.stock.service.StockOrderService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -50,4 +45,25 @@ public interface CompanyMapper {
     StockAsBiResponseDto stockAsBiToStockAsBiResponseDto(StockAsBi stockAsBi);
     @Mapping(source = "company.companyId", target = "companyId")
     StockMinResponseDto stockMinToStockMinResponseDto(StockMin stockMin);
+    @Mapping(source = "company.companyId", target = "companyId")
+    @Mapping(source = "member.memberId", target = "memberId")
+    StockOrderResponseDto stockOrderToStockOrderResponseDto(StockOrder stockOrder);
+    default List<StockHoldResponseDto> stockHoldToStockHoldResponseDto(List<StockHold> stockHolds) {
+        List<StockHoldResponseDto> stockHoldResponseDtos = new ArrayList<>();
+
+        for(StockHold stockHold : stockHolds) {
+            StockHoldResponseDto stockHoldResponseDto = new StockHoldResponseDto();
+
+            stockHoldResponseDto.setStockHoldId(stockHold.getStockHoldId());
+            stockHoldResponseDto.setCompanyId(stockHold.getCompany().getCompanyId());
+            stockHoldResponseDto.setCompanyKorName(stockHold.getCompany().getKorName());
+            stockHoldResponseDto.setMemberId(stockHold.getMember().getMemberId());
+            stockHoldResponseDto.setStockCount(stockHold.getStockCount());
+            stockHoldResponseDto.setPrice(stockHold.getPrice());
+            stockHoldResponseDto.setPercentage(0D);
+
+            stockHoldResponseDtos.add(stockHoldResponseDto);
+        }
+        return stockHoldResponseDtos;
+    }
 }

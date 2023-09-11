@@ -1,0 +1,34 @@
+package com.stockholm.main_project.stock.entity;
+
+import com.stockholm.main_project.audit.Auditable;
+import com.stockholm.main_project.member.entity.Member;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
+
+import javax.persistence.*;
+
+@Entity
+@Getter
+@Setter
+@NoArgsConstructor
+public class StockHold extends Auditable {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long stockHoldId;
+
+    @ManyToOne
+    @JoinColumn(name = "MEMBER_ID")
+    private Member member;
+
+    @ManyToOne
+    @JoinColumn(name = "COMPANY_ID")
+    private Company company;
+
+    @Column
+    private int stockCount;
+
+    @Column
+    private long price;
+
+}

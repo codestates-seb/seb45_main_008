@@ -1,5 +1,6 @@
 package com.stockholm.main_project.exception;
 
+import com.stockholm.main_project.stock.entity.StockAsBi;
 import lombok.Getter;
 
 public enum ExceptionCode {
@@ -10,7 +11,10 @@ public enum ExceptionCode {
     EMAIL_DUPLICATION(400, "이미 존재하는 이메일입니다."),
     INVALID_PASSWORD(404, "비밀번호가 일치하지 않거나 유효하지 않습니다."),
     INVALID_TOKEN(400, "유효하지 않은 토큰입니다"),
-    LOGIN_FAILED(401, "로그인에 실패하였습니다. 사용자 이름 또는 비밀번호를 확인해주세요");
+    LOGIN_FAILED(401, "로그인에 실패하였습니다. 사용자 이름 또는 비밀번호를 확인해주세요"),
+    STOCKASBI_NOT_FOUND(404, "호가 정보를 찾을 수 없습니다"),
+    STOCKHOLD_NOT_FOUND(404, "보유 주식 정보가 없습니다."),
+    INSUFFICIENT_STOCK(422,"보유 주식이 부족합니다");
 
     @Getter
     private int status;

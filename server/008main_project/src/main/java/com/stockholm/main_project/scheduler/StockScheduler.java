@@ -1,18 +1,12 @@
 package com.stockholm.main_project.scheduler;
 
-import com.stockholm.main_project.stock.entity.Company;
-import com.stockholm.main_project.stock.entity.Token;
-import com.stockholm.main_project.stock.service.CompanyService;
-import com.stockholm.main_project.stock.service.StockAsBiService;
-import com.stockholm.main_project.stock.service.StockMinService;
-import com.stockholm.main_project.stock.service.TokenService;
+import com.stockholm.main_project.stock.service.*;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
-import java.util.List;
 
 
 @Slf4j
@@ -22,42 +16,43 @@ public class StockScheduler {
     private final StockMinService stockMinService;
     private final CompanyService companyService;
     private final TokenService tokenService;
+    private final StockOrderService stockOrderService;
 
-    public StockScheduler(StockAsBiService stockAsBiService, StockMinService stockMinService, CompanyService companyService, TokenService tokenService) {
+    public StockScheduler(StockAsBiService stockAsBiService, StockMinService stockMinService, CompanyService companyService, TokenService tokenService, StockOrderService stockOrderService) {
         this.stockAsBiService = stockAsBiService;
-
         this.stockMinService = stockMinService;
         this.companyService = companyService;
         this.tokenService = tokenService;
+        this.stockOrderService = stockOrderService;
     }
 
-    @Scheduled(cron = "0 30/30 9-15 * * MON-FRI")
-    public void myScheduledStockAsBiMethod() throws InterruptedException {
-        // 이 메소드는 매주 월요일부터 금요일까지 9:30부터 15:30까지 30분 간격으로 실행됩니다.
-        // 원하는 작업을 여기에 추가하세요.
-        LocalDateTime start = LocalDateTime.now();
-        stockAsBiService.updateStockAsBi();
-        LocalDateTime end = LocalDateTime.now();
-        Duration duration = Duration.between(start, end);
-        System.out.println(duration.getSeconds());
-
-    }
-
-    @Scheduled(cron = "0 30/30 9-15 * * MON-FRI")
-    public void myScheduledStockMinMethod() throws InterruptedException {
-        // 이 메소드는 매주 월요일부터 금요일까지 9:30부터 15:30까지 30분 간격으로 실행됩니다.
-        // 원하는 작업을 여기에 추가하세요.
-        LocalDateTime start = LocalDateTime.now();
-        stockMinService.updateStockMin();
-        LocalDateTime end = LocalDateTime.now();
-        Duration duration = Duration.between(start, end);
-        System.out.println(duration.getSeconds());
-
-    }
+//    @Scheduled(cron = "0 30/30 9-15 * * MON-FRI")
+//    public void myScheduledStockAsBiMethod() throws InterruptedException {
+//        // 이 메소드는 매주 월요일부터 금요일까지 9:30부터 15:30까지 30분 간격으로 실행됩니다.
+//        // 원하는 작업을 여기에 추가하세요.
+//        LocalDateTime start = LocalDateTime.now();
+//        stockAsBiService.updateStockAsBi();
+//        LocalDateTime end = LocalDateTime.now();
+//        Duration duration = Duration.between(start, end);
+//        System.out.println(duration.getSeconds());
+//
+//    }
+//
+//    @Scheduled(cron = "0 30/30 9-15 * * MON-FRI")
+//    public void myScheduledStockMinMethod() throws InterruptedException {
+//        // 이 메소드는 매주 월요일부터 금요일까지 9:30부터 15:30까지 30분 간격으로 실행됩니다.
+//        // 원하는 작업을 여기에 추가하세요.
+//        LocalDateTime start = LocalDateTime.now();
+//        stockMinService.updateStockMin();
+//        LocalDateTime end = LocalDateTime.now();
+//        Duration duration = Duration.between(start, end);
+//        System.out.println(duration.getSeconds());
+//
+//    }
 
 //    @Scheduled(fixedRate = 100000000)
 //    public void run() throws InterruptedException {
-//        companyService.fillCompaines();
+//        stockOrderService.checkOrder();
 //    }
 
 //    @Scheduled(fixedRate = 10000000)

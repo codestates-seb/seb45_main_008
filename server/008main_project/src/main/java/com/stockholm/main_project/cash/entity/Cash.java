@@ -1,7 +1,7 @@
 package com.stockholm.main_project.cash.entity;
 
+import com.stockholm.main_project.audit.Auditable;
 import com.stockholm.main_project.member.entity.Member;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -17,24 +17,17 @@ import java.time.LocalDateTime;
 @Setter
 @NoArgsConstructor
 @EntityListeners(AuditingEntityListener.class)
-public class Cash {
+public class Cash extends Auditable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long moneyId;
+    private long cashId;
 
     @Column(nullable = false)
-    private String money;
+    private long money;
 
     @JoinColumn(name = "MEMBER_ID")
     @OneToOne(fetch = FetchType.LAZY)
     private Member member;
 
-    @Column(nullable = false)
-    @CreatedDate
-    private LocalDateTime createdAt;
-
-    @Column(nullable = false)
-    @LastModifiedDate
-    private LocalDateTime lastModifiedAt;
 }
