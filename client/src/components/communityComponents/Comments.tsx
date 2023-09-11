@@ -61,6 +61,8 @@ const Comments = ({ postId }: { postId: number }) => {
         </CommentInputSubmit>
         <CommentCount onClick={handleShowMoreComments}>
           {CommentText.replyCount}
+          {commentData.length}
+          {CommentText.replyText}
         </CommentCount>
         {commentData.slice(0, visibleComments).map((el) => (
           <CommentsDiv key={el.id}>&#187; {el.comments}</CommentsDiv>
@@ -74,7 +76,8 @@ export default Comments;
 
 const CommentText = {
   write: "작성",
-  replyCount: `댓글${commentData.length}개 모두보기`,
+  replyCount: "댓글",
+  replyText: "개 모두보기",
 };
 
 const CommentInput = styled.input`
@@ -84,8 +87,9 @@ const CommentInput = styled.input`
 `;
 const CommentInputSubmit = styled.button`
   outline: none;
-  border: 1px solid#40797;
-  background-color: #40797;
+  border: 1px solid#400797;
+  background-color: #400797;
+  color: white;
 `;
 const CommentContainer = styled.div`
   display: flex;

@@ -25,7 +25,7 @@ const MainPage = () => {
   const [isOAuthModalOpen, setOAuthModalOpen] = useState(false);
   const [isEmailLoginModalOpen, setEmailLoginModalOpen] = useState(false);
   const [isEmailSignupModalOpen, setEmailSignupModalOpen] = useState(false);
-  const [userEmail, setUserEmail] = useState('');
+  const [userEmail, setUserEmail] = useState("");
   const [isWelcomeModalOpen, setWelcomeModalOpen] = useState(false);
 
   const openOAuthModal = useCallback(() => {
@@ -54,16 +54,14 @@ const MainPage = () => {
     setEmailSignupModalOpen(false);
   }, []);
 
-
   const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] =
     useState(false);
 
-
   // 이메일 인증 모달을 열 때 사용자가 입력한 이메일을 저장하도록 변경
   const openEmailVerificationModal = useCallback((enteredEmail: string) => {
-    setEmailSignupModalOpen(false); 
+    setEmailSignupModalOpen(false);
     setEmailVerificationModalOpen(true);
-    setUserEmail(enteredEmail);  // 사용자가 입력한 이메일을 저장
+    setUserEmail(enteredEmail); // 사용자가 입력한 이메일을 저장
   }, []);
 
   const closeEmailVerificationModal = useCallback(() => {
@@ -80,7 +78,7 @@ const MainPage = () => {
 
   const closePasswordSettingModal = useCallback(() => {
     setPasswordSettingModalOpen(false);
-}, []);
+  }, []);
 
   const openWelcomeModal = useCallback(() => {
     setPasswordSettingModalOpen(false); // 비밀번호 설정 모달 닫기
@@ -148,10 +146,23 @@ const MainPage = () => {
         />
       )}
 
-      {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} />}
+      {isEmailLoginModalOpen && (
+        <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} />
+      )}
 
-      {isEmailSignupModalOpen && <EmailSignupModal onClose={closeEmailSignupModal} onRequestVerification={openEmailVerificationModal} />}
-      {isEmailVerificationModalOpen && <EmailVerificationModal onClose={closeEmailVerificationModal} onNextStep={openPasswordSettingModal} initialEmail={userEmail} />}
+      {isEmailSignupModalOpen && (
+        <EmailSignupModal
+          onClose={closeEmailSignupModal}
+          onRequestVerification={openEmailVerificationModal}
+        />
+      )}
+      {isEmailVerificationModalOpen && (
+        <EmailVerificationModal
+          onClose={closeEmailVerificationModal}
+          onNextStep={openPasswordSettingModal}
+          initialEmail={userEmail}
+        />
+      )}
 
       {isPasswordSettingModalOpen && (
         <PasswordSettingModal
@@ -176,6 +187,7 @@ export default MainPage;
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
+
   display: flex;
   flex-direction: column;
 `;

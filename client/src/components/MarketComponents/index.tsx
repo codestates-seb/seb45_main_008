@@ -1,51 +1,30 @@
 import styled from "styled-components";
-import axios from "axios";
-import { useState, useEffect } from "react";
+
+import MarketkospiChart from "./MarketKospiChart";
 
 const MarketSummary: React.FC = () => {
-  //컴포넌트 안쪽의 텍스트 변수
-  //컴포넌트 내부 텍스트 변수로 치환후 사용
-  const KospiDataServerUrl =
-    "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/kospi";
-  useEffect(() => {
-    // 컴포넌트가 마운트될 때 데이터를 가져오도록 useEffect를 사용
-    KospiDataFromServer();
-  }, []);
-
-  const KospiDataFromServer = async () => {
-    try {
-      const response = await axios.get(KospiDataServerUrl);
-      const KospiData = response.data;
-      setKospiDatas(KospiData);
-      console.log(kospiDatas, "kospi");
-    } catch (error) {
-      console.error("데이터 가져오기 중 오류 발생:", error);
-    }
-  };
-  const [kospiDatas, setKospiDatas] = useState<string | object>({});
-
   return (
     <Market>
       <MarketH3>{SummaryText.now}</MarketH3>
       <Kospiul>
-        <div>{SummaryText.kospi}</div>
+        <MarketkospiChart />
       </Kospiul>
 
       <News>
         <MarketH3>{SummaryText.liveNews}</MarketH3>
-        <A className="naver" href={NewsListLink.NaverNews}>
+        <A className="naver" href={NewsListLink.NaverNews} target="_blank">
           {SummaryText.naverNews}
         </A>
-        <A className="daum" href={NewsListLink.DaumNews}>
+        <A className="daum" href={NewsListLink.DaumNews} target="_blank">
           {SummaryText.daumNews}
         </A>
-        <A className="chosun" href={NewsListLink.chosunNews}>
+        <A className="chosun" href={NewsListLink.chosunNews} target="_blank">
           {SummaryText.chosunNews}
         </A>
-        <A className="donga" href={NewsListLink.dongaNews}>
+        <A className="donga" href={NewsListLink.dongaNews} target="_blank">
           {SummaryText.dongaNews}
         </A>
-        <A className="jtbc" href={NewsListLink.jtbcNews}>
+        <A className="jtbc" href={NewsListLink.jtbcNews} target="_blank">
           {SummaryText.jtbcNews}
         </A>
       </News>
@@ -72,7 +51,7 @@ const SummaryText: StockStatus = {
   news: "주요 뉴스",
   liveNews: "실시간 뉴스 바로가기",
   naverNews: "네이버뉴스",
-  daumNews: "네이버뉴스",
+  daumNews: "다음뉴스",
   chosunNews: "조선일보",
   dongaNews: "동아일보",
   jtbcNews: "jtbc",
@@ -99,12 +78,14 @@ const News = styled.div`
   align-content: space-around;
 `;
 const A = styled.a`
+  border-radius: 10px 10px;
   &.naver {
-    background-color: white;
-    border: 1px solid green;
+    color: white;
+    background-color: #088a08;
+    border: none;
 
     &:hover {
-      background-color: green;
+      background-color: #0b610b;
       color: white;
     }
   }

@@ -21,19 +21,19 @@ const MarketInfo: React.FC<Props> = () => {
       </style>
 
       <MarketInfoStyle>
-        <TabStyle
-          onClick={() => handleTabStyle(1)}
-          className={`tab ${tabStyle === 1 ? "active-tab" : "inactive-tab"}`}
-        >
-          <Market onClick={() => handleTabClick("market")}>
+        <TabStyle onClick={() => handleTabStyle(1)}>
+          <Market
+            onClick={() => handleTabClick("market")}
+            className={`tab ${tabStyle === 1 ? "active-tab" : "inactive-tab"}`}
+          >
             {MarketInfoText.MarketSummary}
           </Market>
         </TabStyle>
-        <TabStyle
-          onClick={() => handleTabStyle(2)}
-          className={`tab ${tabStyle === 2 ? "active-tab" : "inactive-tab"}`}
-        >
-          <StockList onClick={() => handleTabClick("stockList")}>
+        <TabStyle onClick={() => handleTabStyle(2)}>
+          <StockList
+            onClick={() => handleTabClick("stockList")}
+            className={`tab ${tabStyle === 2 ? "active-tab" : "inactive-tab"}`}
+          >
             {MarketInfoText.AllStockList}
           </StockList>
         </TabStyle>
@@ -55,7 +55,17 @@ const MarketInfoText = {
 
 const TabStyle = styled.div`
   cursor: pointer;
+`;
+//시장정보 탭의 프레임 스타일
+const MarketInfoStyle = styled.div`
+  display: flex;
+  justify-content: space-around;
+`;
 
+//시장정보 탭의 시장요약 스타일
+const Market = styled.div`
+  text-align: center;
+  cursor: pointer;
   &.active-tab {
     transition: all 0.4s;
     border: 1px solid#2d4f51;
@@ -75,20 +85,27 @@ const TabStyle = styled.div`
     font-family: "Noto Sans KR", sans-serif;
   }
 `;
-//시장정보 탭의 프레임 스타일
-const MarketInfoStyle = styled.div`
-  display: flex;
-  justify-content: space-around;
-`;
-
-//시장정보 탭의 시장요약 스타일
-const Market = styled.div`
-  text-align: center;
-  cursor: pointer;
-`;
 
 //시장정보 탭의 전체주식 스타일
 const StockList = styled.div`
   cursor: pointer;
+  &.active-tab {
+    transition: all 0.4s;
+    border: 1px solid#2d4f51;
+    background-color: #2d4f51;
+    padding: 10px 30px;
+    font-size: 14px;
+    border-radius: 60px 60px;
+    color: #fff;
+    font-family: "Noto Sans KR", sans-serif;
+  }
+  &.inactive-tab {
+    border: 1px solid#2d4f51;
+    padding: 10px;
+    color: #2d4f51;
+    font-size: 14px;
+    border-radius: 60px 60px;
+    font-family: "Noto Sans KR", sans-serif;
+  }
 `;
 //시장정보 탭의 시장이슈 스타일
