@@ -35,27 +35,33 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) =
   // 로그인 버튼 클릭 핸들러
   const handleLoginClick = async () => {
     try {
-      // 백엔드에 로그인 요청
       const response = await axios.post("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members/login", {
         email,
         password,
       });
       if (response.status === 200) {
-
+        const authToken = response.headers['authorization'];
+  
+        // JWT 토큰 디코딩
+        const base64Url = authToken.split('.')[1];
+        const base64 = base64Url.replace('-', '+').replace('_', '/');
+        const decodedToken = JSON.parse(window.atob(base64));
+  
+        // memberId 상태 업데이트하기
+        if (decodedToken && decodedToken.memberId) {
+          dispatch(updateMemberId(decodedToken.memberId));
+        }
+  
+        const refreshToken = response.headers['refreshToken'];
+  
         // 로그인 상태로 만들기
         dispatch(setLoginState(true)); 
-
-        // memberId 상태 업데이트하기
-        dispatch(updateMemberId(response.data.memberId));
-
-        const authToken = response.headers['authorization'];
-        const accessToken = response.headers['accessToken'];
-        const refreshToken = response.headers['refreshToken'];
-
+  
         // 토큰들을 로컬 스토리지에 저장
         if(authToken) localStorage.setItem('authToken', authToken);
-        if(accessToken) localStorage.setItem('accessToken', accessToken);
+  
         if(refreshToken) localStorage.setItem('refreshToken', refreshToken);
+        
         onLogin();
         onClose();
       } else {
