@@ -5,10 +5,9 @@ const MarketServerUrl =
   "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/companies";
 
 const MarketStockList: React.FC = () => {
-  const [marketStockList, setMarketStockList] = useState<any[]>([]); // 타입을 명시하고 초기 상태를 빈 배열로 설정
+  const [marketStockList, setMarketStockList] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
   useEffect(() => {
-    // 컴포넌트가 마운트될 때 데이터를 가져오도록 useEffect를 사용
     MarketDataFromServer();
   }, []);
 
@@ -24,7 +23,6 @@ const MarketStockList: React.FC = () => {
     }
   };
   const SortName = () => {
-    // 정렬 함수를 수정하여 즉시 정렬 적용
     const sortedList = [...marketStockList];
     sortedList.sort((a, b) => a.korName.localeCompare(b.korName));
     setMarketStockList(sortedList);
@@ -42,16 +40,19 @@ const MarketStockList: React.FC = () => {
       </StockListTitle>
 
       {marketStockList.map((el) => (
-        <div>
-          {isLoading === true ? (
-            <div>{MarketStockLists.isLoading}</div>
-          ) : (
-            <StockName key={el.korName}>{el.korName}</StockName>
-          )}
-          <StockCode key={el.code}>{el.code}</StockCode>
-          <br />
-          <StockInfo>{el.stockInfResponseDto}</StockInfo>
-        </div>
+        <StockListInfo>
+          <div>
+            {isLoading === true ? (
+              <div>{MarketStockLists.isLoading}</div>
+            ) : (
+              <StockName key={el.korName}>{el.korName}</StockName>
+            )}
+            <StockCode key={el.code}>{el.code}</StockCode>
+            <br />
+            <StockInfo>{el.stockInfResponseDto}</StockInfo>
+          </div>
+          <AfterLine></AfterLine>
+        </StockListInfo>
       ))}
     </div>
   );
@@ -69,7 +70,7 @@ const MarketStockLists = {
 const StockListTitle = styled.div`
   display: flex;
   justify-content: space-around;
-  margin-top: 20px;
+  margin-top: 30px;
   margin-bottom: 20px;
 `;
 const StockListDetail = styled.div`
@@ -81,6 +82,16 @@ const StockListDetail = styled.div`
   transition: all.3s;
   &:hover {
     padding: 5px 20px;
+  }
+`;
+
+const AfterLine = styled.div`
+  border-bottom: 1px solid#f1f1f1;
+`;
+
+const StockListInfo = styled.div`
+  &:hover {
+    background-color: #f3f3f3;
   }
 `;
 const StockName = styled.div``;

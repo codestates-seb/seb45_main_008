@@ -50,7 +50,12 @@ const useGetKospiChart = () => {
         name: "코스피 지수",
         type: "candlestick",
         data: kospiData.map((kospi: KospiProps) => {
-          return [kospi.bstp_nmix_oprc, kospi.bstp_nmix_prpr, kospi.bstp_nmix_lwpr, kospi.bstp_nmix_hgpr];
+          return [
+            kospi.bstp_nmix_oprc,
+            kospi.bstp_nmix_prpr,
+            kospi.bstp_nmix_lwpr,
+            kospi.bstp_nmix_hgpr,
+          ];
         }),
         yAxisIndex: 0,
       },
@@ -75,7 +80,9 @@ export default useGetKospiChart;
 
 // kospi 차트 데이터 fetch 로직
 export const getKospiData = async () => {
-  const res = await axios.get("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/kospi");
+  const res = await axios.get(
+    "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/kospi"
+  );
   const chartData = res.data.output2;
   const kospiData = chartData.reverse();
 

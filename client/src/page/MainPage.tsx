@@ -55,7 +55,8 @@ const MainPage = () => {
     setEmailSignupModalOpen(false);
   }, []);
 
-  const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] = useState(false);
+  const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] =
+    useState(false);
 
   // 이메일 인증 모달을 열 때 사용자가 입력한 이메일을 저장하도록 변경
   const openEmailVerificationModal = useCallback((enteredEmail: string) => {
@@ -68,7 +69,8 @@ const MainPage = () => {
     setEmailVerificationModalOpen(false);
   }, []);
 
-  const [isPasswordSettingModalOpen, setPasswordSettingModalOpen] = useState(false);
+  const [isPasswordSettingModalOpen, setPasswordSettingModalOpen] =
+    useState(false);
 
   const openPasswordSettingModal = useCallback(() => {
     setEmailVerificationModalOpen(false); // 이메일 인증 모달 닫기
@@ -94,7 +96,9 @@ const MainPage = () => {
     setIsLoggedIn(true);
   };
 
-  const [selectedMenu, setSelectedMenu] = useState<"관심목록" | "투자목록">("투자목록"); // Default menu is 관심목록
+  const [selectedMenu, setSelectedMenu] = useState<"관심목록" | "투자목록">(
+    "투자목록"
+  ); // Default menu is 관심목록
 
   const handleMenuChange = (menu: "관심목록" | "투자목록") => {
     setSelectedMenu(menu);
@@ -106,24 +110,60 @@ const MainPage = () => {
 
   return (
     <Container>
-      {isLoggedIn ? <LoginHeader onLogoutClick={handleLogout} /> : <LogoutHeader onLoginClick={openOAuthModal} />}
+      {isLoggedIn ? (
+        <LoginHeader onLogoutClick={handleLogout} />
+      ) : (
+        <LogoutHeader onLoginClick={openOAuthModal} />
+      )}
       <Main>
         <CompareChartSection />
         {!expandScreen.left && (
-          <LeftSection>{selectedMenu === "관심목록" ? <WatchList key="watchlist" currentListType={selectedMenu} onChangeListType={handleMenuChange} /> : <Holdings currentListType={selectedMenu} onChangeListType={handleMenuChange} />}</LeftSection>
+          <LeftSection>
+            {selectedMenu === "관심목록" ? (
+              <WatchList
+                key="watchlist"
+                currentListType={selectedMenu}
+                onChangeListType={handleMenuChange}
+              />
+            ) : (
+              <Holdings
+                currentListType={selectedMenu}
+                onChangeListType={handleMenuChange}
+              />
+            )}
+          </LeftSection>
         )}
         <CentralChart />
         <StockOrderSection />
         {!expandScreen.right && <TabContainerPage></TabContainerPage>}
       </Main>
       {isOAuthModalOpen && (
-        <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} onEmailSignupClick={openEmailSignupModal} onWatchListClick={() => handleMenuChange("관심목록")} onHoldingsClick={() => handleMenuChange("투자목록")} />
+        <OAuthLoginModal
+          onClose={closeOAuthModal}
+          onEmailLoginClick={openEmailLoginModal}
+          onEmailSignupClick={openEmailSignupModal}
+          onWatchListClick={() => handleMenuChange("관심목록")}
+          onHoldingsClick={() => handleMenuChange("투자목록")}
+        />
       )}
 
-      {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} />}
+      {isEmailLoginModalOpen && (
+        <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} />
+      )}
 
-      {isEmailSignupModalOpen && <EmailSignupModal onClose={closeEmailSignupModal} onRequestVerification={openEmailVerificationModal} />}
-      {isEmailVerificationModalOpen && <EmailVerificationModal onClose={closeEmailVerificationModal} onNextStep={openPasswordSettingModal} initialEmail={userEmail} />}
+      {isEmailSignupModalOpen && (
+        <EmailSignupModal
+          onClose={closeEmailSignupModal}
+          onRequestVerification={openEmailVerificationModal}
+        />
+      )}
+      {isEmailVerificationModalOpen && (
+        <EmailVerificationModal
+          onClose={closeEmailVerificationModal}
+          onNextStep={openPasswordSettingModal}
+          initialEmail={userEmail}
+        />
+      )}
 
       {isPasswordSettingModalOpen && (
         <PasswordSettingModal
@@ -148,6 +188,7 @@ export default MainPage;
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
+
   display: flex;
   flex-direction: column;
 `;

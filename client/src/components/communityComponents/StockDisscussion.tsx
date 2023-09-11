@@ -7,10 +7,9 @@ const StockDisscussionUrl =
 const StockDisscussion: React.FC = () => {
   const [StockDisscussions, setStockDisscussions] = useState<StockDiscussion[]>(
     []
-  ); // 타입을 명시하고 초기 상태를 빈 배열로 설정
+  );
 
   useEffect(() => {
-    // 컴포넌트가 마운트될 때 데이터를 가져오도록 useEffect를 사용
     MarketDataFromServer();
   }, []);
 
@@ -35,7 +34,6 @@ export default StockDisscussion;
 interface StockDiscussion {
   id: number;
   korName: string;
-  // 다른 필드들도 여기에 추가할 수 있습니다.
 }
 const DisscussionList = styled.div`
   display: flex;
