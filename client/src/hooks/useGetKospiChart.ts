@@ -34,6 +34,11 @@ const useGetKospiChart = () => {
         },
       },
     ],
+    dataZoom: [
+      {
+        type: "inside",
+      },
+    ],
 
     series: [
       {
