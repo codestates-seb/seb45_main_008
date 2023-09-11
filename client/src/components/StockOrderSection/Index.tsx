@@ -117,7 +117,7 @@ const Container = styled.aside<{ orderSet: boolean }>`
 
   .ErrorContainer {
     width: 100%;
-    height: 75%;
+    height: 80%;
     display: flex;
     flex-direction: column;
     justify-content: center;

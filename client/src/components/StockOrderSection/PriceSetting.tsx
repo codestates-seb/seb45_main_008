@@ -30,42 +30,26 @@ const PriceSetting = (props: OwnProps) => {
     dispatch(minusStockOrderPrice(priceInterval));
   };
 
-  // 거래가 직접 기입 시  1) 음수 => 0으로 재설정  2) priceInteval로 나누어 떨어지지 않으면 => 나누어 떨어지는 수로 변경
+  // 거래가 직접 기입 시
   const handleWriteOrderPrice = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
-    // const numberInputValue = parseInt(inputValue, 10);
+    const numberInputValue = parseInt(inputValue, 10);
 
-    if (inputValue === "") {
-      dispatch(setStockOrderPrice(0));
+    // 1) 음수를 임력하거나, 숫자 아닌 값 기입 시 -> 입력 무시  2) 값을 다 지워서 빈 문자열인 경우 -> 0으로 설정
+    if (numberInputValue < 0 || isNaN(numberInputValue)) {
+      if (inputValue === "") {
+        dispatch(setStockOrderPrice(0));
+      }
+      return;
     }
 
-    if (event.target.value !== "") {
-      const inputValue = parseInt(event.target.value, 10);
-      dispatch(setStockOrderPrice(inputValue));
-    }
-
-    // if(inputValue < 0) {
-    //   dispatch(setStockOrderPrice(0));
-    // }
-
-    // if(inputValue % priceInterval !== 0){
-    //   const remainder = inputValue % priceInterval;
-    //   const modifiedInputValue = inputValue - remainder;
-    //   dispatch(setStockOrderPrice(modifiedInputValue));
-    // }
+    dispatch(setStockOrderPrice(numberInputValue));
   };
 
   // 종목이 달리지면 -> 가격도 변경
   useEffect(() => {
     dispatch(setStockOrderPrice(defaultPrice));
   }, [companyId]);
-
-  // 입력 값 -> event 속성에 담겨 있음
-  // onChange 이벤트 발생할 때 -> 해당 입력값을 Price 관련 전역 상태로 (전역 상태 관리함수 활용)
-  // set => 으로 actionPayload를 설정해야하는데,,,
-  // payload에 넘기기 전에 1) 0보다 큰 값인지, 2) PriceInterval로 나누어 떨어지는지 => 안된다면
-  // 전역 상태관리 함수를 2번 사용? 1) 일단 입력값으로 바꾸고 2) 2차로 필터링 해서 바꾸고?
-  // 2차 변경 때 -> 음수면 0으로 바꾸고,,, Iterval이랑 안맞으면 -> Interval로 나눈 나머지 값 차감
 
   return (
     <Container>

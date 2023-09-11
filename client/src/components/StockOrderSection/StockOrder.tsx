@@ -64,7 +64,7 @@ const OrderFailed = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(209, 209, 209, 0.75);
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 2;
   display: flex;
   justify-content: center;
@@ -109,7 +109,7 @@ const OrderConfirm = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
-  background-color: rgba(209, 209, 209, 0.75);
+  background-color: rgba(0, 0, 0, 0.5);
   z-index: 2;
   display: flex;
   justify-content: center;
