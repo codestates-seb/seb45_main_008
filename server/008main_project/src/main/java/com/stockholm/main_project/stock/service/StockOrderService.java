@@ -62,6 +62,16 @@ public class StockOrderService {
             return buyStock(member, price, stockCount, companyId); // 구매 로직
         else if(Long.parseLong(stockAsBi.getAskp5()) == price && Integer.parseInt(stockAsBi.getAskp_rsqn5()) > stockCount)
             return buyStock(member, price, stockCount, companyId); // 구매 로직
+        else if(Long.parseLong(stockAsBi.getAskp6()) == price && Integer.parseInt(stockAsBi.getAskp_rsqn6()) > stockCount)
+            return buyStock(member, price, stockCount, companyId); // 구매 로직
+        else if(Long.parseLong(stockAsBi.getAskp7()) == price && Integer.parseInt(stockAsBi.getAskp_rsqn7()) > stockCount)
+            return buyStock(member, price, stockCount, companyId); // 구매 로직
+        else if(Long.parseLong(stockAsBi.getAskp8()) == price && Integer.parseInt(stockAsBi.getAskp_rsqn8()) > stockCount)
+            return buyStock(member, price, stockCount, companyId); // 구매 로직
+        else if(Long.parseLong(stockAsBi.getAskp9()) == price && Integer.parseInt(stockAsBi.getAskp_rsqn9()) > stockCount)
+            return buyStock(member, price, stockCount, companyId); // 구매 로직
+        else if(Long.parseLong(stockAsBi.getAskp10()) == price && Integer.parseInt(stockAsBi.getAskp_rsqn10()) > stockCount)
+            return buyStock(member, price, stockCount, companyId); // 구매 로직
         else
             return reserveStock(member, price, stockCount, companyId, StockOrder.OrderTypes.BUY); //예약 구매 로직
     }
@@ -152,6 +162,16 @@ public class StockOrderService {
             return reserveBuyStock(stockOrder); // 구매 로직
         else if(Long.parseLong(stockAsBi.getAskp5()) == price && Integer.parseInt(stockAsBi.getAskp_rsqn5()) > stockCount)
             return reserveBuyStock(stockOrder); // 구매 로직
+        else if(Long.parseLong(stockAsBi.getAskp6()) == price && Integer.parseInt(stockAsBi.getAskp_rsqn6()) > stockCount)
+            return reserveBuyStock(stockOrder); // 구매 로직
+        else if(Long.parseLong(stockAsBi.getAskp7()) == price && Integer.parseInt(stockAsBi.getAskp_rsqn7()) > stockCount)
+            return reserveBuyStock(stockOrder); // 구매 로직
+        else if(Long.parseLong(stockAsBi.getAskp8()) == price && Integer.parseInt(stockAsBi.getAskp_rsqn8()) > stockCount)
+            return reserveBuyStock(stockOrder); // 구매 로직
+        else if(Long.parseLong(stockAsBi.getAskp9()) == price && Integer.parseInt(stockAsBi.getAskp_rsqn9()) > stockCount)
+            return reserveBuyStock(stockOrder); // 구매 로직
+        else if(Long.parseLong(stockAsBi.getAskp10()) == price && Integer.parseInt(stockAsBi.getAskp_rsqn10()) > stockCount)
+            return reserveBuyStock(stockOrder); // 구매 로직
         else {
             return null; // 아무것도 안함
         }
@@ -171,6 +191,16 @@ public class StockOrderService {
         else if(Long.parseLong(stockAsBi.getBidp4()) == price && Integer.parseInt(stockAsBi.getBidp_rsqn4()) > stockCount)
             return reserveSellStock(stockOrder); // 판매 로직
         else if(Long.parseLong(stockAsBi.getBidp5()) == price && Integer.parseInt(stockAsBi.getBidp_rsqn5()) > stockCount)
+            return reserveSellStock(stockOrder); // 판매 로직
+        else if(Long.parseLong(stockAsBi.getBidp6()) == price && Integer.parseInt(stockAsBi.getBidp_rsqn6()) > stockCount)
+            return reserveSellStock(stockOrder); // 판매 로직
+        else if(Long.parseLong(stockAsBi.getBidp7()) == price && Integer.parseInt(stockAsBi.getBidp_rsqn7()) > stockCount)
+            return reserveSellStock(stockOrder); // 판매 로직
+        else if(Long.parseLong(stockAsBi.getBidp8()) == price && Integer.parseInt(stockAsBi.getBidp_rsqn8()) > stockCount)
+            return reserveSellStock(stockOrder); // 판매 로직
+        else if(Long.parseLong(stockAsBi.getBidp9()) == price && Integer.parseInt(stockAsBi.getBidp_rsqn9()) > stockCount)
+            return reserveSellStock(stockOrder); // 판매 로직
+        else if(Long.parseLong(stockAsBi.getBidp10()) == price && Integer.parseInt(stockAsBi.getBidp_rsqn10()) > stockCount)
             return reserveSellStock(stockOrder); // 판매 로직
         else
             return null; // 아무것도 안함
@@ -254,6 +284,16 @@ public class StockOrderService {
         else if(Long.parseLong(stockAsBi.getBidp4()) == price && Integer.parseInt(stockAsBi.getBidp_rsqn4()) > stockCount)
             return sellStock(member, price, stockCount, companyId); // 판매 로직
         else if(Long.parseLong(stockAsBi.getBidp5()) == price && Integer.parseInt(stockAsBi.getBidp_rsqn5()) > stockCount)
+            return sellStock(member, price, stockCount, companyId); // 판매 로직
+        else if(Long.parseLong(stockAsBi.getBidp6()) == price && Integer.parseInt(stockAsBi.getBidp_rsqn6()) > stockCount)
+            return sellStock(member, price, stockCount, companyId); // 판매 로직
+        else if(Long.parseLong(stockAsBi.getBidp7()) == price && Integer.parseInt(stockAsBi.getBidp_rsqn7()) > stockCount)
+            return sellStock(member, price, stockCount, companyId); // 판매 로직
+        else if(Long.parseLong(stockAsBi.getBidp8()) == price && Integer.parseInt(stockAsBi.getBidp_rsqn8()) > stockCount)
+            return sellStock(member, price, stockCount, companyId); // 판매 로직
+        else if(Long.parseLong(stockAsBi.getBidp9()) == price && Integer.parseInt(stockAsBi.getBidp_rsqn9()) > stockCount)
+            return sellStock(member, price, stockCount, companyId); // 판매 로직
+        else if(Long.parseLong(stockAsBi.getBidp10()) == price && Integer.parseInt(stockAsBi.getBidp_rsqn10()) > stockCount)
             return sellStock(member, price, stockCount, companyId); // 판매 로직
         else
             return reserveStock(member, price, stockCount, companyId, StockOrder.OrderTypes.SELL); //예약 판매 로직
