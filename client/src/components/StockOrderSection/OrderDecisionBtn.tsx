@@ -4,7 +4,7 @@ import { styled } from "styled-components";
 import { StateProps } from "../../models/stateProps";
 import { OrderTypeProps } from "../../models/orderTypeProps";
 import { setStockOrderVolume } from "../../reducer/StockOrderVolume-Reducer";
-import { openDecisionWindow } from "../../reducer/setDecisionWindow-Reducer";
+import { openDecisionWindow } from "../../reducer/SetDecisionWindow-Reducer";
 
 const availableMoneyText01: string = "최대";
 const availableMoneyText02: string = "원";

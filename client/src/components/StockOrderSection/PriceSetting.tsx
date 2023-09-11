@@ -21,11 +21,6 @@ const PriceSetting = (props: OwnProps) => {
   const defaultPrice = existSellingPrice[0];
   const priceInterval = existSellingPrice[1] - existSellingPrice[0];
 
-  // 초기 설정값 세팅
-  useEffect(() => {
-    dispatch(setStockOrderPrice(defaultPrice));
-  }, [companyId]);
-
   // 거래가 증가/감소
   const handlePlusOrderPrice = () => {
     dispatch(plusStockOrderPrice(priceInterval));
@@ -35,13 +30,34 @@ const PriceSetting = (props: OwnProps) => {
     dispatch(minusStockOrderPrice(priceInterval));
   };
 
+  // 거래가 직접 기입 시
+  const handleWriteOrderPrice = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    const numberInputValue = parseInt(inputValue, 10);
+
+    // 1) 음수를 임력하거나, 숫자 아닌 값 기입 시 -> 입력 무시  2) 값을 다 지워서 빈 문자열인 경우 -> 0으로 설정
+    if (numberInputValue < 0 || isNaN(numberInputValue)) {
+      if (inputValue === "") {
+        dispatch(setStockOrderPrice(0));
+      }
+      return;
+    }
+
+    dispatch(setStockOrderPrice(numberInputValue));
+  };
+
+  // 종목이 달리지면 -> 가격도 변경
+  useEffect(() => {
+    dispatch(setStockOrderPrice(defaultPrice));
+  }, [companyId]);
+
   return (
     <Container>
       <div className="PriceCategoryBox">
         <div className="Title">{priceSettingTitle}</div>
       </div>
       <div className="PriceSettingBox">
-        <PriceController defaultValue={orderPrice} value={orderPrice} />
+        <PriceController defaultValue={orderPrice} value={orderPrice} onChange={handleWriteOrderPrice} />
         <UnitContent>{unitText}</UnitContent>
         <div className="DirectionBox">
           <button className="PriceUp" onClick={handlePlusOrderPrice}>

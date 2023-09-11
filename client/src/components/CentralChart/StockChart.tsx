@@ -46,7 +46,7 @@ const StockChart = () => {
 
     companyList.forEach((company: CompanyProps) => {
       if (company.korName === searchWord) {
-        searchResult = "ExistCompany";
+        searchResult = "existCompany";
         dispatch(changeCompanyId(company.companyId));
       }
     });

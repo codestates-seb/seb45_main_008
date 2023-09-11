@@ -32,11 +32,11 @@ const StockPrice = (props: StockPriceProps) => {
   }, [stockPrice]);
 
   if (stockPriceLoading) {
-    return <></>;
+    return;
   }
 
-  if (stockPriceError) {
-    return <></>;
+  if (stockPriceError || stockPrice.length === 0) {
+    return;
   }
 
   // 전날 종가 데이터 -> 1) 일/월 : 금요일 종가로 설정  2) 화~토 : 전날 종가로 설정

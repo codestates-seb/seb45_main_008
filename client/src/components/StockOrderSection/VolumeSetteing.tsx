@@ -24,7 +24,9 @@ const VolumeSetting = () => {
   const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
   const orderVolume = useSelector((state: StateProps) => state.stockOrderVolume);
 
-  const maximumBuyingVolume = Math.trunc(dummyMoney / orderPrice);
+  // 🎾 임시로직 추가
+  // const maximumBuyingVolume = Math.trunc(dummyMoney / orderPrice);
+  const maximumBuyingVolume = orderPrice !== 0 ? Math.trunc(dummyMoney / orderPrice) : Math.trunc(dummyMoney / 1);
 
   const handlePlusOrderVolume = () => {
     // 매수 -> 증가 버튼 클릭 시, 최대 구매수량 보다 낮으면 개수 1증가
@@ -40,6 +42,26 @@ const VolumeSetting = () => {
   const handleMinusOrderVolume = () => {
     if (0 < orderVolume) {
       dispatch(minusStockOrderVolume());
+    }
+  };
+
+  // 거래량 직접 기입 시
+  const handleWriteOrderVolume = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    const numberInputValue = parseInt(inputValue, 10);
+
+    // 1) 음수를 임력하거나, 숫자 아닌 값 기입 시 -> 입력 무시  2) 값을 다 지워서 빈 문자열인 경우 -> 0으로 설정  3) 최대 구매가능 수량 보다 높게 기입 -> 입력 무시
+    if (numberInputValue < 0 || isNaN(numberInputValue)) {
+      if (inputValue === "") {
+        dispatch(setStockOrderVolume(0));
+      }
+      return;
+    }
+
+    if (maximumBuyingVolume < numberInputValue) {
+      return;
+    } else {
+      dispatch(setStockOrderVolume(numberInputValue));
     }
   };
 
@@ -75,7 +97,7 @@ const VolumeSetting = () => {
         </div>
       </TitleContainer>
       <VolumeSettingBox>
-        <VolumeController defaultValue={orderVolume} value={orderVolume} />
+        <VolumeController defaultValue={orderVolume} value={orderVolume} onChange={handleWriteOrderVolume} />
         <UnitContent>{volumeUnit}</UnitContent>
         <div className="DirectionContainer">
           <button className="VolumeUp" onClick={handlePlusOrderVolume}>

@@ -12,11 +12,11 @@ const StockPriceList = () => {
   const { stockInfo, stockInfoLoading, stockInfoError } = useGetStockInfo(companyId);
 
   if (stockInfoLoading) {
-    return <></>;
+    return;
   }
 
   if (stockInfoError) {
-    return <></>;
+    return;
   }
 
   // 1) 당일 매도/매수호가 및 거래량
@@ -49,17 +49,17 @@ const StockPriceList = () => {
   */
   const existSellingPrice = sellingPrice.filter((selling) => selling.price !== 0);
   const existBuyingPrice = buyingPrice.filter((buyingPrice) => buyingPrice.price !== 0);
-  const priceInterval: number = existSellingPrice[existSellingPrice.length - 1].price - existBuyingPrice[0].price;
+  // const priceInterval: number = existSellingPrice[existSellingPrice.length - 1].price - existBuyingPrice[0].price;
 
-  for (let i = 0; existSellingPrice.length < 10; i++) {
-    const dummySellingData = { price: existSellingPrice[0].price + priceInterval, volume: 0 };
-    existSellingPrice.unshift(dummySellingData);
-  }
+  // for (let i = 0; existSellingPrice.length < 10; i++) {
+  //   const dummySellingData = { price: existSellingPrice[0].price + priceInterval, volume: 0 };
+  //   existSellingPrice.unshift(dummySellingData);
+  // }
 
-  for (let i = 0; existBuyingPrice.length < 10; i++) {
-    const dummyBuyingData = { price: existBuyingPrice[existBuyingPrice.length - 1].price - priceInterval, volume: 0 };
-    existBuyingPrice.push(dummyBuyingData);
-  }
+  // for (let i = 0; existBuyingPrice.length < 10; i++) {
+  //   const dummyBuyingData = { price: existBuyingPrice[existBuyingPrice.length - 1].price - priceInterval, volume: 0 };
+  //   existBuyingPrice.push(dummyBuyingData);
+  // }
 
   // 1) 매도/매수호가 종합  2) 매수/매도호가 거래량 종합
   const sellingAndBuyingPrice = [...existSellingPrice, ...existBuyingPrice];
