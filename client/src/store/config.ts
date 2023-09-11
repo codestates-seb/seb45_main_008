@@ -6,7 +6,7 @@ import { stockOrderSetReducer } from "../reducer/StockOrderSet-Reducer";
 import { companyIdReducer } from "../reducer/CompanyId-Reducer";
 import memberInfoReducer from "../reducer/member/memberInfoSlice";
 import { stockOrderVolumeReducer } from "../reducer/StockOrderVolume-Reducer";
-import { setDecisionWindowReducer } from "../reducer/setDecisionWindow-Reducer";
+import { setDecisionWindowReducer } from "../reducer/SetDecisionWindow-Reducer";
 
 const store = configureStore({
   reducer: {

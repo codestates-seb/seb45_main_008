@@ -21,12 +21,16 @@ import dummyLogo from "../../asset/CentralSectionMenu-dummyImg.png";
 import { useState } from "react";
 
 const StockOrderSection = () => {
-  // 🔴 로그인 구현될 때까지 임시
-  const [login, setLogin] = useState(true);
-
   const dispatch = useDispatch();
   const companyId = useSelector((state: StateProps) => state.companyId);
   const stockOrderSet = useSelector((state: StateProps) => state.stockOrderSet);
+
+  // 🔴 로그인 구현될 때까지 임시
+  const [login, setLogin] = useState(true);
+  if (companyId === 10000000) {
+    setLogin(true);
+  }
+  //
 
   const { stockInfo, stockInfoLoading, stockInfoError } = useGetStockInfo(companyId);
   const { stockPrice, stockPriceLoading, stockPriceError } = useGetStockData(companyId);
@@ -78,7 +82,7 @@ const StockOrderSection = () => {
               </div>
             </div>
           </StockName>
-          <StockOrder />
+          <StockOrder corpName={corpName} />
           <OrderResult />
         </>
       ) : (
