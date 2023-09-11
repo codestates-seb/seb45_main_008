@@ -30,12 +30,12 @@ const LoginHeader: React.FC<LoginHeaderProps> = ({ onLogoutClick }) => {
       <SearchBar value={searchValue} onChange={handleSearchChange} />
       <UserActions>
         <NotificationButton> 
-          <img src={AlarmImage} alt="Notification" />  // 알림 이미지
+          <img src={AlarmImage} alt="Notification" />
         </NotificationButton>
         <ProfileButton>
-          <ProfileImage src={SampleProfile} />  // 프로필 이미지
+          <ProfileImage src={SampleProfile} />
         </ProfileButton>
-        <LogoutButton onClick={onLogoutClick}>{logoutText}</LogoutButton>  // 로그아웃 버튼
+        <LogoutButton onClick={onLogoutClick}>{logoutText}</LogoutButton> 
       </UserActions>
     </HeaderContainer>
   );

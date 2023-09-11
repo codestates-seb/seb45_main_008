@@ -48,6 +48,11 @@ const Comments = ({ postId }: { postId: number }) => {
     setVisibleComments(close ? 1 : commentData.length);
   };
 
+  const CommentText = {
+    write: "작성",
+    replyCount: `댓글${commentData.length}개 모두보기`,
+  };
+
   return (
     <CommentContainer>
       <div>
@@ -85,12 +90,14 @@ const CommentInput = styled.input`
   outline: none;
   width: 280px;
 `;
+
 const CommentInputSubmit = styled.button`
   outline: none;
   border: 1px solid#400797;
   background-color: #400797;
   color: white;
 `;
+
 const CommentContainer = styled.div`
   display: flex;
   justify-content: space-around;

@@ -1,11 +1,9 @@
-import { useSelector, useDispatch } from "react-redux";
+import { useDispatch } from "react-redux";
 import { styled } from "styled-components";
 import EChartsReact from "echarts-for-react";
-import { StateProps } from "../../models/stateProps";
 import { changeCompanyId } from "../../reducer/CompanyId-Reducer";
 
-import useGetStockData from "../../hooks/useGetStockData";
-import useGetStockChart from "../../hooks/useGetStockChart";
+import useGetKospiChart from "../../hooks/useGetKospiChart";
 
 // 🔴 회사 목록 데이터 불러오는 로직
 import useGetCompanyList from "../../hooks/useGetCompanyList";
@@ -14,28 +12,24 @@ const loadingText = "로딩 중 입니다...";
 const errorText = "화면을 불러올 수 없습니다";
 
 //🔴 테스트
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
-const StockChart = () => {
-  const companyId = useSelector((state: StateProps) => state.companyId);
+const KospiChart = () => {
   const dispatch = useDispatch();
 
-  const { isLoading, error } = useGetStockData(companyId);
-  const { options, chartStyle } = useGetStockChart(companyId);
+  const { isLoading, error, options, chartStyle } = useGetKospiChart();
 
   // 🔴 차트 변환 테스트
 
   // 🔴 1) 검색 이벤트
-  const { companyList, compnayListLoading, companyListError } = useGetCompanyList();
+  const { companyList } = useGetCompanyList();
+  const [companyLists, setCompanyLists] = useState([]);
   const [searchWord, setSearchWord] = useState("");
 
-  if (compnayListLoading) {
-    return <p>회사정보 불러오는 중</p>;
-  }
-
-  if (companyListError) {
-    return <p>에러 발생</p>;
-  }
+  // 회사 목록 불러오면 -> companyList 상태에 할당
+  useEffect(() => {
+    setCompanyLists(companyList);
+  }, [companyList]);
 
   const handleChangeSearchWord = (e: React.ChangeEvent<HTMLInputElement>) => {
     setSearchWord(e.target.value);
@@ -44,7 +38,7 @@ const StockChart = () => {
   const handleSearchCompany = () => {
     let searchResult: string = "noExistCompany";
 
-    companyList.forEach((company: CompanyProps) => {
+    companyLists.forEach((company: CompanyProps) => {
       if (company.korName === searchWord) {
         searchResult = "ExistCompany";
         dispatch(changeCompanyId(company.companyId));
@@ -66,10 +60,6 @@ const StockChart = () => {
   // 🔴 2) 클릭 이벤트
   const handleKospi = () => {
     dispatch(changeCompanyId(0));
-  };
-
-  const handlePlus = () => {
-    dispatch(changeCompanyId(companyId + 1));
   };
 
   const handleStock1 = () => {
@@ -98,7 +88,6 @@ const StockChart = () => {
         <button onClick={handleSearchCompany}>검색</button>
       </label>
       <button onClick={handleKospi}>코스피 버튼</button>
-      <button onClick={handlePlus}>CompanyId +1</button>
       <button onClick={handleStock1}>1번 주식 버튼</button>
       <button onClick={handleStock10}>10번 주식 버튼</button>
       {/* 🔴 차트 변경 이벤트 테스트 */}
@@ -107,7 +96,7 @@ const StockChart = () => {
   );
 };
 
-export default StockChart;
+export default KospiChart;
 
 const Container = styled.div`
   height: 100%;

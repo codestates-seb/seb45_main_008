@@ -19,6 +19,7 @@ import Welcome from "../components/Signups/Welcome";
 import { StateProps } from "../models/stateProps";
 
 import { TabContainerPage } from "./TabPages/TabContainerPage";
+
 const MainPage = () => {
   const expandScreen = useSelector((state: StateProps) => state.expandScreen);
 

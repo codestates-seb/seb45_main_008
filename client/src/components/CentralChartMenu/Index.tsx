@@ -1,4 +1,6 @@
+import { useSelector } from "react-redux";
 import { styled } from "styled-components";
+import { StateProps } from "../../models/stateProps";
 
 import ExpandScreenBtn from "./ExpandScreenBtn";
 import StockOverview from "./StockOverview";
@@ -8,14 +10,22 @@ import CompareChartBtn from "./CompareChartBtn";
 import ChangeChartCycleBtn from "./ChangeChartCycleBtn";
 
 const UpperMenuBar = () => {
+  const companyId = useSelector((state: StateProps) => state.companyId);
+
   return (
     <Container>
       <div className="FirstLine">
         <ExpandScreenBtn direction="left" />
-        <StockOverview />
-        <BookmarkBtn />
-        <StockOrderBtn type="buying" />
-        <StockOrderBtn type="selling" />
+        {companyId === 0 ? (
+          <div>구현 예정</div>
+        ) : (
+          <>
+            <StockOverview />
+            <BookmarkBtn />
+            <StockOrderBtn type="buying" />
+            <StockOrderBtn type="selling" />
+          </>
+        )}
         <ExpandScreenBtn direction="right" />
       </div>
       <div className="SecondLine">

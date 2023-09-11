@@ -14,35 +14,38 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
     const emailLoginText = "이메일로 로그인";
     const emailSignupText = "이메일로 회원가입";
 
-    // 구글 로그인 핸들러
+    // 카카오 로그인 핸들러
     const handleGoogleLogin = async () => {
       try {
-          const response = await axios.post('/oauth2/authorization/google');
+          const response = await axios.get('/oauth2/authorization/google');
           if (response.status === 200) {
-              console.log("Successfully logged in with Google!");
-              onClose();
+              // 200 상태 코드를 받으면 주소 데이터를 사용하여 리다이렉트
+              const redirectUri = response.data.uri;  // 백엔드에서 'url' 키로 주소 데이터를 제공한다고 가정
+              window.location.href = redirectUri;
           } else {
-              console.error("Error logging in with Google");
+              console.error("Error logging in with Google, unexpected status code:", response.status);
           }
       } catch (error) {
           console.error("Error logging in with Google:", error);
       }
-    };
+  };
+
   
     // 카카오 로그인 핸들러
     const handleKakaoLogin = async () => {
       try {
-          const response = await axios.post('/oauth2/authorization/kakao');
+          const response = await axios.get('/oauth2/authorization/kakao');
           if (response.status === 200) {
-              console.log("Successfully logged in with Kakao!");
-              onClose();
+              // 200 상태 코드를 받으면 주소 데이터를 사용하여 리다이렉트
+              const redirectUri = response.data.uri;  // 백엔드에서 'url' 키로 주소 데이터를 제공한다고 가정
+              window.location.href = redirectUri;
           } else {
-              console.error("Error logging in with Kakao");
+              console.error("Error logging in with Kakao, unexpected status code:", response.status);
           }
       } catch (error) {
           console.error("Error logging in with Kakao:", error);
       }
-    };
+  };
   
     // 모달 반환
     return (

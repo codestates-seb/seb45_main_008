@@ -4,4 +4,5 @@ export interface StateProps {
   stockOrderPrice: number;
   expandScreen: { left: boolean; right: boolean };
   stockOrderSet: boolean;
+  companyId: number;
 }
