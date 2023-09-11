@@ -3,6 +3,7 @@ import { StockProps } from "../../models/stockProps";
 
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { isHoliday } from "@hyunbinseo/holidays-kr";
 import { styled } from "styled-components";
 import { setStockOrderPrice } from "../../reducer/StockOrderPrice-Reducer";
 import { StateProps } from "../../models/stateProps";
@@ -39,14 +40,17 @@ const StockPrice = (props: StockPriceProps) => {
     return;
   }
 
-  // 전날 종가 데이터 -> 1) 일/월 : 금요일 종가로 설정  2) 화~토 : 전날 종가로 설정
+  // 전날 종가 데이터 -> 1) 화~토 : 전날 종가로 설정  2) 공휴일/월요일 : 맨 마지막 종가로 설정 (전날 데이터 없음)
   let previousDayStockClosingPrice: number;
 
+  const today = new Date();
+  const getToday = today.getDay();
   const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
-  const getToday = new Date().getDay();
-  const today = daysOfWeek[getToday];
 
-  if (today === "일" || today === "월") {
+  const nonBusinessDay = isHoliday(today, { include: { sunday: true } }); // 일요일, 공휴일 (임시 공휴일 포함) 체크
+  const isMonday = daysOfWeek[getToday] === "월"; // 월요일인지 체크
+
+  if (nonBusinessDay || isMonday) {
     previousDayStockClosingPrice = stockPrice[stockPrice.length - 1].stck_prpr;
   } else {
     const yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
@@ -54,7 +58,6 @@ const StockPrice = (props: StockPriceProps) => {
 
     const yesterdayStockInfo = stockPrice.filter((stockInfo: StockProps) => {
       const dayInfo = stockInfo.stockTradeTime.slice(0, 10);
-
       if (dayInfo === yesterdayYymmdd) {
         return stockInfo;
       }
