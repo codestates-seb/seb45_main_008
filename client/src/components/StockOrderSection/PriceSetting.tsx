@@ -31,6 +31,15 @@ const PriceSetting = (props: OwnProps) => {
     dispatch(minusStockOrderPrice(priceInterval));
   };
 
+  // 방향키 입력 시
+  const handleInputArrowBtn = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.code === "ArrowUp") {
+      handlePlusOrderPrice();
+    } else if (event.code === "ArrowDown") {
+      handleMinusOrderPrice();
+    }
+  };
+
   // 거래가 직접 기입 시
   const handleWriteOrderPrice = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputPrice = event.target.value;
@@ -73,7 +82,7 @@ const PriceSetting = (props: OwnProps) => {
         <div className="Title">{priceSettingTitle}</div>
       </div>
       <div className="PriceSettingBox">
-        <PriceController defaultValue={orderPrice} value={orderPrice} onChange={handleWriteOrderPrice} />
+        <PriceController defaultValue={orderPrice} value={orderPrice} onChange={handleWriteOrderPrice} onKeyDown={handleInputArrowBtn} />
         <UnitContent>{unitText}</UnitContent>
         <div className="DirectionBox">
           <button className="PriceUp" onClick={handlePlusOrderPrice}>
