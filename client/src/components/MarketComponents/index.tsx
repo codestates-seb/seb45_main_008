@@ -12,21 +12,23 @@ const MarketSummary: React.FC = () => {
 
       <News>
         <MarketH3>{SummaryText.liveNews}</MarketH3>
-        <A className="naver" href={NewsListLink.NaverNews} target="_blank">
-          {SummaryText.naverNews}
-        </A>
-        <A className="daum" href={NewsListLink.DaumNews} target="_blank">
-          {SummaryText.daumNews}
-        </A>
-        <A className="chosun" href={NewsListLink.chosunNews} target="_blank">
-          {SummaryText.chosunNews}
-        </A>
-        <A className="donga" href={NewsListLink.dongaNews} target="_blank">
-          {SummaryText.dongaNews}
-        </A>
-        <A className="jtbc" href={NewsListLink.jtbcNews} target="_blank">
-          {SummaryText.jtbcNews}
-        </A>
+        <NewsCompany>
+          <A className="naver" href={NewsListLink.NaverNews} target="_blank">
+            {SummaryText.naverNews}
+          </A>
+          <A className="daum" href={NewsListLink.DaumNews} target="_blank">
+            {SummaryText.daumNews}
+          </A>
+          <A className="chosun" href={NewsListLink.chosunNews} target="_blank">
+            {SummaryText.chosunNews}
+          </A>
+          <A className="donga" href={NewsListLink.dongaNews} target="_blank">
+            {SummaryText.dongaNews}
+          </A>
+          <A className="jtbc" href={NewsListLink.jtbcNews} target="_blank">
+            {SummaryText.jtbcNews}
+          </A>
+        </NewsCompany>
       </News>
     </Market>
   );
@@ -56,6 +58,7 @@ const SummaryText: StockStatus = {
   dongaNews: "동아일보",
   jtbcNews: "jtbc",
 };
+
 const NewsListLink = {
   NaverNews: "https://news.naver.com/main/main.naver?mode=LSD&mid=shm&sid1=101",
   DaumNews: "https://news.daum.net/economic#1",
@@ -77,12 +80,21 @@ const News = styled.div`
   flex-wrap: wrap;
   align-content: space-around;
 `;
+
+const NewsCompany = styled.div`
+  display: flex;
+  margin-top: 20px;
+  width: 60%;
+  flex-wrap: wrap;
+  justify-content: space-around;
+`;
 const A = styled.a`
   border-radius: 10px 10px;
   &.naver {
     color: white;
     background-color: #088a08;
     border: none;
+    width: 100px;
 
     &:hover {
       background-color: #0b610b;
@@ -92,6 +104,7 @@ const A = styled.a`
   &.daum {
     background-color: white;
     border: 1px solid blue;
+    width: 100px;
     &:hover {
       background-color: blue;
       color: white;
@@ -100,6 +113,7 @@ const A = styled.a`
   &.chosun {
     background-color: white;
     border: 1px solid red;
+    width: 100px;
     color: red;
     &:hover {
       color: white;
@@ -107,12 +121,14 @@ const A = styled.a`
     }
   }
   &.donga {
+    width: 100px;
     &:hover {
       background-color: #282b2c;
       color: white;
     }
   }
   &.jtbc {
+    width: 100px;
     border: 1px solid skyblue;
     &:hover {
       background-color: skyblue;

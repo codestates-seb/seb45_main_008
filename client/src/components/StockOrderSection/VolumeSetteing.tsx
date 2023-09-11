@@ -1,40 +1,130 @@
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
+import { StateProps } from "../../models/stateProps";
+import { setStockOrderVolume, plusStockOrderVolume, minusStockOrderVolume } from "../../reducer/StockOrderVolume-Reducer";
 
 const volumeSettingTitle: string = "수량";
 const maximumVolumeText01: string = "최대";
-const maximumVolumeText02: string = "주";
+const volumeUnit: string = "주";
 
-const percentageBtnText01: string = "10%";
-const percentageBtnText02: string = "25%";
-const percentageBtnText03: string = "50%";
-const percentageBtnText04: string = "100%";
+const volumPercentage01: number = 10;
+const volumPercentage02: number = 25;
+const volumPercentage03: number = 50;
+const volumPercentage04: number = 100;
+const percentageUnit: string = "%";
 
 // dummyData
-const dummyMaximum: number = 203;
+const dummyMoney: number = 10000000;
+const dummyholdingStock = 10;
 
 const VolumeSetting = () => {
+  const dispatch = useDispatch();
+  const orderType = useSelector((state: StateProps) => state.stockOrderType);
+  const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
+  const orderVolume = useSelector((state: StateProps) => state.stockOrderVolume);
+
+  // 🎾 임시로직 추가
+  // const maximumBuyingVolume = Math.trunc(dummyMoney / orderPrice);
+  const maximumBuyingVolume = orderPrice !== 0 ? Math.trunc(dummyMoney / orderPrice) : Math.trunc(dummyMoney / 1);
+
+  const handlePlusOrderVolume = () => {
+    // 매수 -> 증가 버튼 클릭 시, 최대 구매수량 보다 낮으면 개수 1증가
+    if (!orderType) {
+      orderVolume < maximumBuyingVolume && dispatch(plusStockOrderVolume());
+    }
+    // 매도 -> 증가 버튼 클릭 시, 보유 주식수량 보다 낮으면 개수 1증가
+    if (orderType) {
+      orderVolume < dummyholdingStock && dispatch(plusStockOrderVolume());
+    }
+  };
+
+  const handleMinusOrderVolume = () => {
+    if (0 < orderVolume) {
+      dispatch(minusStockOrderVolume());
+    }
+  };
+
+  // 거래량 직접 기입 시
+  const handleWriteOrderVolume = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    const numberInputValue = parseInt(inputValue, 10);
+
+    // 1) 음수를 임력하거나, 숫자 아닌 값 기입 시 -> 입력 무시  2) 값을 다 지워서 빈 문자열인 경우 -> 0으로 설정  3) 최대 구매가능 수량 보다 높게 기입 -> 입력 무시
+    if (numberInputValue < 0 || isNaN(numberInputValue)) {
+      if (inputValue === "") {
+        dispatch(setStockOrderVolume(0));
+      }
+      return;
+    }
+
+    if (maximumBuyingVolume < numberInputValue) {
+      return;
+    } else {
+      dispatch(setStockOrderVolume(numberInputValue));
+    }
+  };
+
+  const handleSetVolumePercentage = (volumePerentage: number) => {
+    // 매수 -> percentage 버튼 클릭 시, 최대 구매수량 내에서 계산
+    if (!orderType) {
+      const orderVolume = Math.trunc(maximumBuyingVolume * (volumePerentage / 100));
+      dispatch(setStockOrderVolume(orderVolume));
+    }
+
+    // 매도 -> percentage 버튼 클릭 시, 보유 주식수량 내에서 계산
+    if (orderType) {
+      const orderVolume = Math.trunc(dummyholdingStock * (volumePerentage / 100));
+      dispatch(setStockOrderVolume(orderVolume));
+    }
+  };
+
+  // 지정가 증가 -> (현재 주문수량 > 최대 주문가능 수량)일 경우 -> 현재 주문수량을 최대 주문수량으로 변경
+  useEffect(() => {
+    if (maximumBuyingVolume < orderVolume) {
+      dispatch(setStockOrderVolume(maximumBuyingVolume));
+    }
+  }, [maximumBuyingVolume]);
+
   return (
     <Container>
-      <TitleContainer>
+      <TitleContainer orderType={orderType}>
         <div className="Title">{volumeSettingTitle}</div>
         <div className="MaximumVolumeContainer">
           <span>{maximumVolumeText01}</span>
-          <span className="maximumVolume">{dummyMaximum}</span>
-          <span>{maximumVolumeText02}</span>
+          <span className="maximumVolume">{orderType ? dummyholdingStock : maximumBuyingVolume}</span>
+          <span>{volumeUnit}</span>
         </div>
       </TitleContainer>
       <VolumeSettingBox>
-        <VolumeController />
+        <VolumeController defaultValue={orderVolume} value={orderVolume} onChange={handleWriteOrderVolume} />
+        <UnitContent>{volumeUnit}</UnitContent>
         <div className="DirectionContainer">
-          <button className="VolumeUp">&#8896;</button>
-          <button className="VolumeDown">&#8897;</button>
+          <button className="VolumeUp" onClick={handlePlusOrderVolume}>
+            &#8896;
+          </button>
+          <button className="VolumeDown" onClick={handleMinusOrderVolume}>
+            &#8897;
+          </button>
         </div>
       </VolumeSettingBox>
       <PercentageBox>
-        <button>{percentageBtnText01}</button>
-        <button>{percentageBtnText02}</button>
-        <button>{percentageBtnText03}</button>
-        <button>{percentageBtnText04}</button>
+        <button onClick={() => handleSetVolumePercentage(volumPercentage01)}>
+          {volumPercentage01}
+          {percentageUnit}
+        </button>
+        <button onClick={() => handleSetVolumePercentage(volumPercentage02)}>
+          {volumPercentage02}
+          {percentageUnit}
+        </button>
+        <button onClick={() => handleSetVolumePercentage(volumPercentage03)}>
+          {volumPercentage03}
+          {percentageUnit}
+        </button>
+        <button onClick={() => handleSetVolumePercentage(volumPercentage04)}>
+          {volumPercentage04}
+          {percentageUnit}
+        </button>
       </PercentageBox>
     </Container>
   );
@@ -42,13 +132,14 @@ const VolumeSetting = () => {
 
 export default VolumeSetting;
 
+// component 생성
 const Container = styled.div`
   width: 100%;
   margin-top: 16px;
-  margin-bottom: 46px;
+  margin-bottom: 56px;
 `;
 
-const TitleContainer = styled.div`
+const TitleContainer = styled.div<{ orderType: boolean }>`
   display: flex;
   flex-direction: row;
   justify-content: space-between;
@@ -71,7 +162,7 @@ const TitleContainer = styled.div`
     }
 
     .maximumVolume {
-      color: #ed2926;
+      color: ${(props) => (props.orderType ? "#3177d7" : "#ed2926")};
     }
   }
 `;
@@ -112,6 +203,10 @@ const VolumeController = styled.input`
   border: 1px solid darkgray;
   border-right: none;
   border-radius: 0.2rem 0 0 0.2rem;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: right;
+  padding-bottom: 3px;
 `;
 
 const PercentageBox = styled.div`
@@ -119,6 +214,7 @@ const PercentageBox = styled.div`
   flex-direction: row;
   justify-content: space-between;
   margin-top: 8px;
+  gap: 8px;
 
   & button {
     width: 56px;
@@ -126,4 +222,18 @@ const PercentageBox = styled.div`
     border: none;
     border-radius: 0.2rem;
   }
+`;
+
+const UnitContent = styled.div`
+  height: 30px;
+  color: #999999;
+  font-size: 13px;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 8px;
+  border-top: 1px solid darkgray;
+  border-bottom: 1px solid darkgray;
+  background-color: #ffffff;
 `;
