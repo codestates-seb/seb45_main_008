@@ -13,7 +13,6 @@ const CentralChart = () => {
     <Container>
       <UpperMenuBar />
       {companyId === 0 ? <KospiChart /> : <StockChart />}
-      {/* <StockChart /> */}
     </Container>
   );
 };

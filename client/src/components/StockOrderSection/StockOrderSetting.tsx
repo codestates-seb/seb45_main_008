@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import useGetStockInfo from "../../hooks/useGetStockInfo";
 import { orderTypeBuying, orderTypeSelling } from "../../reducer/StockOrderType-Reducer";
 import { styled } from "styled-components";
 import { StateProps } from "../../models/stateProps";
@@ -6,14 +7,24 @@ import { OrderTypeProps } from "../../models/orderTypeProps";
 
 import PriceSetting from "./PriceSetting";
 import VolumeSetting from "./VolumeSetteing";
-import StockOrderBtn from "./StockOrderBtn";
+import OrderDecisionBtn from "./OrderDecisionBtn";
 
 const orderType01: string = "매수";
 const orderType02: string = "매도";
 
 const StockOrderSetting = () => {
-  const stockOrderType = useSelector((state: StateProps) => state.stockOrderType);
   const dispatch = useDispatch();
+  const orderType = useSelector((state: StateProps) => state.stockOrderType);
+  const companyId = useSelector((state: StateProps) => state.companyId);
+  const { stockInfo, stockInfoLoading, stockInfoError } = useGetStockInfo(companyId);
+
+  if (stockInfoLoading) {
+    return <></>;
+  }
+
+  if (stockInfoError) {
+    return <></>;
+  }
 
   const handleSetBuying = () => {
     dispatch(orderTypeBuying());
@@ -26,30 +37,31 @@ const StockOrderSetting = () => {
   return (
     <Container>
       <div className="OrderType">
-        <Buying onClick={handleSetBuying} ordertype={stockOrderType}>
+        <Buying onClick={handleSetBuying} ordertype={orderType}>
           {orderType01}
         </Buying>
-        <Selling onClick={handleSetSelling} ordertype={stockOrderType}>
+        <Selling onClick={handleSetSelling} ordertype={orderType}>
           {orderType02}
         </Selling>
       </div>
-      <DecorationLine />
-      <PriceSetting />
+      <OrderTypeChangeEffetLine />
+      <PriceSetting stockInfo={stockInfo.stockAsBiResponseDto} companyId={companyId} />
       <VolumeSetting />
-      <StockOrderBtn />
+      <OrderDecisionBtn />
     </Container>
   );
 };
 
 export default StockOrderSetting;
 
-const DecorationLine = () => {
-  const stockOrderType = useSelector((state: StateProps) => state.stockOrderType);
+// 매수/매도 탭 전환 시 하단에 시각화 되는 선
+const OrderTypeChangeEffetLine = () => {
+  const orderType = useSelector((state: StateProps) => state.stockOrderType);
 
   return (
-    <DividingContainer ordertype={stockOrderType}>
-      <DefaultLine ordertype={stockOrderType}>
-        <DivdingLine ordertype={stockOrderType} />
+    <DividingContainer ordertype={orderType}>
+      <DefaultLine ordertype={orderType}>
+        <DivdingLine ordertype={orderType} />
       </DefaultLine>
     </DividingContainer>
   );

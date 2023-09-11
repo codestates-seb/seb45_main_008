@@ -5,4 +5,6 @@ export interface StateProps {
   expandScreen: { left: boolean; right: boolean };
   stockOrderSet: boolean;
   companyId: number;
+  stockOrderVolume: number;
+  decisionWindow: boolean;
 }

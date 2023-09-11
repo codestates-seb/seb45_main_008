@@ -1,5 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
+// [true] 매도, [false] 매수
 const initialState: boolean = false;
 
 const stockOrderTypeSlice = createSlice({
