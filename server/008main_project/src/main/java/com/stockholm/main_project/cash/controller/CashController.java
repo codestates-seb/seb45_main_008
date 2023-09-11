@@ -51,8 +51,8 @@ public class CashController {
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
-    @PatchMapping("{moneyId}")
-    public ResponseEntity patchCash(@Schema(implementation = CashPatchDto.class)@PathVariable long moneyId, @Valid @RequestBody CashPatchDto requestBody,
+    @PatchMapping("{cashId}")
+    public ResponseEntity patchCash(@Schema(implementation = CashPatchDto.class)@PathVariable long cashId, @Valid @RequestBody CashPatchDto requestBody,
                                     @AuthenticationPrincipal Member member){
 //        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 //        Member member = memberService.findMemberByEmail(auth.getPrincipal().toString());
@@ -63,16 +63,16 @@ public class CashController {
 
         cashToUpdate.setMember(member);
 
-        requestBody.setCashId(moneyId);
+        requestBody.setCashId(cashId);
 
-        Cash cash = cashService.updateCash(moneyId, member, requestBody);
+        Cash cash = cashService.updateCash(cashId, member, requestBody);
 
         return new ResponseEntity<>(mapper.cashToCashResponseDto(cash), HttpStatus.OK);
     }
 
-    @GetMapping("{moneyId}")
-    private ResponseEntity getCash(@PathVariable long moneyId){
-        Cash response = cashService.findCash(moneyId);
+    @GetMapping("{cashId}")
+    private ResponseEntity getCash(@PathVariable long cashId){
+        Cash response = cashService.findCash(cashId);
 
         return new ResponseEntity<>(mapper.cashToCashResponseDto(response), HttpStatus.OK);
     }
