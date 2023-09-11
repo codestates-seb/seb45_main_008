@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
@@ -47,13 +48,9 @@ public class BoardController {
             @ApiResponse(responseCode = "400", description = "Bad Request"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
-    public ResponseEntity createPost(@Valid @RequestBody BoardPostDto boardPostDto) {
-
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Member member = memberService.findMemberByEmail(auth.getPrincipal().toString());
+    public ResponseEntity<Board> createPost(@Valid @RequestBody BoardPostDto boardPostDto, @AuthenticationPrincipal Member member) {
 
         Board boardToCreate = mapper.boardPostToBoard(boardPostDto);
-
         boardToCreate.setMember(member);
 
         Board createdBoard = boardService.createBoard(boardToCreate);
@@ -61,6 +58,9 @@ public class BoardController {
 
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
+
+
+
 
     // 모든 게시물 조회
     @GetMapping
@@ -118,11 +118,8 @@ public class BoardController {
     })
     public ResponseEntity<Board> patchBoard(
             @PathVariable Long boardId,
-            @RequestBody Map<String, Object> updates) {
-
-        // Authentication 객체를 사용하여 현재 사용자 정보 가져오기
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Member member = memberService.findMemberByEmail(auth.getPrincipal().toString());
+            @RequestBody Map<String, Object> updates,
+            @AuthenticationPrincipal Member member) {
 
         Board updatedBoard = boardService.patchBoard(boardId, updates, member);
 
@@ -134,14 +131,11 @@ public class BoardController {
     }
 
 
+
     // 게시물 삭제
 
     @DeleteMapping("/{boardId}")
-    public ResponseEntity<Void> deleteBoard(@PathVariable Long boardId) {
-        // Authentication 객체를 사용하여 현재 사용자 정보 가져오기
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Member member = memberService.findMemberByEmail(auth.getPrincipal().toString());
-
+    public ResponseEntity<Void> deleteBoard(@PathVariable Long boardId, @AuthenticationPrincipal Member member) {
         boolean deleted = boardService.deleteBoard(boardId, member);
         if (deleted) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -149,4 +143,5 @@ public class BoardController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
+
 }

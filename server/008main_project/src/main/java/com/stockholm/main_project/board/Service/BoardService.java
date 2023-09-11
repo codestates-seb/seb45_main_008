@@ -4,10 +4,12 @@ import com.stockholm.main_project.board.Repository.BoardRepository;
 import com.stockholm.main_project.board.entity.Board;
 import com.stockholm.main_project.member.entity.Member;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication; // 수정된 import 문
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
-
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.security.access.AccessDeniedException;
+
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -18,12 +20,21 @@ public class BoardService {
     @Autowired
     private BoardRepository boardRepository;
 
-    // 이하 메서드들은 그대로 유지합니다.
-
     public Board createBoard(Board board) {
-        // 게시물 생성 로직 구현
-        return boardRepository.save(board);
+        // 사용자가 로그인한 경우에만 게시물 생성을 허용
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()) {
+            // 권한 검사 로직을 추가할 수 있습니다.
+            // 사용자의 권한을 확인하고 필요한 권한이 있다면 게시물을 생성합니다.
+
+            // 예시: 모든 사용자에게 허용하는 경우
+            return boardRepository.save(board);
+        } else {
+            throw new AccessDeniedException("로그인이 필요합니다.");
+        }
     }
+
+
 
     public List<Board> getAllBoards() {
         // 모든 게시물 조회 로직 구현

@@ -21,7 +21,7 @@ import java.util.List;
 public class Board extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // id 필드명을 boardId에서 id로 수정
+    private Long boardId; // id 필드명을 boardId에서 id로 수정
 
     @Column
     private String title;

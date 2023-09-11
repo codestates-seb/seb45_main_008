@@ -15,6 +15,5 @@ public interface BoardMapper {
     Board boardPostToBoard(BoardPostDto requestBody);
 
     Board boardToBoardResponseDto(Board board);
-    BoardResponseDto boardToBoardToCommnetResponseDto(CommentEntity commentEntity);
 }
 
