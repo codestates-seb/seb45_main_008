@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
 import { setStockOrderPrice, plusStockOrderPrice, minusStockOrderPrice } from "../../reducer/StockOrderPrice-Reducer";
@@ -16,6 +16,7 @@ const PriceSetting = (props: OwnProps) => {
 
   // 초기 설정값 및 가격 변동폭 설정
   const { askp1, askp2, askp3, askp4, askp5 } = stockInfo;
+  const [priceChangeTimer, setPriceChangeTimer] = useState<NodeJS.Timeout | null>(null);
   const sellingPrice = [parseInt(askp1), parseInt(askp2), parseInt(askp3), parseInt(askp4), parseInt(askp5)];
   const existSellingPrice = sellingPrice.filter((price) => price !== 0); // price 0인 경우 제거
   const defaultPrice = existSellingPrice[0];
@@ -32,18 +33,33 @@ const PriceSetting = (props: OwnProps) => {
 
   // 거래가 직접 기입 시
   const handleWriteOrderPrice = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const inputValue = event.target.value;
-    const numberInputValue = parseInt(inputValue, 10);
+    const inputPrice = event.target.value;
+    const numberInputPrice = parseInt(inputPrice, 10);
 
     // 1) 음수를 임력하거나, 숫자 아닌 값 기입 시 -> 입력 무시  2) 값을 다 지워서 빈 문자열인 경우 -> 0으로 설정
-    if (numberInputValue < 0 || isNaN(numberInputValue)) {
-      if (inputValue === "") {
+    if (numberInputPrice < 0 || isNaN(numberInputPrice)) {
+      if (inputPrice === "") {
         dispatch(setStockOrderPrice(0));
       }
       return;
     }
 
-    dispatch(setStockOrderPrice(numberInputValue));
+    // priceInterval로 나누어 떨어지지 않는 값을 기입 시 -> 0.8초 후에 나누어 떨어지는 값으로 변경
+    if (priceChangeTimer !== null) {
+      clearTimeout(priceChangeTimer);
+    }
+
+    dispatch(setStockOrderPrice(numberInputPrice));
+
+    if (numberInputPrice > priceInterval && numberInputPrice % priceInterval !== 0) {
+      const newTimer = setTimeout(() => {
+        const remainder = numberInputPrice % priceInterval;
+        const modifiedInputValue = numberInputPrice - remainder;
+        dispatch(setStockOrderPrice(modifiedInputValue));
+      }, 800);
+
+      setPriceChangeTimer(newTimer);
+    }
   };
 
   // 종목이 달리지면 -> 가격도 변경

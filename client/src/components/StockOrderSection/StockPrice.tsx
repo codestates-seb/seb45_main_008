@@ -116,12 +116,11 @@ const Container = styled.div<{ index: number; price: number; orderPrice: number 
   width: 100%;
   height: 36px;
   margin-bottom: 2px;
-  background-color: ${(props) => (props.index > 9 ? "#FDE8E7" : "#E7F0FD")};
-  border: ${(props) => (props.price === props.orderPrice ? "1.5px solid #2F4F4F" : "none")};
+  background-color: ${(props) => (props.price === props.orderPrice ? (props.index > 9 ? "#e9c2bf" : "#bed1eb") : props.index > 9 ? "#FDE8E7" : "#E7F0FD")};
   border-left: ${(props) => (props.price === props.orderPrice ? "3px solid red" : props.index > 9 ? "3px solid #FDE8E7" : "3px solid #E7F0FD")};
   display: flex;
   flex-direction: row;
-  transition: border 1s ease;
+  transition: border 0.8s ease, background-color 0.8s ease;
 
   &:hover {
     cursor: pointer;
