@@ -1,16 +1,12 @@
 package com.stockholm.main_project.stock.controller;
 
 import com.stockholm.main_project.stock.dto.CompanyResponseDto;
-import com.stockholm.main_project.stock.dto.StockAsBiResponseDto;
 import com.stockholm.main_project.stock.dto.StockMinResponseDto;
-import com.stockholm.main_project.stock.dto.StockasbiDataDto;
 import com.stockholm.main_project.stock.entity.Company;
-import com.stockholm.main_project.stock.entity.StockAsBi;
 import com.stockholm.main_project.stock.entity.StockMin;
 import com.stockholm.main_project.stock.mapper.CompanyMapper;
 import com.stockholm.main_project.stock.service.CompanyService;
 import com.stockholm.main_project.stock.service.StockMinService;
-import com.stockholm.main_project.swaggersample.HelloResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
@@ -56,7 +52,6 @@ public class CompanyController {
     // 전체 회사 리스트
     @GetMapping
     public ResponseEntity getCompanyList() throws InterruptedException {
-        companyService.fillCompaines();
         List<Company> companyList = companyService.findCompanies();
         List<CompanyResponseDto> companyResponseDtoList = companyMapper.CompaniesToCompanyResponseDtos(companyList);
 

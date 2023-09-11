@@ -43,6 +43,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         List<String> authorities = authorityUtils.createRoles(email);
 
+        // 액세스 토큰 및 리프레시 토큰 생성
+        String accessToken = delegateAccessToken(email, authorities);
+        String refreshToken = delegateRefreshToken(email);
+
+        // 헤더에 토큰 추가
+        response.addHeader("Authorization", "Bearer " + accessToken);
+        response.addHeader("Refresh-Token", refreshToken);
+
 
         redirect(request, response, email, authorities);
     }
@@ -83,18 +91,24 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     private URI createURI(String accessToken, String refreshToken) {
-        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
-        queryParams.add("access_token", "Bearer " + accessToken);
-        queryParams.add("refresh_token", refreshToken);
 
-        return UriComponentsBuilder
-                .newInstance()
-                .scheme("http")
-                .host("localhost")
-//                .port(80)
-                .path("/receive-token.html")
-                .queryParams(queryParams)
+
+//        return UriComponentsBuilder
+//                .newInstance()
+//                .scheme("http")
+//                .host("localhost")
+////                .port(80)
+//                .path("/receive-token.html")
+//                .build()
+//                .toUri();
+//    }
+       return UriComponentsBuilder
+               .newInstance()
+               .scheme("http")
+                .host("seb008stockholm.s3-website.ap-northeast-2.amazonaws.com")
+//                .port(8080)
+                .path("/")
                 .build()
                 .toUri();
-    }
+   }
 }

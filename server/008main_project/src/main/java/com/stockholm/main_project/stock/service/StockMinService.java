@@ -67,7 +67,7 @@ public class StockMinService {
             companyService.saveCompany(company);
 
 
-            Thread.sleep(180);
+            Thread.sleep(500);
         }
     }
 

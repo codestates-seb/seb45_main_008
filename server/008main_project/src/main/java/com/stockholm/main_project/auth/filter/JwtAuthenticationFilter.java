@@ -2,7 +2,7 @@ package com.stockholm.main_project.auth.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.stockholm.main_project.auth.jwt.JwtTokenizer;
-import com.stockholm.main_project.auth.logindto.LoginDto;
+import com.stockholm.main_project.auth.dto.LoginDto;
 import com.stockholm.main_project.member.entity.Member;
 import lombok.SneakyThrows;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -60,6 +60,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
 
     private String delegateAccessToken(Member member) {
         Map<String, Object> claims = new HashMap<>();
+        claims.put("memberId", member.getMemberId()); //Context에 member객체를 올려두기 위해 추가
         claims.put("email", member.getEmail());
         claims.put("roles", member.getRoles());
 
