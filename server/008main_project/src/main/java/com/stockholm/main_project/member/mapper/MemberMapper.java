@@ -13,6 +13,7 @@ public interface MemberMapper {
 
     Member memberPostToMember(MemberPostDto requestBody);
     Member memberPatchToMember(MemberPatchDto requestBody);
+
     MemberResponseDto memberToMemberResponseDto(Member member);
 }
 

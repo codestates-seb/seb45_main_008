@@ -8,9 +8,11 @@ import com.stockholm.main_project.auth.handler.OAuth2AuthenticationSuccessHandle
 import com.stockholm.main_project.auth.jwt.JwtTokenizer;
 import com.stockholm.main_project.auth.utils.CustomAuthorityUtils;
 import com.stockholm.main_project.auth.utils.OAuth2MemberService;
+import com.stockholm.main_project.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -24,10 +26,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.CorsConfigurationSource;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
-import java.util.Arrays;
 import java.util.List;
-
-import static org.springframework.security.config.Customizer.withDefaults;
 
 @Configuration
 @EnableWebSecurity
@@ -37,10 +36,13 @@ public class SecurityConfiguration {
     @Autowired
     public final OAuth2MemberService oAuth2MemberService;
 
-    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, OAuth2MemberService oAuth2MemberService) {
+    private final MemberService memberService;
+
+    public SecurityConfiguration(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, OAuth2MemberService oAuth2MemberService, @Lazy MemberService memberService) {
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
         this.oAuth2MemberService = oAuth2MemberService;
+        this.memberService = memberService;
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity httpSecurity) throws Exception {
@@ -58,7 +60,6 @@ public class SecurityConfiguration {
                 .and()
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers("members/login").permitAll()
-
                         .antMatchers(HttpMethod.POST, "/cash").hasRole("USER")
                         .antMatchers(HttpMethod.DELETE, "/cash").hasRole("USER")
                         .anyRequest().permitAll()
@@ -105,7 +106,7 @@ public class SecurityConfiguration {
             jwtAuthenticationFilter.setAuthenticationFailureHandler(new MemberAuthenticationFailureHandler());
             builder.addFilter(jwtAuthenticationFilter);
 
-            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils);
+            JwtVerificationFilter jwtVerificationFilter = new JwtVerificationFilter(jwtTokenizer, authorityUtils, memberService);
 
             builder
                     .addFilter(jwtAuthenticationFilter)

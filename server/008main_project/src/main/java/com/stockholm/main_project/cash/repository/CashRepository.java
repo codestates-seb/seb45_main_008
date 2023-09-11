@@ -5,4 +5,6 @@ import com.stockholm.main_project.member.entity.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface CashRepository extends JpaRepository<Cash, Long> {
+
+
 }
