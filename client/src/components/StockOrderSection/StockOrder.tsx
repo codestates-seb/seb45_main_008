@@ -52,6 +52,10 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
   const isAfter330PM = currentHour > 15 || (currentHour === 15 && currentMinute >= 30);
   const closingTime = isBefore9AM || isAfter330PM;
 
+  // 주문 실패 케이스 1) 개장시간  2) 가격/거래량 설정
+  const orderFailureCase01 = nonBusinessDay || closingTime;
+  const orderFailureCase02 = orderPrice === 0 || orderVolume === 0;
+
   return (
     <>
       {/* 주문 버튼 클릭 안했을 때 */}
@@ -62,11 +66,11 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
 
       {/* 주문 버튼 클릭 했을 때 */}
       {decisionWindow ? (
-        orderVolume === 0 || orderPrice === 0 ? (
+        orderFailureCase01 || orderFailureCase02 ? (
           <OrderFailed>
             <div className="Container">
-              <div className="message01">{nonBusinessDay || closingTime ? `${orderFailureMessage04}` : orderFailureMessage01}</div>
-              <div className="message02">{nonBusinessDay || closingTime ? `${openingTimeIndicator}` : orderPrice !== 0 ? `${orderFailureMessage02}` : `${orderFailureMessage03}`}</div>
+              <div className="message01">{orderFailureCase01 ? `${orderFailureMessage04}` : orderFailureMessage01}</div>
+              <div className="message02">{orderFailureCase01 ? `${openingTimeIndicator}` : orderPrice !== 0 ? `${orderFailureMessage02}` : `${orderFailureMessage03}`}</div>
               <button onClick={handleCloseDecisionWindow}>{orderFailureButtonText}</button>
             </div>
           </OrderFailed>
