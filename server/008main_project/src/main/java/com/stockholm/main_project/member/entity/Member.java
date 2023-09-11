@@ -26,6 +26,9 @@ public class Member extends Auditable {
     @Column(length = 255, nullable = false)
     private String password;
 
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    Cash cash;
+
     @Transient
     private String confirmPassword; //실제 저장을 하지 않기 위해 @Transient 사용
 

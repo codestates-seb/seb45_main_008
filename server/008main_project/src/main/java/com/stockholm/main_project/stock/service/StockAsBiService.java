@@ -1,5 +1,7 @@
 package com.stockholm.main_project.stock.service;
 
+import com.stockholm.main_project.exception.BusinessLogicException;
+import com.stockholm.main_project.exception.ExceptionCode;
 import com.stockholm.main_project.stock.dto.StockasbiDataDto;
 import com.stockholm.main_project.stock.entity.Company;
 import com.stockholm.main_project.stock.entity.StockAsBi;
@@ -10,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -53,9 +56,15 @@ public class StockAsBiService {
             // 저장한다
             companyService.saveCompany(company);
 
-            Thread.sleep(180);
+            Thread.sleep(500);
         }
     }
 
+    public StockAsBi getStockAsBi(long companyId) {
+        Optional<StockAsBi> stock = stockAsBiRepository.findById(companyId);
+        stock.orElseThrow(() -> new BusinessLogicException(ExceptionCode.STOCKASBI_NOT_FOUND));
+
+        return stock.get();
+    }
 
 }
