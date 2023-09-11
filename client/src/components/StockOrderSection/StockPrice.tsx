@@ -53,7 +53,9 @@ const StockPrice = (props: StockPriceProps) => {
   if (nonBusinessDay || isMonday) {
     previousDayStockClosingPrice = stockPrice[stockPrice.length - 1].stck_prpr;
   } else {
-    const yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+    const nowInKoreanTime = new Date(today.getTime() + 9 * 60 * 60 * 1000); // UTC 시간에 9시간 더해서 한국 시간대로 변환
+    const yesterday = new Date(nowInKoreanTime);
+    yesterday.setDate(nowInKoreanTime.getDate() - 1);
     const yesterdayYymmdd = yesterday.toISOString().slice(0, 10);
 
     const yesterdayStockInfo = stockPrice.filter((stockInfo: StockProps) => {
