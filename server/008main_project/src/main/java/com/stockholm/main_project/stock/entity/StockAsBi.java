@@ -31,6 +31,16 @@ public class StockAsBi {
     private String askp4;
     @Column
     private String askp5;
+    @Column
+    private String askp6;
+    @Column
+    private String askp7;
+    @Column
+    private String askp8;
+    @Column
+    private String askp9;
+    @Column
+    private String askp10;
 
     //매도 잔량
     @Column
@@ -43,6 +53,16 @@ public class StockAsBi {
     private String askp_rsqn4;
     @Column
     private String askp_rsqn5;
+    @Column
+    private String askp_rsqn6;
+    @Column
+    private String askp_rsqn7;
+    @Column
+    private String askp_rsqn8;
+    @Column
+    private String askp_rsqn9;
+    @Column
+    private String askp_rsqn10;
 
     //매수 호가
     @Column
@@ -55,6 +75,16 @@ public class StockAsBi {
     private String bidp4;
     @Column
     private String bidp5;
+    @Column
+    private String bidp6;
+    @Column
+    private String bidp7;
+    @Column
+    private String bidp8;
+    @Column
+    private String bidp9;
+    @Column
+    private String bidp10;
 
     //매수 잔량
     @Column
@@ -67,4 +97,14 @@ public class StockAsBi {
     private String bidp_rsqn4;
     @Column
     private String bidp_rsqn5;
+    @Column
+    private String bidp_rsqn6;
+    @Column
+    private String bidp_rsqn7;
+    @Column
+    private String bidp_rsqn8;
+    @Column
+    private String bidp_rsqn9;
+    @Column
+    private String bidp_rsqn10;
 }

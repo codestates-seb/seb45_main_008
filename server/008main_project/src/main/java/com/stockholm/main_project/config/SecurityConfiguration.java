@@ -62,6 +62,7 @@ public class SecurityConfiguration {
                         .antMatchers("members/login").permitAll()
                         .antMatchers(HttpMethod.POST, "/cash").hasRole("USER")
                         .antMatchers(HttpMethod.DELETE, "/cash").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/stockorders").hasRole("USER")
                         .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2

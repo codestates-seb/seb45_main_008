@@ -63,7 +63,7 @@ public class CashController {
 
         cashToUpdate.setMember(member);
 
-        requestBody.setMoneyId(moneyId);
+        requestBody.setCashId(moneyId);
 
         Cash cash = cashService.updateCash(moneyId, member, requestBody);
 

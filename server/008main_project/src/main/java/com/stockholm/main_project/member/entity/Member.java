@@ -1,6 +1,7 @@
 package com.stockholm.main_project.member.entity;
 
 import com.stockholm.main_project.audit.Auditable;
+import com.stockholm.main_project.cash.entity.Cash;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,9 @@ public class Member extends Auditable {
 
     @Column(length = 255, nullable = true)
     private String password;
+
+    @OneToOne(mappedBy = "member", cascade = CascadeType.ALL)
+    Cash cash;
 
     @Transient
     private String confirmPassword; //실제 저장을 하지 않기 위해 @Transient 사용

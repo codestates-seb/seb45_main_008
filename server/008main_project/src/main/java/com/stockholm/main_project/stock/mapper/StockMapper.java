@@ -13,5 +13,4 @@ public interface StockMapper {
     StockMin stockMinOutput2ToStockMin(StockMinDto.StockMinOutput2 stock);
     StockInf stockMinOutput1ToStockInf(StockMinDto.StockMinOutput1 stock);
 
-
 }

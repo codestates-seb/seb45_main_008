@@ -12,7 +12,7 @@ import javax.persistence.*;
 @Getter
 @Setter
 @NoArgsConstructor
-public class StockOrder extends Auditable {
+public class StockOrder extends Auditable{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long stockOrderId;
@@ -20,21 +20,21 @@ public class StockOrder extends Auditable {
     @Column
     private int stockCount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "MEMBER_ID")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne()
     @JoinColumn(name = "COMPANY_ID")
     private Company company;
 
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
-    private OrderTypes OrderTypes;
+    private OrderTypes orderTypes;
 
     @Enumerated(value = EnumType.STRING)
     @Column(length = 20, nullable = false)
-    private OrderStates OrderStates;
+    private OrderStates orderStates;
 
     @Column
     private long price;
@@ -43,6 +43,7 @@ public class StockOrder extends Auditable {
         SELL("매도"),
         BUY("매수");
         @Getter
+        @Setter
         private String types;
 
         OrderTypes(String types) { this.types = types; }
@@ -52,10 +53,12 @@ public class StockOrder extends Auditable {
         ORDER_COMPLETE("채결 완료"),
         ORDER_WAIT("체결 대기");
         @Getter
+        @Setter
         private String states;
 
         OrderStates(String status) {
             this.states = status;
         }
     }
+
 }
