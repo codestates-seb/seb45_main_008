@@ -39,7 +39,12 @@ const useGetKospiChart = () => {
         type: "inside",
       },
     ],
-
+    tooltip: {
+      trigger: "axis",
+      axisPointer: {
+        type: "cross",
+      },
+    },
     series: [
       {
         name: "코스피 지수",
