@@ -31,7 +31,7 @@ public class StockHoldService {
 
     // 없으면 새로운 스톡 홀드를 생성해서 반환해준다
     public StockHold checkStockHold(long companyId, long memberId) {
-        StockHold stockHold = stockHoldRepository.findByCompanyCompanyIdAndMemberMemberId(memberId, companyId);
+        StockHold stockHold = stockHoldRepository.findByCompanyCompanyIdAndMemberMemberId(companyId, memberId);
         if(stockHold == null) {
             StockHold newStockHold = new StockHold();
             newStockHold.setMember(memberRepository.findById(memberId).get());
@@ -58,6 +58,7 @@ public class StockHoldService {
         return stockHoldList;
     }
 
+    //수익률 계산하는 로직
     public List<StockHoldResponseDto> setPercentage(List<StockHoldResponseDto> stockHoldResponseDtos) {
         for(StockHoldResponseDto stockHoldResponseDto : stockHoldResponseDtos) {
             // 이름으로 회사를 불러온다
@@ -72,6 +73,13 @@ public class StockHoldService {
             stockHoldResponseDto.setPercentage(percentage);
         }
         return stockHoldResponseDtos;
+    }
+
+    //보유 주식 전부 삭제하는 로직
+    public void deleteStockHolds(long memberId) {
+        List<StockHold> stockHolds = findStockHolds(memberId);
+
+        stockHoldRepository.deleteAll(stockHolds);
     }
 
 }
