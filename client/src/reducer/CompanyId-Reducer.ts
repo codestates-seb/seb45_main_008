@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 
-const initialState: number = 0;
+const initialState: number = 1;
 
 const companyIdSlice = createSlice({
   name: "companyId",

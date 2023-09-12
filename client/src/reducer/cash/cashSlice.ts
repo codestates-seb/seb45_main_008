@@ -1,20 +1,20 @@
 // store/cashSlice.ts
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
 
 const cashSlice = createSlice({
-    name: 'cash',
-    initialState: {
-        cashId: null,
-        cashAmount: null,
+  name: "cash",
+  initialState: {
+    cashId: null,
+    cashAmount: null,
+  },
+  reducers: {
+    setCashId: (state, action) => {
+      state.cashId = action.payload;
     },
-    reducers: {
-        setCashId: (state, action) => {
-            state.cashId = action.payload;
-        },
-        setCashAmount: (state, action) => {
-            state.cashAmount = action.payload;
-        },
+    setCashAmount: (state, action) => {
+      state.cashAmount = action.payload;
     },
+  },
 });
 
 export const { setCashId, setCashAmount } = cashSlice.actions;
