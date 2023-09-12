@@ -41,16 +41,20 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) =
       });
       if (response.status === 200) {
         const authToken = response.headers['authorization'];
+        console.log(authToken);
   
         // JWT 토큰 디코딩
         const base64Url = authToken.split('.')[1];
         const base64 = base64Url.replace('-', '+').replace('_', '/');
         const decodedToken = JSON.parse(window.atob(base64));
+
+        console.log(decodedToken);
   
         // memberId 상태 업데이트하기
         if (decodedToken && decodedToken.memberId) {
           dispatch(updateMemberId(decodedToken.memberId));
         }
+        console.log(decodedToken.memberId);
   
         const refreshToken = response.headers['refreshToken'];
   

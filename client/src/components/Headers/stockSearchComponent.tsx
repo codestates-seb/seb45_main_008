@@ -4,13 +4,10 @@ import styled from "styled-components";
 import { changeCompanyId } from "../../reducer/CompanyId-Reducer";
 import useGetCompanyList from "../../hooks/useGetCompanyList";
 
-interface CompanyProps {
-  companyId: number;
-  code: string;
-  korName: string;
-  stockAsBiResponseDto: null;
-  stockInfResponseDto: null;
-}
+const stockSearch = "종목 검색";
+const search = "검색";
+const noExistCompany = "noExistCompany";
+const existCompany = "existCompany";
 
 const StockSearchComponent: React.FC = () => {
   const dispatch = useDispatch();
@@ -22,16 +19,16 @@ const StockSearchComponent: React.FC = () => {
   };
 
   const handleSearchCompany = () => {
-    let searchResult: string = "noExistCompany";
+    let searchResult: string = noExistCompany;
 
     companyList.forEach((company: CompanyProps) => {
       if (company.korName === searchWord) {
-        searchResult = "ExistCompany";
+        searchResult = existCompany ;
         dispatch(changeCompanyId(company.companyId));
       }
     });
 
-    if (searchResult === "noExistCompany") {
+    if (searchResult === noExistCompany) {
       dispatch(changeCompanyId(-1));
     }
   };
@@ -49,14 +46,23 @@ const StockSearchComponent: React.FC = () => {
         value={searchWord}
         onChange={handleChangeSearchWord} 
         onKeyDown={handlePressEnterToSearch} 
-        placeholder="종목 검색"
+        placeholder={stockSearch}
       />
-      <StyledSearchButton onClick={handleSearchCompany}>검색</StyledSearchButton>
+      <StyledSearchButton onClick={handleSearchCompany}>{search}</StyledSearchButton>
     </SearchContainer>
   );
 };
 
 export default StockSearchComponent;
+
+interface CompanyProps {
+    companyId: number;
+    code: string;
+    korName: string;
+    stockAsBiResponseDto: null;
+    stockInfResponseDto: null;
+  }
+  
 
 // 스타일 정의
 
