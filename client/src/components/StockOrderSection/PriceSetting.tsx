@@ -53,7 +53,7 @@ const PriceSetting = (props: OwnProps) => {
 
   useEffect(() => {
     handleCheckTradePossibility();
-  }, [orderPrice]);
+  }, [orderPrice, orderType]);
 
   // 가격 설정란에서 포커스 제거 -> 안내 메세지 제거
   const handleRemoveNoVolumeNotification = () => {
@@ -248,5 +248,5 @@ const UnitContent = styled.div`
 const NoTradingVolume = styled.div`
   position: absolute;
   top: 222px;
-  right: 10px;
+  right: 4%;
 `;

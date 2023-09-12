@@ -44,22 +44,23 @@ const StockPriceList = () => {
   }
 
   /*
+  🔴 삭제 예정인 코드
   [문제점] 주가 리스트 개수가 너무 적음 (매도호가 5개 + 매수호가 5개 = 총 10개) → UX를 저해하는 요소로 판단되어, 더미데이터를 추가 (매도/매수 각각 5개씩)
   [해결방안] 1) fetching 해온 데이터 중 가격 0인 데이터 제외 (한국투자증권 API에서 간혹 보내는 경우 있음) → 호가 간격 계산 후, 더미 데이터 추가 (거래량은 0으로 설정)
   */
   const existSellingPrice = sellingPrice.filter((selling) => selling.price !== 0);
   const existBuyingPrice = buyingPrice.filter((buyingPrice) => buyingPrice.price !== 0);
-  const priceInterval: number = existSellingPrice[existSellingPrice.length - 1].price - existBuyingPrice[0].price;
+  // const priceInterval: number = existSellingPrice[existSellingPrice.length - 1].price - existBuyingPrice[0].price;
 
-  for (let i = 0; existSellingPrice.length < 10; i++) {
-    const dummySellingData = { price: existSellingPrice[0].price + priceInterval, volume: 0 };
-    existSellingPrice.unshift(dummySellingData);
-  }
+  // for (let i = 0; existSellingPrice.length < 10; i++) {
+  //   const dummySellingData = { price: existSellingPrice[0].price + priceInterval, volume: 0 };
+  //   existSellingPrice.unshift(dummySellingData);
+  // }
 
-  for (let i = 0; existBuyingPrice.length < 10; i++) {
-    const dummyBuyingData = { price: existBuyingPrice[existBuyingPrice.length - 1].price - priceInterval, volume: 0 };
-    existBuyingPrice.push(dummyBuyingData);
-  }
+  // for (let i = 0; existBuyingPrice.length < 10; i++) {
+  //   const dummyBuyingData = { price: existBuyingPrice[existBuyingPrice.length - 1].price - priceInterval, volume: 0 };
+  //   existBuyingPrice.push(dummyBuyingData);
+  // }
 
   // 1) 매도/매수호가 종합  2) 매수/매도호가 거래량 종합
   const sellingAndBuyingPrice = [...existSellingPrice, ...existBuyingPrice];
