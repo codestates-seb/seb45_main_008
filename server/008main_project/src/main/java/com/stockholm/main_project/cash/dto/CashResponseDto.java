@@ -16,5 +16,5 @@ public class CashResponseDto {
     @Schema(description = "생성 시간", defaultValue = "2023-09-04T12:00:00")
     private LocalDateTime createdAt;
     @Schema(description = "수정 시간", defaultValue = "2023-09-04T12:00:00")
-    private LocalDateTime lastModifiedAt;
+    private LocalDateTime modifiedAt;
 }
