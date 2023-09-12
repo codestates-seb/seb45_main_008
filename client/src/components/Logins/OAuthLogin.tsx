@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import GoogleLogin from './GoogleSignin.tsx'
 import kakaoLogo from '../../asset/images/KakaoLogo.svg';  
 import axios from 'axios';
 
@@ -34,7 +33,7 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
             <ModalContainer>
                 <CloseButton onClick={onClose}>&times;</CloseButton>
                 <Title>{titleText}</Title>
-                <GoogleLogin/>
+
                 <KakaoButton onClick={handleKakaoLogin}>
                     <LogoImage src={kakaoLogo} alt="Kakao Logo" />
                     {kakaoLoginText}

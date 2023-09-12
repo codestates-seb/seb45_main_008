@@ -1,13 +1,10 @@
 import React, { useState } from 'react';
 import styled from 'styled-components'; 
-import { useSelector } from 'react-redux'; // redux-toolkit에서 가져옴
 import { useDeleteMember } from '../../hooks/useDeleteMembers'; // 적절한 경로로 수정
-import { RootState } from '../../store/config'; 
+
 
 const MemberWithdrawalModal: React.FC<MemberWithdrawalModalProps> = ({ onClose }) => {
-    // redux-toolkit에서 memberId 가져옴
-    const memberId = useSelector((state: RootState) => state.login.memberId); 
-    
+
     const [password, setPassword] = useState<string>('');
     const deleteMemberMutation = useDeleteMember();
 
@@ -17,19 +14,15 @@ const MemberWithdrawalModal: React.FC<MemberWithdrawalModalProps> = ({ onClose }
     const withdrawalButtonText = "회원탈퇴";
 
     const handleWithdrawal = () => {
-        if (password === memberId) {
-            deleteMemberMutation.mutate(memberId, {
-                onSuccess: () => {
-                    alert('회원탈퇴 되었습니다!');
-                    onClose();
-                },
-                onError: () => {
-                    alert(incorrectPasswordMsg);
-                }
-            });
-        } else {
-            alert(incorrectPasswordMsg);
-        }
+        deleteMemberMutation.mutate(password, { // 비밀번호를 서버에 전송
+            onSuccess: () => {
+                alert('회원탈퇴 되었습니다!');
+                onClose();
+            },
+            onError: () => {
+                alert(incorrectPasswordMsg);
+            }
+        });
     };
     return (
         <ModalBackground>

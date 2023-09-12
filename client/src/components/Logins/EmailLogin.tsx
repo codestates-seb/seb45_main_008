@@ -1,7 +1,7 @@
 import axios from "axios";
 import styled from "styled-components";
 import React, { useState } from "react";
-import { setLoginState, updateMemberId} from '../../reducer/member/loginSlice';
+import { setLoginState } from '../../reducer/member/loginSlice';
 import { useDispatch } from 'react-redux';
 
 // 이메일 로그인 모달 컴포넌트
@@ -43,27 +43,13 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) =
         const authToken = response.headers['authorization'];
         console.log(authToken);
   
-        // JWT 토큰 디코딩
-        const base64Url = authToken.split('.')[1];
-        const base64 = base64Url.replace('-', '+').replace('_', '/');
-        const decodedToken = JSON.parse(window.atob(base64));
-
-        console.log(decodedToken);
-  
-        // memberId 상태 업데이트하기
-        if (decodedToken && decodedToken.memberId) {
-          dispatch(updateMemberId(decodedToken.memberId));
-        }
-        console.log(decodedToken.memberId);
-  
-        const refreshToken = response.headers['refreshToken'];
+        const refreshToken = response.headers['refresh'];
   
         // 로그인 상태로 만들기
         dispatch(setLoginState(true)); 
   
         // 토큰들을 로컬 스토리지에 저장
         if(authToken) localStorage.setItem('authToken', authToken);
-  
         if(refreshToken) localStorage.setItem('refreshToken', refreshToken);
         
         onLogin();
