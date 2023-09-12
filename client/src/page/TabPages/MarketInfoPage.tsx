@@ -14,7 +14,7 @@ const MarketInfo: React.FC<Props> = () => {
     setTabStyle(number);
   };
   return (
-    <div>
+    <MarketContainer>
       <style>
         @import
         url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@500&display=swap');
@@ -42,7 +42,7 @@ const MarketInfo: React.FC<Props> = () => {
         {selectedTab === "market" && <MarketSummary />}
         {selectedTab === "stockList" && <MarketStockList />}
       </div>
-    </div>
+    </MarketContainer>
   );
 };
 
@@ -53,6 +53,7 @@ const MarketInfoText = {
 };
 // **스타일 옮기기
 
+const MarketContainer = styled.div``;
 const TabStyle = styled.div`
   cursor: pointer;
 `;

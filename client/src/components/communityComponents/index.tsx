@@ -5,7 +5,7 @@ import { DotIcon } from "./IconComponent/Icon";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 const serverUrl =
-  "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/boards";
+  "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards";
 
 const TimeLineComponent = () => {
   const navigate = useNavigate();
@@ -39,7 +39,7 @@ const TimeLineComponent = () => {
     setinputValue(e.target.value);
     console.log(inputValue);
   };
-
+  const authToken = localStorage.getItem("authToken"); // 로컬스토리지 토큰 가져오기
   // 서브밋 버튼 클릭
   const handleClickSubmit = async () => {
     if (inputValue.length !== 0) {
@@ -54,7 +54,11 @@ const TimeLineComponent = () => {
       };
 
       try {
-        const response = await axios.post(`${serverUrl}`, newBoardData);
+        const response = await axios.post(`${serverUrl}`, newBoardData, {
+          headers: {
+            Authorization: authToken, // 토큰을 요청 헤더에 추가
+          },
+        });
         if (response.status === 201) {
           // 서버에 성공적으로 데이터를 업로드한 경우
           alert("작성완료");
@@ -90,7 +94,11 @@ const TimeLineComponent = () => {
   const handleDeleteClick = async (boardId: number) => {
     // boardId로 수정
     try {
-      const response = await axios.delete(`${serverUrl}/${boardId}`); // URL에 boardId 추가
+      const response = await axios.delete(`${serverUrl}/${boardId}`, {
+        headers: {
+          Authorization: `Bearer ${authToken}`, // 토큰을 헤더에 추가
+        },
+      }); // URL에 boardId 추가
       if (response.status === 200) {
         // 삭제 성공 처리
         alert("삭제되었습니다");
@@ -132,12 +140,16 @@ const TimeLineComponent = () => {
           <DropDownClose onClick={handleSetOpenDropDown}>
             <p>{timeLineText.close}</p>
           </DropDownClose>
-          <DropdownInput
-            type="text"
-            placeholder="이곳에 작성해 주세요"
-            value={inputValue}
-            onChange={handleOnChange}
-          ></DropdownInput>
+          {authToken === null || undefined ? (
+            <div>로그인해주세요</div>
+          ) : (
+            <DropdownInput
+              type="text"
+              placeholder="이곳에 작성해 주세요"
+              value={inputValue}
+              onChange={handleOnChange}
+            ></DropdownInput>
+          )}
 
           <SubmitButton onClick={handleClickSubmit}>Submit</SubmitButton>
         </>
@@ -169,7 +181,7 @@ const TimeLineComponent = () => {
                   <br />
                   {el.content}
                 </BoardText>
-                <Comments postId={el.boardId}></Comments>
+                <Comments boardId={el.boardId}></Comments>
               </BoardTextArea>
             ))
         )}
@@ -276,7 +288,7 @@ const SubmitButton = styled.button`
 //게시판 전체 영역
 const BoardArea = styled.div`
   text-align: center;
-
+  max-height: 600px;
   margin-top: 25px;
   width: 90%;
 `;
@@ -293,6 +305,7 @@ const BoardTextAreaNoText = styled.div`
 `;
 const BoardTextArea = styled.div`
   width: 80%;
+
   padding-bottom: 10px;
   border-radius: 20px 20px;
   border: 1px solid#40797c;
@@ -312,7 +325,6 @@ const TimeLine = styled.div`
   flex-direction: column;
   align-content: space-around;
   flex-wrap: wrap;
-  max-height:600px;
 `;
 //게시글 삭제
 const Delete = styled.div`

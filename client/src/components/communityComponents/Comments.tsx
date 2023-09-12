@@ -1,42 +1,62 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import styled from "styled-components";
+import axios from "axios";
 
-const Comments = ({ postId }: { postId: number }) => {
+const Comments = ({ boardId }: { boardId: number }) => {
+  ///api/boards/{boardId}/comment/
   interface CommentData {
     id: number;
     comments: string;
   }
-  const [commentData, setCommentData] = useState<CommentData[]>(() => {
-    // 게시물별로 로컬 스토리지에서 댓글 데이터를 가져옵니다.
-    const storedData = localStorage.getItem(`commentData_${postId}`);
-    return storedData ? JSON.parse(storedData) : [];
-  });
-
+  const [commentData, setCommentData] = useState<CommentData[]>([]);
   const [commentsValue, setCommentsValue] = useState("");
+  useEffect(() => {
+    // 게시물 ID를 기반으로 서버에서 댓글 데이터를 가져옵니다.
+    fetchCommentsFromServer();
+  }, [boardId]);
+
+  const fetchCommentsFromServer = async () => {
+    try {
+      const response = await axios.get(`/api/boards/${boardId}/comment`);
+      setCommentData(response.data);
+    } catch (error) {
+      console.error("댓글 데이터를 가져오는 중 오류 발생:", error);
+    }
+  };
 
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCommentsValue(e.target.value);
   };
-
-  const handleClickSubmit = () => {
+  const authToken = localStorage.getItem("authToken"); // 로컬스토리지 토큰 가져오기
+  const handleClickSubmit = async () => {
     if (commentsValue) {
       const newCommentData: CommentData = {
         id: new Date().getTime(),
-
         comments: commentsValue,
       };
 
-      // 댓글 데이터를 업데이트합니다.
-      setCommentData((prevCommentData) => [...prevCommentData, newCommentData]);
-
-      // 게시물 ID에 따라 로컬 스토리지에 댓글 데이터를 저장합니다.
-      localStorage.setItem(
-        `commentData_${postId}`,
-        JSON.stringify([...commentData, newCommentData])
-      );
-
-      // 댓글 입력창 초기화
-      setCommentsValue("");
+      try {
+        // 서버에 댓글 데이터를 POST합니다.
+        const response = await axios.post(
+          `/api/boards/${boardId}/comment`,
+          newCommentData,
+          {
+            headers: {
+              Authorization: authToken, // 토큰을 헤더에 추가
+            },
+          }
+        );
+        if (response.status === 201) {
+          // 서버에 성공적으로 데이터를 업로드한 경우
+          setCommentsValue("");
+          // 서버에서 업데이트된 댓글 목록을 다시 가져오기
+          fetchCommentsFromServer();
+        } else {
+          console.log("댓글 작성 실패:", response.data);
+        }
+      } catch (error) {
+        console.error("댓글 작성 중 오류 발생:", error);
+      }
     }
   };
   // 보여지는 댓글 수 제한 및 더보기 버튼 클릭시 모든댓글이 보이도록 설정
