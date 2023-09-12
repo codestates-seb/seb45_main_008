@@ -48,11 +48,6 @@ const Comments = ({ postId }: { postId: number }) => {
     setVisibleComments(close ? 1 : commentData.length);
   };
 
-  const CommentText = {
-    write: "작성",
-    replyCount: `댓글${commentData.length}개 모두보기`,
-  };
-
   return (
     <CommentContainer>
       <div>
