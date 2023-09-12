@@ -28,10 +28,6 @@ const StockOrderSection = () => {
   const { stockInfo, stockInfoLoading, stockInfoError } = useGetStockInfo(companyId);
   const { stockPrice, stockPriceLoading, stockPriceError } = useGetStockData(companyId);
 
-  console.log(isLogin);
-  const localData = localStorage.getItem("authToken");
-  console.log(localData);
-
   // 주식주문 창 닫기
   const handleStockOrderClose = () => {
     dispatch(stockOrderClose());

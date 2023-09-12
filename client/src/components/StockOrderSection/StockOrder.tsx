@@ -3,6 +3,7 @@ import { isHoliday } from "@hyunbinseo/holidays-kr";
 import { closeDecisionWindow } from "../../reducer/SetDecisionWindow-Reducer";
 import { styled } from "styled-components";
 import { StateProps } from "../../models/stateProps";
+import useTradeStock from "../../hooks/useTradeStock";
 
 import StockPriceList from "./StockPriceList";
 import StockOrderSetting from "./StockOrderSetting";
@@ -41,6 +42,24 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
     dispatch(closeDecisionWindow());
   };
 
+  //🔴 주문 관련 테스트
+  const orderRequest = useTradeStock();
+
+  const handleStockOrder = () => {
+    orderRequest.mutate();
+    const { isLoading, isError } = orderRequest;
+
+    if (isLoading) {
+      console.log("주식 주문 진행 중");
+    }
+
+    if (isError) {
+      console.log("주문 오류 발생");
+    }
+
+    handleCloseDecisionWindow();
+  };
+
   // 1) 주말, 공휴일 여부 체크
   const today = new Date();
   const nonBusinessDay = isHoliday(today, { include: { saturday: true, sunday: true } }); // 토요일, 일요일, 공휴일 (임시 공휴일 포함)
@@ -53,7 +72,9 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
   const closingTime = isBefore9AM || isAfter330PM;
 
   // 주문 실패 케이스 1) 개장시간  2) 가격/거래량 설정
-  const orderFailureCase01 = nonBusinessDay || closingTime;
+  // 🔴 3시 30분 이후 작업 위해 closingTime 조건 해제
+  const orderFailureCase01 = nonBusinessDay;
+  // const orderFailureCase01 = nonBusinessDay || closingTime;
   const orderFailureCase02 = orderPrice === 0 || orderVolume === 0;
 
   return (
@@ -105,7 +126,7 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
                   <button className="cancel" onClick={handleCloseDecisionWindow}>
                     {cancelButtonText}
                   </button>
-                  <button className="confirm" onClick={handleCloseDecisionWindow}>
+                  <button className="confirm" onClick={handleStockOrder}>
                     {confirmButtonText}
                   </button>
                 </div>
