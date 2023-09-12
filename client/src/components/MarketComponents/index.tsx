@@ -69,6 +69,7 @@ const NewsListLink = {
 
 const Market = styled.div`
   text-align: center;
+  height: 600px;
 `;
 const News = styled.div`
   display: flex;

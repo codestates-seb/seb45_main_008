@@ -48,6 +48,7 @@ const Comments = ({ postId }: { postId: number }) => {
     setVisibleComments(close ? 1 : commentData.length);
   };
 
+  //코드 중복
   // const CommentText = {
   //   write: "작성",
   //   replyCount: `댓글${commentData.length}개 모두보기`,

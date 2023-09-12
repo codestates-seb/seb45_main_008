@@ -200,7 +200,7 @@ const MainPage = () => {
           }}
         />
         )}
-      {isProfileModalOpen && <ProfileModal onClose={() => setProfileModalOpen(false)} />} //프로필 모달 컴포넌트 렌더링
+      {isProfileModalOpen && <ProfileModal onClose={() => setProfileModalOpen(false)} />} 
 
     </Container>
   );
