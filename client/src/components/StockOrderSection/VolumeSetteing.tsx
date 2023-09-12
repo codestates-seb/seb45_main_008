@@ -24,8 +24,6 @@ const VolumeSetting = () => {
   const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
   const orderVolume = useSelector((state: StateProps) => state.stockOrderVolume);
 
-  // 🎾 임시로직 추가
-  // const maximumBuyingVolume = Math.trunc(dummyMoney / orderPrice);
   const maximumBuyingVolume = orderPrice !== 0 ? Math.trunc(dummyMoney / orderPrice) : Math.trunc(dummyMoney / 1);
 
   const handlePlusOrderVolume = () => {
@@ -42,6 +40,15 @@ const VolumeSetting = () => {
   const handleMinusOrderVolume = () => {
     if (0 < orderVolume) {
       dispatch(minusStockOrderVolume());
+    }
+  };
+
+  // 위-아래 방향키 입력 시
+  const handleInputArrowBtn = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.code === "ArrowUp") {
+      handlePlusOrderVolume();
+    } else if (event.code === "ArrowDown") {
+      handleMinusOrderVolume();
     }
   };
 
@@ -97,7 +104,7 @@ const VolumeSetting = () => {
         </div>
       </TitleContainer>
       <VolumeSettingBox>
-        <VolumeController defaultValue={orderVolume} value={orderVolume} onChange={handleWriteOrderVolume} />
+        <VolumeController defaultValue={orderVolume} value={orderVolume} onChange={handleWriteOrderVolume} onKeyDown={handleInputArrowBtn} />
         <UnitContent>{volumeUnit}</UnitContent>
         <div className="DirectionContainer">
           <button className="VolumeUp" onClick={handlePlusOrderVolume}>
