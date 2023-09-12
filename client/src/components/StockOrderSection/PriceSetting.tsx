@@ -18,8 +18,9 @@ const PriceSetting = (props: OwnProps) => {
   const [priceChangeTimer, setPriceChangeTimer] = useState<NodeJS.Timeout | null>(null);
 
   // 초기 설정값 및 가격 변동폭 설정
-  const { askp1, askp2, askp3, askp4, askp5 } = stockInfo;
-  const sellingPrice = [parseInt(askp1), parseInt(askp2), parseInt(askp3), parseInt(askp4), parseInt(askp5)];
+  const { askp1, askp2, askp3, askp4, askp5, askp6, askp7, askp8, askp9, askp10 } = stockInfo;
+  const sellingInfo = [askp1, askp2, askp3, askp4, askp5, askp6, askp7, askp8, askp9, askp10];
+  const sellingPrice = sellingInfo.map((price) => parseInt(price));
   const existSellingPrice = sellingPrice.filter((price) => price !== 0); // price 0인 경우 제거
   const defaultPrice = existSellingPrice[0];
   const priceInterval = existSellingPrice[1] - existSellingPrice[0];
@@ -28,8 +29,9 @@ const PriceSetting = (props: OwnProps) => {
   const orderType = useSelector((state: StateProps) => state.stockOrderType);
   const [orderPossibility, setOrderPossibility] = useState(true);
 
-  const { bidp1, bidp2, bidp3, bidp4, bidp5 } = stockInfo;
-  const buyingPrice = [parseInt(bidp1), parseInt(bidp2), parseInt(bidp3), parseInt(bidp4), parseInt(bidp5)];
+  const { bidp1, bidp2, bidp3, bidp4, bidp5, bidp6, bidp7, bidp8, bidp9, bidp10 } = stockInfo;
+  const buyingInfo = [bidp1, bidp2, bidp3, bidp4, bidp5, bidp6, bidp7, bidp8, bidp9, bidp10];
+  const buyingPrice = buyingInfo.map((price) => parseInt(price));
   const existBuyingPrice = buyingPrice.filter((price) => price !== 0); // price 0인 경우 제거
 
   // 거래 가능여부 판별 함수
