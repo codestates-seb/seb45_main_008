@@ -64,8 +64,13 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.DELETE, "/cash").hasRole("USER")
                         .antMatchers(HttpMethod.POST, "/stockorders").hasRole("USER")
                         .antMatchers(HttpMethod.POST, "/api/boards").hasRole("USER")
-                        .antMatchers(HttpMethod.PATCH, "/api/boards").hasRole("USER")
-                        .antMatchers(HttpMethod.DELETE, "/api/boards").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/api/boards/*").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/api/boards/*").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "api/boards").permitAll()
+                        .antMatchers(HttpMethod.GET, "api/boards/{boardId}").permitAll() //질문을 선택해 조회하는 기능은 인증된 사용자에게만 혀용
+                        .antMatchers(HttpMethod.POST, "/api/boards/{boardId}/comment/*").hasRole("USER")
+                        .antMatchers(HttpMethod.PATCH, "/api/boards/{boardId}/comment/*").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/api/boards/{boardId}/comment/*").hasRole("USER")
                         .anyRequest().permitAll()
                 )
                 .oauth2Login(oauth2 -> oauth2

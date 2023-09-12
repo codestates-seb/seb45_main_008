@@ -31,7 +31,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/boards")
 public class BoardController {
 
-    @Autowired
+
     private final BoardService boardService;
     private final MemberService memberService;
 
@@ -104,11 +104,11 @@ public class BoardController {
     }
 
     @DeleteMapping("{boardId}")
-    public ResponseEntity deleteBoard(@PathVariable long boardId){
-        boardService.deleteBoard(boardId);
+    public ResponseEntity deleteBoard(@PathVariable long boardId, @AuthenticationPrincipal Member member){
+        boardService.deleteBoard(boardId, member);
 
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 
-    };
+    }
 
 }
