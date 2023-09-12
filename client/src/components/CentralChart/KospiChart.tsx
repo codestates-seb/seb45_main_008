@@ -17,7 +17,7 @@ import { useEffect, useState } from "react";
 const KospiChart = () => {
   const dispatch = useDispatch();
 
-  const { isLoading, error, options, chartStyle } = useGetKospiChart();
+  const { kospiLoading, kospiError, options, chartStyle } = useGetKospiChart();
 
   // 🔴 차트 변환 테스트
 
@@ -71,11 +71,11 @@ const KospiChart = () => {
   };
   //
 
-  if (isLoading) {
+  if (kospiLoading) {
     return <LoadingContainer>{loadingText}</LoadingContainer>;
   }
 
-  if (error) {
+  if (kospiError) {
     return <ErrorContainer>{errorText}</ErrorContainer>;
   }
 

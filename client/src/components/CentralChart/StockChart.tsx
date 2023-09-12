@@ -20,7 +20,7 @@ const StockChart = () => {
   const companyId = useSelector((state: StateProps) => state.companyId);
   const dispatch = useDispatch();
 
-  const { isLoading, error } = useGetStockData(companyId);
+  const { stockPriceLoading, stockPriceError } = useGetStockData(companyId);
   const { options, chartStyle } = useGetStockChart(companyId);
 
   // 🔴 차트 변환 테스트
@@ -46,7 +46,7 @@ const StockChart = () => {
 
     companyList.forEach((company: CompanyProps) => {
       if (company.korName === searchWord) {
-        searchResult = "ExistCompany";
+        searchResult = "existCompany";
         dispatch(changeCompanyId(company.companyId));
       }
     });
@@ -81,11 +81,11 @@ const StockChart = () => {
   };
   //
 
-  if (isLoading) {
+  if (stockPriceLoading) {
     return <LoadingContainer>{loadingText}</LoadingContainer>;
   }
 
-  if (error) {
+  if (stockPriceError) {
     return <ErrorContainer>{errorText}</ErrorContainer>;
   }
 

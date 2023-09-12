@@ -1,52 +1,63 @@
+import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
-import { setSpecifiedPrice, setMarketPrice } from "../../reducer/StockPriceType-Reducer";
-import { plusStockOrderPrice, minusStockOrderPrice } from "../../reducer/StockOrderPrice-Reducer";
+import { setStockOrderPrice, plusStockOrderPrice, minusStockOrderPrice } from "../../reducer/StockOrderPrice-Reducer";
 import { StateProps } from "../../models/stateProps";
+import { StockInfoprops } from "../../models/stockInfoProps";
 
 const priceSettingTitle: string = "가격";
-const specifiedPriceBtnText: string = "지정가";
-const marketPriceBtnText: string = "시장가";
 const unitText: string = "원";
 
-const PriceSetting = () => {
-  const priceType = useSelector((state: StateProps) => state.stockPriceType);
-  const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
+const PriceSetting = (props: OwnProps) => {
+  const { stockInfo, companyId } = props;
+
   const dispatch = useDispatch();
+  const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
 
-  // 시장가, 지정가 변경
-  const handleSetSepcifiedPrice = () => {
-    dispatch(setSpecifiedPrice());
-  };
-
-  const handleSetMarketPrice = () => {
-    dispatch(setMarketPrice());
-  };
+  // 초기 설정값 및 가격 변동폭 설정
+  const { askp1, askp2, askp3, askp4, askp5 } = stockInfo;
+  const sellingPrice = [parseInt(askp1), parseInt(askp2), parseInt(askp3), parseInt(askp4), parseInt(askp5)];
+  const existSellingPrice = sellingPrice.filter((price) => price !== 0); // price 0인 경우 제거
+  const defaultPrice = existSellingPrice[0];
+  const priceInterval = existSellingPrice[1] - existSellingPrice[0];
 
   // 거래가 증가/감소
   const handlePlusOrderPrice = () => {
-    dispatch(plusStockOrderPrice(10));
+    dispatch(plusStockOrderPrice(priceInterval));
   };
 
   const handleMinusOrderPrice = () => {
-    dispatch(minusStockOrderPrice(10));
+    dispatch(minusStockOrderPrice(priceInterval));
   };
+
+  // 거래가 직접 기입 시
+  const handleWriteOrderPrice = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    const numberInputValue = parseInt(inputValue, 10);
+
+    // 1) 음수를 임력하거나, 숫자 아닌 값 기입 시 -> 입력 무시  2) 값을 다 지워서 빈 문자열인 경우 -> 0으로 설정
+    if (numberInputValue < 0 || isNaN(numberInputValue)) {
+      if (inputValue === "") {
+        dispatch(setStockOrderPrice(0));
+      }
+      return;
+    }
+
+    dispatch(setStockOrderPrice(numberInputValue));
+  };
+
+  // 종목이 달리지면 -> 가격도 변경
+  useEffect(() => {
+    dispatch(setStockOrderPrice(defaultPrice));
+  }, [companyId]);
 
   return (
     <Container>
       <div className="PriceCategoryBox">
         <div className="Title">{priceSettingTitle}</div>
-        <div className="ButtonContainer">
-          <SepcifiedPriceBtn onClick={handleSetSepcifiedPrice} priceType={priceType}>
-            {specifiedPriceBtnText}
-          </SepcifiedPriceBtn>
-          <MarketPriceBtn onClick={handleSetMarketPrice} priceType={priceType}>
-            {marketPriceBtnText}
-          </MarketPriceBtn>
-        </div>
       </div>
       <div className="PriceSettingBox">
-        <PriceController defaultValue={orderPrice} value={orderPrice} />
+        <PriceController defaultValue={orderPrice} value={orderPrice} onChange={handleWriteOrderPrice} />
         <UnitContent>{unitText}</UnitContent>
         <div className="DirectionBox">
           <button className="PriceUp" onClick={handlePlusOrderPrice}>
@@ -63,16 +74,16 @@ const PriceSetting = () => {
 
 export default PriceSetting;
 
-// type 정의
-interface PriceTypeProps {
-  priceType: boolean;
+interface OwnProps {
+  stockInfo: StockInfoprops;
+  companyId: number;
 }
 
 // component 생성
 const Container = styled.div`
   width: 100%;
-  margin-top: 16px;
-  margin-bottom: 32px;
+  margin-top: 21px;
+  margin-bottom: 34px;
 
   .PriceCategoryBox {
     display: flex;
@@ -129,29 +140,6 @@ const Container = styled.div`
       }
     }
   }
-`;
-
-const SepcifiedPriceBtn = styled.button<PriceTypeProps>`
-  width: 46px;
-  height: 21px;
-  border: none;
-  box-shadow: ${(props) => !props.priceType && "0.7px 0.7px 3px rgba(0, 0, 0, 0.4);"};
-  border-radius: 0.3rem;
-  background-color: ${(props) => (props.priceType ? "f2f2f2" : "white")};
-  color: ${(props) => (props.priceType ? "#999999" : "black")};
-
-  font-size: 13px;
-`;
-
-const MarketPriceBtn = styled.button<PriceTypeProps>`
-  width: 46px;
-  height: 21px;
-  border: none;
-  border-radius: 0.3rem;
-  box-shadow: ${(props) => props.priceType && "0.7px 0.7px 3px rgba(0, 0, 0, 0.4);"};
-  background-color: ${(props) => (props.priceType ? "white" : "f2f2f2")};
-  color: ${(props) => (props.priceType ? "black" : "#999999")};
-  font-size: 13px;
 `;
 
 const PriceController = styled.input`

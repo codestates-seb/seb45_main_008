@@ -13,25 +13,26 @@ const valueText: string = "거래대금";
 // styled-component 수정 및 미디어 쿼리 적용
 const StockOverview = () => {
   const companyId = useSelector((state: StateProps) => state.companyId);
-  const { data, isLoading, error } = useGetStockInfo(companyId);
+  const { stockInfo, stockInfoLoading, stockInfoError } = useGetStockInfo(companyId);
 
-  if (isLoading) {
+  if (stockInfoLoading) {
     return <p>로딩 중 입니다</p>;
   }
 
-  if (error) {
+  if (stockInfoError) {
     return <p>에러 발생</p>;
   }
 
-  const corpName = data.korName;
-  const stockCode = data.code;
-  const stockPrice = parseInt(data.stockInfResponseDto.stck_prpr, 10).toLocaleString();
-  const priceChageRate = parseFloat(data.stockInfResponseDto.prdy_ctrt);
+  const corpName = stockInfo.korName;
+  const stockCode = stockInfo.code;
+  const stockPrice = parseInt(stockInfo.stockInfResponseDto.stck_prpr, 10).toLocaleString();
+  const priceChageRate = parseFloat(stockInfo.stockInfResponseDto.prdy_ctrt);
   const chageDirection = priceChageRate > 0 ? "▲" : "▼";
-  const priceChageAmount = Math.abs(parseInt(data.stockInfResponseDto.prdy_vrss, 10)).toLocaleString();
-  const transactionVolume = parseInt(data.stockInfResponseDto.acml_vol, 10).toLocaleString();
+  const priceChageAmount = Math.abs(parseInt(stockInfo.stockInfResponseDto.prdy_vrss, 10)).toLocaleString();
+  const transactionVolume = parseInt(stockInfo.stockInfResponseDto.acml_vol, 10).toLocaleString();
+
   // 총 거래대금 계산
-  const amount = parseInt(data.stockInfResponseDto.acml_tr_pbmn, 10);
+  const amount = parseInt(stockInfo.stockInfResponseDto.acml_tr_pbmn, 10);
   const [billions, tenThousands] = [Math.floor(amount / 100000000), Math.floor((amount % 100000000) / 10000)];
   const transactionValue = `${billions.toLocaleString()}억 ${tenThousands.toLocaleString()}만`;
 
@@ -99,14 +100,14 @@ const Container = styled.div<{ priceChangeRate: number }>`
 
   .StockPrice {
     font-size: 18px;
-    color: ${(props) => (props.priceChangeRate > 0 ? "#ed2926" : "#3177d7")};
+    color: ${(props) => (props.priceChangeRate > 0 ? "#ed2926" : props.priceChangeRate === 0 ? "black" : "#3177d7")};
     font-weight: 530;
   }
 
   .PriceChangeRate,
   .PriceChangeAmount {
     font-size: 14px;
-    color: ${(props) => (props.priceChangeRate > 0 ? "#ed2926" : "#3177d7")};
+    color: ${(props) => (props.priceChangeRate > 0 ? "#ed2926" : props.priceChangeRate === 0 ? "black" : "#3177d7")};
 
     display: flex;
     flex-direction: row;
@@ -125,7 +126,7 @@ const TransactionVolume = styled.div`
   white-space: nowrap;
   min-width: min-content;
   font-size: 14px;
-  color: #525252;
+  color: #2f4f4f;
 
   & span {
     color: #999999;
