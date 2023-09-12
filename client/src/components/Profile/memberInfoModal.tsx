@@ -1,21 +1,16 @@
 import React from 'react';
 import styled from 'styled-components'; 
-import { useSelector } from 'react-redux';
-import { useGetMemberInfo } from '../../hooks/useGetMemberInfo.ts'; 
-import { RootState } from '../../store/config'; 
+import { useGetMemberInfo } from '../../hooks/useGetMemberInfo.ts';  
 
 const MemberInfoModal: React.FC<MemberInfoModalProps> = ({ onClose }) => {
-    // loginSlice에서 memberId 값을 가져옵니다.
-    const memberId = useSelector((state: RootState) => state.login.memberId);
     
     // memberId 값을 useGetMemberInfo 훅에 전달하여 회원 정보를 가져옵니다.
-    const { data: memberInfo } = useGetMemberInfo(memberId); 
+    const { data: memberInfo } = useGetMemberInfo(); 
 
     const titleText = "회원정보";
     const nameText = "이름: ";
     const emailText = "이메일: ";
     const createdAtText = "회원 가입 일시: ";
-    const memberIdText = "회원 ID: ";
 
     return (
         <ModalBackground>
@@ -24,7 +19,6 @@ const MemberInfoModal: React.FC<MemberInfoModalProps> = ({ onClose }) => {
                 <Title>{titleText}</Title>
                 {memberInfo ? (
                     <div>
-                        <p>{memberIdText}{memberInfo.memberId}</p>
                         <p>{nameText}{memberInfo.name}</p>
                         <p>{emailText}{memberInfo.email}</p>
                         <p>{createdAtText}{memberInfo.createdAt}</p>

@@ -44,6 +44,7 @@ interface ProfileModalProps {
 
 // 모달 배경 스타일
 const ModalBackground = styled.div`
+  z-index:10;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -57,6 +58,7 @@ const ModalBackground = styled.div`
 
 // 모달 컨테이너 스타일
 const ModalContainer = styled.div`
+  z-index: 11;
   position: relative;
   background-color: white;
   padding: 20px;

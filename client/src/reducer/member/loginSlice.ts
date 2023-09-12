@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit';
 const loginSlice = createSlice({
   name: 'login',
   initialState: {
-    memberId: null,
+    memberId: 0,
     isLoggedIn: 1
   },
   reducers: {
@@ -12,14 +12,12 @@ const loginSlice = createSlice({
       state.isLoggedIn = 1;
     },
     setLogoutState: (state) => {
-      state.memberId = null;
+      state.memberId = 0;
       state.isLoggedIn = 0;
     },
-    updateMemberId: (state, action) => {
-      state.memberId = action.payload;
-    }
+
   }
 });
 
-export const { setLoginState, setLogoutState, updateMemberId } = loginSlice.actions;
+export const { setLoginState, setLogoutState} = loginSlice.actions;
 export default loginSlice.reducer;

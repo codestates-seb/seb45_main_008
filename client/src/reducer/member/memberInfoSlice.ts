@@ -3,7 +3,7 @@
 import { createSlice, PayloadAction} from '@reduxjs/toolkit';
 
 interface MemberInfo {
-  memberId: number;
+
   email: string;
   name: string;
   createdAt: string;
