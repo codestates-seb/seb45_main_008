@@ -15,7 +15,11 @@ public enum ExceptionCode {
     INVALID_FAILED(404, "유효하지 않은 접근입니다."),
     STOCKASBI_NOT_FOUND(404, "호가 정보를 찾을 수 없습니다"),
     STOCKHOLD_NOT_FOUND(404, "보유 주식 정보가 없습니다."),
-    INSUFFICIENT_STOCK(422,"보유 주식이 부족합니다");
+    INSUFFICIENT_STOCK(422,"보유 주식이 부족합니다"),
+    NOT_ENOUGH_MONEY(422, "보유 금액이 부족합니다"),
+    STOCKORDER_NOT_FOUND(404, "주식 거래내역이 존재하지 않습니다"),
+    STOCKORDER_PERMISSION_DENIED(400,"잘못된 삭제 요청입니다."),
+    STOCKORDER_ALREADY_FINISH(400, "이미 완료된 거래입니다");
 
     @Getter
     private int status;

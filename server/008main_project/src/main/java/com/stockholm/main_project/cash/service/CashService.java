@@ -31,8 +31,8 @@ public class CashService {
         return saveCash;
     }
 
-    public Cash updateCash(long moneyId, Member member, CashPatchDto patchDto){
-        Cash cash = findCash(moneyId);
+    public Cash updateCash(long cashId, Member member, CashPatchDto patchDto){
+        Cash cash = findCash(cashId);
 
 //        validateAuthor(cash, member);
         cash.setMoney(patchDto.getMoney());
@@ -41,9 +41,16 @@ public class CashService {
 
     }
 
-    public Cash findCash(long moneyId) {
-        Optional<Cash> cashOptional = cashRepository.findById(moneyId);
+    public Cash findCash(long cashId) {
+        Optional<Cash> cashOptional = cashRepository.findById(cashId);
         return cashOptional.orElseThrow(() -> new BusinessLogicException(ExceptionCode.INVALID_CASH));
+    }
+
+    public void checkCash(long price, Member member) {
+        if(price > member.getCash().getMoney())
+            throw new BusinessLogicException(ExceptionCode.NOT_ENOUGH_MONEY);
+        else
+            return;
     }
 
     private void validateAuthor(Cash cash, Member member) {
