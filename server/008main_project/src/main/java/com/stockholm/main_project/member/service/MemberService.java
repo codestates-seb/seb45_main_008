@@ -66,7 +66,13 @@ public class MemberService {
 
     public  Member findMember(long memberId) {
 
-        return findVerifiedMember(memberId);
+        Member findMember = findVerifiedMember(memberId);
+
+        if (findMember.getMemberId() != memberId) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_FAILED);
+        }
+
+        return findVerifiedMember(findMember.getMemberId());
     }
 
     public void deleteMember(long memberId) {

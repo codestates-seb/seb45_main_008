@@ -14,6 +14,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -52,17 +53,17 @@ public class MemberController {
     @ApiResponse(responseCode = "400", description = "BAD REQUEST")
     @ApiResponse(responseCode = "404", description = "NOT FOUND")
     @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-    @PatchMapping("{memberId}")
-    private ResponseEntity patchMember(@Schema(implementation = MemberPatchDto.class)@PathVariable long memberId, @RequestBody MemberPatchDto memberPatchDto){
-        // Mapper 문제로 직접 주입으로 수정
-        memberPatchDto.setMemberId(memberId);
+    @PatchMapping
+    private ResponseEntity patchMember(@Schema(implementation = MemberPatchDto.class)@RequestBody MemberPatchDto memberPatchDto, @AuthenticationPrincipal Member member){
 
-        Member member = new Member();
-        member.setMemberId(memberPatchDto.getMemberId());
-        member.setName(memberPatchDto.getName());
-        member.setEmail(memberPatchDto.getEmail());
+        memberPatchDto.setMemberId(member.getMemberId());
 
-        Member response = memberService.updateMember(member);
+        Member patchedMember = new Member();
+        patchedMember.setMemberId(memberPatchDto.getMemberId());
+        patchedMember.setName(memberPatchDto.getName());
+        patchedMember.setEmail(memberPatchDto.getEmail());
+
+        Member response = memberService.updateMember(patchedMember);
 
         return new ResponseEntity<>(mapper.memberToMemberResponseDto(response), HttpStatus.OK);
     }
@@ -74,9 +75,9 @@ public class MemberController {
     @ApiResponse(responseCode = "400", description = "BAD REQUEST")
     @ApiResponse(responseCode = "404", description = "NOT FOUND")
     @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-    @GetMapping("{memberId}")
-    private ResponseEntity getMember(@PathVariable long memberId){
-        Member response = memberService.findMember(memberId);
+    @GetMapping
+    private ResponseEntity getMember(@AuthenticationPrincipal Member member){
+        Member response = memberService.findMember(member.getMemberId());
 
         return new ResponseEntity<>(mapper.memberToMemberResponseDto(response), HttpStatus.OK);
     }
@@ -86,9 +87,9 @@ public class MemberController {
     @ApiResponse(responseCode = "404", description = "NOT FOUND")
     @ApiResponse(responseCode = "400", description = "BAD REQUEST")
     @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
-    @DeleteMapping("{memberId}")
-    private ResponseEntity deleteMember(@PathVariable long memberId){
-        memberService.deleteMember(memberId);
+    @DeleteMapping
+    private ResponseEntity deleteMember(@AuthenticationPrincipal Member member){
+        memberService.deleteMember(member.getMemberId());
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);
     }
