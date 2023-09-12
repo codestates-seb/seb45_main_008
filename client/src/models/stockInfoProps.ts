@@ -1,4 +1,4 @@
-export interface StockInfoprops {
+export interface StockInfoProps {
   stockAsBiId: number;
   companyId: number;
   askp1: string;
