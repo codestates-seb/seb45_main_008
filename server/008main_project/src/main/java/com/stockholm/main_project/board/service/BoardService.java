@@ -25,12 +25,16 @@ public class BoardService {
     }
 
     public Board updateBoard(long boardId, Board updatedBoard, Member member) {
-        Board existingBoard = findBoard(boardId);
+        Board board = findBoard(boardId);
 
-        existingBoard.setTitle(updatedBoard.getTitle());
-        existingBoard.setContent(updatedBoard.getContent());
+        if (board.getMember().getMemberId() != member.getMemberId()) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_FAILED);
+        }
 
-        return boardRepository.save(existingBoard);
+        board.setTitle(updatedBoard.getTitle());
+        board.setContent(updatedBoard.getContent());
+
+        return boardRepository.save(board);
     }
 
     public Board findBoard(long boardId) {
@@ -42,8 +46,12 @@ public class BoardService {
         return boardRepository.findAll();
     }
 
-    public void deleteBoard(long boardId) {
+    public void deleteBoard(long boardId, Member member) {
         Board board = findBoard(boardId);
+
+        if (board.getMember().getMemberId() != member.getMemberId()) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_FAILED);
+        }
 
         boardRepository.delete(board);
     }

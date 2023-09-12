@@ -12,7 +12,7 @@ public enum ExceptionCode {
     INVALID_PASSWORD(404, "비밀번호가 일치하지 않거나 유효하지 않습니다."),
     BOARD_NOT_FOUND(404, "게시물을 찾을 수 없습니다."),
     COMMENT_NOT_FOUND(404, "댓글을 찾을 수 없습니다."),
-    INVALID_FAILED(404, "유효하지 않은 접근입니다."),
+    INVALID_FAILED(404, "작성자만 접근할 수 있습닌다."),
     STOCKASBI_NOT_FOUND(404, "호가 정보를 찾을 수 없습니다"),
     STOCKHOLD_NOT_FOUND(404, "보유 주식 정보가 없습니다."),
     INSUFFICIENT_STOCK(422,"보유 주식이 부족합니다"),

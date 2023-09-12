@@ -10,5 +10,5 @@ public class BoardCommentDto {
     private String content;
     private String member;
     private String createdAt;
-    private String lastModifiedAt;
+    private String ModifiedAt;
 }

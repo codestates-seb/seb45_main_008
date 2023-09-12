@@ -10,5 +10,5 @@ public class CommentResponseDto {
     private String member;
     private String content;
     private String createdAt;
-    private String lastModifiedAt;
+    private String ModifiedAt;
 }
