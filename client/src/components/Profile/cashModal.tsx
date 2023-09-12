@@ -1,41 +1,49 @@
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import axios from 'axios';
+import React, { useState } from 'react';
+import styled from 'styled-components'; 
+import { useSelector, useDispatch } from 'react-redux'; 
+import { useCreateCash, useGetCash, useUpdateCash } from '../../hooks/useCash'; 
+import { RootState } from '../../store/config'; 
+import { setCashId, setCashAmount } from '../../reducer/cash/cashSlice';
 
-const CashModal: React.FC<CashModalProps> = ({ onClose, memberId }) => {
-    const [cash, setCash] = useState<number | null>(null);
+const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
+    const dispatch = useDispatch();
+    const cashId = useSelector((state: RootState) => state.cash.cashId);
+    const cashAmount = useSelector((state: RootState) => state.cash.cashAmount) || 0;
+    
+    const createCashMutation = useCreateCash();
+    const { data: cashData, isLoading } = useGetCash(cashId); 
+    const updateCashMutation = useUpdateCash();
+
     const [cashInput, setCashInput] = useState<string>('');
+    const [initialAmount, setInitialAmount] = useState<number>(0); // 현금 생성을 위한 상태 변수
 
-    useEffect(() => {
-        axios.get(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/cash/${memberId}`)
-            .then(response => {
-                if (response.status === 200) {
-                    setCash(response.data.cash);
-                } else if (response.status === 204) {
-                    // Handle the "No Content" scenario. This could be setting cash to 0 or displaying a message.
-                    setCash(0); // Or handle it in a way that suits your needs
-                }
-            })
-            .catch(error => {
-                console.error("Error fetching cash:", error);
-            });
-    }, [memberId]);
-
-    const handleCashReceive = () => {
-        axios.post(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/cash/${memberId}`, {
-            cash: cashInput
-        })
-        .then(response => {
-            if (response.status === 201) {
-                // Update the cash display with the new value
-                setCash(prevCash => prevCash ? prevCash + Number(cashInput) : Number(cashInput));
-            } else {
-                console.warn("Unexpected status code:", response.status);
+    // 현금 생성 및 cashId 전역 저장
+    const handleCreateCash = () => {
+        createCashMutation.mutate(initialAmount, {
+            onSuccess: (data) => {
+                dispatch(setCashId(data.data.cashId));
             }
-        })
-        .catch(error => {
-            console.error("Error updating cash:", error);
         });
+    };
+
+    // 보유 현금량 조회 및 전역 저장
+    if (cashData && cashAmount !== cashData.data.cash) {
+        dispatch(setCashAmount(cashData.data.cash));
+    }
+
+    // 현금 충전 및 충전된 현금량 전역 저장
+    const handleCashReceive = () => {
+        if (cashId && cashAmount !== null) {
+            const numericCashId = parseInt(cashId, 10);  // cashId를 숫자로 변환
+            const numericCashAmount = Number(cashInput); // cashInput을 숫자로 변환
+            updateCashMutation.mutate({ cashId: numericCashId, cashAmount: numericCashAmount }, {
+                onSuccess: () => {
+                    dispatch(setCashAmount((prevCash: number) => prevCash ? prevCash + numericCashAmount : numericCashAmount));
+                }
+            });
+        } else {
+            console.error("cashId or cashAmount is null or not a valid number.");
+        }
     };
 
     return (
@@ -43,7 +51,19 @@ const CashModal: React.FC<CashModalProps> = ({ onClose, memberId }) => {
             <ModalContainer>
                 <CloseButton onClick={onClose}>&times;</CloseButton>
                 <Title>현금</Title>
-                <p>현재 현금: {cash ? cash.toLocaleString() : 'Loading...'}</p>
+
+                {/* 현금 생성 입력창 및 버튼 추가 */}
+                <div>
+                    <CashCreationInput
+                        type="number"
+                        value={initialAmount}
+                        onChange={e => setInitialAmount(Number(e.target.value))}
+                        placeholder="생성할 현금 입력"
+                    />
+                    <CreateCashButton onClick={handleCreateCash}>현금 생성</CreateCashButton>
+                </div>
+
+                <p>현재 현금: {isLoading ? 'Loading...' : cashAmount.toLocaleString()}</p>
                 <div>
                     <CashInput
                         type="number"
@@ -58,9 +78,10 @@ const CashModal: React.FC<CashModalProps> = ({ onClose, memberId }) => {
     );
 };
 
+
 interface CashModalProps {
     onClose: () => void;
-    memberId: string;
+    cashId: string | null;
 }
 
 // Styled Components Definitions:
@@ -114,6 +135,21 @@ const CashInput = styled.input`
 const ReceiveButton = styled.button`
     padding: 10px 15px;
     background-color: darkgreen;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+`;
+const CashCreationInput = styled.input`
+    padding: 10px;
+    border: 1px solid lightgray;
+    border-radius: 5px;
+    margin-right: 10px;
+`;
+
+const CreateCashButton = styled.button`
+    padding: 10px 15px;
+    background-color: blue;
     color: white;
     border: none;
     border-radius: 5px;

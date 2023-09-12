@@ -1,21 +1,31 @@
+
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import StockHolmLogo from "../../asset/images/StockHolmLogo.png";
 import SampleProfile from "../../asset/images/ProfileSample.png"; 
+import { useNavigate } from "react-router-dom";  
 import AlarmImage from "../../asset/images/alarm.png"; 
-import { useNavigate } from "react-router-dom";  // 페이지 이동을 위한 훅 가져오기
+import ProfileModal from "../Profile/profileModal";
+import StockSearchComponent from './stockSearchComponent';
+
 
 // 로그인 상태일 때의 헤더 컴포넌트
 const LoginHeader: React.FC<LoginHeaderProps> = ({ onLogoutClick }) => {
-  const [searchValue, setSearchValue] = useState<string>('');  // 검색어 상태
+  const [isProfileModalOpen, setProfileModalOpen] = useState(false); // 프로필 모달 상태
   const navigate = useNavigate();  // 페이지 이동 함수
 
-  // 검색어 입력 처리 함수
-  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(event.target.value);
-  };
+
 
   const logoutText = "로그아웃";
+  // 프로필 모달 열기 함수
+  const handleProfileOpen = () => {
+    setProfileModalOpen(true);
+  };
+
+  // 프로필 모달 닫기 함수
+  const handleProfileClose = () => {
+    setProfileModalOpen(false);
+  };
 
   // 로고 클릭 처리 함수
   const handleLogoClick = () => {
@@ -27,14 +37,16 @@ const LoginHeader: React.FC<LoginHeaderProps> = ({ onLogoutClick }) => {
       <LogoButton onClick={handleLogoClick}>
         <LogoImage src={StockHolmLogo} />
       </LogoButton>
-      <SearchBar value={searchValue} onChange={handleSearchChange} />
+      {/* <SearchBar value={searchValue} onChange={handleSearchChange} /> */}
+      <StockSearchComponent/>
       <UserActions>
         <NotificationButton> 
           <img src={AlarmImage} alt="Notification" />
         </NotificationButton>
-        <ProfileButton>
+        <ProfileButton onClick={handleProfileOpen}>
           <ProfileImage src={SampleProfile} />
         </ProfileButton>
+        {isProfileModalOpen && <ProfileModal onClose={handleProfileClose} />}
         <LogoutButton onClick={onLogoutClick}>{logoutText}</LogoutButton> 
       </UserActions>
     </HeaderContainer>
@@ -46,6 +58,7 @@ export default LoginHeader;
 // 로그아웃 클릭 이벤트 타입 정의
 interface LoginHeaderProps {
   onLogoutClick: () => void;
+  onProfileClick: () => void;
 }
 
 // 헤더 컨테이너 스타일
@@ -77,16 +90,6 @@ const LogoImage = styled.img`
   width: auto;
 `;
 
-// 검색창 스타일
-const SearchBar = styled.input.attrs({
-  type: 'text',
-  placeholder: '검색...'
-})`
-  width: 50%;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
-  border-radius: 4px;
-`;
 
 // 사용자 액션 버튼들의 스타일
 const UserActions = styled.div`
@@ -137,9 +140,5 @@ const LogoutButton = styled.button`
     background-color: #f2f2f2; 
   }
 `;
-
-
-
-
 
 

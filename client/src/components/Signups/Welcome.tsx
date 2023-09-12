@@ -1,15 +1,24 @@
-// client/src/components/Signups/Welcome.tsx
 import React from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
 import StockHolmLogo from '../../asset/images/StockHolmLogo.png';
 
+// Constants for the text strings
+const WELCOME_TEXT = "환영합니다, ";
+const START_TEXT = "시작하기";
+const JOINED_DATE_TEXT = "가입일: ";
+
 const Welcome: React.FC<WelcomeProps> = ({ onClose }) => {
+    // Access the memberInfo state from the Redux store
+    const memberInfo = useSelector((state: RootState) => state.memberInfo.memberInfo);
+
     return (
         <ModalBackground>
             <ModalContainer>
-                <Title>환영합니다.</Title>
+                <Title>{WELCOME_TEXT}{memberInfo?.name}님!</Title>  {/* Display the member's name */}
+                <Subtitle>{JOINED_DATE_TEXT}{memberInfo?.createdAt}</Subtitle> {/* Display the member's createdAt */}
                 <Logo src={StockHolmLogo} alt="StockHolm Logo" />
-                <ConfirmButton onClick={onClose}>시작하기</ConfirmButton> 
+                <ConfirmButton onClick={onClose}>{START_TEXT}</ConfirmButton> 
             </ModalContainer>
         </ModalBackground>
     );
@@ -17,11 +26,25 @@ const Welcome: React.FC<WelcomeProps> = ({ onClose }) => {
 
 export default Welcome;
 
-type WelcomeProps = {
+interface WelcomeProps {
     onClose: () => void;
-  };
+}
 
-// 모달 배경 스타일
+// State type definition
+interface MemberInfo {
+  email: string;
+  name: string;
+  password: string;
+  confirmPassword: string;
+  createdAt: string;  // Assuming createdAt is a string in the format "YYYY-MM-DD" or similar
+}
+
+interface RootState {
+  memberInfo: {
+    memberInfo: MemberInfo | null;
+  };
+}
+
 const ModalBackground = styled.div`
   display: flex;
   justify-content: center;
@@ -34,7 +57,6 @@ const ModalBackground = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
 `;
 
-// 모달 컨테이너 스타일
 const ModalContainer = styled.div`
   position: relative;
   background-color: white;
@@ -46,22 +68,27 @@ const ModalContainer = styled.div`
   align-items: center;
 `;
 
-// 모달 제목 스타일
 const Title = styled.h2`
   margin-bottom: 20px;
   font-size: 1.6rem;
   font-weight: 400;
 `;
 
-// 스톡홀름 로고 스타일
+const Subtitle = styled.h3`
+  margin-top: 10px;
+  margin-bottom: 20px;
+  font-size: 1.2rem;
+  font-weight: 300;
+  color: gray;
+`;
+
 const Logo = styled.img`
   margin-top: 20px;
   margin-bottom: 20px;
-  width: 150px;  // 이미지 크기 조절을 위해 추가
+  width: 150px;
   height: auto;
 `;
 
-// 시작하기 버튼 스타일
 const ConfirmButton = styled.button`
   width: 100%;
   padding: 10px;

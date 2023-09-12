@@ -1,8 +1,18 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import { useSelector } from 'react-redux';
+import MemberInfoModal from './memberInfoModal'; 
+import MemberWithdrawalModal from './memberWithdrawalModal';
+import CashModal from './cashModal'; 
+import { RootState } from '../../store/config'; 
 
 const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
+
+    const memberInfoText = "회원정보";
+    const cashText = "현금";
+    const memberWithdrawText = "회원탈퇴"
     const [selectedTab, setSelectedTab] = useState<number>(1);
+    const cashId = useSelector((state: RootState) => state.cash.cashId); // Get cashId from Redux store
 
     const handleTabChange = (tabNumber: number) => {
         setSelectedTab(tabNumber);
@@ -13,20 +23,19 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
             <ModalContainer>
                 <CloseButton onClick={onClose}>&times;</CloseButton>
                 <Tabs>
-                    <TabButton active={selectedTab === 1} onClick={() => handleTabChange(1)}>회원정보</TabButton>
-
-                    <TabButton active={selectedTab === 2} onClick={() => handleTabChange(2)}>현금</TabButton>
-                    <TabButton active={selectedTab === 3} onClick={() => handleTabChange(3)}>회원탈퇴</TabButton>
+                    <TabButton active={selectedTab === 1} onClick={() => handleTabChange(1)}>{memberInfoText}</TabButton>
+                    <TabButton active={selectedTab === 2} onClick={() => handleTabChange(2)}>{cashText}</TabButton>
+                    <TabButton active={selectedTab === 3} onClick={() => handleTabChange(3)}>{memberWithdrawText}</TabButton>
                 </Tabs>
                 <TabContent>
-                    {selectedTab === 1 && <div>회원정보 Content</div>}
-                    {selectedTab === 2 && <div>현금 Content</div>}
-                    {selectedTab === 3 && <div>회원탈퇴 Content</div>}
+                    {selectedTab === 1 && <MemberInfoModal onClose={onClose}/>}
+                    {selectedTab === 2 && <CashModal onClose={onClose} cashId={cashId} />}
+                    {selectedTab === 3 && <MemberWithdrawalModal onClose={onClose}/>}
                 </TabContent>
             </ModalContainer>
         </ModalBackground>
     );
-};
+}
 
 interface ProfileModalProps {
     onClose: () => void;
