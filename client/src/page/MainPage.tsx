@@ -1,6 +1,5 @@
-// /client/src/pages/MainPage.tsx
-import { useState, useCallback } from "react";
-import { useSelector } from "react-redux";
+import { useState, useEffect, useCallback } from "react";
+import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 import LogoutHeader from "../components/Headers/LogoutHeader";
 import LoginHeader from "../components/Headers/LoginHeader";
@@ -19,6 +18,10 @@ import Welcome from "../components/Signups/Welcome";
 import ProfileModal from "../components/Profile/profileModal";
 import { StateProps } from "../models/stateProps";
 import { TabContainerPage } from "./TabPages/TabContainerPage";
+
+// 🔴 로그아웃 관련 action 함수
+import { setLogoutState } from "../reducer/member/loginSlice";
+import { setLoginState } from "../reducer/member/loginSlice";
 
 const MainPage = () => {
   const expandScreen = useSelector((state: StateProps) => state.expandScreen);
@@ -56,8 +59,7 @@ const MainPage = () => {
     setEmailSignupModalOpen(false);
   }, []);
 
-  const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] =
-    useState(false);
+  const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] = useState(false);
 
   // 이메일 인증 모달을 열 때 사용자가 입력한 이메일을 저장하도록 변경
   const openEmailVerificationModal = useCallback((enteredEmail: string) => {
@@ -70,8 +72,7 @@ const MainPage = () => {
     setEmailVerificationModalOpen(false);
   }, []);
 
-  const [isPasswordSettingModalOpen, setPasswordSettingModalOpen] =
-    useState(false);
+  const [isPasswordSettingModalOpen, setPasswordSettingModalOpen] = useState(false);
 
   const openPasswordSettingModal = useCallback(() => {
     setEmailVerificationModalOpen(false); // 이메일 인증 모달 닫기
@@ -91,12 +92,23 @@ const MainPage = () => {
     setWelcomeModalOpen(false);
   }, []);
 
+  // 🔴 로그인 지역 상태 제거 → 전역 상태로 대체 (지역 상태 관련된 코드 싹 다 지워야함... -> 전역 상태 만들었으니 전역 상태로 활용)
+  const dispatch = useDispatch();
+  const isLogin = useSelector((state: StateProps) => state.login);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 관리
+
+  useEffect(() => {
+    const authToken = localStorage.getItem("authToken");
+
+    if (authToken !== null) {
+      dispatch(setLoginState());
+    }
+  }, []);
 
   //프로필 모달 열고닫는 매커니즘
   const openProfileModal = useCallback(() => {
     setProfileModalOpen(true);
-  }, []); 
+  }, []);
 
   const [isLoginConfirmationModalOpen, setLoginConfirmationModalOpen] = useState(false);
 
@@ -110,78 +122,40 @@ const MainPage = () => {
     setIsLoggedIn(true);
   };
 
-  const [selectedMenu, setSelectedMenu] = useState<"관심목록" | "투자목록">(
-    "투자목록"
-  ); // Default menu is 관심목록
+  const [selectedMenu, setSelectedMenu] = useState<"관심목록" | "투자목록">("투자목록"); // Default menu is 관심목록
 
   const handleMenuChange = (menu: "관심목록" | "투자목록") => {
     setSelectedMenu(menu);
   };
 
+  // 🔴 로그 아웃 시 로컬데이터 토큰 제거
   const handleLogout = () => {
-    setIsLoggedIn(false);
+    dispatch(setLogoutState());
+    localStorage.removeItem("authToken");
   };
 
   return (
     <Container>
-
-      {isLoggedIn ? (
-        <LoginHeader onLogoutClick={handleLogout} onProfileClick={openProfileModal} />
-      ) : (
-        <LogoutHeader onLoginClick={openOAuthModal} />
-      )}
+      {isLogin === 1 ? <LoginHeader onLogoutClick={handleLogout} onProfileClick={openProfileModal} /> : <LogoutHeader onLoginClick={openOAuthModal} />}
 
       <Main>
         <CompareChartSection />
         {!expandScreen.left && (
-          <LeftSection>
-            {selectedMenu === "관심목록" ? (
-              <WatchList
-                key="watchlist"
-                currentListType={selectedMenu}
-                onChangeListType={handleMenuChange}
-              />
-            ) : (
-              <Holdings
-                currentListType={selectedMenu}
-                onChangeListType={handleMenuChange}
-              />
-            )}
-          </LeftSection>
+          <LeftSection>{selectedMenu === "관심목록" ? <WatchList key="watchlist" currentListType={selectedMenu} onChangeListType={handleMenuChange} /> : <Holdings currentListType={selectedMenu} onChangeListType={handleMenuChange} />}</LeftSection>
         )}
         <CentralChart />
         <StockOrderSection />
         {!expandScreen.right && <TabContainerPage></TabContainerPage>}
       </Main>
       {isOAuthModalOpen && (
-        <OAuthLoginModal
-          onClose={closeOAuthModal}
-          onEmailLoginClick={openEmailLoginModal}
-          onEmailSignupClick={openEmailSignupModal}
-          onWatchListClick={() => handleMenuChange("관심목록")}
-          onHoldingsClick={() => handleMenuChange("투자목록")}
-        />
+        <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} onEmailSignupClick={openEmailSignupModal} onWatchListClick={() => handleMenuChange("관심목록")} onHoldingsClick={() => handleMenuChange("투자목록")} />
       )}
 
       {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} />}
-      {isLoginConfirmationModalOpen && (
-        <LoginConfirmationModal onClose={handleLoginConfirmationClose} />
+      {isLoginConfirmationModalOpen && <LoginConfirmationModal onClose={handleLoginConfirmationClose} />}
 
-      )}
-
-      {isEmailSignupModalOpen && (
-        <EmailSignupModal
-          onClose={closeEmailSignupModal}
-          onRequestVerification={openEmailVerificationModal}
-        />
-      )}
-      {isEmailVerificationModalOpen && (
-        <EmailVerificationModal
-          onClose={closeEmailVerificationModal}
-          onNextStep={openPasswordSettingModal}
-          initialEmail={userEmail}
-        />
-      )}
+      {isEmailSignupModalOpen && <EmailSignupModal onClose={closeEmailSignupModal} onRequestVerification={openEmailVerificationModal} />}
+      {isEmailVerificationModalOpen && <EmailVerificationModal onClose={closeEmailVerificationModal} onNextStep={openPasswordSettingModal} initialEmail={userEmail} />}
 
       {isPasswordSettingModalOpen && (
         <PasswordSettingModal
@@ -196,9 +170,8 @@ const MainPage = () => {
             closeWelcomeModal();
           }}
         />
-        )}
-      {isProfileModalOpen && <ProfileModal onClose={() => setProfileModalOpen(false)} />} 
-
+      )}
+      {isProfileModalOpen && <ProfileModal onClose={() => setProfileModalOpen(false)} />}
     </Container>
   );
 };
