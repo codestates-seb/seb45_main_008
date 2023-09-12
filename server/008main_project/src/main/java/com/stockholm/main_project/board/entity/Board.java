@@ -3,11 +3,12 @@ package com.stockholm.main_project.board.entity;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.stockholm.main_project.audit.Auditable;
-import com.stockholm.main_project.comment.entity.CommentEntity;
 import com.stockholm.main_project.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -21,7 +22,7 @@ import java.util.List;
 public class Board extends Auditable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long boardId; // id 필드명을 boardId에서 id로 수정
+    private Long boardId;
 
     @Column
     private String title;
@@ -29,12 +30,9 @@ public class Board extends Auditable {
     @Column
     private String content;
 
-    @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
-
-    @OneToMany(mappedBy = "board", cascade = CascadeType.ALL)
-    @JsonIgnoreProperties("board") // board 필드는 JSON 직렬화에서 제외하지 않음
-    private List<CommentEntity> comments = new ArrayList<>();
 
 }

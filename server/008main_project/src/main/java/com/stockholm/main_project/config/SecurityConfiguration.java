@@ -8,8 +8,6 @@ import com.stockholm.main_project.auth.handler.OAuth2AuthenticationSuccessHandle
 import com.stockholm.main_project.auth.jwt.JwtTokenizer;
 import com.stockholm.main_project.auth.utils.CustomAuthorityUtils;
 import com.stockholm.main_project.auth.utils.OAuth2MemberService;
-import com.stockholm.main_project.board.Service.BoardService;
-import com.stockholm.main_project.board.entity.Board;
 import com.stockholm.main_project.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
