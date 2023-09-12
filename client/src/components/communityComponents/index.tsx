@@ -312,6 +312,7 @@ const TimeLine = styled.div`
   flex-direction: column;
   align-content: space-around;
   flex-wrap: wrap;
+  max-height:600px;
 `;
 //게시글 삭제
 const Delete = styled.div`

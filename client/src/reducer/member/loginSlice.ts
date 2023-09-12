@@ -4,16 +4,16 @@ const loginSlice = createSlice({
   name: 'login',
   initialState: {
     memberId: null,
-    isLoggedOut: 1
+    isLoggedIn: 1
   },
   reducers: {
     setLoginState: (state, action) => {
       state.memberId = action.payload;
-      state.isLoggedOut = 0;
+      state.isLoggedIn = 1;
     },
     setLogoutState: (state) => {
       state.memberId = null;
-      state.isLoggedOut = 1;
+      state.isLoggedIn = 0;
     },
     updateMemberId: (state, action) => {
       state.memberId = action.payload;

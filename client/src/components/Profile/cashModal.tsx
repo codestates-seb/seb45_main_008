@@ -1,18 +1,25 @@
 import React, { useState } from 'react';
 import styled from 'styled-components'; 
 import { useSelector, useDispatch } from 'react-redux'; 
-import { useCreateCash, useGetCash, useUpdateCash } from '../../hooks/useCash'; 
+import { useCreateCash, useGetCash, useResetCash } from '../../hooks/useCash'; 
 import { RootState } from '../../store/config'; 
 import { setCashId, setCashAmount } from '../../reducer/cash/cashSlice';
 
 const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
+
+    const titleText = "현금";
+    const cashCreationPlaceholder = "생성할 현금 입력";
+    const createCashButtonText = "현금 생성";
+    const cashInputPlaceholder = "현금 입력";
+    const resetButtonText = "리셋";
+
     const dispatch = useDispatch();
     const cashId = useSelector((state: RootState) => state.cash.cashId);
     const cashAmount = useSelector((state: RootState) => state.cash.cashAmount) || 0;
     
     const createCashMutation = useCreateCash();
     const { data: cashData, isLoading } = useGetCash(cashId); 
-    const updateCashMutation = useUpdateCash();
+    const updateCashMutation = useResetCash();
 
     const [cashInput, setCashInput] = useState<string>('');
     const [initialAmount, setInitialAmount] = useState<number>(0); // 현금 생성을 위한 상태 변수
@@ -31,26 +38,27 @@ const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
         dispatch(setCashAmount(cashData.data.cash));
     }
 
-    // 현금 충전 및 충전된 현금량 전역 저장
-    const handleCashReceive = () => {
-        if (cashId && cashAmount !== null) {
+// 현금을 입력한 금액으로 리셋하는 함수
+    const handleCashReset = () => {
+        if (cashId) {
             const numericCashId = parseInt(cashId, 10);  // cashId를 숫자로 변환
             const numericCashAmount = Number(cashInput); // cashInput을 숫자로 변환
             updateCashMutation.mutate({ cashId: numericCashId, cashAmount: numericCashAmount }, {
                 onSuccess: () => {
-                    dispatch(setCashAmount((prevCash: number) => prevCash ? prevCash + numericCashAmount : numericCashAmount));
+                    dispatch(setCashAmount(numericCashAmount)); // 현금 금액을 입력한 금액으로 리셋
                 }
             });
         } else {
-            console.error("cashId or cashAmount is null or not a valid number.");
+            console.error("cashId is null or not a valid number.");
         }
     };
+
 
     return (
         <ModalBackground>
             <ModalContainer>
                 <CloseButton onClick={onClose}>&times;</CloseButton>
-                <Title>현금</Title>
+                <Title>{titleText}</Title>
 
                 {/* 현금 생성 입력창 및 버튼 추가 */}
                 <div>
@@ -58,9 +66,9 @@ const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
                         type="number"
                         value={initialAmount}
                         onChange={e => setInitialAmount(Number(e.target.value))}
-                        placeholder="생성할 현금 입력"
+                        placeholder={cashCreationPlaceholder}
                     />
-                    <CreateCashButton onClick={handleCreateCash}>현금 생성</CreateCashButton>
+                    <CreateCashButton onClick={handleCreateCash}>{createCashButtonText}</CreateCashButton>
                 </div>
 
                 <p>현재 현금: {isLoading ? 'Loading...' : cashAmount.toLocaleString()}</p>
@@ -69,15 +77,14 @@ const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
                         type="number"
                         value={cashInput}
                         onChange={e => setCashInput(e.target.value)}
-                        placeholder="현금 입력"
+                        placeholder={cashInputPlaceholder}
                     />
-                    <ReceiveButton onClick={handleCashReceive}>받기</ReceiveButton>
+                    <ReceiveButton onClick={handleCashReset}>{resetButtonText}</ReceiveButton>
                 </div>
             </ModalContainer>
         </ModalBackground>
     );
 };
-
 
 interface CashModalProps {
     onClose: () => void;

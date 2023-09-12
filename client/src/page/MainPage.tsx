@@ -16,11 +16,8 @@ import Holdings from "../components/watchlist/Holdings"; // Assuming you have a 
 import CompareChartSection from "../components/CompareChartSection/Index";
 import StockOrderSection from "../components/StockOrderSection/Index";
 import Welcome from "../components/Signups/Welcome";
-
 import ProfileModal from "../components/Profile/profileModal";
-
 import { StateProps } from "../models/stateProps";
-
 import { TabContainerPage } from "./TabPages/TabContainerPage";
 
 const MainPage = () => {
@@ -200,7 +197,7 @@ const MainPage = () => {
           }}
         />
         )}
-      {isProfileModalOpen && <ProfileModal onClose={() => setProfileModalOpen(false)} />} //프로필 모달 컴포넌트 렌더링
+      {isProfileModalOpen && <ProfileModal onClose={() => setProfileModalOpen(false)} />} 
 
     </Container>
   );
