@@ -1,22 +1,19 @@
 import React from 'react';
 import styled from 'styled-components';
-import googleLogo from '../../asset/images/GoogleLogo.svg'; 
+
 import kakaoLogo from '../../asset/images/KakaoLogo.svg';  
 import axios from 'axios';
-import { GoogleLogin, GoogleLoginResponse, GoogleLoginResponseOffline } from 'react-google-login';
+
 
 const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick, onEmailSignupClick }) => {
     const titleText = "로그인";
-    const googleLoginText = "구글로 로그인";
+
     const kakaoLoginText = "카카오로 로그인";
     const orText = "또는";
     const emailLoginText = "이메일로 로그인";
     const emailSignupText = "이메일로 회원가입";
 
-    const responseGoogle = (response: GoogleLoginResponse | GoogleLoginResponseOffline) => {
-        console.log(response);
-        // 여기서 응답 데이터를 처리하거나 백엔드에 전송할 수 있습니다.
-    }
+
 
     const handleKakaoLogin = async () => {
         try {
@@ -37,17 +34,7 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
             <ModalContainer>
                 <CloseButton onClick={onClose}>&times;</CloseButton>
                 <Title>{titleText}</Title>
-                <StyledGoogleLogin
-                  clientId="47991654230-k0vku25t92sageg12thm05nfm9nro1rh.apps.googleusercontent.com"
-                  buttonText={googleLoginText}
-                  onSuccess={responseGoogle}
-                  onFailure={responseGoogle}
-                  cookiePolicy={'single_host_origin'}
-                  uxMode="redirect"
-                  redirectUri={window.location.origin}
-              >
-                  <LogoImage src={googleLogo} alt="Google Logo" />
-              </StyledGoogleLogin>
+
                 <KakaoButton onClick={handleKakaoLogin}>
                     <LogoImage src={kakaoLogo} alt="Kakao Logo" />
                     {kakaoLoginText}
@@ -114,18 +101,6 @@ const OrText = styled.span`
     color: grey;
 `;
 
-const StyledGoogleLogin = styled(GoogleLogin)`
-    margin: 10px 0;
-    padding: 10px 20px;
-    background-color: #FFFFFF;
-    border: 1px solid lightgray;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
 
 const KakaoButton = styled.button`
     margin: 10px 0;
