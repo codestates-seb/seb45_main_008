@@ -3,6 +3,7 @@ import { StockProps } from "../../models/stockProps";
 
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { isHoliday } from "@hyunbinseo/holidays-kr";
 import { styled } from "styled-components";
 import { setStockOrderPrice } from "../../reducer/StockOrderPrice-Reducer";
 import { StateProps } from "../../models/stateProps";
@@ -39,22 +40,26 @@ const StockPrice = (props: StockPriceProps) => {
     return;
   }
 
-  // 전날 종가 데이터 -> 1) 일/월 : 금요일 종가로 설정  2) 화~토 : 전날 종가로 설정
+  // 전날 종가 데이터 -> 1) 화~토 : 전날 종가로 설정  2) 공휴일/월요일 : 맨 마지막 종가로 설정 (전날 데이터 없음)
   let previousDayStockClosingPrice: number;
 
+  const today = new Date();
+  const getToday = today.getDay();
   const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
-  const getToday = new Date().getDay();
-  const today = daysOfWeek[getToday];
 
-  if (today === "일" || today === "월") {
+  const nonBusinessDay = isHoliday(today, { include: { sunday: true } }); // 일요일, 공휴일 (임시 공휴일 포함) 체크
+  const isMonday = daysOfWeek[getToday] === "월"; // 월요일인지 체크
+
+  if (nonBusinessDay || isMonday) {
     previousDayStockClosingPrice = stockPrice[stockPrice.length - 1].stck_prpr;
   } else {
-    const yesterday = new Date(new Date().getTime() - 24 * 60 * 60 * 1000);
+    const nowInKoreanTime = new Date(today.getTime() + 9 * 60 * 60 * 1000); // UTC 시간에 9시간 더해서 한국 시간대로 변환
+    const yesterday = new Date(nowInKoreanTime);
+    yesterday.setDate(nowInKoreanTime.getDate() - 1);
     const yesterdayYymmdd = yesterday.toISOString().slice(0, 10);
 
     const yesterdayStockInfo = stockPrice.filter((stockInfo: StockProps) => {
       const dayInfo = stockInfo.stockTradeTime.slice(0, 10);
-
       if (dayInfo === yesterdayYymmdd) {
         return stockInfo;
       }
@@ -111,12 +116,11 @@ const Container = styled.div<{ index: number; price: number; orderPrice: number 
   width: 100%;
   height: 36px;
   margin-bottom: 2px;
-  background-color: ${(props) => (props.index > 9 ? "#FDE8E7" : "#E7F0FD")};
-  border: ${(props) => (props.price === props.orderPrice ? "1.5px solid #2F4F4F" : "none")};
+  background-color: ${(props) => (props.price === props.orderPrice ? (props.index > 9 ? "#e9c2bf" : "#bed1eb") : props.index > 9 ? "#FDE8E7" : "#E7F0FD")};
   border-left: ${(props) => (props.price === props.orderPrice ? "3px solid red" : props.index > 9 ? "3px solid #FDE8E7" : "3px solid #E7F0FD")};
   display: flex;
   flex-direction: row;
-  transition: border 1s ease;
+  transition: border 0.8s ease, background-color 0.8s ease;
 
   &:hover {
     cursor: pointer;

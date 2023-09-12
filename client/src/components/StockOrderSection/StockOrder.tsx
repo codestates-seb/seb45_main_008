@@ -1,4 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
+import { isHoliday } from "@hyunbinseo/holidays-kr";
 import { closeDecisionWindow } from "../../reducer/SetDecisionWindow-Reducer";
 import { styled } from "styled-components";
 import { StateProps } from "../../models/stateProps";
@@ -12,6 +13,8 @@ import dummyImg from "../../asset/CentralSectionMenu-dummyImg.png";
 const orderFailureMessage01: string = "주문 실패";
 const orderFailureMessage02: string = "주문 수량이 없습니다";
 const orderFailureMessage03: string = "입력하신 가격이 올바르지 않습니다";
+const orderFailureMessage04: string = "주문 가능한 시간이 아닙니다";
+const openingTimeIndicator: string = "주문 가능 : 평일 오전 9시 ~ 오후 3시 30분";
 const orderFailureButtonText: string = "확인";
 
 const orderPriceText: string = "주문단가";
@@ -38,6 +41,21 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
     dispatch(closeDecisionWindow());
   };
 
+  // 1) 주말, 공휴일 여부 체크
+  const today = new Date();
+  const nonBusinessDay = isHoliday(today, { include: { saturday: true, sunday: true } }); // 토요일, 일요일, 공휴일 (임시 공휴일 포함)
+
+  // 2) 개장시간 여부 체크
+  const currentHour = today.getHours();
+  const currentMinute = today.getMinutes();
+  const isBefore9AM = currentHour < 9;
+  const isAfter330PM = currentHour > 15 || (currentHour === 15 && currentMinute >= 30);
+  const closingTime = isBefore9AM || isAfter330PM;
+
+  // 주문 실패 케이스 1) 개장시간  2) 가격/거래량 설정
+  const orderFailureCase01 = nonBusinessDay || closingTime;
+  const orderFailureCase02 = orderPrice === 0 || orderVolume === 0;
+
   return (
     <>
       {/* 주문 버튼 클릭 안했을 때 */}
@@ -48,11 +66,11 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
 
       {/* 주문 버튼 클릭 했을 때 */}
       {decisionWindow ? (
-        orderVolume === 0 || orderPrice === 0 ? (
+        orderFailureCase01 || orderFailureCase02 ? (
           <OrderFailed>
             <div className="Container">
-              <div className="message01">{orderFailureMessage01}</div>
-              <div className="message02">{orderPrice !== 0 ? `${orderFailureMessage02}` : `${orderFailureMessage03}`}</div>
+              <div className="message01">{orderFailureCase01 ? `${orderFailureMessage04}` : orderFailureMessage01}</div>
+              <div className="message02">{orderFailureCase01 ? `${openingTimeIndicator}` : orderPrice !== 0 ? `${orderFailureMessage02}` : `${orderFailureMessage03}`}</div>
               <button onClick={handleCloseDecisionWindow}>{orderFailureButtonText}</button>
             </div>
           </OrderFailed>
