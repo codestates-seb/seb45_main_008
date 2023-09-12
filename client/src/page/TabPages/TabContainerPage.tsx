@@ -2,10 +2,15 @@ import MarketInfo from "./MarketInfoPage";
 import { Routes, Route, Link } from "react-router-dom";
 import styled from "styled-components";
 import { DetailStockInformation } from "../../components/stockListComponents/DetailStockInformation";
-import { Community } from "./CommunityPage";
+import { Community } from "./communityPage";
 import { Status } from "../../components/statusComponents";
 import { useState } from "react";
-import { MarketImages, InfoImages, CommunityImages, InvestImage } from "../../components/communityComponents/IconComponent/Icon";
+import {
+  MarketImages,
+  InfoImages,
+  CommunityImages,
+  InvestImage,
+} from "../../components/communityComponents/IconComponent/Icon";
 export const TabContainerPage = () => {
   const [activeTab, setActiveTab] = useState(1);
   const handleClickActiveTab = (number: number) => {
@@ -14,23 +19,42 @@ export const TabContainerPage = () => {
 
   return (
     <TabContainerStyle>
-      <style>@import url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@500&display=swap');</style>
+      <style>
+        @import
+        url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@500&display=swap');
+      </style>
 
       <div>
         <TabNavArea>
-          <Nav to="/" onClick={() => handleClickActiveTab(1)} className={`tab ${activeTab === 1 ? "active-tab" : "inactive-tab"}`}>
+          <Nav
+            to="/"
+            onClick={() => handleClickActiveTab(1)}
+            className={`tab ${activeTab === 1 ? "active-tab" : "inactive-tab"}`}
+          >
             <MarketImages />
             {TabContainerText.marketInfo}
           </Nav>
-          <Nav to="/stockitems" onClick={() => handleClickActiveTab(2)} className={`tab ${activeTab === 2 ? "active-tab" : "inactive-tab"}`}>
+          <Nav
+            to="/stockitems"
+            onClick={() => handleClickActiveTab(2)}
+            className={`tab ${activeTab === 2 ? "active-tab" : "inactive-tab"}`}
+          >
             <InfoImages />
             {TabContainerText.StockInfo}
           </Nav>
-          <Nav to="/community" onClick={() => handleClickActiveTab(3)} className={`tab ${activeTab === 3 ? "active-tab" : "inactive-tab"}`}>
+          <Nav
+            to="/community"
+            onClick={() => handleClickActiveTab(3)}
+            className={`tab ${activeTab === 3 ? "active-tab" : "inactive-tab"}`}
+          >
             <CommunityImages />
             {TabContainerText.community}
           </Nav>
-          <Nav to="/status" onClick={() => handleClickActiveTab(4)} className={`tab ${activeTab === 4 ? "active-tab" : "inactive-tab"}`}>
+          <Nav
+            to="/status"
+            onClick={() => handleClickActiveTab(4)}
+            className={`tab ${activeTab === 4 ? "active-tab" : "inactive-tab"}`}
+          >
             <InvestImage />
             {TabContainerText.myPortfolio}
           </Nav>
