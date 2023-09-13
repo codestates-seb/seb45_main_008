@@ -19,7 +19,12 @@ public enum ExceptionCode {
     NOT_ENOUGH_MONEY(422, "보유 금액이 부족합니다"),
     STOCKORDER_NOT_FOUND(404, "주식 거래내역이 존재하지 않습니다"),
     STOCKORDER_PERMISSION_DENIED(400,"잘못된 삭제 요청입니다."),
-    STOCKORDER_ALREADY_FINISH(400, "이미 완료된 거래입니다");
+    STOCKORDER_ALREADY_FINISH(400, "이미 완료된 거래입니다"),
+    AWS_CREDENTIALS_ERROR(401, "AWS 인증 오류"),
+    S3_UPLOAD_ERROR(500, "S3 파일 업로드 중 오류 발생"),
+    S3_DELETE_ERROR(500, "S3 파일 삭제 중 오류 발생"),
+    S3_URL_RETRIEVE_ERROR(500, "S3에서 파일 URL 검색 중 오류 발생");
+
 
     @Getter
     private int status;

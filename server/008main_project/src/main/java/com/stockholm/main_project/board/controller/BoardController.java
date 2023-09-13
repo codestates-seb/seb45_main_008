@@ -19,9 +19,11 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.validation.Valid;
 import java.util.List;
@@ -47,33 +49,32 @@ public class BoardController {
     }
 
     // 게시물 생성
-    @PostMapping
+    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @Operation(summary = "게시물 생성", description = "새로운 게시물을 생성합니다.", tags = { "Board" })
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Created", content = @Content(schema = @Schema(implementation = Board.class))),
             @ApiResponse(responseCode = "400", description = "Bad Request"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
-    public ResponseEntity<SingleBoardResponseDto> createBoard(@Valid @RequestBody BoardRequestDto boardPostDto, @AuthenticationPrincipal Member member) {
-
+    public ResponseEntity<SingleBoardResponseDto> createBoard(@Valid @RequestPart("boardData") BoardRequestDto boardPostDto,
+                                                              @RequestPart(value = "image", required = false) MultipartFile imageFile,
+                                                              @AuthenticationPrincipal Member member) throws Exception {
         Board boardToCreate = mapper.boardRequestToBoard(boardPostDto);
         boardToCreate.setMember(member);
-
-        Board createdBoard = boardService.createBoard(boardToCreate);
+        Board createdBoard = boardService.createBoard(boardToCreate, imageFile);
         SingleBoardResponseDto responseDto = mapper.boardToBoardResponseDto(createdBoard);
-
-        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
+        return ResponseEntity.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON).body(responseDto);
     }
+
     @PatchMapping("{boardId}")
-    public ResponseEntity<SingleBoardResponseDto> updateBoard(@Valid @PathVariable long boardId,@RequestBody BoardRequestDto boardRequestDto,
-                                                              @AuthenticationPrincipal Member member){
-
-        Board boardToUpdate = mapper.boardRequestToBoard(boardRequestDto);
-
-        Board board = boardService.updateBoard(boardId, boardToUpdate, member);
-
-        SingleBoardResponseDto responseDto = mapper.boardToBoardResponseDto(board);
-
+    public ResponseEntity<SingleBoardResponseDto> updateBoard(@PathVariable long boardId,
+                                                              @RequestPart("boardData") BoardRequestDto boardUpdateDto,
+                                                              @RequestPart(value = "image", required = false) MultipartFile imageFile,
+                                                              @AuthenticationPrincipal Member member) throws Exception {
+        Board boardToUpdate = mapper.boardRequestToBoard(boardUpdateDto);
+        boardToUpdate.setMember(member);
+        Board updatedBoard = boardService.updateBoard(boardId, boardToUpdate, imageFile);
+        SingleBoardResponseDto responseDto = mapper.boardToBoardResponseDto(updatedBoard);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
