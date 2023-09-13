@@ -49,7 +49,7 @@ const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
                 }
             });
         } else {
-            console.error("cashId is null or not a valid number.");
+            console.error("moneyId is null or not a valid number.");
         }
     };
 
@@ -88,7 +88,7 @@ const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
 
 interface CashModalProps {
     onClose: () => void;
-    cashId: string | null;
+    moneyId: number | null;
 }
 
 // Styled Components Definitions:

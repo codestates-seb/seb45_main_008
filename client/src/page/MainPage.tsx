@@ -97,25 +97,19 @@ const MainPage = () => {
   const dispatch = useDispatch();
   const isLogin = useSelector((state: StateProps) => state.login);
 
-    // 🔴 페이지 로드 시 로컬 스토리지의 토큰을 기반으로 로그인 상태를 확인합니다.
-    useEffect(() => {
-      const authToken = localStorage.getItem("authToken");
-      if (authToken !== null) {
-        dispatch(setLoginState());
-      } else {
-        dispatch(setLogoutState());
-      }
-    }, [dispatch]);
+  // 🔴 페이지 로드 시 로컬 스토리지의 토큰을 기반으로 로그인 상태를 확인합니다.
+  useEffect(() => {
+    const authToken = localStorage.getItem("authToken");
+    if (authToken !== null) {
+      dispatch(setLoginState());
+    }
+  },);
 
-  // // 🔴 새로고침 되면 로그인 해제되면서 액세스 토큰도 같이 삭제됨
-  // useEffect(() => {
-  //   // const authToken = localStorage.getItem("authToken");
-
-  //   // if (authToken !== null) {
-  //   //   dispatch(setLoginState());
-  //   // }
-  //   localStorage.removeItem("authToken");
-  // }, []);
+      // 🔴 로그아웃 시 로컬스토리지에 있는 Auth 토큰 제거
+  const handleLogout = () => {
+    dispatch(setLogoutState());
+    localStorage.removeItem("authToken");
+  };
 
   //프로필 모달 열고닫는 매커니즘
   const openProfileModal = useCallback(() => {
@@ -141,12 +135,7 @@ const MainPage = () => {
     setSelectedMenu(menu);
   };
 
-  // 🔴 로그아웃 시 로컬스토리지에 있는 Auth 토큰 제거
-  const handleLogout = () => {
-    dispatch(setLogoutState());
-    localStorage.removeItem("authToken");
 
-  };
 
   return (
     <Container>
