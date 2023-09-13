@@ -1,4 +1,3 @@
-import { useEffect } from "react";
 import { useQuery } from "react-query";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -9,13 +8,8 @@ const url = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080
 const useGetStockOrderRecord = () => {
   const isLogin = useSelector((state: StateProps) => state.login);
 
-  useEffect(() => {
-    if (isLogin === 1) {
-      refetch();
-    }
-  }, [isLogin]);
-  const { data, isLoading, isError, refetch } = useQuery("orderRecord", getOrderRecord, {
-    enabled: false,
+  const { data, isLoading, isError } = useQuery("orderRecord", getOrderRecord, {
+    enabled: isLogin === 1,
   });
 
   return { orderRecordData: data, orderRecordLoading: isLoading, orderRecordError: isError };
