@@ -3,7 +3,7 @@ import { GoogleOAuthProvider, GoogleLogin, useGoogleOneTapLogin } from "@react-o
 import { useDispatch } from "react-redux";
 import { setLoginState } from "../../reducer/member/loginSlice";
 
-const GoogleSignInComponent: React.FC = () => {
+const GoogleSignIn: React.FC = () => {
   const dispatch = useDispatch(); // Redux의 dispatch 함수를 사용하기 위해 가져옵니다.
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -37,4 +37,4 @@ const GoogleSignInComponent: React.FC = () => {
   );
 };
 
-export default GoogleSignInComponent;
+export default GoogleSignIn;
