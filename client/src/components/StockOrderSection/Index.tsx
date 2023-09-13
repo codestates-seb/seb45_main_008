@@ -18,22 +18,19 @@ const marketType: string = "코스피";
 
 // dummyData
 import dummyLogo from "../../asset/CentralSectionMenu-dummyImg.png";
-import { useState } from "react";
 
 const StockOrderSection = () => {
   const dispatch = useDispatch();
+  const isLogin = useSelector((state: StateProps) => state.login);
   const companyId = useSelector((state: StateProps) => state.companyId);
   const stockOrderSet = useSelector((state: StateProps) => state.stockOrderSet);
 
-  // 🔴 로그인 구현될 때까지 임시
-  const [login, setLogin] = useState(true);
-  if (companyId === 10000000) {
-    setLogin(true);
-  }
-  //
-
   const { stockInfo, stockInfoLoading, stockInfoError } = useGetStockInfo(companyId);
   const { stockPrice, stockPriceLoading, stockPriceError } = useGetStockData(companyId);
+
+  console.log(isLogin);
+  const localData = localStorage.getItem("authToken");
+  console.log(localData);
 
   // 주식주문 창 닫기
   const handleStockOrderClose = () => {
@@ -71,7 +68,7 @@ const StockOrderSection = () => {
           &#10005;
         </button>
       </UpperBar>
-      {login ? (
+      {isLogin === 1 ? (
         <>
           <StockName>
             <img className="CorpLogo" src={dummyLogo} />
