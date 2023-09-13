@@ -1,7 +1,12 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
+import useGetCash from "../../hooks/useGetCash";
+import useGetHoldingStock from "../../hooks/useGetHoldingStock";
+import useGetStockOrderRecord from "../../hooks/useGetStockOrderRecord";
 import { StateProps } from "../../models/stateProps";
+import { HoldingStockProps } from "../../models/stockProps";
+import { OrderRecordProps } from "../../models/stockProps";
 import { setStockOrderVolume, plusStockOrderVolume, minusStockOrderVolume } from "../../reducer/StockOrderVolume-Reducer";
 
 const volumeSettingTitle: string = "수량";
@@ -14,17 +19,28 @@ const volumPercentage03: number = 50;
 const volumPercentage04: number = 100;
 const percentageUnit: string = "%";
 
-// dummyData
-const dummyMoney: number = 10000000;
-const dummyholdingStock = 10;
-
 const VolumeSetting = () => {
   const dispatch = useDispatch();
+  const companyId = useSelector((state: StateProps) => state.companyId);
   const orderType = useSelector((state: StateProps) => state.stockOrderType);
   const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
   const orderVolume = useSelector((state: StateProps) => state.stockOrderVolume);
 
-  const maximumBuyingVolume = orderPrice !== 0 ? Math.trunc(dummyMoney / orderPrice) : Math.trunc(dummyMoney / 1);
+  // 거래가능 주식 수 = 보유 주식 수 - 매도 대기 중인 주식 수
+  let avaiableSellingStock: number = 0;
+
+  const { cashData } = useGetCash();
+  const { holdingStockData } = useGetHoldingStock();
+  const { orderRecordData } = useGetStockOrderRecord();
+  const holdingCompanyStock = holdingStockData.filter((stock: HoldingStockProps) => stock.companyId === companyId);
+
+  const maximumBuyingVolume = orderPrice !== 0 ? Math.trunc(cashData / orderPrice) : Math.trunc(cashData / 1);
+
+  // 해당 company 보유 주식이 0이 아닐 때
+  if (holdingCompanyStock.length !== 0) {
+    const waitingForSaleStock = orderRecordData.filter((stock: OrderRecordProps) => stock.companyId === companyId && stock.orderTypes === "SELL" && stock.orderStates === "ORDER_WAIT");
+    avaiableSellingStock = holdingCompanyStock[0].stockCount - waitingForSaleStock.length;
+  }
 
   const handlePlusOrderVolume = () => {
     // 매수 -> 증가 버튼 클릭 시, 최대 구매수량 보다 낮으면 개수 1증가
@@ -33,7 +49,7 @@ const VolumeSetting = () => {
     }
     // 매도 -> 증가 버튼 클릭 시, 보유 주식수량 보다 낮으면 개수 1증가
     if (orderType) {
-      orderVolume < dummyholdingStock && dispatch(plusStockOrderVolume());
+      orderVolume < avaiableSellingStock && dispatch(plusStockOrderVolume());
     }
   };
 
@@ -81,7 +97,7 @@ const VolumeSetting = () => {
 
     // 매도 -> percentage 버튼 클릭 시, 보유 주식수량 내에서 계산
     if (orderType) {
-      const orderVolume = Math.trunc(dummyholdingStock * (volumePerentage / 100));
+      const orderVolume = Math.trunc(avaiableSellingStock * (volumePerentage / 100));
       dispatch(setStockOrderVolume(orderVolume));
     }
   };
@@ -99,7 +115,7 @@ const VolumeSetting = () => {
         <div className="Title">{volumeSettingTitle}</div>
         <div className="MaximumVolumeContainer">
           <span>{maximumVolumeText01}</span>
-          <span className="maximumVolume">{orderType ? dummyholdingStock : maximumBuyingVolume}</span>
+          <span className="maximumVolume">{orderType ? avaiableSellingStock : maximumBuyingVolume}</span>
           <span>{volumeUnit}</span>
         </div>
       </TitleContainer>

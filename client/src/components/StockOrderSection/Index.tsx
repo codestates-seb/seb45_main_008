@@ -2,6 +2,9 @@ import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
 import useGetStockInfo from "../../hooks/useGetStockInfo";
 import useGetStockData from "../../hooks/useGetStockData";
+import useGetCash from "../../hooks/useGetCash";
+import useGetStockOrderRecord from "../../hooks/useGetStockOrderRecord";
+import useGetHoldingStock from "../../hooks/useGetHoldingStock";
 import { stockOrderClose } from "../../reducer/StockOrderSet-Reducer";
 import { StateProps } from "../../models/stateProps";
 import StockOrder from "./StockOrder";
@@ -27,19 +30,26 @@ const StockOrderSection = () => {
 
   const { stockInfo, stockInfoLoading, stockInfoError } = useGetStockInfo(companyId);
   const { stockPrice, stockPriceLoading, stockPriceError } = useGetStockData(companyId);
+  const { cashLoading, cashError } = useGetCash();
+  const { orderRecordLoading, orderRecordError } = useGetStockOrderRecord();
+  const { holdingStockLoading, holdingStockError } = useGetHoldingStock();
+
+  // fetching 데이터 loading, error 여부
+  const isLoading = stockInfoLoading || stockPriceLoading || cashLoading || orderRecordLoading || holdingStockLoading;
+  const isError = stockInfoError || stockPriceError || cashError || orderRecordError || holdingStockError;
+
+  // 1) 데이터 로딩 중
+  if (isLoading) {
+    return <Container orderSet={stockOrderSet}>로딩 중</Container>;
+  }
 
   // 주식주문 창 닫기
   const handleStockOrderClose = () => {
     dispatch(stockOrderClose());
   };
 
-  // 1) 데이터 로딩 중
-  if (stockInfoLoading || stockPriceLoading) {
-    return <Container orderSet={stockOrderSet}>로딩 중</Container>;
-  }
-
-  // 2) 데이터 받아오기 실패 + 성공했으나 빈 데이터일 때
-  if (stockInfoError || stockPriceError || stockPrice.length === 0) {
+  // 2) 데이터 받아오기 실패 or 성공했으나 빈 데이터일 때
+  if (isError || stockPrice.length === 0) {
     return (
       <Container orderSet={stockOrderSet}>
         <div className="ErrorContainer">

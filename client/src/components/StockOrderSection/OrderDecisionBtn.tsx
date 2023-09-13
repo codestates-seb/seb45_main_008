@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
+import useGetCash from "../../hooks/useGetCash";
 import { StateProps } from "../../models/stateProps";
 import { OrderTypeProps } from "../../models/orderTypeProps";
 import { setStockOrderVolume } from "../../reducer/StockOrderVolume-Reducer";
@@ -11,10 +12,10 @@ const availableMoneyText02: string = "원";
 const totalAmountText: string = "주문총액";
 const totalAmountUnit: string = "원";
 
-// dummyData
-const dummyMoney = 10000000;
-
 const OrderDecisionBtn = () => {
+  const { cashData } = useGetCash();
+  const cash = cashData.toLocaleString();
+
   const dispatch = useDispatch();
   const orderType = useSelector((state: StateProps) => state.stockOrderType);
   const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
@@ -40,7 +41,7 @@ const OrderDecisionBtn = () => {
     <div className="container">
       <AvailableMoney orderType={orderType}>
         <span>{availableMoneyText01}</span>
-        <span className="availableMoney">{dummyMoney.toLocaleString()}</span>
+        <span className="availableMoney">{cash}</span>
         <span>{availableMoneyText02}</span>
       </AvailableMoney>
       <TotalAmount>

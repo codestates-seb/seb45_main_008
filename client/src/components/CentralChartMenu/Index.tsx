@@ -10,6 +10,8 @@ import CompareChartBtn from "./CompareChartBtn";
 const UpperMenuBar = () => {
   const companyId = useSelector((state: StateProps) => state.companyId);
 
+  console.log(localStorage.getItem("authToken"));
+
   return (
     <Container>
       <div className="FirstLine">
