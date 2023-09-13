@@ -1,54 +1,53 @@
 import React from 'react';
 import styled from 'styled-components';
-import kakaoLogo from '../../asset/images/KakaoLogo.svg';  
-import axios from 'axios';
-// import { GoogleOAuthProvider, GoogleLogin, googleLogout } from '@react-oauth/google';
+// import kakaoLogo from '../../asset/images/KakaoLogo.svg';  
+// import axios from 'axios';
+import GoogleLoginButton from './GoogleLoginButton'
+import KakaoLoginButton from './KakaoLoginButton';
+
+
+
 
 const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick, onEmailSignupClick }) => {
     const titleText = "로그인";
 
-    const kakaoLoginText = "카카오로 로그인";
+    // const kakaoLoginText = "카카오로 로그인";
     const orText = "또는";
     const emailLoginText = "이메일로 로그인";
     const emailSignupText = "이메일로 회원가입";
+
 
     // const handleGoogleLogout = async () => {
     //     googleLogout();
     // }
 
-    const handleKakaoLogin = async () => {
-        try {
-            const response = await axios.get('/oauth2/authorization/kakao');
-            if (response.status === 200) {
-                const redirectUri = response.data.uri;
-                window.location.href = redirectUri;
-            } else {
-                console.error("Error logging in with Kakao, unexpected status code:", response.status);
-            }
-        } catch (error) {
-            console.error("Error logging in with Kakao:", error);
-        }
-    };
+    //임시로 비활성화
+
+    // const handleKakaoLogin = async () => {
+    //     try {
+    //         const response = await axios.get('/oauth2/authorization/kakao');
+    //         if (response.status === 200) {
+    //             const redirectUri = response.data.uri;
+    //             window.location.href = redirectUri;
+    //         } else {
+    //             console.error("Error logging in with Kakao, unexpected status code:", response.status);
+    //         }
+    //     } catch (error) {
+    //         console.error("Error logging in with Kakao:", error);
+    //     }
+    // };
 
     return (
         <ModalBackground>
             <ModalContainer>
                 <CloseButton onClick={onClose}>&times;</CloseButton>
                 <Title>{titleText}</Title>
-                {/* <GoogleOAuthProvider clientId="<your_client_id>">
-                    <GoogleLogin
-                        onSuccess={credentialResponse => {
-                            console.log(credentialResponse);
-                        }}
-                        onError={() => {
-                            console.log('Login Failed');
-                        }}
-                    />;
-                </GoogleOAuthProvider>; */}
-                <KakaoButton onClick={handleKakaoLogin}>
+                <GoogleLoginButton backendURL="YOUR_BACKEND_SERVER_URL" />
+                <KakaoLoginButton backendURL="YOUR_BACKEND_SERVER_URL" />
+                {/*임시로 비활성화 <KakaoButton onClick={handleKakaoLogin}>
                     <LogoImage src={kakaoLogo} alt="Kakao Logo" />
                     {kakaoLoginText}
-                </KakaoButton>
+                </KakaoButton> */}
                 <OrText>{orText}</OrText>
                 <EmailButtonsContainer>
                     <EmailButton onClick={onEmailLoginClick}>{emailLoginText}</EmailButton>
@@ -113,24 +112,25 @@ const OrText = styled.span`
 
 
 
-const KakaoButton = styled.button`
-    margin: 10px 0;
-    padding: 10px 20px;
-    background-color: #FFFFFF;
-    border: 1px solid lightgray;
-    border-radius: 5px;
-    cursor: pointer;
-    width: 300px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-`;
+// 임시로 비활성화
+// const KakaoButton = styled.button`
+//     margin: 10px 0;
+//     padding: 10px 20px;
+//     background-color: #FFFFFF;
+//     border: 1px solid lightgray;
+//     border-radius: 5px;
+//     cursor: pointer;
+//     width: 300px;
+//     display: flex;
+//     align-items: center;
+//     justify-content: center;
+// `;
 
-const LogoImage = styled.img`
-    margin-right: 30px;
-    width: 60px;
-    height: auto;
-`;
+// const LogoImage = styled.img`
+//     margin-right: 30px;
+//     width: 60px;
+//     height: auto;
+// `;
 
 const EmailButtonsContainer = styled.div`
     display: flex;
