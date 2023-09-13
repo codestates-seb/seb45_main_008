@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { StateProps } from "../models/stateProps";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
 
 const useTradeStock = () => {
@@ -9,7 +9,14 @@ const useTradeStock = () => {
   const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
   const orderVolume = useSelector((state: StateProps) => state.stockOrderVolume);
 
-  const orderRequest = useMutation(() => postOrderRequest(orderType, companyId, orderPrice, orderVolume));
+  const queryClient = useQueryClient();
+  const orderRequest = useMutation(() => postOrderRequest(orderType, companyId, orderPrice, orderVolume), {
+    onSuccess: () => {
+      queryClient.invalidateQueries("cash");
+      queryClient.invalidateQueries("holdingStock");
+      queryClient.invalidateQueries("orderRecord");
+    },
+  });
   return orderRequest;
 };
 

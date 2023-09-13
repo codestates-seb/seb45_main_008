@@ -7,7 +7,7 @@ const url = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080
 
 const useGetStockOrderRecord = () => {
   const isLogin = useSelector((state: StateProps) => state.login);
-  const { data, isLoading, isError } = useQuery("record", getOrderRecord, {
+  const { data, isLoading, isError } = useQuery("orderRecord", getOrderRecord, {
     enabled: isLogin === 1,
   });
 
