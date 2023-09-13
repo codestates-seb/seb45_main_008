@@ -1,9 +1,10 @@
 import { useState, useEffect } from "react";
-import { useQuery } from "react-query";
+import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 
 const useGetStockData = (companyId: number) => {
   const [autoRefetch, setAutoRefetch] = useState(false);
+  const queryClient = useQueryClient();
 
   // 시간대 (timeZone) 별로 queryKey를 다르게 설정해서, 서버 데이터가 동일할 때는 캐싱된 데이터 활용하고 서버 데이터가 갱신됐을 때는 새롭게 받아옴 (서버 데이터 30분마다 갱신)
   const currentTime = new Date();
@@ -33,10 +34,11 @@ const useGetStockData = (companyId: number) => {
   const { data, isLoading, error, refetch } = useQuery(`chartData${companyId} ${queryKey}`, () => getChartData(companyId), {
     enabled: true,
     refetchInterval: autoRefetch ? 60000 * 10 : false, // 정각 혹은 30분에 맞춰서 10분 마다 데이터 리패칭
-    // onSuccess: () => {
-    //   console.log(new Date());
-    //   console.log(data);
-    // },
+    onSuccess: () => {
+      queryClient.invalidateQueries("cash");
+      queryClient.invalidateQueries("holdingStock");
+      queryClient.invalidateQueries("orderRecord");
+    },
   });
 
   return { stockPrice: data, stockPriceLoading: isLoading, stockPriceError: error };

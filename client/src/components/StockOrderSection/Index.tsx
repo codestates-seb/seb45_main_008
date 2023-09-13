@@ -5,6 +5,7 @@ import useGetStockData from "../../hooks/useGetStockData";
 import useGetCash from "../../hooks/useGetCash";
 import useGetStockOrderRecord from "../../hooks/useGetStockOrderRecord";
 import useGetHoldingStock from "../../hooks/useGetHoldingStock";
+import useGetCompanyList from "../../hooks/useGetCompanyList";
 import { stockOrderClose } from "../../reducer/StockOrderSet-Reducer";
 import { StateProps } from "../../models/stateProps";
 import StockOrder from "./StockOrder";
@@ -12,10 +13,8 @@ import OrderResult from "./OrderResult";
 
 const errorMessage: string = "정보를 불러올 수 없습니다";
 const errorButtonText: string = "닫기";
-
 const loginRequiredText: string = "로그인이 필요한 서비스입니다";
 const loginBtnText: string = "StockHolm 로그인";
-
 const upperbarTitle: string = "주식주문";
 const marketType: string = "코스피";
 
@@ -33,10 +32,11 @@ const StockOrderSection = () => {
   const { cashLoading, cashError } = useGetCash();
   const { orderRecordLoading, orderRecordError } = useGetStockOrderRecord();
   const { holdingStockLoading, holdingStockError } = useGetHoldingStock();
+  const { compnayListLoading, companyListError } = useGetCompanyList();
 
   // fetching 데이터 loading, error 여부
-  const isLoading = stockInfoLoading || stockPriceLoading || cashLoading || orderRecordLoading || holdingStockLoading;
-  const isError = stockInfoError || stockPriceError || cashError || orderRecordError || holdingStockError;
+  const isLoading = stockInfoLoading || stockPriceLoading || cashLoading || orderRecordLoading || holdingStockLoading || compnayListLoading;
+  const isError = stockInfoError || stockPriceError || cashError || orderRecordError || holdingStockError || companyListError;
 
   // 1) 데이터 로딩 중
   if (isLoading) {
@@ -75,7 +75,7 @@ const StockOrderSection = () => {
         </button>
       </UpperBar>
       {isLogin === 1 ? (
-        <>
+        <div className="mainContent">
           <StockName>
             <img className="CorpLogo" src={dummyLogo} />
             <div className="NameContainer">
@@ -87,7 +87,7 @@ const StockOrderSection = () => {
           </StockName>
           <StockOrder corpName={corpName} />
           <OrderResult />
-        </>
+        </div>
       ) : (
         <LoginRequestIndicator />
       )}
@@ -119,8 +119,16 @@ const Container = styled.aside<{ orderSet: boolean }>`
   min-width: 400px;
   height: 100%;
   box-shadow: -1px 0px 10px darkgray;
-
   background-color: #ffffff;
+
+  .mainContent {
+    height: 100%;
+    overflow-y: scroll;
+
+    &::-webkit-scrollbar {
+      display: none;
+    }
+  }
 
   .ErrorContainer {
     width: 100%;

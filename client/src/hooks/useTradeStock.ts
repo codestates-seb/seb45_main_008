@@ -37,7 +37,6 @@ const postOrderRequest = async (orderType: boolean, companyId: number, price: nu
     const response = await axios.post(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/stock/buy?companyId=${companyId}&price=${price}&stockCount=${volume}`, {}, options);
     const orderResult = await response.data;
 
-    console.log(orderResult); // 테스트 코드
     return orderResult;
   }
 
@@ -46,7 +45,6 @@ const postOrderRequest = async (orderType: boolean, companyId: number, price: nu
     const response = await axios.post(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/stock/sell?companyId=${companyId}&price=${price}&stockCount=${volume}`, {}, options);
     const orderResult = await response.data;
 
-    console.log(orderResult); // 테스트 코드
     return orderResult;
   }
 };
