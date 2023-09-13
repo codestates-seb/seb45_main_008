@@ -109,6 +109,11 @@ const VolumeSetting = () => {
     }
   }, [maximumBuyingVolume]);
 
+  // 조회하는 종목을 변경하면 구매수량 0으로 설정
+  useEffect(() => {
+    dispatch(setStockOrderVolume(0));
+  }, [companyId]);
+
   return (
     <Container>
       <TitleContainer orderType={orderType}>
