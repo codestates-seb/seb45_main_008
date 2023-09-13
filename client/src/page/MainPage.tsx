@@ -97,12 +97,14 @@ const MainPage = () => {
   const isLogin = useSelector((state: StateProps) => state.login);
   const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 관리
 
+  // 🔴 새로고침 되면 로그인 해제되면서 액세스 토큰도 같이 삭제됨
   useEffect(() => {
-    const authToken = localStorage.getItem("authToken");
+    // const authToken = localStorage.getItem("authToken");
 
-    if (authToken !== null) {
-      dispatch(setLoginState());
-    }
+    // if (authToken !== null) {
+    //   dispatch(setLoginState());
+    // }
+    localStorage.removeItem("authToken");
   }, []);
 
   //프로필 모달 열고닫는 매커니즘
