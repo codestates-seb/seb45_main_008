@@ -1,38 +1,19 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import styled from 'styled-components';
-import { useSelector, useDispatch } from 'react-redux';
-import { setMemberInfo } from '../../reducer/member/memberInfoSlice.ts';
-import { useGetMemberInfo } from '../../hooks/useGetMemberInfo.ts';
-import { RootState } from '../../reducer/member/rootReducer';
+
 
 const LoginConfirmationModal: React.FC<LoginConfirmationProps> = ({ onClose }) => {
     const messageText = "로그인이 성공적으로 완료되었습니다!";
     const confirmText = "확인"
-    const loadingText = "로딩 중...";
-    const errorText = "데이터를 가져오는 중 문제가 발생했습니다.";
 
-    const memberId: number | null = useSelector((state: RootState) => state.login.memberId);
-  
-    const { data, error, isLoading } = useGetMemberInfo(memberId);
-    
-    const dispatch = useDispatch();
 
-    useEffect(() => {
-      if (data) {
-        dispatch(setMemberInfo(data));
-      }
-    }, [data, dispatch]);
 
     return (
       <ModalBackground>
         <ModalContainer>
-          {isLoading ? (
-            <Message>{loadingText}</Message>
-          ) : error ? (
-            <Message>{errorText}</Message>
-          ) : (
+
             <Message>{messageText}</Message>
-          )}
+
           <ConfirmButton onClick={onClose}>{confirmText}</ConfirmButton>
         </ModalContainer>
       </ModalBackground>

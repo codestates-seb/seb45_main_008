@@ -77,7 +77,7 @@ const MarketkospiChart = () => {
               symbol: "none",
               sampling: "lttb",
               itemStyle: {
-                color: function (params) {
+                color: function (params: any) {
                   // 주식 상승이면 빨간색, 하락이면 파란색 반환
                   return params.data[1] >= params.data[0]
                     ? "rgb(255, 0, 0)"
@@ -97,26 +97,28 @@ const MarketkospiChart = () => {
                 ]),
               },
 
-              data: kospiData.map((item, index, array) => {
-                const currentPrice = parseFloat(item.bstp_nmix_oprc);
-                const previousPrice =
-                  index > 0
-                    ? parseFloat(array[index - 1].bstp_nmix_oprc)
-                    : currentPrice;
+              data: kospiData.map(
+                (item: KospiProps, index: number, array: KospiProps[]) => {
+                  const currentPrice = parseFloat(item.bstp_nmix_oprc);
+                  const previousPrice =
+                    index > 0
+                      ? parseFloat(array[index - 1].bstp_nmix_oprc)
+                      : currentPrice;
 
-                // 현재 가격과 이전 가격을 비교하여 색상 설정
-                const color =
-                  currentPrice > previousPrice
-                    ? "rgb(255, 0, 0)"
-                    : "rgb(0, 0, 255)";
+                  // 현재 가격과 이전 가격을 비교하여 색상 설정
+                  const color =
+                    currentPrice > previousPrice
+                      ? "rgb(255, 0, 0)"
+                      : "rgb(0, 0, 255)";
 
-                return {
-                  value: currentPrice,
-                  itemStyle: {
-                    color: color,
-                  },
-                };
-              }),
+                  return {
+                    value: currentPrice,
+                    itemStyle: {
+                      color: color,
+                    },
+                  };
+                }
+              ),
             },
           ],
           grid: {

@@ -33,9 +33,9 @@ const Holdings: React.FC<HoldingsProps> = ({ currentListType, onChangeListType }
           </SlideMenu>
         )}
       </Header>
-      <Divider />
+      <Divider1 />
       <EvaluationProfit>평가 수익금: +5,000,000원</EvaluationProfit> {/* 임의의 평가 수익금 */}
-      <Divider />
+      <Divider2 />
       {holdingsData.map(stock => (
         <>
           <StockItem key={stock.name}>
@@ -88,10 +88,11 @@ const getColorByChange = (change: string) => {
   };
   
   const HoldingsContainer = styled.div`
-    padding: 16px;
+    padding: 8px 0px;
   `;
   
   const Header = styled.div`
+    padding:0px 16px;
     display: flex;
     align-items: center;
     position: relative;
@@ -186,17 +187,32 @@ const getColorByChange = (change: string) => {
       cursor: pointer; // 마우스 포인터 변경 추가
     `;
   
-  const Divider = styled.div`
-  height: 1px;
-  background-color: #aaa; // 회색으로 설정
-  margin: 8px 0; // 상하 여백 추가
+  const Divider1 = styled.div`
+    margin:0px;
+    padding:0px;
+    width: 100%;
+    height: 11px;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #2f4f4f;
   `;
-  
+
+  const Divider2 = styled.div`
+    margin:0px;
+    padding:0px;
+    width: 100%;
+    height: 4.5px;
+    display: flex;
+    flex-direction: row;
+   border-bottom: 1px solid #2f4f4f;
+`;
+
+
 
 const EvaluationProfit = styled.div`
   font-size: 16px;
   font-weight: bold;
-  margin: 10px 0;
+  margin: 8px 0;
   text-align: center;
   color: red; // 수익금이 플러스일 경우 초록색으로 표시
 `;
@@ -238,7 +254,7 @@ const ColoredDetailData = styled.span.attrs<{ value: string }>(({ value }) => ({
 `;
 
 const ThickDivider = styled.div`
-  height: 2px;
+  height: 3px;
   background-color: #aaa; 
   margin: 8px 0; 
 `;

@@ -7,4 +7,5 @@ export interface StateProps {
   companyId: number;
   stockOrderVolume: number;
   decisionWindow: boolean;
+  login: number;
 }

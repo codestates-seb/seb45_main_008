@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-
 import kakaoLogo from '../../asset/images/KakaoLogo.svg';  
 import axios from 'axios';
 

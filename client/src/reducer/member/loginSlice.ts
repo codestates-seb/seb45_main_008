@@ -1,25 +1,21 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
+
+const initialState: number = 0;
 
 const loginSlice = createSlice({
-  name: 'login',
-  initialState: {
-    memberId: null,
-    isLoggedOut: 1
-  },
+  name: "login",
+  initialState: initialState,
   reducers: {
-    setLoginState: (state, action) => {
-      state.memberId = action.payload;
-      state.isLoggedOut = 0;
+    setLoginState: (state) => {
+      state = 1;
+      return state;
     },
     setLogoutState: (state) => {
-      state.memberId = null;
-      state.isLoggedOut = 1;
+      state = 0;
+      return state;
     },
-    updateMemberId: (state, action) => {
-      state.memberId = action.payload;
-    }
-  }
+  },
 });
 
-export const { setLoginState, setLogoutState, updateMemberId } = loginSlice.actions;
-export default loginSlice.reducer;
+export const { setLoginState, setLogoutState } = loginSlice.actions;
+export const loginReducer = loginSlice.reducer;

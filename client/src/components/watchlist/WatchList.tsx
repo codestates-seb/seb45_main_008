@@ -39,9 +39,9 @@ const WatchList: React.FC<WatchListProps> = ({ currentListType, onChangeListType
           </SlideMenu>
         )}
       </Header>
-      <Divider />
+      <Divider1 />
       <AddStockButton onClick={() => { /* 종목 추가 로직 */ }}>종목 추가</AddStockButton>
-      <Divider />
+      <Divider2 />
       {favoriteStocks.map(stock => (
         <StockItem key={stock.name}>
           <Logo src={stock.logo} alt="stock logo"/>
@@ -77,7 +77,7 @@ const getColorByChange = (change: string) => {
 };
 
 const WatchListContainer = styled.div`
-  padding: 16px;
+  padding: 8px 0px;
 `;
 
 const Header = styled.div`
@@ -175,14 +175,27 @@ const StockChange = styled.span.attrs<{ change: string }>(({ change }) => ({
     cursor: pointer;
   `;
 
-const Divider = styled.div`
-  height: 1px;
-  background-color: #aaa;
-  margin: 8px 0;
+const Divider1 = styled.div`
+    margin:0px;
+    padding:0px;
+    width: 100%;
+    height: 11px;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #2f4f4f;
+`;
+const Divider2 = styled.div`
+    margin:0px;
+    padding:0px;
+    width: 100%;
+    height: 4px;
+    display: flex;
+    flex-direction: row;
+    border-bottom: 1px solid #2f4f4f;
 `;
 
 const AddStockButton = styled.button`
-  padding: 10px 20px;
+  padding: 10px;
   border: none;
   background-color: transparent;
   cursor: pointer;
