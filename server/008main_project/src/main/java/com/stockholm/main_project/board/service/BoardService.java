@@ -62,7 +62,7 @@ public class BoardService {
         return boardRepository.findAll();
     }
 
-    public void deleteBoard(long boardId) {
+    public void deleteBoard(long boardId, Member member) {
         Board board = findBoard(boardId);
         if (board.getImageUrl() != null) {
             awsS3Service.deleteFile("boards", board.getImageUrl());

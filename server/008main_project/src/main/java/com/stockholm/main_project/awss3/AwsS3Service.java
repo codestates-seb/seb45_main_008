@@ -1,6 +1,9 @@
 package com.stockholm.main_project.awss3;
 
 
+import lombok.Getter;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import com.stockholm.main_project.exception.BusinessLogicException;
 import com.stockholm.main_project.exception.ExceptionCode;
@@ -15,15 +18,15 @@ import software.amazon.awssdk.core.sync.RequestBody;
 import java.net.URL;
 
 @Service
+@Slf4j
 public class AwsS3Service {
-
     private final String bucketName = "stockholm-server";
     private final S3Client s3Client;
 
     public AwsS3Service() {
         try {
-            String awsAccessKeyId = System.getenv("AWS_ACCESS_KEY_ID");
-            String awsSecretAccessKey = System.getenv("AWS_SECRET_ACCESS_KEY");
+            String awsAccessKeyId = System.getenv("AWS_S3_ACCESS_KEY");
+            String awsSecretAccessKey = System.getenv("AWS_S3_SECRET_KEY");
 
             AwsBasicCredentials awsCredentials = AwsBasicCredentials.create(
                     awsAccessKeyId,

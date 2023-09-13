@@ -1,28 +1,18 @@
 spring:
-#  datasource:
-#    url: jdbc:mysql://stockholm.c9tdmcjx6fcv.ap-northeast-2.rds.amazonaws.com/stockholm?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
-#    username: admin
-#    password: 1q2w3e4r
-#    driver-class-name: com.mysql.cj.jdbc.Driver
-#  jpa:
-#    hibernate:
-#      ddl-auto: update
-#    show-sql: true
-#    properties:
-#      hibernate:
-#        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
-#        format_sql: true
-  h2:
-    console:
-      enabled: true
-      path: /h2
   datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
+    url: jdbc:mysql://stockholm.c9tdmcjx6fcv.ap-northeast-2.rds.amazonaws.com/stockholm?useSSL=false&allowPublicKeyRetrieval=true&characterEncoding=UTF-8&serverTimezone=Asia/Seoul
+    username: ${DATABASE_USERNAME}
+    password: ${DATABASE_PASSWORD}
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
-      ddl-auto: create
+      ddl-auto: update
     show-sql: true
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.MySQL5InnoDBDialect
+        format_sql: true
+
   mail:
     host: smtp.gmail.com
     port: 587
@@ -41,6 +31,7 @@ spring:
           google:
             clientId: 47991654230-k0vku25t92sageg12thm05nfm9nro1rh.apps.googleusercontent.com
             clientSecret: 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
+            #redirect-uri: "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/google"
             scope:
               - email
               - profile
@@ -50,6 +41,7 @@ spring:
             client-name: Kakao
             client-authentication-method: POST
             redirect-uri: "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/login/oauth2/code/kakao"
+#            redirect-uri: "http://localhost:8080/login/oauth2/code/kakao"
             authorization-grant-type: authorization_code
             scope:
               - profile_nickname
@@ -84,8 +76,8 @@ springdoc:
 cloud:
   aws:
     credentials:
-      access-key: ""
-      secret-key: ""
+      access-key: ${AWS_S3_ACCESS_KEY}
+      secret-key: ${AWS_S3_SECRET_KEY}
     s3:
       bucket: "stockholm-server"
     region:
@@ -104,5 +96,6 @@ stock-url:
   kospi: "https://openapivts.koreainvestment.com:29443/uapi/domestic-stock/v1/quotations/inquire-daily-indexchartprice"
 
 jwt:
+  key: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 40
   refresh-token-expiration-minutes: 420

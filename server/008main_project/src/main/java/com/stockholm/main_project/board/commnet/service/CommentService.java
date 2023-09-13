@@ -28,6 +28,10 @@ public class CommentService {
     public Comment updateComment(long commentId ,Comment comment, Member member){
         Comment existingComment = findComment(commentId);
 
+        if (existingComment.getMember().getMemberId() != member.getMemberId()) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_FAILED);
+        }
+
         existingComment.setContent(comment.getContent());
 
         return commentRepository.save(existingComment);
@@ -38,8 +42,12 @@ public class CommentService {
         return commentRepository.findAllByBoardBoardId(commentId);
     }
 
-    public void deleteComment (long commentId) {
+    public void deleteComment (long commentId, Member member) {
         Comment comment = findComment(commentId);
+
+        if (comment.getMember().getMemberId() != member.getMemberId()) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_FAILED);
+        }
 
         commentRepository.delete(comment);
     }
