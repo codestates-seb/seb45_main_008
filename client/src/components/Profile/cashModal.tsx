@@ -15,14 +15,14 @@ const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
 
     const dispatch = useDispatch();
     const moneyId = useSelector((state: RootState) => state.cash.moneyId);
-    const moneyAmount = useSelector((state: RootState) => state.cash.moneyAmount) || 0;
+    const moneyAmount = useSelector((state: RootState) => state.cash.moneyAmount) || '0';
     
     const createCashMutation = useCreateCash();
     const { data: cashData, isLoading } = useGetCash(moneyId); 
     const updateCashMutation = useResetCash();
 
-    const [cashInput, setCashInput] = useState<number>(0);
-    const [initialAmount, setInitialAmount] = useState<number>(0); // 현금 생성을 위한 상태 변수
+    const [cashInput, setCashInput] = useState<string>('0');
+    const [initialAmount, setInitialAmount] = useState<string>('0'); // 현금 생성을 위한 상태 변수
 
     // 현금 생성 및 cashId 전역 저장
     const handleCreateCash = () => {
@@ -42,7 +42,7 @@ const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
     const handleCashReset = () => {
         if (moneyId) {
             const numericCashId = parseInt(moneyId, 10);  // cashId를 숫자로 변환
-            const numericCashAmount = Number(cashInput); // cashInput을 숫자로 변환
+            const numericCashAmount =cashInput; // cashInput을 숫자로 변환
             updateCashMutation.mutate({ moneyId: numericCashId, money: numericCashAmount }, {
                 onSuccess: () => {
                     dispatch(setMoneyAmount(numericCashAmount)); // 현금 금액을 입력한 금액으로 리셋
@@ -63,9 +63,9 @@ const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
                 {/* 현금 생성 입력창 및 버튼 추가 */}
                 <div>
                     <CashCreationInput
-                        type="number"
+                        type="string"
                         value={initialAmount}
-                        onChange={e => setInitialAmount(Number(e.target.value))}
+                        onChange={e => setInitialAmount(e.target.value)}
                         placeholder={cashCreationPlaceholder}
                     />
                     <CreateCashButton onClick={handleCreateCash}>{createCashButtonText}</CreateCashButton>
@@ -74,9 +74,9 @@ const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
                 <p>현재 현금: {isLoading ? 'Loading...' : moneyAmount.toLocaleString()}</p>
                 <div>
                     <CashInput
-                        type="number"
+                        type="string"
                         value={cashInput}
-                        onChange={e => setCashInput(Number(e.target.value))}
+                        onChange={e => setCashInput(e.target.value)}
                         placeholder={cashInputPlaceholder}
                     />
                     <ReceiveButton onClick={handleCashReset}>{resetButtonText}</ReceiveButton>
