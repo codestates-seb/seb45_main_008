@@ -73,7 +73,7 @@ public class BoardController {
                                                               @AuthenticationPrincipal Member member) throws Exception {
         Board boardToUpdate = mapper.boardRequestToBoard(boardUpdateDto);
         boardToUpdate.setMember(member);
-        Board updatedBoard = boardService.updateBoard(boardId, boardToUpdate, imageFile);
+        Board updatedBoard = boardService.updateBoard(boardId, boardToUpdate, imageFile, member);
         SingleBoardResponseDto responseDto = mapper.boardToBoardResponseDto(updatedBoard);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
