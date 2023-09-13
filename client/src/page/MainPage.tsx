@@ -33,6 +33,7 @@ const MainPage = () => {
   const [isWelcomeModalOpen, setWelcomeModalOpen] = useState(false);
   const [isProfileModalOpen, setProfileModalOpen] = useState(false); //프로필 모달 보이기/숨기기
 
+
   const openOAuthModal = useCallback(() => {
     setOAuthModalOpen(true);
   }, []);
@@ -95,17 +96,20 @@ const MainPage = () => {
   // 🔴 로그인 지역 상태 제거 → 전역 상태로 대체 (지역 상태 관련된 코드 싹 다 지워야함... -> 전역 상태 만들었으니 전역 상태로 활용)
   const dispatch = useDispatch();
   const isLogin = useSelector((state: StateProps) => state.login);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // 로그인 상태 관리
 
-  // 🔴 새로고침 되면 로그인 해제되면서 액세스 토큰도 같이 삭제됨
+  // 🔴 페이지 로드 시 로컬 스토리지의 토큰을 기반으로 로그인 상태를 확인합니다.
   useEffect(() => {
-    // const authToken = localStorage.getItem("authToken");
+    const authToken = localStorage.getItem("authToken");
+    if (authToken !== null) {
+      dispatch(setLoginState());
+    }
+  },);
 
-    // if (authToken !== null) {
-    //   dispatch(setLoginState());
-    // }
+      // 🔴 로그아웃 시 로컬스토리지에 있는 Auth 토큰 제거
+  const handleLogout = () => {
+    dispatch(setLogoutState());
     localStorage.removeItem("authToken");
-  }, []);
+  };
 
   //프로필 모달 열고닫는 매커니즘
   const openProfileModal = useCallback(() => {
@@ -117,11 +121,12 @@ const MainPage = () => {
   const handleLogin = () => {
     closeEmailLoginModal();
     setLoginConfirmationModalOpen(true);
+    dispatch(setLoginState());
   };
+
 
   const handleLoginConfirmationClose = () => {
     setLoginConfirmationModalOpen(false);
-    setIsLoggedIn(true);
   };
 
   const [selectedMenu, setSelectedMenu] = useState<"관심목록" | "투자목록">("투자목록"); // Default menu is 관심목록
@@ -130,11 +135,7 @@ const MainPage = () => {
     setSelectedMenu(menu);
   };
 
-  // 🔴 로그 아웃 시 로컬데이터 토큰 제거
-  const handleLogout = () => {
-    dispatch(setLogoutState());
-    localStorage.removeItem("authToken");
-  };
+
 
   return (
     <Container>

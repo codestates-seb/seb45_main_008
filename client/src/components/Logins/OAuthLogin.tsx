@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import kakaoLogo from '../../asset/images/KakaoLogo.svg';  
 import axios from 'axios';
-
+// import { GoogleOAuthProvider, GoogleLogin, googleLogout } from '@react-oauth/google';
 
 const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick, onEmailSignupClick }) => {
     const titleText = "로그인";
@@ -12,7 +12,9 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
     const emailLoginText = "이메일로 로그인";
     const emailSignupText = "이메일로 회원가입";
 
-
+    // const handleGoogleLogout = async () => {
+    //     googleLogout();
+    // }
 
     const handleKakaoLogin = async () => {
         try {
@@ -33,7 +35,16 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
             <ModalContainer>
                 <CloseButton onClick={onClose}>&times;</CloseButton>
                 <Title>{titleText}</Title>
-
+                {/* <GoogleOAuthProvider clientId="<your_client_id>">
+                    <GoogleLogin
+                        onSuccess={credentialResponse => {
+                            console.log(credentialResponse);
+                        }}
+                        onError={() => {
+                            console.log('Login Failed');
+                        }}
+                    />;
+                </GoogleOAuthProvider>; */}
                 <KakaoButton onClick={handleKakaoLogin}>
                     <LogoImage src={kakaoLogo} alt="Kakao Logo" />
                     {kakaoLoginText}
@@ -99,6 +110,7 @@ const OrText = styled.span`
     margin: 20px 0;
     color: grey;
 `;
+
 
 
 const KakaoButton = styled.button`
