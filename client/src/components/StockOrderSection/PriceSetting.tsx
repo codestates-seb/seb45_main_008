@@ -60,10 +60,6 @@ const PriceSetting = (props: OwnProps) => {
     handleCheckTradePossibility();
   }, [orderPrice, orderType]);
 
-  // 가격 설정란에서 포커스 제거 -> 안내 메세지 제거
-  const handleRemoveNoVolumeNotification = () => {
-    setOrderPossibility(true);
-  };
   // 🔴 [TestCode] 거래가능 안내 메세지 테스트 -> 🟢 구현 성공하여 코드 정리할 예정
 
   // 거래가 증가/감소
@@ -126,13 +122,13 @@ const PriceSetting = (props: OwnProps) => {
         <div className="Title">{priceSettingTitle}</div>
       </div>
       <div className="PriceSettingBox">
-        <PriceController defaultValue={orderPrice} value={orderPrice} onChange={handleWriteOrderPrice} onKeyDown={handleInputArrowBtn} onFocus={handleCheckTradePossibility} onBlur={handleRemoveNoVolumeNotification} />
+        <PriceController defaultValue={orderPrice} value={orderPrice} onChange={handleWriteOrderPrice} onKeyDown={handleInputArrowBtn} onFocus={handleCheckTradePossibility} />
         <UnitContent>{unitText}</UnitContent>
         <div className="DirectionBox">
-          <button className="PriceUp" onClick={handlePlusOrderPrice} onBlur={handleRemoveNoVolumeNotification}>
+          <button className="PriceUp" onClick={handlePlusOrderPrice}>
             &#8896;
           </button>
-          <button className="PriceDown" onClick={handleMinusOrderPrice} onBlur={handleRemoveNoVolumeNotification}>
+          <button className="PriceDown" onClick={handleMinusOrderPrice}>
             &#8897;
           </button>
         </div>
@@ -247,5 +243,5 @@ const CheckTradingVolume = styled.div<{ orderPossibility: boolean }>`
   left: 2px;
   font-size: 0.77em;
   color: ${(props) => (props.orderPossibility ? "#2679ed" : "#e22926")};
-  transition: color 0.3s ease-in-out; /* 전환 효과 설정 */
+  transition: color 0.3s ease-in-out;
 `;
