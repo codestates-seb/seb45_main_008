@@ -22,7 +22,7 @@ import java.util.Map;
 public class JwtTokenizer {
 
     @Getter
-    @Value("abcdefgabcdefgabcdefgabcdefgabcdefg") //임시 키
+    @Value("${jwt.key}") //임시 키
     private String secretKey;
 
     @Getter
