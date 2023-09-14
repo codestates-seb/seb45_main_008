@@ -3,7 +3,7 @@ import { styled } from "styled-components";
 import useGetStockOrderRecord from "../../hooks/useGetStockOrderRecord";
 import useGetCompanyList from "../../hooks/useGetCompanyList";
 import useDeleteStockOrder from "../../hooks/useDeleteStockOrder";
-import { orderWaitProps } from "../../models/stockProps";
+import { OrderRecordProps } from "../../models/stockProps";
 
 // dummyLogo
 import dummyImg from "../../asset/CentralSectionMenu-dummyImg.png";
@@ -12,32 +12,56 @@ const priceUnit: string = "원";
 const volumeUnit: string = "주";
 const cancelButtonText: string = "주문취소";
 
-const titleText: string = "미체결 내역";
-const orderPendingEmptyMessage: string = "미체결 내역이 없습니다";
+const titleText01: string = "미체결 내역";
+const titleText02: string = "체결 내역";
+const orderPendingEmptyMessage: string = "거래 내역이 없습니다";
 
 const OrderResult = () => {
   const { orderRecordData } = useGetStockOrderRecord();
+  const [recordType, setRecordType] = useState(false);
 
-  const orderWaitList = orderRecordData.filter((order: orderWaitProps) => order.orderStates === "ORDER_WAIT");
-  orderWaitList.reverse(); // 최근 주문이 상단에 노출되도록 배열 순서 변경
-  const waitListNum = orderWaitList.length;
+  const orderWaitList = orderRecordData.filter((order: OrderRecordProps) => order.orderStates === "ORDER_WAIT");
+  const orderCompleteList = orderRecordData.filter((order: OrderRecordProps) => order.orderStates === "ORDER_COMPLETE");
+
+  // 최근 주문이 상단에 노출되도록 배열 순서 변경
+  orderWaitList.reverse();
+  orderCompleteList.reverse();
+  const orderList = recordType ? orderCompleteList : orderWaitList;
+  const orderListNum = orderList.length;
+
+  const handleChangeRecordType = (type: string) => {
+    if (type === "wait") {
+      setRecordType(false);
+    }
+
+    if (type === "complete") {
+      setRecordType(true);
+    }
+  };
 
   return (
-    <Container>
-      <div className="Title">{titleText}</div>
+    <Container recordType={recordType}>
+      <div className="titleContainer">
+        <div className="waitTitle" onClick={() => handleChangeRecordType("wait")}>
+          {titleText01}
+        </div>
+        <div className="completeTitle" onClick={() => handleChangeRecordType("complete")}>
+          {titleText02}
+        </div>
+      </div>
       <TradeWaiting>
-        {waitListNum === 0 ? (
+        {orderListNum === 0 ? (
           <div className="emptyIndicator">{orderPendingEmptyMessage}</div>
         ) : (
           <>
-            {orderWaitList.map((stock: orderWaitProps) => {
+            {orderList.map((stock: OrderRecordProps) => {
               const orderType = stock.orderTypes === "BUY" ? "매수" : "매도";
               const price = stock.price;
               const volume = stock.stockCount;
               const companyId = stock.companyId;
               const orderId = stock.stockOrderId;
 
-              return <OrderWaitStock key={orderId} orderType={orderType} orderPrice={price} orderVolume={volume} companyId={companyId} orderId={orderId} />;
+              return <OrderedStock key={orderId} recordType={recordType} orderType={orderType} orderPrice={price} orderVolume={volume} companyId={companyId} orderId={orderId} />;
             })}
           </>
         )}
@@ -49,8 +73,8 @@ const OrderResult = () => {
 export default OrderResult;
 
 // 개별 미체결 거래내역
-const OrderWaitStock = (props: WaitStockProps) => {
-  const { orderType, orderPrice, orderVolume, companyId, orderId } = props;
+const OrderedStock = (props: OrderdStockProps) => {
+  const { orderType, orderPrice, orderVolume, companyId, orderId, recordType } = props;
 
   const [orderCancle, setOrderCancle] = useState(false);
   const { companyList } = useGetCompanyList();
@@ -85,11 +109,13 @@ const OrderWaitStock = (props: WaitStockProps) => {
             </span>
           </div>
         </div>
-        <div className="buttonContainer">
-          <button className="cancelButton" onClick={handleSetOrderCancle}>
-            {cancelButtonText}
-          </button>
-        </div>
+        {!recordType && (
+          <div className="buttonContainer">
+            <button className="cancelButton" onClick={handleSetOrderCancle}>
+              {cancelButtonText}
+            </button>
+          </div>
+        )}
       </StockContainer>
       {orderCancle && <CancleConfirm corpName={corpName} orderType={orderType} orderPrice={orderPrice} orderVolume={orderVolume} companyId={companyId} orderId={orderId} setCancle={handleSetOrderCancle} />}
     </>
@@ -216,15 +242,21 @@ const CancleConfirm = (props: CancelConfirmProps) => {
 };
 
 // type 정의
-interface WaitStockProps {
+interface OrderdStockProps {
   orderType: string;
   orderPrice: number;
   orderVolume: number;
   companyId: number;
   orderId: number;
+  recordType: boolean;
 }
 
-interface CancelConfirmProps extends WaitStockProps {
+interface CancelConfirmProps {
+  orderType: string;
+  orderPrice: number;
+  orderVolume: number;
+  companyId: number;
+  orderId: number;
   corpName: string;
   setCancle: () => void;
 }
@@ -238,18 +270,35 @@ interface companyProps {
 }
 
 // component 생성
-const Container = styled.div`
+const Container = styled.div<{ recordType: boolean }>`
   width: 100%;
   height: calc(100vh - 570px);
   padding-top: 16px;
   display: flex;
   flex-direction: column;
+  cursor: pointer;
 
-  .Title {
+  .titleContainer {
+    display: flex;
+    flex-direction: row;
+  }
+
+  .waitTitle {
     font-size: 16px;
     font-weight: 500;
     padding-left: 16px;
     padding-bottom: 16px;
+    color: ${(props) => (props.recordType ? "#9999" : "black")};
+    transition: color 0.5s ease;
+  }
+
+  .completeTitle {
+    font-size: 16px;
+    font-weight: 500;
+    padding-left: 16px;
+    padding-bottom: 16px;
+    color: ${(props) => (props.recordType ? "black" : "#9999")};
+    transition: color 0.5s ease;
   }
 `;
 

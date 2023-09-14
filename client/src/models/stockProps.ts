@@ -28,13 +28,3 @@ export interface OrderRecordProps {
   stockCount: number;
   stockOrderId: number;
 }
-
-export interface orderWaitProps {
-  companyId: number;
-  memberId: number;
-  orderStates: string;
-  orderTypes: string;
-  price: number;
-  stockCount: number;
-  stockOrderId: number;
-}
