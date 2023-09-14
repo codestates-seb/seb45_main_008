@@ -10,7 +10,10 @@ import com.stockholm.main_project.member.entity.Member;
 import com.stockholm.main_project.member.service.MemberService;
 import com.stockholm.main_project.stock.service.StockHoldService;
 import com.stockholm.main_project.stock.service.StockOrderService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -36,6 +39,11 @@ public class CashController {
         this.stockOrderService = stockOrderService;
     }
     @PostMapping
+    @Operation(summary = "현금 정보 생성", description = "새로운 현금 정보를 생성합니다.", tags = { "Cash" })
+    @ApiResponse(responseCode = "201", description = "Created",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CashResponseDto.class)))
+    @ApiResponse(responseCode = "400", description = "Bad Request")
+    @ApiResponse(responseCode = "401", description = "Not Enough Money")
     public ResponseEntity postCash(@Schema(implementation = CashPostDto.class)@Valid @RequestBody CashPostDto cashPostDto,
                                    @AuthenticationPrincipal Member member){
 
@@ -50,6 +58,12 @@ public class CashController {
     }
 
     @PatchMapping("{cashId}")
+    @Operation(summary = "현금 정보 업데이트", description = "현금 정보를 업데이트합니다.", tags = { "Cash" })
+    @ApiResponse(responseCode = "200", description = "OK",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CashResponseDto.class)))
+    @ApiResponse(responseCode = "400", description = "Bad Request")
+    @ApiResponse(responseCode = "401", description = "Invalid Cash")
+    @ApiResponse(responseCode = "404", description = "Not Found")
     public ResponseEntity patchCash(@Schema(implementation = CashPatchDto.class)@PathVariable long cashId, @Valid @RequestBody CashPatchDto requestBody,
                                     @AuthenticationPrincipal Member member){
 
@@ -66,6 +80,11 @@ public class CashController {
         return new ResponseEntity<>(mapper.cashToCashResponseDto(cash), HttpStatus.OK);
     }
 
+    @Operation(summary = "현금 정보 조회", description = "현금 정보를 조회합니다.", tags = { "Cash" })
+    @ApiResponse(responseCode = "200", description = "OK",
+            content = @Content(mediaType = "application/json", schema = @Schema(implementation = CashResponseDto.class)))
+    @ApiResponse(responseCode = "401", description = "Invalid Cash")
+    @ApiResponse(responseCode = "404", description = "Not Found")
     @GetMapping
     private ResponseEntity getCash(@AuthenticationPrincipal Member member){
         Cash response = cashService.findCash(member);

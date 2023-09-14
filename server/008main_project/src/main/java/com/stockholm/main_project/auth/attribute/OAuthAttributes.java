@@ -49,7 +49,7 @@ public class OAuthAttributes {
         return Member.builder()
                 .name(name)
                 .email(email)
-                .roles(Arrays.asList("ROLE_USER"))
+                .roles(Arrays.asList("USER"))
                 .build();
     }
 }
