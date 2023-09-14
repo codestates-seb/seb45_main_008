@@ -69,13 +69,10 @@ const NewsListLink = {
 
 const Market = styled.div`
   text-align: center;
-  height: 600px;
 `;
 const News = styled.div`
   display: flex;
   flex-direction: column;
-
-  height: 500px;
   width: 100%;
   margin-top: 120px;
   flex-wrap: wrap;
