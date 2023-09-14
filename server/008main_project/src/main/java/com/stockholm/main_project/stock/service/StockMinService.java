@@ -1,9 +1,11 @@
 package com.stockholm.main_project.stock.service;
 
 import com.stockholm.main_project.stock.dto.StockMinDto;
+import com.stockholm.main_project.stock.dto.StockMinResponseDto;
 import com.stockholm.main_project.stock.entity.Company;
 import com.stockholm.main_project.stock.entity.StockInf;
 import com.stockholm.main_project.stock.entity.StockMin;
+import com.stockholm.main_project.stock.mapper.CompanyMapper;
 import com.stockholm.main_project.stock.mapper.StockMapper;
 import com.stockholm.main_project.stock.repository.StockMinRepository;
 import com.stockholm.main_project.utils.Time;
@@ -26,12 +28,14 @@ public class StockMinService {
     private final ApiCallService apiCallService;
     private final StockMapper stockMapper;
     private final StockMinRepository stockMinRepository;
+    private final CompanyMapper companyMapper;
 
-    public StockMinService(CompanyService companyService, ApiCallService apiCallService, StockMapper stockMapper, StockMinRepository stockMinRepository) {
+    public StockMinService(CompanyService companyService, ApiCallService apiCallService, StockMapper stockMapper, StockMinRepository stockMinRepository, CompanyMapper companyMapper) {
         this.companyService = companyService;
         this.apiCallService = apiCallService;
         this.stockMapper = stockMapper;
         this.stockMinRepository = stockMinRepository;
+        this.companyMapper = companyMapper;
     }
 
     public void updateStockMin() throws InterruptedException {
@@ -75,6 +79,15 @@ public class StockMinService {
         List<StockMin> stockMinList = stockMinRepository.findAllByCompanyCompanyId(companyId);
 
         return stockMinList;
+    }
+
+    public List<StockMinResponseDto> getRecent420StockMin(long companyId) {
+        List<StockMin> stockMinList = stockMinRepository.findTop420ByCompanyIdOrderByStockMinIdDesc(companyId);
+
+        List<StockMinResponseDto> stockMinResponseDtos = stockMinList.stream()
+                .map(stockMin -> companyMapper.stockMinToStockMinResponseDto(stockMin)).collect(Collectors.toList());
+        Collections.reverse(stockMinResponseDtos);
+        return stockMinResponseDtos;
     }
 
 
