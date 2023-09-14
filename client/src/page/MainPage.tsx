@@ -180,14 +180,13 @@ export default MainPage;
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-
-  /* overflow: scroll;
-  &::-webkit-scrollbar {
-    display: none;
-  } */
-
   display: flex;
   flex-direction: column;
+  overflow: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Main = styled.main`

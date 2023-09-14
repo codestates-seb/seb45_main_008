@@ -5,7 +5,7 @@ import { DotIcon } from "./IconComponent/Icon";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 const serverUrl =
-  "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/boards";
+  "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards";
 
 const TimeLineComponent = () => {
   const navigate = useNavigate();
@@ -41,20 +41,22 @@ const TimeLineComponent = () => {
   };
 
   // 서브밋 버튼 클릭
+  const authToken = localStorage.getItem("authToken");
   const handleClickSubmit = async () => {
     if (inputValue.length !== 0) {
-      //if 문의 조건식에 inputValue만 사용해도 정상 작동하는
-      //이유는 JavaScript와 TypeScript의 "Truthy"와 "Falsy" 값 변환 규칙때문
-      const newBoardData: BoardData = {
+      const newBoardData = {
         id: new Date().getTime(),
         content: inputValue,
         comments: "",
-        title: `user${UserId}`,
         boardId: 0,
       };
 
       try {
-        const response = await axios.post(`${serverUrl}`, newBoardData);
+        const response = await axios.post(serverUrl, newBoardData, {
+          headers: {
+            Authorization: authToken, // 토큰을 헤더에 추가
+          },
+        });
         if (response.status === 201) {
           // 서버에 성공적으로 데이터를 업로드한 경우
           alert("작성완료");
@@ -90,7 +92,11 @@ const TimeLineComponent = () => {
   const handleDeleteClick = async (boardId: number) => {
     // boardId로 수정
     try {
-      const response = await axios.delete(`${serverUrl}/${boardId}`); // URL에 boardId 추가
+      const response = await axios.delete(`${serverUrl}/${boardId}`, {
+        headers: {
+          Authorization: authToken, // 토큰을 헤더에 추가
+        },
+      }); // URL에 boardId 추가
       if (response.status === 200) {
         // 삭제 성공 처리
         alert("삭제되었습니다");
@@ -109,12 +115,6 @@ const TimeLineComponent = () => {
     }
   };
   //유저 아이디 랜덤 설정
-  const getRandomFourDigitNumber = () => {
-    const min = 1000; // 1000 이상의 수
-    const max = 9999; // 9999 이하의 수
-    return Math.floor(Math.random() * (max - min + 1)) + min;
-  };
-  const UserId = getRandomFourDigitNumber();
 
   //boardData업데이트될때 마다 로컬스토리지 데이터 저장
   // useEffect(() => {
@@ -143,7 +143,7 @@ const TimeLineComponent = () => {
         </>
       )}
       <DevideLine></DevideLine>
-      <BoardArea>
+      <BoardArea className="scroll">
         {boardData.length === 0 ? (
           <BoardTextAreaNoText>
             {timeLineText.notYetWriting}
@@ -152,7 +152,7 @@ const TimeLineComponent = () => {
           boardData
             .slice()
             .reverse()
-            .map((el) => (
+            .map((el: BoardData) => (
               <BoardTextArea>
                 <Delete>
                   <div onClick={() => handleDotOpen(el.boardId)}>
@@ -165,11 +165,12 @@ const TimeLineComponent = () => {
                   )}
                 </Delete>
                 <BoardText>
-                  {el.title}
+                  {el.member}
                   <br />
                   {el.content}
                 </BoardText>
-                <Comments postId={el.boardId}></Comments>
+                <DevideLine2 />
+                <Comments boardId={el.boardId}></Comments>
               </BoardTextArea>
             ))
         )}
@@ -184,7 +185,7 @@ interface BoardData {
   id: number;
   content: string;
   comments: string;
-  title: string;
+  member: string;
 }
 const timeLineText = {
   close: "닫기",
@@ -196,7 +197,7 @@ const timeLineText = {
 const DropdownInput = styled.input`
   text-align: center;
   border: 1px solid#40797c;
-  width: 90%;
+  width: 100%;
   height: 80px;
   outline: none;
   &:focus {
@@ -238,6 +239,21 @@ const Button = styled.button`
 `;
 
 //버튼 과 글영역 구분
+const DevideLine2 = styled.div`
+  margin-bottom: 10px;
+  position: relative;
+  margin-bottom: 30px;
+  &:after {
+    position: absolute;
+    top: 5px;
+    content: "";
+    border-bottom: 2px solid#e1e1e1;
+    display: block;
+    width: 100%;
+    height: 5px;
+  }
+`;
+
 const DevideLine = styled.div`
   margin-bottom: 10px;
   position: relative;
@@ -276,9 +292,9 @@ const SubmitButton = styled.button`
 //게시판 전체 영역
 const BoardArea = styled.div`
   text-align: center;
-
+  max-height: 500px;
   margin-top: 25px;
-  width: 90%;
+  width: 100%;
 `;
 //게시글 스타일
 const BoardTextAreaNoText = styled.div`
@@ -292,19 +308,16 @@ const BoardTextAreaNoText = styled.div`
   color: #c3c3c3;
 `;
 const BoardTextArea = styled.div`
-  width: 80%;
+  width: 100%;
   padding-bottom: 10px;
-  border-radius: 20px 20px;
-  border: 1px solid#40797c;
-  margin: 0 auto;
-  margin-bottom: 10px;
+  background-color: #f3f3f3;
+  border-bottom: 10px solid#333;
   padding-top: 10px;
   color: #333;
 `;
 const BoardText = styled.div`
   margin-top: 10px;
   margin-left: 25px;
-  max-width: 300px;
   min-height: 100px;
 `;
 const TimeLine = styled.div`
@@ -312,7 +325,6 @@ const TimeLine = styled.div`
   flex-direction: column;
   align-content: space-around;
   flex-wrap: wrap;
-  max-height:600px;
 `;
 //게시글 삭제
 const Delete = styled.div`
