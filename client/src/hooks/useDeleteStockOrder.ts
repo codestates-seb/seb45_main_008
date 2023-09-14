@@ -1,12 +1,10 @@
 import { useMutation, useQueryClient } from "react-query";
 import axios from "axios";
 
-const url = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/stock/stockorders/";
-
 const useDeleteStockOrder = () => {
   const queryClient = useQueryClient();
 
-  const mutate = useMutation((orderId: number) => deleteStockOrder(orderId), {
+  const mutate = useMutation((data: { orderId: number; cancleVolume: number }) => deleteStockOrder(data.orderId, data.cancleVolume), {
     onSuccess: () => {
       queryClient.invalidateQueries("holdingStock");
       queryClient.invalidateQueries("orderRecord");
@@ -18,7 +16,9 @@ const useDeleteStockOrder = () => {
 
 export default useDeleteStockOrder;
 
-const deleteStockOrder = async (orderId: number) => {
+const deleteStockOrder = async (orderId: number, cancleVolume: number) => {
+  const url = `http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/stock/stockorders?stockOrderId=${orderId}&stockCount=${cancleVolume}`;
+
   const authToken = localStorage.getItem("authToken");
   const options = {
     headers: {
@@ -27,6 +27,6 @@ const deleteStockOrder = async (orderId: number) => {
     },
   };
 
-  const response = await axios.delete(`${url}${orderId}`, options);
+  const response = await axios.delete(url, options);
   return response;
 };

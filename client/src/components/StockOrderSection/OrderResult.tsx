@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { styled } from "styled-components";
 import useGetStockOrderRecord from "../../hooks/useGetStockOrderRecord";
 import useGetCompanyList from "../../hooks/useGetCompanyList";
@@ -31,12 +32,12 @@ const OrderResult = () => {
           <>
             {orderWaitList.map((stock: orderWaitProps) => {
               const orderType = stock.orderTypes === "BUY" ? "매수" : "매도";
-              const price = stock.price.toLocaleString();
-              const volume = stock.stockCount.toLocaleString();
+              const price = stock.price;
+              const volume = stock.stockCount;
               const companyId = stock.companyId;
               const orderId = stock.stockOrderId;
 
-              return <OrderWaitStock key={orderId} orderType={orderType} price={price} volume={volume} companyId={companyId} orderId={orderId} />;
+              return <OrderWaitStock key={orderId} orderType={orderType} orderPrice={price} orderVolume={volume} companyId={companyId} orderId={orderId} />;
             })}
           </>
         )}
@@ -49,15 +50,101 @@ export default OrderResult;
 
 // 개별 미체결 거래내역
 const OrderWaitStock = (props: WaitStockProps) => {
-  const { orderType, price, volume, companyId, orderId } = props;
+  const { orderType, orderPrice, orderVolume, companyId, orderId } = props;
+
+  const [orderCancle, setOrderCancle] = useState(false);
   const { companyList } = useGetCompanyList();
-  const deleteOrder = useDeleteStockOrder();
+
+  const price = orderPrice.toLocaleString();
+  const volume = orderVolume.toLocaleString();
 
   const corp = companyList.filter((corp: companyProps) => corp.companyId === companyId);
   const corpName = corp[0].korName;
 
+  const handleSetOrderCancle = () => {
+    setOrderCancle(!orderCancle);
+  };
+
+  return (
+    <>
+      <StockContainer orderType={orderType}>
+        <div className="logoContainer">
+          <img className="corpLogo" src={dummyImg} />
+        </div>
+        <div className="tradingOverview">
+          <div className="corpName">{corpName}</div>
+          <div className="orderInfo">
+            <span className="orderType">{orderType}</span>
+            <span className="price">
+              {price}
+              {priceUnit}
+            </span>
+            <span className="volume">
+              {volume}
+              {volumeUnit}
+            </span>
+          </div>
+        </div>
+        <div className="buttonContainer">
+          <button className="cancelButton" onClick={handleSetOrderCancle}>
+            {cancelButtonText}
+          </button>
+        </div>
+      </StockContainer>
+      {orderCancle && <CancleConfirm corpName={corpName} orderType={orderType} orderPrice={orderPrice} orderVolume={orderVolume} companyId={companyId} orderId={orderId} setCancle={handleSetOrderCancle} />}
+    </>
+  );
+};
+
+// 주문 취소 확인창
+const CancleConfirm = (props: CancelConfirmProps) => {
+  const { corpName, orderType, orderPrice, orderVolume, orderId, setCancle } = props;
+
+  const [cancleVolume, setCancleVolume] = useState(0);
+  const deleteOrder = useDeleteStockOrder();
+
+  const orderCancleText: string = "취소";
+  const orderPriceText: string = "주문단가";
+  const cancleVolumeText: string = "취소수량";
+  const maximumCancleVolumeText01: string = "최대";
+  const maximumCancleVolumeText02: string = "주";
+  const totalCancleAmountText: string = "총 취소금액";
+  const closeButtonText: string = "닫기";
+  const confirmButtonText: string = "확인";
+  const price = orderPrice.toLocaleString();
+  const totalPrice = (orderPrice * cancleVolume).toLocaleString();
+
+  const handleChangeCancleVolume = (direction: string) => {
+    if (direction === "Up") {
+      cancleVolume < orderVolume && setCancleVolume((previousState) => previousState + 1);
+    }
+    if (direction === "Down") {
+      0 < cancleVolume && setCancleVolume((previousState) => previousState - 1);
+    }
+  };
+
+  // 거래량 직접 기입 시
+  const handleWriteCancleVolume = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    const numberInputValue = parseInt(inputValue, 10);
+
+    // 1) 음수를 임력하거나, 숫자 아닌 값 기입 시 -> 입력 무시  2) 값을 다 지워서 빈 문자열인 경우 -> 0으로 설정  3) 취소가능 수량 보다 높게 기입 -> 입력 무시
+    if (numberInputValue < 0 || isNaN(numberInputValue)) {
+      if (inputValue === "") {
+        setCancleVolume(0);
+      }
+      return;
+    }
+
+    if (orderVolume < numberInputValue) {
+      return;
+    } else {
+      setCancleVolume(numberInputValue);
+    }
+  };
+
   const handleDeleteWaitOrder = () => {
-    deleteOrder.mutate(orderId);
+    deleteOrder.mutate({ orderId, cancleVolume });
     const { isLoading, isError } = deleteOrder;
 
     if (isLoading) {
@@ -67,43 +154,79 @@ const OrderWaitStock = (props: WaitStockProps) => {
     if (isError) {
       console.log("주문 삭제 실패");
     }
+    setCancle(); // 모달 창 닫기
   };
 
   return (
-    <StockContainer orderType={orderType}>
-      <div className="logoContainer">
-        <img className="corpLogo" src={dummyImg} />
-      </div>
-      <div className="tradingOverview">
-        <div className="corpName">{corpName}</div>
-        <div className="orderInfo">
-          <span className="orderType">{orderType}</span>
-          <span className="price">
-            {price}
-            {priceUnit}
-          </span>
-          <span className="volume">
-            {volume}
-            {volumeUnit}
-          </span>
+    <CancelConfirm orderType={orderType}>
+      <div className="Container">
+        <img className="CorpLogo" src={dummyImg} />
+        <div className="OrderOverview">
+          <span className="CorpName">{corpName}</span>
+          <span className="OrderType">{orderType}</span>
+          <span className="orderCancel">{orderCancleText}</span>
+        </div>
+        <div className="OrderContent">
+          <div className="priceContent">
+            <span className="text">{orderPriceText}</span>
+            <span>
+              {price} {priceUnit}
+            </span>
+          </div>
+          <div className="volumeContent">
+            <div className="text cancleVolumeText">
+              <span>{cancleVolumeText}</span>
+              <span className="maximumCancleVolume">
+                {maximumCancleVolumeText01}
+                <span className="maximumVolumeNum"> {orderVolume} </span>
+                {maximumCancleVolumeText02}
+              </span>
+            </div>
+            <VolumeSettingBox>
+              <VolumeController defaultValue={cancleVolume} value={cancleVolume} onChange={handleWriteCancleVolume} />
+              <UnitContent>{volumeUnit}</UnitContent>
+              <div className="DirectionContainer">
+                <button className="VolumeUp" onClick={() => handleChangeCancleVolume("Up")}>
+                  &#8896;
+                </button>
+                <button className="VolumeDown" onClick={() => handleChangeCancleVolume("Down")}>
+                  &#8897;
+                </button>
+              </div>
+            </VolumeSettingBox>
+          </div>
+          <div className="totalContent">
+            <span className="text">{totalCancleAmountText}</span>
+            <span>
+              {totalPrice} {priceUnit}
+            </span>
+          </div>
+          <div className="ButtonContainer">
+            <button className="cancel" onClick={setCancle}>
+              {closeButtonText}
+            </button>
+            <button className="confirm" onClick={handleDeleteWaitOrder}>
+              {confirmButtonText}
+            </button>
+          </div>
         </div>
       </div>
-      <div className="buttonContainer">
-        <button className="cancelButton" onClick={handleDeleteWaitOrder}>
-          {cancelButtonText}
-        </button>
-      </div>
-    </StockContainer>
+    </CancelConfirm>
   );
 };
 
 // type 정의
 interface WaitStockProps {
   orderType: string;
-  price: string;
-  volume: string;
+  orderPrice: number;
+  orderVolume: number;
   companyId: number;
   orderId: number;
+}
+
+interface CancelConfirmProps extends WaitStockProps {
+  corpName: string;
+  setCancle: () => void;
 }
 
 interface companyProps {
@@ -241,4 +364,185 @@ const StockContainer = styled.div<{ orderType: string }>`
       background-color: ${(props) => (props.orderType === "매도" ? "#c7dbfa" : "#f4d2cf")};
     }
   }
+`;
+
+const CancelConfirm = styled.div<{ orderType: string }>`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 2;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  .Container {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    width: 328px;
+    height: 375px;
+    background-color: white;
+    border: none;
+    border-radius: 0.5rem;
+
+    padding-left: 20px;
+    padding-right: 20px;
+
+    .CorpLogo {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+    }
+
+    .OrderOverview {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      font-size: 18px;
+      font-weight: 500;
+      padding-top: 18px;
+      padding-bottom: 28px;
+
+      .OrderType {
+        color: ${(props) => (props.orderType === "매도" ? "#4479c2" : "#cc3c3a")};
+      }
+    }
+
+    .OrderContent {
+      width: 100%;
+      font-size: 15px;
+
+      .priceContent {
+        height: 24px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding-bottom: 40px;
+      }
+
+      .volumeContent {
+        display: flex;
+        flex-direction: column;
+        padding-bottom: 20px;
+        border-bottom: 0.1px solid #d3cece99;
+      }
+
+      .totalContent {
+        height: 24px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        padding-top: 20px;
+        padding-bottom: 20px;
+      }
+
+      .text {
+        color: #292828;
+      }
+
+      .cancleVolumeText {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+      }
+
+      .maximumVolumeNum {
+        color: ${(props) => (props.orderType === "매수" ? "#e22926" : "#2679ed")};
+      }
+
+      .TotalOrderAmout {
+        padding-top: 20px;
+        padding-bottom: 45px;
+      }
+    }
+
+    .ButtonContainer {
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      padding-top: 20px;
+      gap: 12px;
+
+      & button {
+        width: 50%;
+        height: 32px;
+        border: none;
+        border-radius: 0.25rem;
+      }
+
+      .cancel {
+        color: ${(props) => (props.orderType === "매수" ? "#e22926" : "#2679ed")};
+        background-color: ${(props) => (props.orderType === "매수" ? "#fcdddb" : "#dce9fc")};
+      }
+
+      .confirm {
+        color: white;
+        background-color: ${(props) => (props.orderType === "매수" ? "#e22926" : "#2679ed")};
+      }
+    }
+  }
+`;
+
+const VolumeSettingBox = styled.div`
+  padding-top: 10px;
+  display: flex;
+  flex-direction: row;
+
+  .DirectionContainer {
+    display: flex;
+    flex-direction: column;
+
+    & button {
+      width: 31px;
+      height: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 10px;
+      border: 1px solid darkgray;
+      border-radius: 0%;
+
+      &.VolumeUp {
+        border-bottom: none;
+        border-radius: 0 0.2rem 0 0;
+      }
+
+      &.VolumeDown {
+        border-radius: 0 0 0.2rem 0;
+      }
+    }
+  }
+`;
+
+const VolumeController = styled.input`
+  flex: 1 0 0;
+  height: 30px;
+  border: 1px solid darkgray;
+  border-right: none;
+  border-radius: 0.2rem 0 0 0.2rem;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: right;
+`;
+
+const UnitContent = styled.div`
+  height: 30px;
+  color: #999999;
+  font-size: 13px;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 8px;
+  border-top: 1px solid darkgray;
+  border-bottom: 1px solid darkgray;
+  background-color: #ffffff;
 `;
