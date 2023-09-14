@@ -10,6 +10,7 @@ const MarketServerUrl =
 const MarketStockList: React.FC = () => {
   const [marketStockList, setMarketStockList] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     MarketDataFromServer();
   }, []);
@@ -53,7 +54,6 @@ const MarketStockList: React.FC = () => {
             )}
             <StockCode key={el.code}>{el.code}</StockCode>
             <br />
-            <StockInfo>{el.stockInfResponseDto}</StockInfo>
           </div>
           <AfterLine></AfterLine>
         </StockListInfo>
@@ -73,7 +73,7 @@ const MarketStockLists = {
 };
 
 const StockListContainer = styled.div`
-  max-height: 600px;
+  max-height: 500px;
 `;
 const StockListTitle = styled.div`
   display: flex;
@@ -104,4 +104,3 @@ const StockListInfo = styled.div`
 `;
 const StockName = styled.div``;
 const StockCode = styled.div``;
-const StockInfo = styled.div``;

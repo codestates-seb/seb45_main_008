@@ -1,15 +1,13 @@
 import MarketInfo from "./MarketInfoPage";
 import { Routes, Route, Link } from "react-router-dom";
 import styled from "styled-components";
-import { DetailStockInformation } from "../../components/stockListComponents/DetailStockInformation";
+import { DetailStockInformation } from "../../components/stockinfoComponents/DetailStockInformation";
 import { Community } from "./communityPage";
-import { Status } from "../../components/statusComponents";
 import { useState } from "react";
 import {
   MarketImages,
   InfoImages,
   CommunityImages,
-  InvestImage,
 } from "../../components/communityComponents/IconComponent/Icon";
 export const TabContainerPage = () => {
   const [activeTab, setActiveTab] = useState(1);
@@ -18,7 +16,7 @@ export const TabContainerPage = () => {
   };
 
   return (
-    <TabContainerStyle>
+    <TabContainerStyle className="scroll">
       <style>
         @import
         url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@500&display=swap');
@@ -50,20 +48,11 @@ export const TabContainerPage = () => {
             <CommunityImages />
             {TabContainerText.community}
           </Nav>
-          <Nav
-            to="/status"
-            onClick={() => handleClickActiveTab(4)}
-            className={`tab ${activeTab === 4 ? "active-tab" : "inactive-tab"}`}
-          >
-            <InvestImage />
-            {TabContainerText.myPortfolio}
-          </Nav>
         </TabNavArea>
         <Routes>
           <Route path="/" element={<MarketInfo />} />
           <Route path="/stockitems" element={<DetailStockInformation />} />
           <Route path="/community" element={<Community />} />
-          <Route path="/status" element={<Status />} />
         </Routes>
       </div>
     </TabContainerStyle>
@@ -82,6 +71,9 @@ const TabContainerStyle = styled.div`
   min-width: 400px;
   overflow: scroll;
   border-left: 1px solid #2d4f51;
+  &.scroll::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const TabNavArea = styled.div`
