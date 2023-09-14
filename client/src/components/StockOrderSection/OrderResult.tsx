@@ -268,13 +268,13 @@ const TradeWaiting = styled.div`
 
   .emptyIndicator {
     width: 100%;
-    height: 48px;
+    height: 55%;
     display: flex;
     justify-content: center;
     align-items: center;
-    font-size: 14px;
+    font-size: 1em;
     font-weight: 350;
-    color: #999999;
+    color: #9999;
   }
 
   .layoutComposition {
