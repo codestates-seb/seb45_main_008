@@ -1,7 +1,7 @@
 import MarketInfo from "./MarketInfoPage";
 import { Routes, Route, Link } from "react-router-dom";
 import styled from "styled-components";
-import { DetailStockInformation } from "../../components/stockinfoComponents/DetailStockInformation";
+import { DetailStockInformation } from "../../components/stockListComponents/DetailStockInformation";
 import { Community } from "./communityPage";
 import { useState } from "react";
 import {
