@@ -33,7 +33,6 @@ const MainPage = () => {
   const [isWelcomeModalOpen, setWelcomeModalOpen] = useState(false);
   const [isProfileModalOpen, setProfileModalOpen] = useState(false); //프로필 모달 보이기/숨기기
 
-
   const openOAuthModal = useCallback(() => {
     setOAuthModalOpen(true);
   }, []);
@@ -103,9 +102,9 @@ const MainPage = () => {
     if (authToken !== null) {
       dispatch(setLoginState());
     }
-  },);
+  });
 
-      // 🔴 로그아웃 시 로컬스토리지에 있는 Auth 토큰 제거
+  // 🔴 로그아웃 시 로컬스토리지에 있는 Auth 토큰 제거
   const handleLogout = () => {
     dispatch(setLogoutState());
     localStorage.removeItem("authToken");
@@ -124,7 +123,6 @@ const MainPage = () => {
     dispatch(setLoginState());
   };
 
-
   const handleLoginConfirmationClose = () => {
     setLoginConfirmationModalOpen(false);
   };
@@ -134,8 +132,6 @@ const MainPage = () => {
   const handleMenuChange = (menu: "관심목록" | "투자목록") => {
     setSelectedMenu(menu);
   };
-
-
 
   return (
     <Container>
@@ -184,9 +180,13 @@ export default MainPage;
 const Container = styled.div`
   width: 100vw;
   height: 100vh;
-
   display: flex;
   flex-direction: column;
+  overflow: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Main = styled.main`
