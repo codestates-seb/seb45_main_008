@@ -8,7 +8,7 @@ interface Props {
 
 const GoogleLoginButton: React.FC<Props> = ({ backendURL }) => {
   const handleLoginClick = () => {
-    window.location.href = `${backendURL}/oauth2/authorization/google`;
+    window.location.href = `${backendURL}`;
   };
 
   return (
@@ -21,7 +21,6 @@ const GoogleLoginButton: React.FC<Props> = ({ backendURL }) => {
 export default GoogleLoginButton;
 
 
-// 토큰 저장 로직
 
 // const authToken = response.headers["authorization"];
 // console.log(authToken);

@@ -42,8 +42,8 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
             <ModalContainer>
                 <CloseButton onClick={onClose}>&times;</CloseButton>
                 <Title>{titleText}</Title>
-                <GoogleLoginButton backendURL="YOUR_BACKEND_SERVER_URL" />
-                <KakaoLoginButton backendURL="YOUR_BACKEND_SERVER_URL" />
+                <GoogleLoginButton backendURL="http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google" />
+                <KakaoLoginButton backendURL="http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/kakao" />
                 {/*임시로 비활성화 <KakaoButton onClick={handleKakaoLogin}>
                     <LogoImage src={kakaoLogo} alt="Kakao Logo" />
                     {kakaoLoginText}

@@ -8,7 +8,7 @@ interface Props {
 
 const KakaoLoginButton: React.FC<Props> = ({ backendURL }) => {
   const handleLoginClick = () => {
-    window.location.href = `${backendURL}/oauth2/authorization/kakao`;
+    window.location.href = `${backendURL}`;
   };
 
   return (
