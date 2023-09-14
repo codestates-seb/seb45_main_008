@@ -23,11 +23,11 @@ const StockDisscussion: React.FC = () => {
     }
   };
   return (
-    <div>
+    <DissCussionContainer>
       {StockDisscussions.map((el) => (
         <DisscussionList>{el.korName}</DisscussionList>
       ))}
-    </div>
+    </DissCussionContainer>
   );
 };
 export default StockDisscussion;
@@ -35,6 +35,10 @@ interface StockDiscussion {
   id: number;
   korName: string;
 }
+
+const DissCussionContainer = styled.div`
+  max-height: 500px;
+`;
 const DisscussionList = styled.div`
   display: flex;
   justify-content: space-around;

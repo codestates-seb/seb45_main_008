@@ -51,7 +51,7 @@ const MarketkospiChart = () => {
             {
               type: "value",
               boundaryGap: [0, "10%"],
-              position: "left",
+              position: "right",
               interval: 100,
               min: 2000,
               splitLine: {
@@ -59,17 +59,7 @@ const MarketkospiChart = () => {
               },
             },
           ],
-          dataZoom: [
-            {
-              type: "inside",
-              start: 0,
-              end: 100,
-            },
-            {
-              start: 0,
-              end: 10,
-            },
-          ],
+
           series: [
             {
               name: "코스피 지수",
@@ -122,10 +112,10 @@ const MarketkospiChart = () => {
             },
           ],
           grid: {
-            left: "10%",
+            left: "5%",
             right: "15%",
             top: "20%",
-            bottom: "40%",
+            bottom: "10%",
           },
         });
       }
