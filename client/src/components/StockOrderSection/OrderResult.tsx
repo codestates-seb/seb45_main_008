@@ -13,7 +13,6 @@ const cancelButtonText: string = "주문취소";
 
 const titleText: string = "미체결 내역";
 const orderPendingEmptyMessage: string = "미체결 내역이 없습니다";
-const layoutComposition: string = "StockHolm";
 
 const OrderResult = () => {
   const { orderRecordData } = useGetStockOrderRecord();
@@ -22,8 +21,6 @@ const OrderResult = () => {
   orderWaitList.reverse(); // 최근 주문이 상단에 노출되도록 배열 순서 변경
   const waitListNum = orderWaitList.length;
 
-  console.log(waitListNum);
-
   return (
     <Container>
       <div className="Title">{titleText}</div>
@@ -31,7 +28,7 @@ const OrderResult = () => {
         {waitListNum === 0 ? (
           <div className="emptyIndicator">{orderPendingEmptyMessage}</div>
         ) : (
-          <div className="orderWaitStockList">
+          <>
             {orderWaitList.map((stock: orderWaitProps) => {
               const orderType = stock.orderTypes === "BUY" ? "매수" : "매도";
               const price = stock.price.toLocaleString();
@@ -41,8 +38,7 @@ const OrderResult = () => {
 
               return <OrderWaitStock key={orderId} orderType={orderType} price={price} volume={volume} companyId={companyId} orderId={orderId} />;
             })}
-            <div className="layoutComposition">{layoutComposition}</div>
-          </div>
+          </>
         )}
       </TradeWaiting>
     </Container>
@@ -51,6 +47,7 @@ const OrderResult = () => {
 
 export default OrderResult;
 
+// 개별 미체결 거래내역
 const OrderWaitStock = (props: WaitStockProps) => {
   const { orderType, price, volume, companyId, orderId } = props;
   const { companyList } = useGetCompanyList();
@@ -119,8 +116,8 @@ interface companyProps {
 
 // component 생성
 const Container = styled.div`
-  height: auto;
-  max-height: 100%;
+  width: 100%;
+  height: calc(100vh - 570px);
   padding-top: 16px;
   display: flex;
   flex-direction: column;
@@ -134,6 +131,13 @@ const Container = styled.div`
 `;
 
 const TradeWaiting = styled.div`
+  height: 100%;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+
   .title {
     padding-left: 16px;
     margin-bottom: 8px;

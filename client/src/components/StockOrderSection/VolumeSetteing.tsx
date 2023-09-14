@@ -3,10 +3,8 @@ import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
 import useGetCash from "../../hooks/useGetCash";
 import useGetHoldingStock from "../../hooks/useGetHoldingStock";
-import useGetStockOrderRecord from "../../hooks/useGetStockOrderRecord";
 import { StateProps } from "../../models/stateProps";
 import { HoldingStockProps } from "../../models/stockProps";
-import { OrderRecordProps } from "../../models/stockProps";
 import { setStockOrderVolume, plusStockOrderVolume, minusStockOrderVolume } from "../../reducer/StockOrderVolume-Reducer";
 
 const volumeSettingTitle: string = "수량";
@@ -26,24 +24,17 @@ const VolumeSetting = () => {
   const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
   const orderVolume = useSelector((state: StateProps) => state.stockOrderVolume);
 
-  // 거래가능 주식 수 = 보유 주식 수 - 매도 대기 중인 주식 수
+  // 거래가능 주식 수
   let avaiableSellingStock: number = 0;
 
   const { cashData } = useGetCash();
   const { holdingStockData } = useGetHoldingStock();
-  const { orderRecordData } = useGetStockOrderRecord();
-  const holdingCompanyStock = holdingStockData.filter((stock: HoldingStockProps) => stock.companyId === companyId);
-
   const maximumBuyingVolume = orderPrice !== 0 ? Math.trunc(cashData / orderPrice) : Math.trunc(cashData / 1);
+  const holdingCompanyStock = holdingStockData.filter((stock: HoldingStockProps) => stock.companyId === companyId);
 
   // 해당 company 보유 주식이 0이 아닐 때
   if (holdingCompanyStock.length !== 0) {
-    const waitingForSaleStock = orderRecordData.filter((stock: OrderRecordProps) => stock.companyId === companyId && stock.orderTypes === "SELL" && stock.orderStates === "ORDER_WAIT");
-    const waitingStockNum = waitingForSaleStock.reduce((acc: number, cur: OrderRecordProps) => {
-      acc = acc + cur.stockCount;
-      return acc;
-    }, 0);
-    avaiableSellingStock = holdingCompanyStock[0].stockCount - waitingStockNum;
+    avaiableSellingStock = holdingCompanyStock[0].stockCount;
   }
 
   const handlePlusOrderVolume = () => {
@@ -85,10 +76,20 @@ const VolumeSetting = () => {
       return;
     }
 
-    if (maximumBuyingVolume < numberInputValue) {
-      return;
-    } else {
-      dispatch(setStockOrderVolume(numberInputValue));
+    if (!orderType) {
+      if (maximumBuyingVolume < numberInputValue) {
+        return;
+      } else {
+        dispatch(setStockOrderVolume(numberInputValue));
+      }
+    }
+
+    if (orderType) {
+      if (avaiableSellingStock < numberInputValue) {
+        return;
+      } else {
+        dispatch(setStockOrderVolume(numberInputValue));
+      }
     }
   };
 

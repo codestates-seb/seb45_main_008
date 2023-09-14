@@ -52,6 +52,12 @@ const StockOrderSection = () => {
   if (isError || stockPrice.length === 0) {
     return (
       <Container orderSet={stockOrderSet}>
+        <UpperBar>
+          <h2 className="Title">{upperbarTitle}</h2>
+          <button className="CloseButton" onClick={handleStockOrderClose}>
+            &#10005;
+          </button>
+        </UpperBar>
         <div className="ErrorContainer">
           <div className="ErrorMessage">{errorMessage}</div>
           <button className="ErrorCloseButton" onClick={handleStockOrderClose}>
@@ -123,11 +129,6 @@ const Container = styled.aside<{ orderSet: boolean }>`
 
   .mainContent {
     height: 100%;
-    overflow-y: scroll;
-
-    &::-webkit-scrollbar {
-      display: none;
-    }
   }
 
   .ErrorContainer {

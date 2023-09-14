@@ -1,8 +1,10 @@
+// 🟢 기존 로직
 import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 
 const useGetStockData = (companyId: number) => {
+  // 🟢 기존 로직
   const [autoRefetch, setAutoRefetch] = useState(false);
   const queryClient = useQueryClient();
 
@@ -40,6 +42,21 @@ const useGetStockData = (companyId: number) => {
       queryClient.invalidateQueries("orderRecord");
     },
   });
+  // 🟢 기존 로직
+
+  // 🔴 테스트 로직
+  // const queryClient = useQueryClient();
+
+  // const { data, isLoading, error } = useQuery(`chartData`, () => getChartData(companyId), {
+  //   enabled: true,
+  //   refetchInterval: 1000 * 10, // 정각 혹은 30분에 맞춰서 10분 마다 데이터 리패칭
+  //   onSuccess: () => {
+  //     queryClient.invalidateQueries("cash");
+  //     queryClient.invalidateQueries("holdingStock");
+  //     queryClient.invalidateQueries("orderRecord");
+  //   },
+  // });
+  // 🔴 테스트 로직
 
   return { stockPrice: data, stockPriceLoading: isLoading, stockPriceError: error };
 };

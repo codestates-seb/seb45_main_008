@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { isHoliday } from "@hyunbinseo/holidays-kr";
+import { setStockOrderVolume } from "../../reducer/StockOrderVolume-Reducer";
 import { closeDecisionWindow } from "../../reducer/SetDecisionWindow-Reducer";
 import { styled } from "styled-components";
 import { StateProps } from "../../models/stateProps";
@@ -57,6 +58,7 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
       console.log("주문 오류 발생");
     }
 
+    dispatch(setStockOrderVolume(0));
     handleCloseDecisionWindow();
   };
 
