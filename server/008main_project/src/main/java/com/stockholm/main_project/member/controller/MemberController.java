@@ -35,6 +35,7 @@ public class MemberController {
     @Operation(summary = "회원가입", description = "자체 회원가입 요청이 POST됩니다.", tags = { "Member" })
     @ApiResponse(responseCode = "201", description = "CREATED",
             content = @Content(schema = @Schema(implementation = MemberResponseDto.class)))
+    @ApiResponse(responseCode = "400", description = "EMAIL_DUPLICATION")
     @ApiResponse(responseCode = "404", description = "BAD REQUEST")
     @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     @PostMapping
