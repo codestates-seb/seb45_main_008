@@ -5,6 +5,8 @@ import com.stockholm.main_project.member.entity.Member;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
 
@@ -19,6 +21,7 @@ public class Star extends Auditable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "MEMBER_ID")
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 
     @ManyToOne(fetch = FetchType.LAZY)
