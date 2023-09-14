@@ -35,7 +35,7 @@ public class MemberController {
     @Operation(summary = "회원가입", description = "자체 회원가입 요청이 POST됩니다.", tags = { "Member" })
     @ApiResponse(responseCode = "201", description = "CREATED",
             content = @Content(schema = @Schema(implementation = MemberResponseDto.class)))
-    @ApiResponse(responseCode = "404", description = "BAD REQUEST")
+    @ApiResponse(responseCode = "404", description = "INVALID_PASSWORD")
     @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     @PostMapping
     public ResponseEntity postMember(@Schema(implementation = MemberPostDto.class)@Valid @RequestBody MemberPostDto memberPostDto){
@@ -51,7 +51,7 @@ public class MemberController {
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(schema = @Schema(implementation = MemberResponseDto.class)))
     @ApiResponse(responseCode = "400", description = "BAD REQUEST")
-    @ApiResponse(responseCode = "404", description = "NOT FOUND")
+    @ApiResponse(responseCode = "404", description = "MEMBER NOT FOUND")
     @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     @PatchMapping
     private ResponseEntity patchMember(@Schema(implementation = MemberPatchDto.class)@RequestBody MemberPatchDto memberPatchDto, @AuthenticationPrincipal Member member){

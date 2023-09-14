@@ -73,7 +73,7 @@ public class BoardController {
                                                               @AuthenticationPrincipal Member member) throws Exception {
         Board boardToUpdate = mapper.boardRequestToBoard(boardUpdateDto);
         boardToUpdate.setMember(member);
-        Board updatedBoard = boardService.updateBoard(boardId, boardToUpdate, imageFile);
+        Board updatedBoard = boardService.updateBoard(boardId, boardToUpdate, imageFile, member);
         SingleBoardResponseDto responseDto = mapper.boardToBoardResponseDto(updatedBoard);
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
@@ -98,10 +98,17 @@ public class BoardController {
         List<Board> foundBoards = boardService.getAllBoards();
 
         List<AllBoardResponseDto> responseDtos = foundBoards.stream()
-                .map(mapper::boardToAllBoardResponseDto)
+                .map(board -> {
+                    AllBoardResponseDto responseDto = mapper.boardToAllBoardResponseDto(board);
+                    List<Comment> comments = commentService.findComments(board.getBoardId());
+                    List<BoardCommentDto> boardCommentDtos = comments.stream()
+                            .map(mapper::boardCommentToBoardCommentsDto)
+                            .collect(Collectors.toList());
+                    responseDto.setComments(boardCommentDtos);
+                    return responseDto;
+                })
                 .collect(Collectors.toList());
-
-        return new ResponseEntity<>(responseDtos,HttpStatus.OK);
+        return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 
     @DeleteMapping("{boardId}")

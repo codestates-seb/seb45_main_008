@@ -39,14 +39,8 @@ public class CashController {
     public ResponseEntity postCash(@Schema(implementation = CashPostDto.class)@Valid @RequestBody CashPostDto cashPostDto,
                                    @AuthenticationPrincipal Member member){
 
-        // 현재 인증된 사용자 정보 가져오기
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        Member member = memberService.findMemberByEmail(auth.getPrincipal().toString());
-
-        // DTO에서 Entity로 변환
         Cash cashToCreate = mapper.cashPostToCash(cashPostDto);
 
-        // 사용자 정보 설정
         cashToCreate.setMember(member);
 
         Cash createdCash = cashService.createCash(cashToCreate);
@@ -58,10 +52,6 @@ public class CashController {
     @PatchMapping("{cashId}")
     public ResponseEntity patchCash(@Schema(implementation = CashPatchDto.class)@PathVariable long cashId, @Valid @RequestBody CashPatchDto requestBody,
                                     @AuthenticationPrincipal Member member){
-//        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-//        Member member = memberService.findMemberByEmail(auth.getPrincipal().toString());
-
-//        stockOrderService.deleteStockOrdersByMemberId(member.getId());
 
         Cash cashToUpdate = mapper.cashPatchToCash(requestBody);
 
@@ -76,9 +66,9 @@ public class CashController {
         return new ResponseEntity<>(mapper.cashToCashResponseDto(cash), HttpStatus.OK);
     }
 
-    @GetMapping("{cashId}")
-    private ResponseEntity getCash(@PathVariable long cashId){
-        Cash response = cashService.findCash(cashId);
+    @GetMapping
+    private ResponseEntity getCash(@AuthenticationPrincipal Member member){
+        Cash response = cashService.findCash(member);
 
         return new ResponseEntity<>(mapper.cashToCashResponseDto(response), HttpStatus.OK);
     }
