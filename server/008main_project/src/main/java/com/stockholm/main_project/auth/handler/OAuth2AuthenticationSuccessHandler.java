@@ -111,6 +111,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
                .scheme("http")
                 .host("seb008stockholm.s3-website.ap-northeast-2.amazonaws.com")
 //                .port(8080)
+                .queryParams(queryParams)
                 .path("/")
                 .build()
                 .toUri();
