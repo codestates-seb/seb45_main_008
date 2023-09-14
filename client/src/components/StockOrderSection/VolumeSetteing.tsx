@@ -39,7 +39,11 @@ const VolumeSetting = () => {
   // 해당 company 보유 주식이 0이 아닐 때
   if (holdingCompanyStock.length !== 0) {
     const waitingForSaleStock = orderRecordData.filter((stock: OrderRecordProps) => stock.companyId === companyId && stock.orderTypes === "SELL" && stock.orderStates === "ORDER_WAIT");
-    avaiableSellingStock = holdingCompanyStock[0].stockCount - waitingForSaleStock.length;
+    const waitingStockNum = waitingForSaleStock.reduce((acc: number, cur: OrderRecordProps) => {
+      acc = acc + cur.stockCount;
+      return acc;
+    }, 0);
+    avaiableSellingStock = holdingCompanyStock[0].stockCount - waitingStockNum;
   }
 
   const handlePlusOrderVolume = () => {
