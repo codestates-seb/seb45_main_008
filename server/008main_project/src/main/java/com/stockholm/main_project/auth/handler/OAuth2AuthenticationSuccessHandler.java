@@ -92,12 +92,16 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private URI createURI(String accessToken, String refreshToken) {
 
-
+        MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
+        queryParams.add("access_token", accessToken);
+        queryParams.add("refresh_token", refreshToken);
+//
 //        return UriComponentsBuilder
 //                .newInstance()
 //                .scheme("http")
 //                .host("localhost")
-////                .port(80)
+//                .port(8080)
+//                .queryParams(queryParams)
 //                .path("/receive-token.html")
 //                .build()
 //                .toUri();
