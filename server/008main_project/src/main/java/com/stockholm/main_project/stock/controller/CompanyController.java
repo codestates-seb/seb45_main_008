@@ -76,7 +76,7 @@ public class CompanyController {
         return new ResponseEntity<>(companyResponseDto, HttpStatus.OK);
     }
 
-    @Operation(summary = "주식 한개 분봉 차트 불러오기", description = "주식 하나의 분봉 30개를 불러옵니다", tags = { "Stock" })
+    @Operation(summary = "주식 한개 분봉 차트 불러오기", description = "주식 하나의 분봉 420개를 불러옵니다", tags = { "Stock" })
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(array = @ArraySchema(schema = @Schema(implementation = StockMinResponseDto.class)))),
@@ -87,12 +87,8 @@ public class CompanyController {
     // 차트 하나 호출
     @GetMapping("/charts/{companyId}")
     public ResponseEntity getCompanyChart(@PathVariable("companyId") long companyId) {
-        List<StockMin> stockMinList = stockMinService.getChart(companyId);
+        List<StockMinResponseDto> stockMinList = stockMinService.getRecent420StockMin(companyId);
 
-        List<StockMinResponseDto> stockMinResponseDtos = stockMinList.stream()
-                .map(stockMin -> companyMapper.stockMinToStockMinResponseDto(stockMin))
-                .collect(Collectors.toList());
-
-        return new ResponseEntity(stockMinResponseDtos, HttpStatus.OK);
+        return new ResponseEntity(stockMinList, HttpStatus.OK);
     }
 }

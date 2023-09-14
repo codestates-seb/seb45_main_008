@@ -14,6 +14,7 @@ public class AllBoardResponseDto {
     private String title;
     private String content;
     private String member;
+    private List<BoardCommentDto> comments;
     private String createdAt;
     private String modifiedAt;
 

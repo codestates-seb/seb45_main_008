@@ -33,8 +33,12 @@ public class BoardService {
         return boardRepository.save(board);
     }
 
-    public Board updateBoard(long boardId, Board updatedBoard, MultipartFile imageFile) throws Exception {
+    public Board updateBoard(long boardId, Board updatedBoard, MultipartFile imageFile, Member member) throws Exception {
         Board existingBoard = findBoard(boardId);
+
+        if (existingBoard.getMember().getMemberId() != member.getMemberId()) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_FAILED);
+        }
         if (imageFile != null) {
             // 기존 이미지 삭제
             if (existingBoard.getImageUrl() != null) {
@@ -64,6 +68,9 @@ public class BoardService {
 
     public void deleteBoard(long boardId, Member member) {
         Board board = findBoard(boardId);
+        if (board.getMember().getMemberId() != member.getMemberId()) {
+            throw new BusinessLogicException(ExceptionCode.INVALID_FAILED);
+        }
         if (board.getImageUrl() != null) {
             awsS3Service.deleteFile("boards", board.getImageUrl());
         }
