@@ -113,7 +113,14 @@ public class StockOrderService {
         return stockOrder;
     }
 
+    // 예약 매도 일 때는 보유 주식 줄어들게(완료)
     public StockOrder reserveStock(Member member, long price, int stockCount, long companyId, StockOrder.OrderTypes types) {
+        if(StockOrder.OrderTypes.SELL.equals(types)) {
+            // 보유 주식 설정
+            StockHold stockHold = stockHoldService.findStockHold(companyId, member.getMemberId());
+            stockHold.setStockCount(stockHold.getStockCount() - stockCount);
+
+        }
         StockOrder stockOrder = new StockOrder();
         stockOrder.setOrderStates(StockOrder.OrderStates.ORDER_WAIT);
         stockOrder.setOrderTypes(types);
@@ -240,15 +247,16 @@ public class StockOrderService {
         return stockOrder;
     }
 
+    // 예약 매도 -> 판매로 바뀔 때 금액 늘어나게, 보유 주식은 예약 할 때 줄어들도록
+    // Price 줄어드는 금액은 주식 투자금액 - (주식 투자 금액 / 보유 주식 개수) * 팔 주식 개수 (완료)
     public StockOrder reserveSellStock(StockOrder stockOrder) {
         Optional<StockOrder> optionalStockOrder = stockOrderRepository.findById(stockOrder.getStockOrderId());
         StockOrder updateStockOrder = optionalStockOrder.get();
         updateStockOrder.setOrderStates(StockOrder.OrderStates.ORDER_COMPLETE);
         updateStockOrder.setOrderTypes(StockOrder.OrderTypes.SELL);
         // 보유 주식 설정
-        StockHold stockHold = stockHoldService.checkStockHold(stockOrder.getCompany().getCompanyId(), stockOrder.getMember().getMemberId());
-        stockHold.setStockCount(stockHold.getStockCount() - stockOrder.getStockCount());
-        stockHold.setPrice(stockHold.getPrice() - (stockOrder.getStockCount()) * stockOrder.getPrice());
+        StockHold stockHold = stockHoldService.findStockHold(stockOrder.getCompany().getCompanyId(), stockOrder.getMember().getMemberId());
+        stockHold.setPrice(stockHold.getPrice() - (stockHold.getPrice() / stockHold.getStockCount()) * stockOrder.getStockCount());
         // 현금량 증가
         Member member = updateStockOrder.getMember();
         Cash cash = member.getCash();
@@ -311,8 +319,8 @@ public class StockOrderService {
     public StockOrder sellStock(Member member, long price, int stockCount, long companyId) {
         // 보유 주식 설정
         StockHold stockHold = stockHoldService.findStockHold(companyId, member.getMemberId());
+        stockHold.setPrice(stockHold.getPrice() - (stockHold.getPrice() / stockHold.getStockCount()) * stockCount);
         stockHold.setStockCount(stockHold.getStockCount() - stockCount);
-        stockHold.setPrice(stockHold.getPrice() - (stockCount * price));
 
         // 스톡 오더 작성
         StockOrder stockOrder = new StockOrder();
@@ -365,8 +373,9 @@ public class StockOrderService {
         return stockOrderRepositories;
     }
 
-    // 미체결 stockOrder 삭제하는 메소드
-    public void deleteStockOrder(Member member, long stockOrderId) {
+    // 미체결 stockOrder 취소하는 메소드
+    // 취소한 주식 수 만큼 보유주식으로 돌아오게 해야함
+    public void deleteStockOrder(Member member, long stockOrderId, int stockCount) {
         Optional<StockOrder> optionalStockOrder = stockOrderRepository.findById(stockOrderId);
         StockOrder stockOrder = optionalStockOrder.orElseThrow(() -> new BusinessLogicException(ExceptionCode.STOCKORDER_NOT_FOUND));
 
@@ -375,9 +384,20 @@ public class StockOrderService {
         }
         else if(!stockOrder.getOrderStates().equals(StockOrder.OrderStates.ORDER_WAIT))
             throw new BusinessLogicException(ExceptionCode.STOCKORDER_ALREADY_FINISH);
+        // 수량 선택해서 취소 할 수 있게(취소한 만큼 보유 주식 돌아오게) 0이 되면 미체결 스톡 오더 삭제
+        else {
+            if(stockOrder.getStockCount() >= stockCount)
+                stockOrderRepository.delete(stockOrder);
+            else {
+                stockOrder.setStockCount(stockOrder.getStockCount() - stockCount);
+            }
+            if(StockOrder.OrderTypes.SELL.equals(stockOrder.getOrderTypes())) {
+                StockHold stockHold = stockHoldService.findStockHold(stockOrder.getCompany().getCompanyId(), stockOrder.getMember().getMemberId());
+                stockHold.setStockCount(stockHold.getStockCount() + stockCount);
+            }
 
-        else
-            stockOrderRepository.delete(stockOrder);
+        }
+
 
     }
 }

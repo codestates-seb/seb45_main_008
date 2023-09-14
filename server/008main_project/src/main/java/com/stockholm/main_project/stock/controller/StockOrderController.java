@@ -73,8 +73,10 @@ public class StockOrderController {
     }
 
     // 미 체결된 매수, 매도 삭제하는 api
-    @DeleteMapping("/stockorders/{stockOrderId}")
-    public void deleteStockOrders(@AuthenticationPrincipal Member member, @PathVariable("stockOrderId") long stockOrderId) {
-        stockOrderService.deleteStockOrder(member, stockOrderId);
+    @DeleteMapping("/stockorders")
+    public void deleteStockOrders(@AuthenticationPrincipal Member member,
+                                  @RequestParam("stockOrderId") long stockOrderId,
+                                  @RequestParam("stockCount") int stockCount) {
+        stockOrderService.deleteStockOrder(member, stockOrderId, stockCount);
     }
 }
