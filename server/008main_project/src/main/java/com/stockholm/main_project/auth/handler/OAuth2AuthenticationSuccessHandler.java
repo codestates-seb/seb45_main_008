@@ -2,6 +2,7 @@ package com.stockholm.main_project.auth.handler;
 
 import com.stockholm.main_project.auth.jwt.JwtTokenizer;
 import com.stockholm.main_project.auth.utils.CustomAuthorityUtils;
+import com.stockholm.main_project.member.service.MemberService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.oauth2.core.user.OAuth2User;
@@ -27,12 +28,14 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     private final JwtTokenizer jwtTokenizer;
 
     private final CustomAuthorityUtils authorityUtils;
+    private final MemberService memberService;
 
     @Autowired
-    public OAuth2AuthenticationSuccessHandler(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils) {
+    public OAuth2AuthenticationSuccessHandler(JwtTokenizer jwtTokenizer, CustomAuthorityUtils authorityUtils, MemberService memberService) {
 
         this.jwtTokenizer = jwtTokenizer;
         this.authorityUtils = authorityUtils;
+        this.memberService = memberService;
     }
 
     @Override
@@ -64,9 +67,13 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
     }
 
     private String delegateAccessToken(String username, List<String> authorities) {
+        // 사용자의 이메일로 Member ID를 가져옴
+        int memberId = memberService.findMemberIdByEmail(username);
+
         Map<String, Object> claims = new HashMap<>();
         claims.put("email", username);
         claims.put("roles", authorities);
+        claims.put("memberId", memberId); // Member ID를 클레임에 추가
 
         String subject = username;
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
@@ -95,7 +102,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         MultiValueMap<String, String> queryParams = new LinkedMultiValueMap<>();
         queryParams.add("access_token", accessToken);
         queryParams.add("refresh_token", refreshToken);
-//
+
 //        return UriComponentsBuilder
 //                .newInstance()
 //                .scheme("http")
