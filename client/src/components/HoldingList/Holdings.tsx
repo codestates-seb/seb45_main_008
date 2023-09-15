@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Samsung_logo from "../../asset/logos/Samsung_logo.svg"
 import Menu_icon from "../../asset/images/menu.png"
 
-const Holdings: React.FC<HoldingsProps> = ({ currentListType, onChangeListType }) => {
+const Holdings: React.FC<holdingsProps> = ({ currentListType, onChangeListType }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
 
 
@@ -28,8 +28,9 @@ const Holdings: React.FC<HoldingsProps> = ({ currentListType, onChangeListType }
         <HeaderText>{currentListType}</HeaderText>
         {isMenuOpen && (
           <SlideMenu>
-            <MenuItem onClick={() => { onChangeListType('관심목록'); setMenuOpen(false); }}>관심목록</MenuItem>
-            <MenuItem onClick={() => { onChangeListType('투자목록'); setMenuOpen(false); }}>투자목록</MenuItem>
+            <MenuItem onClick={() => { onChangeListType('관심종목'); setMenuOpen(false); }}>관심종목</MenuItem>
+            <MenuItem onClick={() => { onChangeListType('보유종목'); setMenuOpen(false); }}>보유종목</MenuItem>
+            <MenuItem onClick={() => { onChangeListType('전체종목'); setMenuOpen(false); }}>전체종목</MenuItem>
           </SlideMenu>
         )}
       </Header>
@@ -76,9 +77,9 @@ const Holdings: React.FC<HoldingsProps> = ({ currentListType, onChangeListType }
   );
 };
 
-type HoldingsProps = {
-  currentListType: "관심목록" | "투자목록";
-  onChangeListType: (type: "관심목록" | "투자목록") => void;
+type holdingsProps = {
+  currentListType: '전체종목' | '관심종목' | '보유종목';
+  onChangeListType: (type: '전체종목' | '관심종목' | '보유종목') => void;
 };
 
 const getColorByChange = (change: string) => {

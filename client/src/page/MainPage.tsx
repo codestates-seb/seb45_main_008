@@ -10,8 +10,9 @@ import EmailSignupModal from "../components/Signups/EmailSignup";
 import EmailVerificationModal from "../components/Signups/EmailCertify";
 import PasswordSettingModal from "../components/Signups/Password";
 import CentralChart from "../components/CentralChart/Index";
-import WatchList from "../components/WatchList/WatchList";
-import Holdings from "../components/WatchList/Holdings";// Assuming you have a Holdings component
+import EntireList from "../components/EntireList/EntireList";
+import HoldingList from "../components/HoldingList/HoldingList"; 
+import WatchList from "../components/WatchList/WatchList"; // Assuming you have a Holdings component
 import CompareChartSection from "../components/CompareChartSection/Index";
 import StockOrderSection from "../components/StockOrderSection/Index";
 import Welcome from "../components/Signups/Welcome";
@@ -96,6 +97,7 @@ const MainPage = () => {
 
   const dispatch = useDispatch();
   const isLogin = useSelector((state: RootState) => state.login);
+  console.log(isLogin);
 
   // 🔴 페이지 로드 시 로컬 스토리지의 토큰을 기반으로 로그인 상태를 확인합니다.
   useEffect(() => {
@@ -118,19 +120,16 @@ const MainPage = () => {
     dispatch(setLoginState());
   };
 
-  // // 🔴 로그아웃 시 로컬스토리지에 있는 Auth 토큰 제거
-  // const handleLogout = () => {
-  //   dispatch(setLogoutState());
-  //   localStorage.removeItem("Authorization");
-  // };
 
   const handleLoginConfirmationClose = () => {
     setLoginConfirmationModalOpen(false);
   };
 
-  const [selectedMenu, setSelectedMenu] = useState<"관심목록" | "투자목록">("투자목록"); // Default menu is 관심목록
+  // 현재 선택된 메뉴 타입을 상태로 관리
+  const [selectedMenu, setSelectedMenu] = useState<"전체종목" | "관심종목" | "보유종목">("전체종목");
 
-  const handleMenuChange = (menu: "관심목록" | "투자목록") => {
+  // 메뉴 변경 핸들러
+  const handleMenuChange = (menu: "전체종목" | "관심종목" | "보유종목") => {
     setSelectedMenu(menu);
   };
 
@@ -144,14 +143,22 @@ const MainPage = () => {
       <Main>
         <CompareChartSection />
         {!expandScreen.left && (
-          <LeftSection>{selectedMenu === "관심목록" ? <WatchList key="watchlist" currentListType={selectedMenu} onChangeListType={handleMenuChange} /> : <Holdings currentListType={selectedMenu} onChangeListType={handleMenuChange} />}</LeftSection>
+           <LeftSection>
+          {selectedMenu === "전체종목" ? (
+            <EntireList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+          ) : selectedMenu === "관심종목" ? (
+           <WatchList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+          ) : selectedMenu === "보유종목" ? (
+            <HoldingList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+          ) : null}
+         </LeftSection>
         )}
         <CentralChart />
         <StockOrderSection />
         {!expandScreen.right && <TabContainerPage></TabContainerPage>}
       </Main>
       {isOAuthModalOpen && (
-        <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} onEmailSignupClick={openEmailSignupModal} onWatchListClick={() => handleMenuChange("관심목록")} onHoldingsClick={() => handleMenuChange("투자목록")} />
+        <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} onEmailSignupClick={openEmailSignupModal} onWatchListClick={() => handleMenuChange("관심종목")} onHoldingsClick={() => handleMenuChange("보유종목")} />
       )}
 
       {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} />}
