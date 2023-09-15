@@ -1,43 +1,50 @@
 import React from 'react';
 import styled from 'styled-components';
+import logo from '../../asset/logos/SK_logo.png'
+
+
 
 // StockItem 컴포넌트는 주식 정보를 나타내는 UI를 구성합니다.
-const StockItem: React.FC<StockItemProps> = ({ stock, setShowChangePrice, showChangePrice }) => {
+const StockItem: React.FC<StockItemProps> = ({ company, setShowChangePrice, showChangePrice }) => {
     return (
       <StockItemWrapper>  {/* 전체 아이템을 감싸는 래퍼 */}
-        <Logo src={stock.logo} alt="stock logo"/>  {/* 로고 이미지 */}
+        <Logo src={logo} alt="stock logo"/>  {/* 로고 이미지 */}
         <StockInfo>  {/* 주식의 이름과 코드를 담는 섹션 */}
-          <StockName>{stock.name}</StockName>  {/* 주식 이름 */}
-          <StockCode>{stock.code}</StockCode>  {/* 주식 코드 */}
+          <StockName>{company.korName}</StockName>  {/* 주식 이름 */}
+          <StockCode>{company.code}</StockCode>  {/* 주식 코드 */}
         </StockInfo>
         <StockPriceSection>  {/* 주식의 가격과 변동률을 담는 섹션 */}
-          <StockPrice change={stock.change}>{stock.price}</StockPrice>  {/* 주식 가격 */}
-          <StockChange 
-            change={stock.change} 
+        <StockPrice change={company.stockChangeRate}>{company.stockPrice}</StockPrice>
+            <StockChange 
+            change={company.stockChangeRate}
             onMouseEnter={() => setShowChangePrice(true)} 
             onMouseLeave={() => setShowChangePrice(false)}
-          >
-            {showChangePrice ? stock.changePrice : stock.change}  {/* 변동률 또는 변동 가격 */}
+        >
+            {showChangePrice ? company.stockChangeAmount : company.stockChangeRate} {/* 변동률 또는 변동 가격 */}
           </StockChange>
         </StockPriceSection>
       </StockItemWrapper>
     );
   };
   
-  type Stock = {
-    name: string;
+  
+  // 새로운 주식 데이터 형태
+  type NewCompanyData = {
+    companyId: number;
     code: string;
-    price: string;
-    change: string;
-    changePrice: string;
-    logo: string;
+    korName: string;
+    stockPrice: string; // 현재가
+    stockChangeAmount: string; // 변동량
+    stockChangeRate: string; // 변동률
   };
   
+  // StockItem 컴포넌트에서 사용할 주식 데이터 형태
   type StockItemProps = {
-    stock: Stock;
-    showChangePrice: boolean;
+    company: NewCompanyData;
     setShowChangePrice: React.Dispatch<React.SetStateAction<boolean>>;
+    showChangePrice: boolean;
   };
+  
 
 const StockItemWrapper = styled.div`
   display: flex;

@@ -2,58 +2,53 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import Header from './Header';
 import StockItem from './StockItem';
-
-type WatchListProps = {
-  currentListType: "관심목록" | "투자목록";
-  onChangeListType: (type: "관심목록" | "투자목록") => void;
-};
+import useCompanyData from '../../hooks/useCompanyData';
 
 const WatchList: React.FC<WatchListProps> = ({ currentListType, onChangeListType }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [showChangePrice, setShowChangePrice] = useState(false);
 
-  // Sample stocks data
-  const stocks = [
-    {
-      name: '삼성전자',
-      code: '005930',
-      price: '57800',
-      change: '+0.67%',
-      changePrice: '+380',
-      logo: 'https://your_logo_url.com'
-    },
-    {
-      name: '현대차',
-      code: '005380',
-      price: '205000',
-      change: '-0.24%',
-      changePrice: '-500',
-      logo: 'https://your_logo_url.com'
-    },
-  ];
+  // useCompanyData 훅 사용하여 데이터 가져오기
+  const { data: companies, isLoading, isError } = useCompanyData(1, 14);
+
+  // 'companies'가 'undefined'인 경우를 처리하기 위해 빈 배열로 초기화
+  const companiesList = companies || [];
 
   return (
     <WatchListContainer>
-      <Header 
-        currentListType={currentListType} 
-        onChangeListType={onChangeListType} 
-        isMenuOpen={isMenuOpen} 
+      <Header
+        currentListType={currentListType}
+        onChangeListType={onChangeListType}
+        isMenuOpen={isMenuOpen}
         setMenuOpen={setMenuOpen}
       />
       <StockList>
-        {stocks.map((stock, index) => (
-          <StockItem 
-            key={index} 
-            stock={stock} 
-            setShowChangePrice={setShowChangePrice} 
-            showChangePrice={showChangePrice}
-          />
-        ))}
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : isError ? (
+          <div>Error fetching data</div>
+        ) : (
+          companiesList.map((company) => (
+            <StockItem
+              key={company.companyId}
+              company={company}
+              setShowChangePrice={setShowChangePrice}
+              showChangePrice={showChangePrice}
+            />
+          ))
+        )}
       </StockList>
     </WatchListContainer>
   );
 };
 
+// Props와 상태에 대한 타입 정의
+type WatchListProps = {
+  currentListType: '관심목록' | '투자목록';
+  onChangeListType: (type: '관심목록' | '투자목록') => void;
+};
+
+// WatchList 컴포넌트에 대한 스타일드 컴포넌트 정의
 const WatchListContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -62,6 +57,8 @@ const WatchListContainer = styled.div`
 
 const StockList = styled.div`
   width: 100%;
+  max-height: 400px; /* 스크롤이 발생할 최대 높이를 지정하세요 */
+  overflow-y: auto; /* 세로 스크롤을 활성화합니다 */
 `;
 
 export default WatchList;
