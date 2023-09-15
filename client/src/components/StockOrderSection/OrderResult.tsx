@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { styled } from "styled-components";
+import { toast } from "react-toastify";
 import useGetStockOrderRecord from "../../hooks/useGetStockOrderRecord";
 import useGetCompanyList from "../../hooks/useGetCompanyList";
 import useDeleteStockOrder from "../../hooks/useDeleteStockOrder";
@@ -166,6 +167,8 @@ const CancleConfirm = (props: CancelConfirmProps) => {
   const totalCancleAmountText: string = "총 취소금액";
   const closeButtonText: string = "닫기";
   const confirmButtonText: string = "확인";
+  const toastText01: string = "취소";
+  const toastText02: string = " 요청이 완료되었습니다";
   const price = orderPrice.toLocaleString();
   const totalPrice = (orderPrice * cancleVolume).toLocaleString();
 
@@ -209,6 +212,31 @@ const CancleConfirm = (props: CancelConfirmProps) => {
     if (isError) {
       console.log("주문 삭제 실패");
     }
+
+    toast(
+      <ToastMessage orderType={orderType}>
+        <div className="overview">
+          <img src={dummyImg} />
+          <div className="orderInfo">
+            {corpName} {cancleVolume}
+            {volumeUnit}
+          </div>
+        </div>
+        <div>
+          <span className="orderType">
+            ✓ {orderType}
+            {toastText01}
+          </span>
+          <span>{toastText02}</span>
+        </div>
+      </ToastMessage>,
+      {
+        position: toast.POSITION.BOTTOM_LEFT,
+        // autoClose: 2000,
+        hideProgressBar: true,
+      }
+    );
+
     setCancle(); // 모달 창 닫기
   };
 
@@ -644,4 +672,32 @@ const UnitContent = styled.div`
   border-top: 1px solid darkgray;
   border-bottom: 1px solid darkgray;
   background-color: #ffffff;
+`;
+
+const ToastMessage = styled.div<{ orderType: string }>`
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  font-size: 14px;
+
+  .overview {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: 700;
+    gap: 6px;
+  }
+
+  & img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    padding-bottom: 3px;
+  }
+
+  .orderType {
+    color: ${(props) => (props.orderType === "매수" ? "#e22926" : "#2679ed")};
+  }
 `;
