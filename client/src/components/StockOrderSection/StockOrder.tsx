@@ -46,7 +46,7 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
   //🔴 주문 관련 테스트
   const orderRequest = useTradeStock();
 
-  const handleStockOrder = () => {
+  const handleOrderConfirm = () => {
     orderRequest.mutate();
     const { isLoading, isError } = orderRequest;
 
@@ -128,7 +128,7 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
                   <button className="cancel" onClick={handleCloseDecisionWindow}>
                     {cancelButtonText}
                   </button>
-                  <button className="confirm" onClick={handleStockOrder}>
+                  <button className="confirm" onClick={handleOrderConfirm}>
                     {confirmButtonText}
                   </button>
                 </div>

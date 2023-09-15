@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { styled } from "styled-components";
 import useGetStockOrderRecord from "../../hooks/useGetStockOrderRecord";
 import useGetCompanyList from "../../hooks/useGetCompanyList";
@@ -12,8 +12,8 @@ const priceUnit: string = "원";
 const volumeUnit: string = "주";
 const cancelButtonText: string = "주문취소";
 
-const titleText01: string = "미체결 내역";
-const titleText02: string = "체결 내역";
+const titleText01: string = "체결 내역";
+const titleText02: string = "미체결 내역";
 const orderPendingEmptyMessage: string = "거래 내역이 없습니다";
 
 const OrderResult = () => {
@@ -39,13 +39,22 @@ const OrderResult = () => {
     }
   };
 
+  // 거래 발생 유형에 따라 자동으로 거래내역 창 변경
+  useEffect(() => {
+    setRecordType(false);
+  }, [orderWaitList.length]);
+
+  useEffect(() => {
+    setRecordType(true);
+  }, [orderCompleteList.length]);
+
   return (
     <Container recordType={recordType}>
       <div className="titleContainer">
-        <div className="waitTitle" onClick={() => handleChangeRecordType("wait")}>
+        <div className="completeTitle" onClick={() => handleChangeRecordType("complete")}>
           {titleText01}
         </div>
-        <div className="completeTitle" onClick={() => handleChangeRecordType("complete")}>
+        <div className="waitTitle" onClick={() => handleChangeRecordType("wait")}>
           {titleText02}
         </div>
       </div>
