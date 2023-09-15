@@ -10,7 +10,7 @@ import EmailSignupModal from "../components/Signups/EmailSignup";
 import EmailVerificationModal from "../components/Signups/EmailCertify";
 import PasswordSettingModal from "../components/Signups/Password";
 import CentralChart from "../components/CentralChart/Index";
-import WatchList from "../components/watchlist/WatchList";
+import WatchList from "../components/watchlist/EntireList";
 import Holdings from "../components/watchlist/Holdings"; // Assuming you have a Holdings component
 import CompareChartSection from "../components/CompareChartSection/Index";
 import StockOrderSection from "../components/StockOrderSection/Index";
