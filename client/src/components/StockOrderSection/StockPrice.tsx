@@ -40,10 +40,10 @@ const StockPrice = (props: StockPriceProps) => {
   }
 
   // 전날 종가대비 매도/매수호가 변동률 계산
-  const presentStockPrice = parseInt(stockInfo.stockInfResponseDto.stck_prpr, 10);
-  const priceChageAmountComparedYesterday = Math.abs(parseInt(stockInfo.stockInfResponseDto.prdy_vrss, 10));
-  const previousDayStockClosingPrice = presentStockPrice - priceChageAmountComparedYesterday;
-  const changeRate = (((price - previousDayStockClosingPrice) / previousDayStockClosingPrice) * 100).toFixed(2);
+  const presentStockPrice = parseInt(stockInfo.stockInfResponseDto.stck_prpr, 10); // 현재가
+  const priceChageAmountComparedYesterday = parseInt(stockInfo.stockInfResponseDto.prdy_vrss, 10); // 전날 종가대비 현재가 가격 차이
+  const yesterDayStockClosingPrice = presentStockPrice - priceChageAmountComparedYesterday; // 잔날종가 = 현재가 - 전날 종가대비 현재가 가격 차이
+  const changeRate = (((price - yesterDayStockClosingPrice) / yesterDayStockClosingPrice) * 100).toFixed(2);
 
   return (
     <Container index={index} ref={index === 9 ? ref : null} price={price} orderPrice={orderPrice} onClick={handleSetOrderPrice}>
