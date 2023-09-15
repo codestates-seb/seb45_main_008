@@ -11,7 +11,7 @@ import com.stockholm.main_project.stock.entity.Company;
 import com.stockholm.main_project.stock.entity.StockAsBi;
 import com.stockholm.main_project.stock.entity.StockHold;
 import com.stockholm.main_project.stock.entity.StockOrder;
-import com.stockholm.main_project.stock.mapper.CompanyMapper;
+import com.stockholm.main_project.stock.mapper.StockMapper;
 import com.stockholm.main_project.stock.repository.StockHoldRepository;
 import com.stockholm.main_project.stock.repository.StockOrderRepository;
 import lombok.extern.slf4j.Slf4j;
@@ -36,9 +36,9 @@ public class StockOrderService {
     private final StockHoldRepository stockHoldRepository;
     private final CashService cashService;
 
-    private final CompanyMapper companyMapper;
+    private final StockMapper stockMapper;
 
-    public StockOrderService(StockAsBiService stockAsBiService, CompanyService companyService, StockOrderRepository stockOrderRepository, MemberRepository memberRepository, StockHoldService stockHoldService, StockHoldRepository stockHoldRepository, CashService cashService, CompanyMapper companyMapper) {
+    public StockOrderService(StockAsBiService stockAsBiService, CompanyService companyService, StockOrderRepository stockOrderRepository, MemberRepository memberRepository, StockHoldService stockHoldService, StockHoldRepository stockHoldRepository, CashService cashService, StockMapper stockMapper) {
         this.stockAsBiService = stockAsBiService;
         this.companyService = companyService;
         this.stockOrderRepository = stockOrderRepository;
@@ -46,7 +46,7 @@ public class StockOrderService {
         this.stockHoldService = stockHoldService;
         this.stockHoldRepository = stockHoldRepository;
         this.cashService = cashService;
-        this.companyMapper = companyMapper;
+        this.stockMapper = stockMapper;
     }
 
     // 멤버, 회사 id, 가격
@@ -368,7 +368,7 @@ public class StockOrderService {
     public List<StockOrderResponseDto> getMemberStockOrders(long memberId) {
         List<StockOrder> stockOrders = stockOrderRepository.findAllByMember_MemberIdOrderByModifiedAtDesc(memberId);
         List<StockOrderResponseDto> stockOrderRepositories = stockOrders.stream()
-                .map(stockOrder -> companyMapper.stockOrderToStockOrderResponseDto(stockOrder)).collect(Collectors.toList());
+                .map(stockOrder -> stockMapper.stockOrderToStockOrderResponseDto(stockOrder)).collect(Collectors.toList());
 
         return stockOrderRepositories;
     }

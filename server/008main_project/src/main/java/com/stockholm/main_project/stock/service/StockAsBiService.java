@@ -5,7 +5,7 @@ import com.stockholm.main_project.exception.ExceptionCode;
 import com.stockholm.main_project.stock.dto.StockasbiDataDto;
 import com.stockholm.main_project.stock.entity.Company;
 import com.stockholm.main_project.stock.entity.StockAsBi;
-import com.stockholm.main_project.stock.mapper.StockMapper;
+import com.stockholm.main_project.stock.mapper.ApiMapper;
 import com.stockholm.main_project.stock.repository.StockAsBiRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -21,13 +21,13 @@ public class StockAsBiService {
 
     private final StockAsBiRepository stockAsBiRepository;
     private final ApiCallService apiCallService;
-    private final StockMapper stockMapper;
+    private final ApiMapper apiMapper;
     private final CompanyService companyService;
 
-    public StockAsBiService(StockAsBiRepository stockAsBiRepository, ApiCallService apiCallService, StockMapper stockMapper, CompanyService companyService) {
+    public StockAsBiService(StockAsBiRepository stockAsBiRepository, ApiCallService apiCallService, ApiMapper apiMapper, CompanyService companyService) {
         this.stockAsBiRepository = stockAsBiRepository;
         this.apiCallService = apiCallService;
-        this.stockMapper = stockMapper;
+        this.apiMapper = apiMapper;
         this.companyService = companyService;
     }
 
@@ -44,7 +44,7 @@ public class StockAsBiService {
             // api 호출하기
             StockasbiDataDto stockasbiDataDto = apiCallService.getStockasbiDataFromApi(company.getCode());
             // mapper로 정리 된 값 받기
-            StockAsBi stockAsBi = stockMapper.stockAsBiOutput1ToStockAsBi(stockasbiDataDto.getOutput1());
+            StockAsBi stockAsBi = apiMapper.stockAsBiOutput1ToStockAsBi(stockasbiDataDto.getOutput1());
 
             // 회사 등록
             stockAsBi.setCompany(company);

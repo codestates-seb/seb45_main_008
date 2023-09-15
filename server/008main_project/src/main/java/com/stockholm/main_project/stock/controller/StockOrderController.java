@@ -1,12 +1,10 @@
 package com.stockholm.main_project.stock.controller;
 
 import com.stockholm.main_project.member.entity.Member;
-import com.stockholm.main_project.member.service.MemberService;
 import com.stockholm.main_project.stock.dto.StockHoldResponseDto;
 import com.stockholm.main_project.stock.dto.StockOrderResponseDto;
-import com.stockholm.main_project.stock.entity.StockHold;
 import com.stockholm.main_project.stock.entity.StockOrder;
-import com.stockholm.main_project.stock.mapper.CompanyMapper;
+import com.stockholm.main_project.stock.mapper.StockMapper;
 import com.stockholm.main_project.stock.service.StockHoldService;
 import com.stockholm.main_project.stock.service.StockOrderService;
 import org.springframework.http.HttpStatus;
@@ -21,12 +19,12 @@ import java.util.List;
 public class StockOrderController {
 
     private final StockOrderService stockOrderService;
-    private final CompanyMapper companyMapper;
+    private final StockMapper stockMapper;
     private final StockHoldService stockHoldService;
 
-    public StockOrderController(StockOrderService stockOrderService, CompanyMapper companyMapper, StockHoldService stockHoldService) {
+    public StockOrderController(StockOrderService stockOrderService, StockMapper stockMapper, StockHoldService stockHoldService) {
         this.stockOrderService = stockOrderService;
-        this.companyMapper = companyMapper;
+        this.stockMapper = stockMapper;
         this.stockHoldService = stockHoldService;
     }
 
@@ -37,7 +35,7 @@ public class StockOrderController {
                                     @RequestParam(name = "stockCount") int stockCount,
                                     @AuthenticationPrincipal Member member) {
         StockOrder stockOrder = stockOrderService.buyStocks(member, companyId, price, stockCount);
-        StockOrderResponseDto stockOrderResponseDto = companyMapper.stockOrderToStockOrderResponseDto(stockOrder);
+        StockOrderResponseDto stockOrderResponseDto = stockMapper.stockOrderToStockOrderResponseDto(stockOrder);
 
         return new ResponseEntity<>(stockOrderResponseDto, HttpStatus.CREATED);
     }
@@ -49,7 +47,7 @@ public class StockOrderController {
                                      @RequestParam(name = "stockCount") int stockCount,
                                      @AuthenticationPrincipal Member member) {
         StockOrder stockOrder = stockOrderService.sellStocks(member, companyId, price, stockCount);
-        StockOrderResponseDto stockOrderResponseDto = companyMapper.stockOrderToStockOrderResponseDto(stockOrder);
+        StockOrderResponseDto stockOrderResponseDto = stockMapper.stockOrderToStockOrderResponseDto(stockOrder);
 
         return new ResponseEntity<>(stockOrderResponseDto, HttpStatus.CREATED);
     }

@@ -3,7 +3,7 @@ package com.stockholm.main_project.stock.service;
 import com.stockholm.main_project.stock.dto.StockasbiDataDto;
 import com.stockholm.main_project.stock.entity.Company;
 import com.stockholm.main_project.stock.entity.StockAsBi;
-import com.stockholm.main_project.stock.mapper.StockMapper;
+import com.stockholm.main_project.stock.mapper.ApiMapper;
 import com.stockholm.main_project.stock.repository.CompanyRepository;
 import org.springframework.stereotype.Service;
 
@@ -15,12 +15,12 @@ import java.util.List;
 public class CompanyService {
     private final CompanyRepository companyRepository;
     private final ApiCallService apiCallService;
-    private final StockMapper stockMapper;
+    private final ApiMapper apiMapper;
 
-    public CompanyService(CompanyRepository companyRepository, ApiCallService apiCallService, StockMapper stockMapper) {
+    public CompanyService(CompanyRepository companyRepository, ApiCallService apiCallService, ApiMapper apiMapper) {
         this.companyRepository = companyRepository;
         this.apiCallService = apiCallService;
-        this.stockMapper = stockMapper;
+        this.apiMapper = apiMapper;
     }
 
     // 특정 회사  리턴
@@ -69,7 +69,7 @@ public class CompanyService {
 
             StockasbiDataDto stockasbiDataDto = apiCallService.getStockasbiDataFromApi(company.getCode());
             // mapper로 정리 된 값 받기
-            StockAsBi stockAsBi = stockMapper.stockAsBiOutput1ToStockAsBi(stockasbiDataDto.getOutput1());
+            StockAsBi stockAsBi = apiMapper.stockAsBiOutput1ToStockAsBi(stockasbiDataDto.getOutput1());
 
             company.setStockAsBi(stockAsBi);
             stockAsBi.setCompany(company);

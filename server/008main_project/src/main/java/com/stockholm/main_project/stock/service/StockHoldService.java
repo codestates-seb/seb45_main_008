@@ -7,7 +7,7 @@ import com.stockholm.main_project.stock.dto.StockHoldResponseDto;
 import com.stockholm.main_project.stock.entity.Company;
 import com.stockholm.main_project.stock.entity.StockHold;
 import com.stockholm.main_project.stock.entity.StockOrder;
-import com.stockholm.main_project.stock.mapper.CompanyMapper;
+import com.stockholm.main_project.stock.mapper.StockMapper;
 import com.stockholm.main_project.stock.repository.CompanyRepository;
 import com.stockholm.main_project.stock.repository.StockHoldRepository;
 import com.stockholm.main_project.stock.repository.StockOrderRepository;
@@ -15,7 +15,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,15 +25,15 @@ public class StockHoldService {
     private final MemberRepository memberRepository;
     private final CompanyRepository companyRepository;
     private final StockOrderRepository stockOrderRepository;
-    private final CompanyMapper companyMapper;
+    private final StockMapper stockMapper;
 
 
-    public StockHoldService(StockHoldRepository stockHoldRepository, MemberRepository memberRepository, CompanyRepository companyRepository, StockOrderRepository stockOrderRepository, CompanyMapper companyMapper) {
+    public StockHoldService(StockHoldRepository stockHoldRepository, MemberRepository memberRepository, CompanyRepository companyRepository, StockOrderRepository stockOrderRepository, StockMapper stockMapper) {
         this.stockHoldRepository = stockHoldRepository;
         this.memberRepository = memberRepository;
         this.companyRepository = companyRepository;
         this.stockOrderRepository = stockOrderRepository;
-        this.companyMapper = companyMapper;
+        this.stockMapper = stockMapper;
     }
 
     // 없으면 새로운 스톡 홀드를 생성해서 반환해준다
@@ -62,7 +61,7 @@ public class StockHoldService {
 
     public List<StockHoldResponseDto> findStockHolds(long memberId) {
         List<StockHold> stockHoldList = stockHoldRepository.findAllByMember_MemberId(memberId);
-        List<StockHoldResponseDto> stockHoldResponseDtos = companyMapper.stockHoldToStockHoldResponseDto(stockHoldList);
+        List<StockHoldResponseDto> stockHoldResponseDtos = stockMapper.stockHoldToStockHoldResponseDto(stockHoldList);
         for(StockHoldResponseDto stockHold : stockHoldResponseDtos) {
 
             List<StockOrder> stockOrders =  stockOrderRepository

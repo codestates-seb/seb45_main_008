@@ -5,8 +5,8 @@ import com.stockholm.main_project.stock.dto.StockMinResponseDto;
 import com.stockholm.main_project.stock.entity.Company;
 import com.stockholm.main_project.stock.entity.StockInf;
 import com.stockholm.main_project.stock.entity.StockMin;
-import com.stockholm.main_project.stock.mapper.CompanyMapper;
 import com.stockholm.main_project.stock.mapper.StockMapper;
+import com.stockholm.main_project.stock.mapper.ApiMapper;
 import com.stockholm.main_project.stock.repository.StockMinRepository;
 import com.stockholm.main_project.utils.Time;
 import lombok.extern.slf4j.Slf4j;
@@ -26,16 +26,16 @@ public class StockMinService {
 
     private final CompanyService companyService;
     private final ApiCallService apiCallService;
-    private final StockMapper stockMapper;
+    private final ApiMapper apiMapper;
     private final StockMinRepository stockMinRepository;
-    private final CompanyMapper companyMapper;
+    private final StockMapper stockMapper;
 
-    public StockMinService(CompanyService companyService, ApiCallService apiCallService, StockMapper stockMapper, StockMinRepository stockMinRepository, CompanyMapper companyMapper) {
+    public StockMinService(CompanyService companyService, ApiCallService apiCallService, ApiMapper apiMapper, StockMinRepository stockMinRepository, StockMapper stockMapper) {
         this.companyService = companyService;
         this.apiCallService = apiCallService;
-        this.stockMapper = stockMapper;
+        this.apiMapper = apiMapper;
         this.stockMinRepository = stockMinRepository;
-        this.companyMapper = companyMapper;
+        this.stockMapper = stockMapper;
     }
 
     public void updateStockMin() throws InterruptedException {
@@ -52,7 +52,7 @@ public class StockMinService {
             // mapper로 정리 된 값 받기
             List<StockMin> stockMinList = stockMinDto.getOutput2().stream()
                     .map(stockMinOutput2 -> {
-                        StockMin stockMin = stockMapper.stockMinOutput2ToStockMin(stockMinOutput2);
+                        StockMin stockMin = apiMapper.stockMinOutput2ToStockMin(stockMinOutput2);
                         stockMin.setCompany(company);
                         stockMin.setTradeTime(now);
                         return stockMin;
@@ -60,7 +60,7 @@ public class StockMinService {
             // 빠른 시간 순으로 정렬
             Collections.sort(stockMinList, Comparator.comparing(StockMin::getStockTradeTime));
             // 회사 정보 저장
-            StockInf stockInf = stockMapper.stockMinOutput1ToStockInf(stockMinDto.getOutput1());
+            StockInf stockInf = apiMapper.stockMinOutput1ToStockInf(stockMinDto.getOutput1());
             stockInf.setCompany(company);
             StockInf oldStockInf = company.getStockInf();
             stockInf.setStockInfId(oldStockInf.getStockInfId());
@@ -85,7 +85,7 @@ public class StockMinService {
         List<StockMin> stockMinList = stockMinRepository.findTop420ByCompanyIdOrderByStockMinIdDesc(companyId);
 
         List<StockMinResponseDto> stockMinResponseDtos = stockMinList.stream()
-                .map(stockMin -> companyMapper.stockMinToStockMinResponseDto(stockMin)).collect(Collectors.toList());
+                .map(stockMin -> stockMapper.stockMinToStockMinResponseDto(stockMin)).collect(Collectors.toList());
         Collections.reverse(stockMinResponseDtos);
         return stockMinResponseDtos;
     }
