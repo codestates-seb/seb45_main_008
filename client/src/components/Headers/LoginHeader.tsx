@@ -7,16 +7,17 @@ import { useNavigate } from "react-router-dom";
 import AlarmImage from "../../asset/images/alarm.png"; 
 import ProfileModal from "../Profile/profileModal";
 import StockSearchComponent from './stockSearchComponent';
+import { setLogoutState } from '../../reducer/member/loginSlice';
+import { useDispatch } from 'react-redux';
 
 
 // 로그인 상태일 때의 헤더 컴포넌트
-const LoginHeader: React.FC<LoginHeaderProps> = ({ onLogoutClick }) => {
+const LoginHeader: React.FC<LoginHeaderProps> = () => {
   const [isProfileModalOpen, setProfileModalOpen] = useState(false); // 프로필 모달 상태
   const navigate = useNavigate();  // 페이지 이동 함수
-
-
-
   const logoutText = "로그아웃";
+  const dispatch = useDispatch();  // 👈 useDispatch hook 추가
+
   // 프로필 모달 열기 함수
   const handleProfileOpen = () => {
     setProfileModalOpen(true);
@@ -31,6 +32,12 @@ const LoginHeader: React.FC<LoginHeaderProps> = ({ onLogoutClick }) => {
   const handleLogoClick = () => {
     navigate("/");  // 메인 페이지로 이동
   };
+
+  const handleLogout = () => {
+    dispatch(setLogoutState()); // 전역변수에서 로그아웃 상태로 설정
+    localStorage.removeItem("Authorization"); // 엑세스 토큰 제거
+    localStorage.removeItem("Refresh-token"); // 리프레시 토큰 제거
+};
 
   return (
     <HeaderContainer>
@@ -47,7 +54,7 @@ const LoginHeader: React.FC<LoginHeaderProps> = ({ onLogoutClick }) => {
           <ProfileImage src={SampleProfile} />
         </ProfileButton>
         {isProfileModalOpen && <ProfileModal onClose={handleProfileClose} />}
-        <LogoutButton onClick={onLogoutClick}>{logoutText}</LogoutButton> 
+        <LogoutButton onClick={handleLogout}>{logoutText}</LogoutButton>
       </UserActions>
     </HeaderContainer>
   );
@@ -57,7 +64,6 @@ export default LoginHeader;
 
 // 로그아웃 클릭 이벤트 타입 정의
 interface LoginHeaderProps {
-  onLogoutClick: () => void;
   onProfileClick: () => void;
 }
 

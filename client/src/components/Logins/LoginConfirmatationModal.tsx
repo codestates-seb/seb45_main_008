@@ -6,14 +6,10 @@ const LoginConfirmationModal: React.FC<LoginConfirmationProps> = ({ onClose }) =
     const messageText = "로그인이 성공적으로 완료되었습니다!";
     const confirmText = "확인"
 
-
-
     return (
       <ModalBackground>
         <ModalContainer>
-
             <Message>{messageText}</Message>
-
           <ConfirmButton onClick={onClose}>{confirmText}</ConfirmButton>
         </ModalContainer>
       </ModalBackground>

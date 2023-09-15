@@ -4,8 +4,7 @@ import Comments from "./Comments";
 import { DotIcon } from "./IconComponent/Icon";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-const serverUrl =
-  "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards";
+const serverUrl = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards";
 
 const TimeLineComponent = () => {
   const navigate = useNavigate();
@@ -101,9 +100,7 @@ const TimeLineComponent = () => {
         // 삭제 성공 처리
         alert("삭제되었습니다");
         // 삭제한 게시물을 클라이언트 데이터에서도 제거
-        const updatedBoardData = boardData.filter(
-          (el) => el.boardId !== boardId
-        ); // boardId로 수정
+        const updatedBoardData = boardData.filter((el) => el.boardId !== boardId); // boardId로 수정
         setBoardData(updatedBoardData);
       } else {
         alert("삭제 실패");
@@ -123,21 +120,14 @@ const TimeLineComponent = () => {
 
   return (
     <TimeLine>
-      {openDropDown === false && (
-        <Button onClick={handleSetOpenDropDown}></Button>
-      )}
+      {openDropDown === false && <Button onClick={handleSetOpenDropDown}></Button>}
 
       {openDropDown === true && (
         <>
           <DropDownClose onClick={handleSetOpenDropDown}>
             <p>{timeLineText.close}</p>
           </DropDownClose>
-          <DropdownInput
-            type="text"
-            placeholder="이곳에 작성해 주세요"
-            value={inputValue}
-            onChange={handleOnChange}
-          ></DropdownInput>
+          <DropdownInput type="text" placeholder="이곳에 작성해 주세요" value={inputValue} onChange={handleOnChange}></DropdownInput>
 
           <SubmitButton onClick={handleClickSubmit}>Submit</SubmitButton>
         </>
@@ -145,9 +135,7 @@ const TimeLineComponent = () => {
       <DevideLine></DevideLine>
       <BoardArea className="scroll">
         {boardData.length === 0 ? (
-          <BoardTextAreaNoText>
-            {timeLineText.notYetWriting}
-          </BoardTextAreaNoText>
+          <BoardTextAreaNoText>{timeLineText.notYetWriting}</BoardTextAreaNoText>
         ) : (
           boardData
             .slice()
@@ -158,11 +146,7 @@ const TimeLineComponent = () => {
                   <div onClick={() => handleDotOpen(el.boardId)}>
                     <DotIcon />
                   </div>
-                  {dotMenuOpenMap[el.boardId] && (
-                    <DeleteBoard onClick={() => handleDeleteClick(el.boardId)}>
-                      {timeLineText.delete}
-                    </DeleteBoard>
-                  )}
+                  {dotMenuOpenMap[el.boardId] && <DeleteBoard onClick={() => handleDeleteClick(el.boardId)}>{timeLineText.delete}</DeleteBoard>}
                 </Delete>
                 <BoardText>
                   {el.member}
