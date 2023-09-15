@@ -49,7 +49,7 @@ const MarketInfo: React.FC<Props> = () => {
 export default MarketInfo;
 const MarketInfoText = {
   MarketSummary: "시장요약",
-  AllStockList: "전체종목",
+  AllStockList: "종목랭킹",
 };
 // **스타일 옮기기
 

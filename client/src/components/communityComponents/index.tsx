@@ -3,12 +3,10 @@ import styled from "styled-components";
 import Comments from "./Comments";
 import { DotIcon } from "./IconComponent/Icon";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
 const serverUrl =
   "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards";
 
 const TimeLineComponent = () => {
-  const navigate = useNavigate();
   const [boardData, setBoardData] = useState<BoardData[]>([]);
 
   useEffect(() => {
@@ -42,38 +40,48 @@ const TimeLineComponent = () => {
 
   // 서브밋 버튼 클릭
   const authToken = localStorage.getItem("authToken");
-  const handleClickSubmit = async () => {
-    if (inputValue.length !== 0) {
-      const newBoardData = {
-        id: new Date().getTime(),
-        content: inputValue,
-        comments: "",
-        boardId: 0,
-      };
 
-      try {
-        const response = await axios.post(serverUrl, newBoardData, {
-          headers: {
-            Authorization: authToken, // 토큰을 헤더에 추가
-          },
-        });
-        if (response.status === 201) {
-          // 서버에 성공적으로 데이터를 업로드한 경우
-          alert("작성완료");
-          setinputValue(""); // 입력 필드 초기화
-          // 서버에서 업데이트된 게시물 목록을 다시 가져오기
-          fetchBoardDataFromServer();
-        } else {
-          alert("작성실패");
-        }
-      } catch (error) {
-        console.log("데이터 추가 중 오류 발생:", error);
+  const [selectedImageFile, setSelectedImageFile] = useState<File | null>(null);
+  const config = {
+    headers: {
+      "Content-Type": "multipart/form-data", // Content-Type
+      Authorization: authToken, // 인증 헤더 추가
+    },
+  };
+  const jsonData = {
+    title: "게시판 test12",
+    content: inputValue,
+  };
+
+  const handleClickSubmit = async () => {
+    // 이미지 파일이 선택되었을 때만 FormData에 추가
+    const formData = new FormData();
+
+    if (selectedImageFile) {
+      formData.append("image", selectedImageFile);
+    }
+    formData.append("boradData", JSON.stringify(jsonData));
+
+    try {
+      const response = await axios.post(serverUrl, formData, config);
+
+      if (response.status === 201) {
+        // 서버에 성공적으로 데이터를 업로드한 경우
+        alert("작성완료");
+        setinputValue(""); // 입력 필드 초기화
+        setSelectedImageFile(null); // 이미지 파일 초기화
+        // 서버에서 업데이트된 게시물 목록을 다시 가져오기
+        fetchBoardDataFromServer();
+      } else {
         alert("작성실패");
       }
-    } else {
-      alert("내용이 없습니다");
-
-      navigate("/community");
+    } catch (error) {
+      console.log("데이터 추가 중 오류 발생:", error);
+      alert("작성실패");
+      console.log(authToken);
+      console.log(formData);
+      console.log(inputValue);
+      console.log(selectedImageFile);
     }
   };
 
@@ -114,12 +122,6 @@ const TimeLineComponent = () => {
       console.log(boardData);
     }
   };
-  //유저 아이디 랜덤 설정
-
-  //boardData업데이트될때 마다 로컬스토리지 데이터 저장
-  // useEffect(() => {
-  //   localStorage.setItem("boardData", JSON.stringify(boardData));
-  // }, [boardData]);
 
   return (
     <TimeLine>
@@ -138,6 +140,15 @@ const TimeLineComponent = () => {
             value={inputValue}
             onChange={handleOnChange}
           ></DropdownInput>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+              if (e.target.files && e.target.files.length > 0) {
+                setSelectedImageFile(e.target.files[0]);
+              }
+            }}
+          />
 
           <SubmitButton onClick={handleClickSubmit}>Submit</SubmitButton>
         </>
@@ -169,6 +180,7 @@ const TimeLineComponent = () => {
                   <br />
                   {el.content}
                 </BoardText>
+
                 <DevideLine2 />
                 <Comments boardId={el.boardId}></Comments>
               </BoardTextArea>

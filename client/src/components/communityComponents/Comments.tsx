@@ -10,7 +10,7 @@ const Comments = ({ boardId }: { boardId: number }) => {
   }
   const [commentData, setCommentData] = useState<CommentData[]>([]);
   const [commentsValue, setCommentsValue] = useState("");
-  const commentUrl = `/api/boards/${boardId}/comment`;
+  const commentUrl = `/api/boards/${boardId}/comments`;
   useEffect(() => {
     // 게시물 ID를 기반으로 서버에서 댓글 데이터를 가져옵니다.
     fetchCommentsFromServer();
@@ -38,15 +38,11 @@ const Comments = ({ boardId }: { boardId: number }) => {
 
       try {
         // 서버에 댓글 데이터를 POST합니다.
-        const response = await axios.post(
-          `/api/boards/${boardId}/comment`,
-          newCommentData,
-          {
-            headers: {
-              Authorization: authToken, // 토큰을 헤더에 추가
-            },
-          }
-        );
+        const response = await axios.post(commentUrl, newCommentData, {
+          headers: {
+            Authorization: authToken, // 토큰을 헤더에 추가
+          },
+        });
         if (response.status === 201) {
           // 서버에 성공적으로 데이터를 업로드한 경우
           setCommentsValue("");
