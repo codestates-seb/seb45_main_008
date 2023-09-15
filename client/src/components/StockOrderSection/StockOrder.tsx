@@ -98,8 +98,10 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
   // const closingTime = isBefore9AM || isAfter330PM;
 
   // 주문 실패 케이스 1) 개장시간  2) 가격/거래량 설정
-  // 🔴 3시 30분 이후 작업 위해 closingTime 조건 해제
-  const orderFailureCase01 = nonBusinessDay;
+  // 🔴 3시 30분 이후 작업 위해 closingTime 조건 해제 + 주말 요건도 해제
+  const orderFailureCase01 = false;
+
+  // 🟢 기존로직
   // const orderFailureCase01 = nonBusinessDay || closingTime;
   const orderFailureCase02 = orderPrice === 0 || orderVolume === 0;
 

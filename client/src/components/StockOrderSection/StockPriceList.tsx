@@ -11,15 +11,12 @@ const tradingVolumeText: string = "거래량";
 const StockPriceList = () => {
   const companyId = useSelector((state: StateProps) => state.companyId);
   const stockOrderType = useSelector((state: StateProps) => state.stockOrderType);
-  const { stockInfo, stockInfoLoading, stockInfoError } = useGetStockInfo(companyId);
+  const { stockInfo } = useGetStockInfo(companyId);
 
-  if (stockInfoLoading) {
-    return;
-  }
-
-  if (stockInfoError) {
-    return;
-  }
+  // 전날 종가 계산
+  const presentStockPrice = parseInt(stockInfo.stockInfResponseDto.stck_prpr, 10); // 현재가
+  const priceChageAmountComparedYesterday = parseInt(stockInfo.stockInfResponseDto.prdy_vrss, 10); // 전날 종가대비 현재가 가격 차이
+  const yesterDayStockClosingPrice = presentStockPrice - priceChageAmountComparedYesterday; // 잔날종가 = 현재가 - 전날 종가대비 현재가 가격 차이
 
   // 1) 당일 매도/매수호가 및 거래량
   const sellingPrice: PriceProps[] = [];
@@ -81,9 +78,11 @@ const StockPriceList = () => {
         <div className="sellingVolume">{tradingVolumeText}</div>
       </div>
       <PriceList>
-        {sellingAndBuyingPrice.map((item, idx) => (
-          <StockPrice key={item.price} index={idx} price={item.price} volume={item.volume} totalSellingVolume={totalSellingVolume} totalBuyingVolum={totalBuyingVolum} />
-        ))}
+        {sellingAndBuyingPrice.map((item, idx) => {
+          const changeRate = (((item.price - yesterDayStockClosingPrice) / yesterDayStockClosingPrice) * 100).toFixed(2); // 전날 종가대비 주가 변동률
+
+          return <StockPrice key={item.price} index={idx} price={item.price} volume={item.volume} changeRate={changeRate} totalSellingVolume={totalSellingVolume} totalBuyingVolum={totalBuyingVolum} />;
+        })}
       </PriceList>
       <div className="priceIndicator">
         <div className="buyingPrice">{buyingPriceTest}</div>
