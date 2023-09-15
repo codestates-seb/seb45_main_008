@@ -5,12 +5,5 @@
       <sourceFolder url="file://$MODULE_DIR$/../../server/008main_project/src/test/java" isTestSource="true" />
     </content>
   </component>
-  <component name="FacetManager">
-    <facet type="web" name="Web">
-      <configuration>
-        <webroots />
-      </configuration>
-    </facet>
-  </component>
   <component name="TestModuleProperties" production-module="008main_project.main" />
 </module>
