@@ -78,7 +78,7 @@ public class SecurityConfiguration {
                         .userInfoEndpoint()
                         .userService(oAuth2MemberService)
                         .and()
-                        .successHandler(new OAuth2AuthenticationSuccessHandler(jwtTokenizer, authorityUtils))
+                        .successHandler(new OAuth2AuthenticationSuccessHandler(jwtTokenizer, authorityUtils, memberService))
                 );
 
         return httpSecurity.build();

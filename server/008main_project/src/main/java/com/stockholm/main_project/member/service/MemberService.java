@@ -102,6 +102,18 @@ public class MemberService {
         return optionalUser.orElse(null);
     }
 
+    public int findMemberIdByEmail(String email) {
+        Optional<Member> optionalMember = memberRepository.findByEmail(email);
+
+        if (optionalMember.isPresent()) {
+            Member member = optionalMember.get();
+            return (int) member.getMemberId();
+        } else {
+
+            throw new  BusinessLogicException(ExceptionCode.MEMBER_NOT_FOUND);
+        }
+    }
+
 //    public void deleteStockOrdersByMemberId(Long memberId) {
 //        stockOrderRepository.deleteAllByMemberId(memberId);
 //    }
