@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { motion } from "framer-motion";
 import { styled } from "styled-components";
 import useGetStockOrderRecord from "../../hooks/useGetStockOrderRecord";
 import useGetCompanyList from "../../hooks/useGetCompanyList";
@@ -70,7 +71,16 @@ const OrderResult = () => {
               const companyId = stock.companyId;
               const orderId = stock.stockOrderId;
 
-              return <OrderedStock key={orderId} recordType={recordType} orderType={orderType} orderPrice={price} orderVolume={volume} companyId={companyId} orderId={orderId} />;
+              return (
+                <motion.div
+                  key={orderId}
+                  initial={{ opacity: 0, y: -20 }} // 초기 상태
+                  animate={{ opacity: 1, y: 0 }} // 애니메이션 중인 상태
+                  exit={{ opacity: 0, y: -20 }} // 빠져나가는 상태
+                >
+                  <OrderedStock recordType={recordType} orderType={orderType} orderPrice={price} orderVolume={volume} companyId={companyId} orderId={orderId} />
+                </motion.div>
+              );
             })}
           </>
         )}
