@@ -16,6 +16,20 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
     const emailLoginText = "이메일로 로그인";
     const emailSignupText = "이메일로 회원가입";
 
+    // URL에서 엑세스 토큰과 리프레시 토큰을 추출합니다.
+    const urlParams = new URLSearchParams(window.location.search);
+    const accessToken = urlParams.get("access_token");
+    const refreshToken = urlParams.get("refresh_token");
+
+    if (accessToken && refreshToken) {
+        // 엑세스 토큰을 로컬 스토리지에 저장합니다.
+        localStorage.setItem("Authorization", `Bearer ${accessToken}`);
+
+        // 리프레시 토큰을 로컬 스토리지에 저장합니다.
+        localStorage.setItem("Refresh-token", refreshToken);
+    }
+
+
 
     // const handleGoogleLogout = async () => {
     //     googleLogout();
