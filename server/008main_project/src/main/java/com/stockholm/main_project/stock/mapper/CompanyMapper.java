@@ -2,7 +2,6 @@ package com.stockholm.main_project.stock.mapper;
 
 import com.stockholm.main_project.stock.dto.*;
 import com.stockholm.main_project.stock.entity.*;
-import com.stockholm.main_project.stock.service.StockOrderService;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 
@@ -16,12 +15,7 @@ public interface CompanyMapper {
         List<CompanyResponseDto> companyResponseDtoList = new ArrayList<>();
 
         for(Company company : companyList) {
-            CompanyResponseDto companyResponseDto = new CompanyResponseDto();
-
-            companyResponseDto.setCompanyId(company.getCompanyId());
-            companyResponseDto.setCode(company.getCode());
-            companyResponseDto.setKorName(company.getKorName());
-
+            CompanyResponseDto companyResponseDto = companyToCompanyResponseDto(company);
             companyResponseDtoList.add(companyResponseDto);
         }
         return companyResponseDtoList;
@@ -59,8 +53,10 @@ public interface CompanyMapper {
             stockHoldResponseDto.setCompanyKorName(stockHold.getCompany().getKorName());
             stockHoldResponseDto.setMemberId(stockHold.getMember().getMemberId());
             stockHoldResponseDto.setStockCount(stockHold.getStockCount());
-            stockHoldResponseDto.setPrice(stockHold.getPrice());
+            stockHoldResponseDto.setTotalPrice(stockHold.getPrice());
             stockHoldResponseDto.setPercentage(0D);
+            stockHoldResponseDto.setStockReturn(0);
+            stockHoldResponseDto.setReserveSellStockCount(0);
 
             stockHoldResponseDtos.add(stockHoldResponseDto);
         }

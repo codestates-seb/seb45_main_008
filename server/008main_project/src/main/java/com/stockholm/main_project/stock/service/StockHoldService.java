@@ -6,14 +6,17 @@ import com.stockholm.main_project.member.repository.MemberRepository;
 import com.stockholm.main_project.stock.dto.StockHoldResponseDto;
 import com.stockholm.main_project.stock.entity.Company;
 import com.stockholm.main_project.stock.entity.StockHold;
+import com.stockholm.main_project.stock.entity.StockOrder;
+import com.stockholm.main_project.stock.mapper.CompanyMapper;
 import com.stockholm.main_project.stock.repository.CompanyRepository;
 import com.stockholm.main_project.stock.repository.StockHoldRepository;
+import com.stockholm.main_project.stock.repository.StockOrderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @Transactional
@@ -22,11 +25,16 @@ public class StockHoldService {
     private final StockHoldRepository stockHoldRepository;
     private final MemberRepository memberRepository;
     private final CompanyRepository companyRepository;
+    private final StockOrderRepository stockOrderRepository;
+    private final CompanyMapper companyMapper;
 
-    public StockHoldService(StockHoldRepository stockHoldRepository, MemberRepository memberRepository, CompanyRepository companyRepository) {
+
+    public StockHoldService(StockHoldRepository stockHoldRepository, MemberRepository memberRepository, CompanyRepository companyRepository, StockOrderRepository stockOrderRepository, CompanyMapper companyMapper) {
         this.stockHoldRepository = stockHoldRepository;
         this.memberRepository = memberRepository;
         this.companyRepository = companyRepository;
+        this.stockOrderRepository = stockOrderRepository;
+        this.companyMapper = companyMapper;
     }
 
     // 없으면 새로운 스톡 홀드를 생성해서 반환해준다
@@ -52,10 +60,23 @@ public class StockHoldService {
             return stockHold;
     }
 
-    public List<StockHold> findStockHolds(long memberId) {
+    public List<StockHoldResponseDto> findStockHolds(long memberId) {
         List<StockHold> stockHoldList = stockHoldRepository.findAllByMember_MemberId(memberId);
+        List<StockHoldResponseDto> stockHoldResponseDtos = companyMapper.stockHoldToStockHoldResponseDto(stockHoldList);
+        for(StockHoldResponseDto stockHold : stockHoldResponseDtos) {
 
-        return stockHoldList;
+            List<StockOrder> stockOrders =  stockOrderRepository
+                    .findAllByMember_MemberIdAndCompany_CompanyIdAndOrderStatesAndOrderTypes(
+                            stockHold.getMemberId(),
+                            stockHold.getCompanyId(),
+                            StockOrder.OrderStates.ORDER_WAIT,
+                            StockOrder.OrderTypes.SELL
+                    );
+            int orderWaitCount = stockOrders.stream().mapToInt(StockOrder::getStockCount).sum();
+            stockHold.setReserveSellStockCount(orderWaitCount);
+        }
+
+        return stockHoldResponseDtos;
     }
 
     //수익률 계산하는 로직
@@ -66,20 +87,30 @@ public class StockHoldService {
             // 주식 현재가를 불러온다
             String nowPrice = company.getStockInf().getStck_prpr();
             // 주식 수익 = 전체 주식 가치 - 전체 투자 금액
-            double totalRevenue = Double.valueOf(nowPrice) * stockHoldResponseDto.getStockCount() - stockHoldResponseDto.getPrice();
+            double totalRevenue =
+                    Double.valueOf(nowPrice)
+                            * (stockHoldResponseDto.getStockCount()+stockHoldResponseDto.getReserveSellStockCount())
+                            - stockHoldResponseDto.getTotalPrice();
             // 주식 수익률(%) = (주식 수익 / 전체 투자 금액) × 100
-            double percentage = (totalRevenue / (double)stockHoldResponseDto.getPrice()) * 100;
+            double percentage = (totalRevenue / (double)stockHoldResponseDto.getTotalPrice()) * 100;
 
             stockHoldResponseDto.setPercentage(percentage);
+            stockHoldResponseDto.setStockReturn((long) totalRevenue);
         }
         return stockHoldResponseDtos;
     }
 
     //보유 주식 전부 삭제하는 로직
     public void deleteStockHolds(long memberId) {
-        List<StockHold> stockHolds = findStockHolds(memberId);
+        List<StockHold> stockHolds = getMemberStockHolds(memberId);
 
         stockHoldRepository.deleteAll(stockHolds);
+    }
+
+    public List<StockHold> getMemberStockHolds(long memberId) {
+        List<StockHold> stockHolds = stockHoldRepository.findAllByMember_MemberId(memberId);
+
+        return stockHolds;
     }
 
 }

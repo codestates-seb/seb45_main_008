@@ -51,7 +51,7 @@ public class CompanyController {
     })
     // 전체 회사 리스트
     @GetMapping
-    public ResponseEntity getCompanyList() throws InterruptedException {
+    public ResponseEntity getCompanyList() {
         List<Company> companyList = companyService.findCompanies();
         List<CompanyResponseDto> companyResponseDtoList = companyMapper.CompaniesToCompanyResponseDtos(companyList);
 

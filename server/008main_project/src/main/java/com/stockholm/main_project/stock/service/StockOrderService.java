@@ -366,7 +366,7 @@ public class StockOrderService {
 
     // 멤버의 모든 StockOrders 불러오기
     public List<StockOrderResponseDto> getMemberStockOrders(long memberId) {
-        List<StockOrder> stockOrders = stockOrderRepository.findAllByMember_MemberId(memberId);
+        List<StockOrder> stockOrders = stockOrderRepository.findAllByMember_MemberIdOrderByModifiedAtDesc(memberId);
         List<StockOrderResponseDto> stockOrderRepositories = stockOrders.stream()
                 .map(stockOrder -> companyMapper.stockOrderToStockOrderResponseDto(stockOrder)).collect(Collectors.toList());
 
@@ -386,7 +386,7 @@ public class StockOrderService {
             throw new BusinessLogicException(ExceptionCode.STOCKORDER_ALREADY_FINISH);
         // 수량 선택해서 취소 할 수 있게(취소한 만큼 보유 주식 돌아오게) 0이 되면 미체결 스톡 오더 삭제
         else {
-            if(stockOrder.getStockCount() >= stockCount)
+            if(stockOrder.getStockCount() <= stockCount)
                 stockOrderRepository.delete(stockOrder);
             else {
                 stockOrder.setStockCount(stockOrder.getStockCount() - stockCount);
