@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import logo from '../../asset/logos/SK_logo.png';
+import logo from '../../asset/images/StockHolmImage.png';
 
 const StockItem: React.FC<StockItemProps> = ({ company, setShowChangePrice, showChangePrice }) => {
   const isPositiveChange = parseFloat(company.stockChangeRate) > 0;

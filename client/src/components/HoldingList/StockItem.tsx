@@ -1,57 +1,95 @@
 import React from 'react';
 import styled from 'styled-components';
-import logo from '../../asset/logos/SK_logo.png';
+import logo from '../../asset/images/StockHolmImage.png';
 
-const StockItem: React.FC<StockItemProps> = ({ company, setShowChangePrice, showChangePrice }) => {
-  const isPositiveChange = parseFloat(company.stockChangeRate) > 0;
-  const priceColor = isPositiveChange ? 'red' : 'blue';
-
-  return (
-    <StockItemWrapper>
-      <Logo src={logo} alt="stock logo" />
-      <StockInfo>
-        <StockName>{company.korName}</StockName>
-        <StockCode>{company.code}</StockCode>
-      </StockInfo>
-      <StockPriceSection>
-        <StockPrice change={priceColor}>{company.stockPrice}</StockPrice>
-        <StockChange
-          change={priceColor}
-          onMouseEnter={() => setShowChangePrice(true)}
-          onMouseLeave={() => setShowChangePrice(false)}
-        >
-          {showChangePrice ? `${company.stockChangeAmount}%` : `${company.stockChangeRate}%`}
-        </StockChange>
-      </StockPriceSection>
-    </StockItemWrapper>
-  );
-};
-
-type NewCompanyData = {
-  companyId: number;
-  code: string;
-  korName: string;
-  stockPrice: string;
-  stockChangeAmount: string;
-  stockChangeRate: string;
-};
-
-type StockItemProps = {
-  company: NewCompanyData;
-  setShowChangePrice: React.Dispatch<React.SetStateAction<boolean>>;
+export type StockItemProps = {
+  stockData: {
+    stockHoldId: number;
+    memberId: number;
+    companyId: number;
+    companyKorName: string;
+    stockCount: number;
+    totalPrice: number;
+    percentage: number;
+    stockReturn: number;
+    reserveSellStockCount: number;
+  };
+  companyData?: {
+    companyId: number;
+    code: string;
+    korName: string;
+    stockPrice: string;
+    stockChangeAmount: string;
+    stockChangeRate: string;
+}[];
+  setShowChangePrice: (value: boolean) => void;
   showChangePrice: boolean;
 };
 
-const StockItemWrapper = styled.div`
+
+
+const StockItem: React.FC<StockItemProps> = ({ companyData, stockData, setShowChangePrice, showChangePrice }) => {
+  const {  stockCount, reserveSellStockCount, totalPrice, percentage, stockReturn } = stockData;
+  const totalStocksHeld = stockCount + reserveSellStockCount;
+  const company = companyData ? companyData[0] : undefined;
+
+  const { 
+    code = '', 
+    korName = '', 
+    stockPrice='',
+    stockChangeAmount = '', 
+    stockChangeRate = '' 
+  } = company || {};
+  
+    // Format percentage to two decimal places
+    const formattedPercentage = parseFloat(percentage.toFixed(2));
+
+
+  return (
+    <>
+      <ItemContainer>
+        <Logo src={logo} alt="stock logo" />
+        <StockInfo>
+          <StockName>{korName}</StockName>
+          <StockCode>{code}</StockCode>
+        </StockInfo>
+        <StockPriceSection>
+          <StockPrice change={`${stockChangeRate}%`}>{stockPrice.toLocaleString()} 원</StockPrice>
+          <StockChange 
+              change={`${stockChangeRate}%`} 
+              onMouseEnter={() => setShowChangePrice(true)} 
+              onMouseLeave={() => setShowChangePrice(false)}
+              >
+              {showChangePrice ? stockChangeAmount.toLocaleString() : `${stockChangeRate}%`}
+          </StockChange>
+        </StockPriceSection>
+      </ItemContainer>
+      <StockDetails>
+        <DetailSection>
+          <DetailTitle>수익</DetailTitle>
+          <DetailTitle>보유</DetailTitle>
+        </DetailSection>
+        <DetailSection>
+          <ColoredDetailData value={stockReturn.toString()}>{stockReturn.toLocaleString()} 원</ColoredDetailData>
+          <DetailData>{totalPrice.toLocaleString()} 원</DetailData>
+        </DetailSection>
+        <DetailSection>
+          <ColoredDetailData value={`${formattedPercentage}%`}>{formattedPercentage}%</ColoredDetailData>
+          <DetailTitle>{totalStocksHeld}주</DetailTitle>
+        </DetailSection>
+      </StockDetails>
+      <ThickDivider />
+    </>
+  );
+};
+
+const ItemContainer = styled.div`
   display: flex;
-  flex-direction: row; /* 수평으로 정렬 */
-  justify-content: flex-start; /* 왼쪽 정렬 */
-  align-items: flex-start; /* 위로 정렬 */
-  padding: 8px 0;
-  border-bottom: 1px solid #e0e0e0;
+  justify-content: space-between;
+  align-items: center;
   width: 100%;
-  background-color: transparent;
-  cursor: pointer;
+  padding: 8px 0;
+  border-bottom: 1px solid #e0e0e0; // Holdings에서의 스타일 추가
 `;
 
 const Logo = styled.img`
@@ -80,16 +118,67 @@ const StockPriceSection = styled.div`
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-left: auto; /* 자동으로 왼쪽 여백 추가 */
 `;
 
-const StockPrice = styled.span<{ change: string }>`
-  color: ${(props) => props.change};
-`;
+const getColorByChange = (change: string) => {
+  if (change.startsWith('')) return 'red';
+  if (change.startsWith('-')) return 'blue';
+  return 'black';
+};
 
-const StockChange = styled.span<{ change: string }>`
-  color: ${(props) => props.change};
+const StockPrice = styled.span.attrs<{ change: string }>(({ change }) => ({
+  style: {
+    color: getColorByChange(change),
+  },
+}))``;
+
+const StockChange = styled.span.attrs<{ change: string }>(({ change }) => ({
+  style: {
+    color: getColorByChange(change),
+  },
+}))`
   cursor: pointer;
 `;
 
+const StockDetails = styled.div`
+  display: flex;
+  justify-content: space-between;
+  padding: 8px 0;
+  width: 100%;
+`;
+
+const DetailSection = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const DetailTitle = styled.span`
+  font-weight: light;
+  font-size : 14px;
+`;
+
+const DetailData = styled.span`
+  font-size: 14px;  // Setting standardized font size for all data
+`;
+
+const getColorByValue = (value: string) => {
+  if (value.startsWith('')) return 'red';
+  if (value.startsWith('-')) return 'blue';
+  return 'black';
+};
+
+const ColoredDetailData = styled.span.attrs<{ value: string }>(({ value }) => ({
+  style: {
+    color: getColorByValue(value),
+  },
+}))`
+  font-size: 14px;  // Setting standardized font size for all data
+`;
+
+const ThickDivider = styled.div`
+  height: 3px;
+  background-color: #aaa; 
+  margin: 8px 0; 
+`;
 export default StockItem;
