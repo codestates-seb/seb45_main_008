@@ -26,8 +26,8 @@ const OrderResult = () => {
   const orderCompleteList = orderRecordData.filter((order: OrderRecordProps) => order.orderStates === "ORDER_COMPLETE");
 
   // 최근 주문이 상단에 노출되도록 배열 순서 변경
-  orderWaitList.reverse();
-  orderCompleteList.reverse();
+  // orderWaitList.reverse();
+  // orderCompleteList.reverse();
   const orderList = recordType ? orderCompleteList : orderWaitList;
   const orderListNum = orderList.length;
 
