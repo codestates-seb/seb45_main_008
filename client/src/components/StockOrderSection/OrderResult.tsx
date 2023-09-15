@@ -91,15 +91,17 @@ const OrderResult = () => {
 
 export default OrderResult;
 
-// 개별 미체결 거래내역
+// 개별 거래내역
 const OrderedStock = (props: OrderdStockProps) => {
   const { orderType, orderPrice, orderVolume, companyId, orderId, recordType } = props;
 
   const [orderCancle, setOrderCancle] = useState(false);
   const { companyList } = useGetCompanyList();
 
+  const dummyDate = "2023-09-15"; // dummyData
   const price = orderPrice.toLocaleString();
   const volume = orderVolume.toLocaleString();
+  const totalOrderPrice = (orderPrice * orderVolume).toLocaleString();
 
   const corp = companyList.filter((corp: companyProps) => corp.companyId === companyId);
   const corpName = corp[0].korName;
@@ -128,7 +130,15 @@ const OrderedStock = (props: OrderdStockProps) => {
             </span>
           </div>
         </div>
-        {!recordType && (
+        {recordType ? (
+          <div className="orderRusultContainer">
+            <div className="orderResult">
+              <span className="totalPrice">{totalOrderPrice}</span>
+              <span className="priceUnit">{priceUnit}</span>
+            </div>
+            <div className="orderDate">{dummyDate}</div>
+          </div>
+        ) : (
           <div className="buttonContainer">
             <button className="cancelButton" onClick={handleSetOrderCancle}>
               {cancelButtonText}
@@ -412,6 +422,27 @@ const StockContainer = styled.div<{ orderType: string }>`
       .volume {
         color: darkgray;
       }
+    }
+  }
+
+  .orderRusultContainer {
+    flex: 1.4 0 0;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-end;
+    gap: 1px;
+
+    & div {
+      width: max-content;
+      font-size: 11px;
+      padding-left: 6px;
+      padding-right: 6px;
+    }
+
+    .orderResult {
+      color: ${(props) => (props.orderType === "매도" ? "#2679ed" : "#e22926")};
     }
   }
 
