@@ -8,6 +8,9 @@ import { StockInfoProps } from "../../models/stockInfoProps";
 const priceSettingTitle: string = "가격";
 const unitText: string = "원";
 
+const noVolumeNotification: string = " [거래량 없음] 주문 시 대기 처리 됩니다";
+const existVolumeNotification: string = " [거래량 있음] 주문 시 체결 처리 됩니다";
+
 const PriceSetting = (props: OwnProps) => {
   const { stockInfo, companyId } = props;
 
@@ -57,10 +60,6 @@ const PriceSetting = (props: OwnProps) => {
     handleCheckTradePossibility();
   }, [orderPrice, orderType]);
 
-  // 가격 설정란에서 포커스 제거 -> 안내 메세지 제거
-  const handleRemoveNoVolumeNotification = () => {
-    setOrderPossibility(true);
-  };
   // 🔴 [TestCode] 거래가능 안내 메세지 테스트 -> 🟢 구현 성공하여 코드 정리할 예정
 
   // 거래가 증가/감소
@@ -118,36 +117,26 @@ const PriceSetting = (props: OwnProps) => {
   }, [companyId]);
 
   return (
-    <>
-      <Container>
-        <div className="PriceCategoryBox">
-          <div className="Title">{priceSettingTitle}</div>
+    <Container>
+      <div className="PriceCategoryBox">
+        <div className="Title">{priceSettingTitle}</div>
+      </div>
+      <div className="PriceSettingBox">
+        <PriceController defaultValue={orderPrice} value={orderPrice} onChange={handleWriteOrderPrice} onKeyDown={handleInputArrowBtn} onFocus={handleCheckTradePossibility} />
+        <UnitContent>{unitText}</UnitContent>
+        <div className="DirectionBox">
+          <button className="PriceUp" onClick={handlePlusOrderPrice}>
+            &#8896;
+          </button>
+          <button className="PriceDown" onClick={handleMinusOrderPrice}>
+            &#8897;
+          </button>
         </div>
-        <div className="PriceSettingBox">
-          <PriceController defaultValue={orderPrice} value={orderPrice} onChange={handleWriteOrderPrice} onKeyDown={handleInputArrowBtn} onFocus={handleCheckTradePossibility} onBlur={handleRemoveNoVolumeNotification} />
-          <UnitContent>{unitText}</UnitContent>
-          <div className="DirectionBox">
-            <button className="PriceUp" onClick={handlePlusOrderPrice} onBlur={handleRemoveNoVolumeNotification}>
-              &#8896;
-            </button>
-            <button className="PriceDown" onClick={handleMinusOrderPrice} onBlur={handleRemoveNoVolumeNotification}>
-              &#8897;
-            </button>
-          </div>
-        </div>
-      </Container>
-
-      {/* 거래 불가 테스트 */}
-      {!orderPossibility && (
-        <NoTradingVolume>
-          <div className="container">
-            거래 불가하며 예약 거래 됨을 공지
-            <div></div>
-            <div></div>
-          </div>
-        </NoTradingVolume>
-      )}
-    </>
+      </div>
+      <CheckTradingVolume orderPossibility={orderPossibility}>
+        <div>&#10004; {orderPossibility ? `${existVolumeNotification}` : `${noVolumeNotification}`}</div>
+      </CheckTradingVolume>
+    </Container>
   );
 };
 
@@ -160,6 +149,7 @@ interface OwnProps {
 
 // component 생성
 const Container = styled.div`
+  position: relative;
   width: 100%;
   margin-top: 21px;
   margin-bottom: 34px;
@@ -247,8 +237,11 @@ const UnitContent = styled.div`
   background-color: #ffffff;
 `;
 
-const NoTradingVolume = styled.div`
+const CheckTradingVolume = styled.div<{ orderPossibility: boolean }>`
   position: absolute;
-  top: 222px;
-  right: 4%;
+  top: 61px;
+  left: 2px;
+  font-size: 0.77em;
+  color: ${(props) => (props.orderPossibility ? "#2679ed" : "#e22926")};
+  transition: color 0.3s ease-in-out;
 `;
