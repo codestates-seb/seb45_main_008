@@ -11,7 +11,6 @@ const useGetStockChart = (companyId: number) => {
   useEffect(() => {
     if (stockPrice) {
       setChartData(stockPrice);
-
       const { interval, min } = calculateYAxisOptions(stockPrice);
       setYAxisInterval(interval);
       setYAxisMinPrice(min);

@@ -19,10 +19,10 @@ import Welcome from "../components/Signups/Welcome";
 import ProfileModal from "../components/Profile/profileModal";
 import { StateProps } from "../models/stateProps";
 import { TabContainerPage } from "./TabPages/TabContainerPage";
+import { RootState } from "../store/config";
 
 // 🔴 로그아웃 관련 action 함수
-import { setLogoutState } from "../reducer/member/loginSlice";
-import { setLoginState } from "../reducer/member/loginSlice";
+import {  setLoginState } from "../reducer/member/loginSlice"
 
 const MainPage = () => {
   const expandScreen = useSelector((state: StateProps) => state.expandScreen);
@@ -33,6 +33,8 @@ const MainPage = () => {
   const [userEmail, setUserEmail] = useState("");
   const [isWelcomeModalOpen, setWelcomeModalOpen] = useState(false);
   const [isProfileModalOpen, setProfileModalOpen] = useState(false); //프로필 모달 보이기/숨기기
+
+
 
   const openOAuthModal = useCallback(() => {
     setOAuthModalOpen(true);
@@ -93,23 +95,16 @@ const MainPage = () => {
     setWelcomeModalOpen(false);
   }, []);
 
-  // 🔴 로그인 지역 상태 제거 → 전역 상태로 대체 (지역 상태 관련된 코드 싹 다 지워야함... -> 전역 상태 만들었으니 전역 상태로 활용)
   const dispatch = useDispatch();
-  const isLogin = useSelector((state: StateProps) => state.login);
+  const isLogin = useSelector((state: RootState) => state.login);
 
   // 🔴 페이지 로드 시 로컬 스토리지의 토큰을 기반으로 로그인 상태를 확인합니다.
   useEffect(() => {
-    const authToken = localStorage.getItem("authToken");
+    const authToken = localStorage.getItem("Authorization");
     if (authToken !== null) {
       dispatch(setLoginState());
     }
-  });
-
-  // 🔴 로그아웃 시 로컬스토리지에 있는 Auth 토큰 제거
-  const handleLogout = () => {
-    dispatch(setLogoutState());
-    localStorage.removeItem("authToken");
-  };
+  }, [dispatch]);
 
   //프로필 모달 열고닫는 매커니즘
   const openProfileModal = useCallback(() => {
@@ -124,6 +119,12 @@ const MainPage = () => {
     dispatch(setLoginState());
   };
 
+  // // 🔴 로그아웃 시 로컬스토리지에 있는 Auth 토큰 제거
+  // const handleLogout = () => {
+  //   dispatch(setLogoutState());
+  //   localStorage.removeItem("Authorization");
+  // };
+
   const handleLoginConfirmationClose = () => {
     setLoginConfirmationModalOpen(false);
   };
@@ -136,8 +137,11 @@ const MainPage = () => {
 
   return (
     <Container>
-      {isLogin === 1 ? <LoginHeader onLogoutClick={handleLogout} onProfileClick={openProfileModal} /> : <LogoutHeader onLoginClick={openOAuthModal} />}
-
+      {isLogin === 1 ? (
+        <LoginHeader onProfileClick={openProfileModal} />
+      ) : (
+        <LogoutHeader onLoginClick={openOAuthModal} />
+      )}
       <Main>
         <CompareChartSection />
         {!expandScreen.left && (

@@ -1,14 +1,14 @@
 import { useState } from "react";
 import styled from "styled-components";
 
-const Comments = ({ postId }: { postId: number }) => {
+const Comments = ({ boardId }: { boardId: number }) => {
   interface CommentData {
     id: number;
     comments: string;
   }
   const [commentData, setCommentData] = useState<CommentData[]>(() => {
     // 게시물별로 로컬 스토리지에서 댓글 데이터를 가져옵니다.
-    const storedData = localStorage.getItem(`commentData_${postId}`);
+    const storedData = localStorage.getItem(`commentData_${boardId}`);
     return storedData ? JSON.parse(storedData) : [];
   });
 
@@ -30,10 +30,7 @@ const Comments = ({ postId }: { postId: number }) => {
       setCommentData((prevCommentData) => [...prevCommentData, newCommentData]);
 
       // 게시물 ID에 따라 로컬 스토리지에 댓글 데이터를 저장합니다.
-      localStorage.setItem(
-        `commentData_${postId}`,
-        JSON.stringify([...commentData, newCommentData])
-      );
+      localStorage.setItem(`commentData_${boardId}`, JSON.stringify([...commentData, newCommentData]));
 
       // 댓글 입력창 초기화
       setCommentsValue("");
@@ -51,14 +48,8 @@ const Comments = ({ postId }: { postId: number }) => {
   return (
     <CommentContainer>
       <div>
-        <CommentInput
-          type="text"
-          value={commentsValue}
-          onChange={handleOnChange}
-        />
-        <CommentInputSubmit onClick={() => handleClickSubmit()}>
-          {CommentText.write}
-        </CommentInputSubmit>
+        <CommentInput type="text" value={commentsValue} onChange={handleOnChange} />
+        <CommentInputSubmit onClick={() => handleClickSubmit()}>{CommentText.write}</CommentInputSubmit>
         <CommentCount onClick={handleShowMoreComments}>
           {CommentText.replyCount}
           {commentData.length}

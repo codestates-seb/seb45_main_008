@@ -1,8 +1,11 @@
 import { useSelector, useDispatch } from "react-redux";
 import { isHoliday } from "@hyunbinseo/holidays-kr";
+import { setStockOrderVolume } from "../../reducer/StockOrderVolume-Reducer";
 import { closeDecisionWindow } from "../../reducer/SetDecisionWindow-Reducer";
 import { styled } from "styled-components";
+import { toast } from "react-toastify";
 import { StateProps } from "../../models/stateProps";
+import useTradeStock from "../../hooks/useTradeStock";
 
 import StockPriceList from "./StockPriceList";
 import StockOrderSetting from "./StockOrderSetting";
@@ -25,6 +28,8 @@ const volumeUnit: string = "주";
 const cancelButtonText: string = "취소";
 const confirmButtonText: string = "확인";
 
+const toastText: string = " 요청이 완료되었습니다";
+
 const StockOrder = ({ corpName }: { corpName: string }) => {
   const dispatch = useDispatch();
   const orderType = useSelector((state: StateProps) => state.stockOrderType);
@@ -41,19 +46,61 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
     dispatch(closeDecisionWindow());
   };
 
+  //🔴 주문 관련 테스트
+  const orderRequest = useTradeStock();
+
+  const handleOrderConfirm = () => {
+    orderRequest.mutate();
+    const { isLoading, isError } = orderRequest;
+
+    if (isLoading) {
+      console.log("주식 주문 진행 중");
+    }
+
+    if (isError) {
+      console.log("주문 오류 발생");
+    }
+
+    toast(
+      <ToastMessage orderType={orderType}>
+        <div className="overview">
+          <img src={dummyImg} />
+          <div className="orderInfo">
+            {corpName} {volume}
+            {volumeUnit}
+          </div>
+        </div>
+        <div>
+          <span className="orderType">✓ {orderTypeText}</span>
+          <span>{toastText}</span>
+        </div>
+      </ToastMessage>,
+      {
+        position: toast.POSITION.BOTTOM_LEFT,
+        // autoClose: 2000,
+        hideProgressBar: true,
+      }
+    );
+
+    dispatch(setStockOrderVolume(0));
+    handleCloseDecisionWindow();
+  };
+
   // 1) 주말, 공휴일 여부 체크
   const today = new Date();
   const nonBusinessDay = isHoliday(today, { include: { saturday: true, sunday: true } }); // 토요일, 일요일, 공휴일 (임시 공휴일 포함)
 
-  // 2) 개장시간 여부 체크
-  const currentHour = today.getHours();
-  const currentMinute = today.getMinutes();
-  const isBefore9AM = currentHour < 9;
-  const isAfter330PM = currentHour > 15 || (currentHour === 15 && currentMinute >= 30);
-  const closingTime = isBefore9AM || isAfter330PM;
+  // 🟢 2) 개장시간 여부 체크
+  // const currentHour = today.getHours();
+  // const currentMinute = today.getMinutes();
+  // const isBefore9AM = currentHour < 9;
+  // const isAfter330PM = currentHour > 15 || (currentHour === 15 && currentMinute >= 30);
+  // const closingTime = isBefore9AM || isAfter330PM;
 
   // 주문 실패 케이스 1) 개장시간  2) 가격/거래량 설정
-  const orderFailureCase01 = nonBusinessDay || closingTime;
+  // 🔴 3시 30분 이후 작업 위해 closingTime 조건 해제
+  const orderFailureCase01 = nonBusinessDay;
+  // const orderFailureCase01 = nonBusinessDay || closingTime;
   const orderFailureCase02 = orderPrice === 0 || orderVolume === 0;
 
   return (
@@ -105,7 +152,7 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
                   <button className="cancel" onClick={handleCloseDecisionWindow}>
                     {cancelButtonText}
                   </button>
-                  <button className="confirm" onClick={handleCloseDecisionWindow}>
+                  <button className="confirm" onClick={handleOrderConfirm}>
                     {confirmButtonText}
                   </button>
                 </div>
@@ -279,5 +326,33 @@ const OrderConfirm = styled.div<{ orderType: boolean }>`
         background-color: ${(props) => (!props.orderType ? "#e22926" : "#2679ed")};
       }
     }
+  }
+`;
+
+const ToastMessage = styled.div<{ orderType: boolean }>`
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  font-size: 14px;
+
+  .overview {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: 700;
+    gap: 6px;
+  }
+
+  & img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    padding-bottom: 3px;
+  }
+
+  .orderType {
+    color: ${(props) => (!props.orderType ? "#e22926" : "#2679ed")};
   }
 `;
