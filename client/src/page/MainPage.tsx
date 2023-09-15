@@ -10,8 +10,9 @@ import EmailSignupModal from "../components/Signups/EmailSignup";
 import EmailVerificationModal from "../components/Signups/EmailCertify";
 import PasswordSettingModal from "../components/Signups/Password";
 import CentralChart from "../components/CentralChart/Index";
-import WatchList from "../components/EntireList/EntireList";
-import Holdings from "../components/HoldingList/Holdings"; // Assuming you have a Holdings component
+import EntireList from "../components/EntireList/EntireList";
+import HoldingList from "../components/HoldingList/HoldingList"; 
+import WatchList from "../components/WatchList/WatchList"; // Assuming you have a Holdings component
 import CompareChartSection from "../components/CompareChartSection/Index";
 import StockOrderSection from "../components/StockOrderSection/Index";
 import Welcome from "../components/Signups/Welcome";
@@ -141,11 +142,13 @@ const MainPage = () => {
         <CompareChartSection />
         {!expandScreen.left && (
            <LeftSection>
-           {selectedMenu === "전체종목" ? (
-             <WatchList key="watchlist" currentListType={selectedMenu} onChangeListType={handleMenuChange} />
-           ) : (
-             <Holdings currentListType={selectedMenu} onChangeListType={handleMenuChange} />
-           )}
+            {selectedMenu === "전체종목" ? (
+              <EntireList key="entirelist" currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+            ) : selectedMenu === "보유종목" ? (
+              <HoldingList key="holdinglist" currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+            ) : (
+              <WatchList key="watchlist" currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+            )}
          </LeftSection>
         )}
         <CentralChart />

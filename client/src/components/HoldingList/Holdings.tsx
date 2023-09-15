@@ -29,7 +29,7 @@ const Holdings: React.FC<holdingsProps> = ({ currentListType, onChangeListType }
         {isMenuOpen && (
           <SlideMenu>
             <MenuItem onClick={() => { onChangeListType('관심종목'); setMenuOpen(false); }}>관심종목</MenuItem>
-            <MenuItem onClick={() => { onChangeListType('보유종목'); setMenuOpen(false); }}>투자종목</MenuItem>
+            <MenuItem onClick={() => { onChangeListType('보유종목'); setMenuOpen(false); }}>보유종목</MenuItem>
             <MenuItem onClick={() => { onChangeListType('전체종목'); setMenuOpen(false); }}>전체종목</MenuItem>
           </SlideMenu>
         )}

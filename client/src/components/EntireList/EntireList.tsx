@@ -4,7 +4,7 @@ import Header from './Header';
 import StockItem from './StockItem';
 import useCompanyData from '../../hooks/useCompanyData';
 
-const WatchList: React.FC<WatchListProps> = ({ currentListType, onChangeListType }) => {
+const EntireList: React.FC<EntireListProps> = ({ currentListType, onChangeListType }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [showChangePrice, setShowChangePrice] = useState(false);
 
@@ -46,7 +46,7 @@ const WatchList: React.FC<WatchListProps> = ({ currentListType, onChangeListType
 };
 
 // Props와 상태에 대한 타입 정의
-type WatchListProps = {
+type EntireListProps = {
   currentListType: '전체종목' | '관심종목' | '보유종목';
   onChangeListType: (type: '전체종목' | '관심종목' | '보유종목') => void;
 };
@@ -88,9 +88,9 @@ text-align: center;
 color: red; // 수익금이 플러스일 경우 초록색으로 표시
 `;
 const StockList = styled.div`
-  width: 90%;
-  max-height: 800px; /* 스크롤이 발생할 최대 높이를 지정하세요 */
+  width: 100%;
+  max-height: 740px; /* 스크롤이 발생할 최대 높이를 지정하세요 */
   overflow-y: auto; /* 세로 스크롤을 활성화합니다 */
 `;
 
-export default WatchList;
+export default EntireList;

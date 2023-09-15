@@ -42,6 +42,7 @@ const HeaderWrapper = styled.div`
 
 const Icon = styled.img`
   margin-top: 9.5px;
+  margin-left: 10px;
   width: 24px;
   height: 24px;
   cursor: pointer;
