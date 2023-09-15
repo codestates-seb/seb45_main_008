@@ -20,24 +20,21 @@ const orderPendingEmptyMessage: string = "거래 내역이 없습니다";
 
 const OrderResult = () => {
   const { orderRecordData } = useGetStockOrderRecord();
-  const [recordType, setRecordType] = useState(false);
+  const [recordType, setRecordType] = useState(true);
 
   const orderWaitList = orderRecordData.filter((order: OrderRecordProps) => order.orderStates === "ORDER_WAIT");
   const orderCompleteList = orderRecordData.filter((order: OrderRecordProps) => order.orderStates === "ORDER_COMPLETE");
 
-  // 최근 주문이 상단에 노출되도록 배열 순서 변경
-  orderWaitList.reverse();
-  orderCompleteList.reverse();
   const orderList = recordType ? orderCompleteList : orderWaitList;
   const orderListNum = orderList.length;
 
   const handleChangeRecordType = (type: string) => {
-    if (type === "wait") {
-      setRecordType(false);
-    }
-
     if (type === "complete") {
       setRecordType(true);
+    }
+
+    if (type === "wait") {
+      setRecordType(false);
     }
   };
 
@@ -79,7 +76,7 @@ const OrderResult = () => {
                   animate={{ opacity: 1, y: 0 }} // 애니메이션 중인 상태
                   exit={{ opacity: 0, y: -20 }} // 빠져나가는 상태
                 >
-                  <OrderedStock recordType={recordType} index={index} orderType={orderType} orderPrice={price} orderVolume={volume} companyId={companyId} orderId={orderId} />
+                  <OrderedStock index={index} recordType={recordType} orderType={orderType} orderPrice={price} orderVolume={volume} companyId={companyId} orderId={orderId} />
                 </motion.div>
               );
             })}
@@ -112,11 +109,12 @@ const OrderedStock = (props: OrderdStockProps) => {
     setOrderCancle(!orderCancle);
   };
 
-  // 거래내역 창 전환 시 가장 상단이 렌더링 되도록 설정
   useEffect(() => {
-    ref.current?.focus();
-    ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
-  }, [orderCancle]);
+    if (index === 0 && ref.current) {
+      ref.current.focus();
+      ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [recordType]);
 
   return (
     <>

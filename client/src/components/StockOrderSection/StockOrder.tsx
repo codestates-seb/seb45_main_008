@@ -90,16 +90,18 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
   const today = new Date();
   const nonBusinessDay = isHoliday(today, { include: { saturday: true, sunday: true } }); // 토요일, 일요일, 공휴일 (임시 공휴일 포함)
 
-  // 2) 개장시간 여부 체크
-  const currentHour = today.getHours();
-  const currentMinute = today.getMinutes();
-  const isBefore9AM = currentHour < 9;
-  const isAfter330PM = currentHour > 15 || (currentHour === 15 && currentMinute >= 30);
-  const closingTime = isBefore9AM || isAfter330PM;
+  // 🟢 2) 개장시간 여부 체크
+  // const currentHour = today.getHours();
+  // const currentMinute = today.getMinutes();
+  // const isBefore9AM = currentHour < 9;
+  // const isAfter330PM = currentHour > 15 || (currentHour === 15 && currentMinute >= 30);
+  // const closingTime = isBefore9AM || isAfter330PM;
 
   // 주문 실패 케이스 1) 개장시간  2) 가격/거래량 설정
-  // 🔴 3시 30분 이후 작업 위해 closingTime 조건 해제
-  const orderFailureCase01 = nonBusinessDay;
+  // 🔴 3시 30분 이후 작업 위해 closingTime 조건 해제 + 주말 요건도 해제
+  const orderFailureCase01 = false;
+
+  // 🟢 기존로직
   // const orderFailureCase01 = nonBusinessDay || closingTime;
   const orderFailureCase02 = orderPrice === 0 || orderVolume === 0;
 

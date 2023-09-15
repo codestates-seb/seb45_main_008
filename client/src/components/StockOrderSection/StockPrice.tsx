@@ -1,5 +1,3 @@
-import useGetStockData from "../../hooks/useGetStockData";
-import useGetStockInfo from "../../hooks/useGetStockInfo";
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
@@ -9,11 +7,7 @@ import { StateProps } from "../../models/stateProps";
 const changeRateUnit = `%`;
 
 const StockPrice = (props: StockPriceProps) => {
-  const { index, price, volume, totalSellingVolume, totalBuyingVolum } = props;
-
-  const companyId = useSelector((state: StateProps) => state.companyId);
-  const { stockPrice, stockPriceLoading, stockPriceError } = useGetStockData(companyId);
-  const { stockInfo } = useGetStockInfo(companyId);
+  const { index, price, volume, changeRate, totalSellingVolume, totalBuyingVolum } = props;
 
   const dispatch = useDispatch();
   const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
@@ -23,27 +17,12 @@ const StockPrice = (props: StockPriceProps) => {
     dispatch(setStockOrderPrice(price));
   };
 
-  // 가격 리스트 중 10번째 순서인 요소가 화면 렌더링 시 정중앙에 오도록 설정
   useEffect(() => {
-    if (!stockPriceLoading && !stockPriceError) {
-      ref.current?.focus();
-      ref.current?.scrollIntoView({ behavior: "smooth", block: "center" });
+    if (index === 9 && ref.current) {
+      ref.current.focus();
+      ref.current.scrollIntoView({ behavior: "smooth", block: "center" });
     }
-  }, [stockPrice]);
-
-  if (stockPriceLoading) {
-    return;
-  }
-
-  if (stockPriceError || stockPrice.length === 0) {
-    return;
-  }
-
-  // 전날 종가대비 매도/매수호가 변동률 계산
-  const presentStockPrice = parseInt(stockInfo.stockInfResponseDto.stck_prpr, 10); // 현재가
-  const priceChageAmountComparedYesterday = parseInt(stockInfo.stockInfResponseDto.prdy_vrss, 10); // 전날 종가대비 현재가 가격 차이
-  const yesterDayStockClosingPrice = presentStockPrice - priceChageAmountComparedYesterday; // 잔날종가 = 현재가 - 전날 종가대비 현재가 가격 차이
-  const changeRate = (((price - yesterDayStockClosingPrice) / yesterDayStockClosingPrice) * 100).toFixed(2);
+  }, [ref.current]);
 
   return (
     <Container index={index} ref={index === 9 ? ref : null} price={price} orderPrice={orderPrice} onClick={handleSetOrderPrice}>
@@ -81,6 +60,7 @@ interface StockPriceProps {
   index: number;
   price: number;
   volume: number;
+  changeRate: string;
   totalSellingVolume: number;
   totalBuyingVolum: number;
 }
