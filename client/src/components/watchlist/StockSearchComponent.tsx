@@ -69,6 +69,7 @@ const SearchContainer = styled.div`
   display: flex;
   align-items: center;
   flex-grow: 0.7;
+  margin: 1px 10px;
 `;
 
 const StyledSearchInput = styled.input.attrs({

@@ -46,6 +46,7 @@ const Icon = styled.img`
   height: 24px;
   cursor: pointer;
   margin-right: 10px;
+  margin-left:10px;
 `;
 
 const HeaderText = styled.span`

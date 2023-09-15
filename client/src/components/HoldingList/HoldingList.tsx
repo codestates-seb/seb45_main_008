@@ -13,6 +13,10 @@ const HoldingList: React.FC<WatchListProps> = ({ currentListType, onChangeListTy
   const { stockHolds, stockHoldsLoading: isLoading, stockHoldsError: isError } = useGetStockHolds();
   const { data: companyData, isLoading: isCompanyDataLoading, isError: isCompanyDataError } = useCompanyData(1, 14);
 
+  // 모든 stockReturn의 합을 계산합니다.
+  const totalEvaluationProfit = stockHolds.reduce((sum: number, stockHold: StockItemProps['stockData']) => sum + stockHold.stockReturn, 0);
+
+
   return (
     <WatchListContainer>
       <Header
@@ -22,7 +26,7 @@ const HoldingList: React.FC<WatchListProps> = ({ currentListType, onChangeListTy
         setMenuOpen={setMenuOpen}
       />
       <Divider1 />
-      <EvaluationProfit>평가 수익금: +5,000,000원</EvaluationProfit>
+      <EvaluationProfit>평가 수익금: {totalEvaluationProfit.toLocaleString()}원</EvaluationProfit>
       <Divider2 />
       <StockList>
         {isLoading || isCompanyDataLoading ? (
@@ -52,6 +56,7 @@ export default HoldingList;
 type WatchListProps = {
   currentListType: '전체종목' | '관심종목' | '보유종목';
   onChangeListType: (type: '전체종목' | '관심종목' | '보유종목') => void;
+
 };
 
 const WatchListContainer = styled.div`
@@ -69,6 +74,13 @@ const Divider1 = styled.div`
   flex-direction: row;
   border-bottom: 1px solid #2f4f4f;
 `;
+const EvaluationProfit = styled.div`
+  font-size: 16px;
+  font-weight: bold;
+  margin: 8px 12px;
+  text-align: center;
+  color: red;
+`;
 
 const Divider2 = styled.div`
   margin: 0px;
@@ -80,13 +92,7 @@ const Divider2 = styled.div`
   border-bottom: 1px solid #2f4f4f;
 `;
 
-const EvaluationProfit = styled.div`
-  font-size: 16px;
-  font-weight: bold;
-  margin: 8px 0;
-  text-align: center;
-  color: red;
-`;
+
 const StockList = styled.div`
   width: 90%;
   max-height: 800px;
