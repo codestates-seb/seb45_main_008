@@ -1,12 +1,16 @@
 import axios from "axios";
 import { useState, useEffect } from "react"; // useEffect 추가
 import styled from "styled-components";
+import { useDispatch } from "react-redux";
+import { changeCompanyId } from "../../reducer/CompanyId-Reducer";
+
 const MarketServerUrl =
   "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/companies";
 
 const MarketStockList: React.FC = () => {
   const [marketStockList, setMarketStockList] = useState<any[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+
   useEffect(() => {
     MarketDataFromServer();
   }, []);
@@ -27,9 +31,10 @@ const MarketStockList: React.FC = () => {
     sortedList.sort((a, b) => a.korName.localeCompare(b.korName));
     setMarketStockList(sortedList);
   };
+  const dispatch = useDispatch();
 
   return (
-    <div>
+    <StockListContainer>
       <StockListTitle>
         <StockListDetail onClick={SortName}>
           {MarketStockLists.stockName}
@@ -40,7 +45,7 @@ const MarketStockList: React.FC = () => {
       </StockListTitle>
 
       {marketStockList.map((el) => (
-        <StockListInfo>
+        <StockListInfo onClick={() => dispatch(changeCompanyId(el.companyId))}>
           <div>
             {isLoading === true ? (
               <div>{MarketStockLists.isLoading}</div>
@@ -49,12 +54,11 @@ const MarketStockList: React.FC = () => {
             )}
             <StockCode key={el.code}>{el.code}</StockCode>
             <br />
-            <StockInfo>{el.stockInfResponseDto}</StockInfo>
           </div>
           <AfterLine></AfterLine>
         </StockListInfo>
       ))}
-    </div>
+    </StockListContainer>
   );
 };
 
@@ -67,6 +71,10 @@ const MarketStockLists = {
   stockTrade: "#거래량",
   isLoading: "isLoading...",
 };
+
+const StockListContainer = styled.div`
+  max-height: 500px;
+`;
 const StockListTitle = styled.div`
   display: flex;
   justify-content: space-around;
@@ -96,4 +104,3 @@ const StockListInfo = styled.div`
 `;
 const StockName = styled.div``;
 const StockCode = styled.div``;
-const StockInfo = styled.div``;

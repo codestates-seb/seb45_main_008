@@ -1,9 +1,7 @@
 import useGetStockData from "../../hooks/useGetStockData";
-import { StockProps } from "../../models/stockProps";
-
+import useGetStockInfo from "../../hooks/useGetStockInfo";
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { isHoliday } from "@hyunbinseo/holidays-kr";
 import { styled } from "styled-components";
 import { setStockOrderPrice } from "../../reducer/StockOrderPrice-Reducer";
 import { StateProps } from "../../models/stateProps";
@@ -15,6 +13,7 @@ const StockPrice = (props: StockPriceProps) => {
 
   const companyId = useSelector((state: StateProps) => state.companyId);
   const { stockPrice, stockPriceLoading, stockPriceError } = useGetStockData(companyId);
+  const { stockInfo } = useGetStockInfo(companyId);
 
   const dispatch = useDispatch();
   const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
@@ -40,46 +39,11 @@ const StockPrice = (props: StockPriceProps) => {
     return;
   }
 
-  // 전날 종가 데이터 계산 -> 1) 화~토 : 바로 전날   2) 월요일 및 공휴일 : 영업일 기준 전날
-  let previousDayStockClosingPrice: number = 0;
-
-  const today = new Date();
-  const getToday = today.getDay();
-  const daysOfWeek = ["일", "월", "화", "수", "목", "금", "토"];
-  const nowInKoreanTime = new Date(today.getTime() + 9 * 60 * 60 * 1000); // 날짜 계산 -> UTC 시간에 9시간 더해서 한국 시간대로 변환
-
-  const nonBusinessDay = isHoliday(today, { include: { sunday: true } }); // 일요일, 공휴일 (임시 공휴일 포함) 체크
-  const isMonday = daysOfWeek[getToday] === "월"; // 월요일인지 체크
-
-  if (nonBusinessDay || isMonday) {
-    const standardDay = new Date(nowInKoreanTime);
-    const todayYymmdd = standardDay.toISOString().slice(0, 10);
-
-    const yesterdayStockInfo = stockPrice.filter((stockInfo: StockProps) => {
-      const dayInfo = stockInfo.stockTradeTime.slice(0, 10);
-      return dayInfo !== todayYymmdd && stockInfo;
-    });
-
-    if (yesterdayStockInfo.length !== 0) {
-      previousDayStockClosingPrice = parseInt(yesterdayStockInfo[yesterdayStockInfo.length - 1].stck_prpr);
-    }
-  } else {
-    const standardDay = new Date(nowInKoreanTime);
-    standardDay.setDate(nowInKoreanTime.getDate() - 1);
-    const yesterdayYymmdd = standardDay.toISOString().slice(0, 10);
-
-    const yesterdayStockInfo = stockPrice.filter((stockInfo: StockProps) => {
-      const dayInfo = stockInfo.stockTradeTime.slice(0, 10);
-      return dayInfo === yesterdayYymmdd && stockInfo;
-    });
-
-    if (yesterdayStockInfo.length !== 0) {
-      previousDayStockClosingPrice = parseInt(yesterdayStockInfo[yesterdayStockInfo.length - 1].stck_prpr);
-    }
-  }
-
-  // 전날 종가대비 매도/매수호가 변동률
-  const changeRate = (((price - previousDayStockClosingPrice) / previousDayStockClosingPrice) * 100).toFixed(2);
+  // 전날 종가대비 매도/매수호가 변동률 계산
+  const presentStockPrice = parseInt(stockInfo.stockInfResponseDto.stck_prpr, 10); // 현재가
+  const priceChageAmountComparedYesterday = parseInt(stockInfo.stockInfResponseDto.prdy_vrss, 10); // 전날 종가대비 현재가 가격 차이
+  const yesterDayStockClosingPrice = presentStockPrice - priceChageAmountComparedYesterday; // 잔날종가 = 현재가 - 전날 종가대비 현재가 가격 차이
+  const changeRate = (((price - yesterDayStockClosingPrice) / yesterDayStockClosingPrice) * 100).toFixed(2);
 
   return (
     <Container index={index} ref={index === 9 ? ref : null} price={price} orderPrice={orderPrice} onClick={handleSetOrderPrice}>
