@@ -1,71 +1,40 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import styled from 'styled-components';
-// import kakaoLogo from '../../asset/images/KakaoLogo.svg';  
-// import axios from 'axios';
-import GoogleLoginButton from './GoogleLoginButton'
+import GoogleLoginButton from './GoogleLoginButton';
 import KakaoLoginButton from './KakaoLoginButton';
-
-
-
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store/config';
+import TokenHandler from './TokenHandler';
 
 const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick, onEmailSignupClick }) => {
     const titleText = "로그인";
-
-    // const kakaoLoginText = "카카오로 로그인";
     const orText = "또는";
     const emailLoginText = "이메일로 로그인";
     const emailSignupText = "이메일로 회원가입";
 
-    // URL에서 엑세스 토큰과 리프레시 토큰을 추출합니다.
-    const urlParams = new URLSearchParams(window.location.search);
-    const accessToken = urlParams.get("access_token");
-    const refreshToken = urlParams.get("refresh_token");
+    const loginState = useSelector((state: RootState) => state.login);
+    console.log("Login State:", loginState);
 
-    if (accessToken && refreshToken) {
-        // 엑세스 토큰을 로컬 스토리지에 저장합니다.
-        localStorage.setItem("Authorization", `Bearer ${accessToken}`);
+    
 
-        // 리프레시 토큰을 로컬 스토리지에 저장합니다.
-        localStorage.setItem("Refresh-token", refreshToken);
-    }
-
-
-
-    // const handleGoogleLogout = async () => {
-    //     googleLogout();
-    // }
-
-    //임시로 비활성화
-
-    // const handleKakaoLogin = async () => {
-    //     try {
-    //         const response = await axios.get('/oauth2/authorization/kakao');
-    //         if (response.status === 200) {
-    //             const redirectUri = response.data.uri;
-    //             window.location.href = redirectUri;
-    //         } else {
-    //             console.error("Error logging in with Kakao, unexpected status code:", response.status);
-    //         }
-    //     } catch (error) {
-    //         console.error("Error logging in with Kakao:", error);
-    //     }
-    // };
+    useEffect(() => {
+        if (loginState === 1) {
+            onClose();
+        }
+    }, [loginState, onClose]);
 
     return (
         <ModalBackground>
             <ModalContainer>
+                <TokenHandler />
                 <CloseButton onClick={onClose}>&times;</CloseButton>
                 <Title>{titleText}</Title>
                 <GoogleLoginButton backendURL="http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google" />
                 <KakaoLoginButton backendURL="http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/kakao" />
-                {/*임시로 비활성화 <KakaoButton onClick={handleKakaoLogin}>
-                    <LogoImage src={kakaoLogo} alt="Kakao Logo" />
-                    {kakaoLoginText}
-                </KakaoButton> */}
                 <OrText>{orText}</OrText>
                 <EmailButtonsContainer>
                     <EmailButton onClick={onEmailLoginClick}>{emailLoginText}</EmailButton>
-                    <EmailButton onClick={onEmailSignupClick}>{emailSignupText}</EmailButton> 
+                    <EmailButton onClick={onEmailSignupClick}>{emailSignupText}</EmailButton>
                 </EmailButtonsContainer>
             </ModalContainer>
         </ModalBackground>
@@ -123,28 +92,6 @@ const OrText = styled.span`
     margin: 20px 0;
     color: grey;
 `;
-
-
-
-// 임시로 비활성화
-// const KakaoButton = styled.button`
-//     margin: 10px 0;
-//     padding: 10px 20px;
-//     background-color: #FFFFFF;
-//     border: 1px solid lightgray;
-//     border-radius: 5px;
-//     cursor: pointer;
-//     width: 300px;
-//     display: flex;
-//     align-items: center;
-//     justify-content: center;
-// `;
-
-// const LogoImage = styled.img`
-//     margin-right: 30px;
-//     width: 60px;
-//     height: auto;
-// `;
 
 const EmailButtonsContainer = styled.div`
     display: flex;
