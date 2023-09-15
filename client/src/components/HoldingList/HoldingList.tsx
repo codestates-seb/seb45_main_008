@@ -14,8 +14,11 @@ const HoldingList: React.FC<WatchListProps> = ({ currentListType, onChangeListTy
   const { data: companyData, isLoading: isCompanyDataLoading, isError: isCompanyDataError } = useCompanyData(1, 14);
 
   // 모든 stockReturn의 합을 계산합니다.
-  const totalEvaluationProfit = stockHolds.reduce((sum: number, stockHold: StockItemProps['stockData']) => sum + stockHold.stockReturn, 0);
+  let totalEvaluationProfit = 0;
 
+  if (stockHolds) {
+    totalEvaluationProfit = stockHolds.reduce((sum:number, stockHold: StockItemProps['stockData']) => sum + stockHold.stockReturn, 0);
+  }
 
   return (
     <WatchListContainer>
