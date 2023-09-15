@@ -3,6 +3,7 @@ import { isHoliday } from "@hyunbinseo/holidays-kr";
 import { setStockOrderVolume } from "../../reducer/StockOrderVolume-Reducer";
 import { closeDecisionWindow } from "../../reducer/SetDecisionWindow-Reducer";
 import { styled } from "styled-components";
+import { toast } from "react-toastify";
 import { StateProps } from "../../models/stateProps";
 import useTradeStock from "../../hooks/useTradeStock";
 
@@ -26,6 +27,8 @@ const priceUnit: string = "원";
 const volumeUnit: string = "주";
 const cancelButtonText: string = "취소";
 const confirmButtonText: string = "확인";
+
+const toastText: string = " 요청이 완료되었습니다";
 
 const StockOrder = ({ corpName }: { corpName: string }) => {
   const dispatch = useDispatch();
@@ -57,6 +60,27 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
     if (isError) {
       console.log("주문 오류 발생");
     }
+
+    toast(
+      <ToastMessage orderType={orderType}>
+        <div className="overview">
+          <img src={dummyImg} />
+          <div className="orderInfo">
+            {corpName} {volume}
+            {volumeUnit}
+          </div>
+        </div>
+        <div>
+          <span className="orderType">✓ {orderTypeText}</span>
+          <span>{toastText}</span>
+        </div>
+      </ToastMessage>,
+      {
+        position: toast.POSITION.BOTTOM_LEFT,
+        // autoClose: 2000,
+        hideProgressBar: true,
+      }
+    );
 
     dispatch(setStockOrderVolume(0));
     handleCloseDecisionWindow();
@@ -302,5 +326,33 @@ const OrderConfirm = styled.div<{ orderType: boolean }>`
         background-color: ${(props) => (!props.orderType ? "#e22926" : "#2679ed")};
       }
     }
+  }
+`;
+
+const ToastMessage = styled.div<{ orderType: boolean }>`
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+
+  font-size: 14px;
+
+  .overview {
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    font-weight: 700;
+    gap: 6px;
+  }
+
+  & img {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    padding-bottom: 3px;
+  }
+
+  .orderType {
+    color: ${(props) => (!props.orderType ? "#e22926" : "#2679ed")};
   }
 `;
