@@ -49,8 +49,8 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) =
         dispatch(setLoginState());
 
         // 토큰들을 로컬 스토리지에 저장
-        if (authToken) localStorage.setItem("authToken", authToken);
-        if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
+        if (authToken) localStorage.setItem("Authorization", authToken);
+        if (refreshToken) localStorage.setItem("Refresh-token", refreshToken);
 
         onLogin();
         onClose();

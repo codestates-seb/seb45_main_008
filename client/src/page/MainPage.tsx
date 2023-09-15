@@ -97,6 +97,7 @@ const MainPage = () => {
 
   const dispatch = useDispatch();
   const isLogin = useSelector((state: RootState) => state.login);
+  console.log(isLogin);
 
   // 🔴 페이지 로드 시 로컬 스토리지의 토큰을 기반으로 로그인 상태를 확인합니다.
   useEffect(() => {
@@ -119,18 +120,15 @@ const MainPage = () => {
     dispatch(setLoginState());
   };
 
-  // // 🔴 로그아웃 시 로컬스토리지에 있는 Auth 토큰 제거
-  // const handleLogout = () => {
-  //   dispatch(setLogoutState());
-  //   localStorage.removeItem("Authorization");
-  // };
 
   const handleLoginConfirmationClose = () => {
     setLoginConfirmationModalOpen(false);
   };
 
+  // 현재 선택된 메뉴 타입을 상태로 관리
   const [selectedMenu, setSelectedMenu] = useState<"전체종목" | "관심종목" | "보유종목">("전체종목");
 
+  // 메뉴 변경 핸들러
   const handleMenuChange = (menu: "전체종목" | "관심종목" | "보유종목") => {
     setSelectedMenu(menu);
   };
@@ -146,13 +144,13 @@ const MainPage = () => {
         <CompareChartSection />
         {!expandScreen.left && (
            <LeftSection>
-            {selectedMenu === "전체종목" ? (
-              <EntireList key="entirelist" currentListType={selectedMenu} onChangeListType={handleMenuChange} />
-            ) : selectedMenu === "보유종목" ? (
-              <HoldingList key="holdinglist" currentListType={selectedMenu} onChangeListType={handleMenuChange} />
-            ) : (
-              <WatchList key="watchlist" currentListType={selectedMenu} onChangeListType={handleMenuChange} />
-            )}
+          {selectedMenu === "전체종목" ? (
+            <EntireList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+          ) : selectedMenu === "관심종목" ? (
+           <WatchList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+          ) : selectedMenu === "보유종목" ? (
+            <HoldingList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+          ) : null}
          </LeftSection>
         )}
         <CentralChart />
