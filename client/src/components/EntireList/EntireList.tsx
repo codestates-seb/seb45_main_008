@@ -47,8 +47,8 @@ const WatchList: React.FC<WatchListProps> = ({ currentListType, onChangeListType
 
 // Props와 상태에 대한 타입 정의
 type WatchListProps = {
-  currentListType: '관심목록' | '투자목록';
-  onChangeListType: (type: '관심목록' | '투자목록') => void;
+  currentListType: '전체종목' | '관심종목' | '보유종목';
+  onChangeListType: (type: '전체종목' | '관심종목' | '보유종목') => void;
 };
 
 // WatchList 컴포넌트에 대한 스타일드 컴포넌트 정의

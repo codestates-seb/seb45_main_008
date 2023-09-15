@@ -10,8 +10,8 @@ import EmailSignupModal from "../components/Signups/EmailSignup";
 import EmailVerificationModal from "../components/Signups/EmailCertify";
 import PasswordSettingModal from "../components/Signups/Password";
 import CentralChart from "../components/CentralChart/Index";
-import WatchList from "../components/watchlist/EntireList";
-import Holdings from "../components/watchlist/Holdings"; // Assuming you have a Holdings component
+import WatchList from "../components/EntireList/EntireList";
+import Holdings from "../components/HoldingList/Holdings"; // Assuming you have a Holdings component
 import CompareChartSection from "../components/CompareChartSection/Index";
 import StockOrderSection from "../components/StockOrderSection/Index";
 import Welcome from "../components/Signups/Welcome";
@@ -127,9 +127,9 @@ const MainPage = () => {
     setLoginConfirmationModalOpen(false);
   };
 
-  const [selectedMenu, setSelectedMenu] = useState<"관심목록" | "투자목록">("투자목록"); // Default menu is 관심목록
+  const [selectedMenu, setSelectedMenu] = useState<"전체종목" | "관심종목" | "보유종목">("전체종목");
 
-  const handleMenuChange = (menu: "관심목록" | "투자목록") => {
+  const handleMenuChange = (menu: "전체종목" | "관심종목" | "보유종목") => {
     setSelectedMenu(menu);
   };
 
@@ -140,14 +140,20 @@ const MainPage = () => {
       <Main>
         <CompareChartSection />
         {!expandScreen.left && (
-          <LeftSection>{selectedMenu === "관심목록" ? <WatchList key="watchlist" currentListType={selectedMenu} onChangeListType={handleMenuChange} /> : <Holdings currentListType={selectedMenu} onChangeListType={handleMenuChange} />}</LeftSection>
+           <LeftSection>
+           {selectedMenu === "전체종목" ? (
+             <WatchList key="watchlist" currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+           ) : (
+             <Holdings currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+           )}
+         </LeftSection>
         )}
         <CentralChart />
         <StockOrderSection />
         {!expandScreen.right && <TabContainerPage></TabContainerPage>}
       </Main>
       {isOAuthModalOpen && (
-        <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} onEmailSignupClick={openEmailSignupModal} onWatchListClick={() => handleMenuChange("관심목록")} onHoldingsClick={() => handleMenuChange("투자목록")} />
+        <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} onEmailSignupClick={openEmailSignupModal} onWatchListClick={() => handleMenuChange("관심종목")} onHoldingsClick={() => handleMenuChange("보유종목")} />
       )}
 
       {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} />}
