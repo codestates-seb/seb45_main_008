@@ -168,7 +168,7 @@ const CancleConfirm = (props: CancelConfirmProps) => {
   const closeButtonText: string = "닫기";
   const confirmButtonText: string = "확인";
   const toastText01: string = "취소";
-  const toastText02: string = " 요청이 완료되었습니다";
+  const toastText02: string = " 처리가 완료되었습니다";
   const price = orderPrice.toLocaleString();
   const totalPrice = (orderPrice * cancleVolume).toLocaleString();
 
