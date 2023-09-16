@@ -4,7 +4,7 @@ import useGetStockInfo from "../../hooks/useGetStockInfo";
 import { StateProps } from "../../models/stateProps";
 
 // dummyData
-import { dummyData } from "./dummyData";
+import dummyLogo from "../../asset/CentralSectionMenu-dummyImg.png";
 
 const marketType: string = "코스피";
 const volumeText: string = "거래량";
@@ -38,7 +38,7 @@ const StockOverview = () => {
 
   return (
     <Container priceChangeRate={priceChageRate}>
-      <img className="CorpLogo" src={dummyData.corpLogo} />
+      <img className="CorpLogo" src={dummyLogo} />
       <div className="CorpName">{corpName}</div>
       <div className="StockCode">
         {stockCode} <span>{marketType}</span>
