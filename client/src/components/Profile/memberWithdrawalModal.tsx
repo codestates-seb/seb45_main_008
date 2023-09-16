@@ -14,13 +14,8 @@ const MemberWithdrawalModal: React.FC<MemberWithdrawalModalProps> = ({ onClose }
     const withdrawalButtonText = "회원탈퇴";
 
     const handleWithdrawal = () => {
-        if (inputString === "Codestates/seb-45_main_008") {
-            deleteMemberMutation.mutate(inputString, {
-                onSuccess: () => {
-                    alert('회원탈퇴 되었습니다!');
-                    onClose();
-                }
-            });
+        if (inputString === "Codestates") {
+            deleteMemberMutation.mutate();
         } else {
             setErrorMsg(incorrectStringMsg);
         }
