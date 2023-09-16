@@ -82,8 +82,8 @@ const Divider2 = styled.div`
 `;
 
 const StockList = styled.div`
-  width: 100%;
   height: 100%;
+  width: 100%;
   overflow-y: auto; /* 세로 스크롤을 활성화합니다 */
 
   &::-webkit-scrollbar {

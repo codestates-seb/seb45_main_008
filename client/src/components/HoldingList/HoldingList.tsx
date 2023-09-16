@@ -63,6 +63,7 @@ type WatchListProps = {
 };
 
 const WatchListContainer = styled.div`
+  height: calc(100vh - 53px); 
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -97,7 +98,11 @@ const Divider2 = styled.div`
 
 
 const StockList = styled.div`
-  width: 90%;
-  max-height: 800px;
-  overflow-y: auto;
+  height: 100%;
+  width: 100%;
+  overflow-y: auto; /* 세로 스크롤을 활성화합니다 */
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
