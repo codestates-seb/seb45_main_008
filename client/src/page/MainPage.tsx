@@ -101,11 +101,15 @@ const MainPage = () => {
 
   // 🔴 페이지 로드 시 로컬 스토리지의 토큰을 기반으로 로그인 상태를 확인합니다.
   useEffect(() => {
-    const authToken = localStorage.getItem("Authorization");
-    if (authToken !== null) {
+    const acessToken = localStorage.getItem("acessToken");
+    if (acessToken !== null) {
       dispatch(setLoginState());
     }
   }, [dispatch]);
+
+  const handleOAuthLoginSuccess = useCallback(() => {
+    setLoginConfirmationModalOpen(true);  // 로그인 확인 모달 열기
+}, []);
 
   //프로필 모달 열고닫는 매커니즘
   const openProfileModal = useCallback(() => {
@@ -158,8 +162,15 @@ const MainPage = () => {
         {!expandScreen.right && <TabContainerPage></TabContainerPage>}
       </Main>
       {isOAuthModalOpen && (
-        <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} onEmailSignupClick={openEmailSignupModal} onWatchListClick={() => handleMenuChange("관심종목")} onHoldingsClick={() => handleMenuChange("보유종목")} />
-      )}
+            <OAuthLoginModal 
+                onClose={closeOAuthModal} 
+                onEmailLoginClick={openEmailLoginModal} 
+                onEmailSignupClick={openEmailSignupModal} 
+                onLoginSuccess={handleOAuthLoginSuccess}  // 추가된 부분
+                onWatchListClick={() => handleMenuChange("관심종목")} 
+                onHoldingsClick={() => handleMenuChange("보유종목")} 
+            />
+        )}
 
       {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} />}
       {isLoginConfirmationModalOpen && <LoginConfirmationModal onClose={handleLoginConfirmationClose} />}

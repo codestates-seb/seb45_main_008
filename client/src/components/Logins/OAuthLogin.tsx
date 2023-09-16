@@ -4,21 +4,22 @@ import GoogleLoginButton from './GoogleLoginButton';
 import KakaoLoginButton from './KakaoLoginButton';
 import { useSelector } from 'react-redux';
 import { RootState } from '../../store/config';
-import TokenHandler from './TokenHandler';
 
-const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick, onEmailSignupClick }) => {
+
+const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick, onEmailSignupClick, onLoginSuccess  }) => {
     const titleText = "로그인";
     const orText = "또는";
     const emailLoginText = "이메일로 로그인";
     const emailSignupText = "이메일로 회원가입";
 
     const loginState = useSelector((state: RootState) => state.login);
-    console.log("Login State:", loginState);
+
 
     
 
     useEffect(() => {
         if (loginState === 1) {
+            onLoginSuccess(); 
             onClose();
         }
     }, [loginState, onClose]);
@@ -26,7 +27,7 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
     return (
         <ModalBackground>
             <ModalContainer>
-                <TokenHandler />
+
                 <CloseButton onClick={onClose}>&times;</CloseButton>
                 <Title>{titleText}</Title>
                 <GoogleLoginButton backendURL="http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google" />
@@ -45,6 +46,7 @@ interface LoginModalProps {
     onClose: () => void;
     onEmailLoginClick: () => void;
     onEmailSignupClick: () => void;
+    onLoginSuccess: () => void;  // 추가된 부분
     onWatchListClick: () => void;
     onHoldingsClick: () => void;
 }
