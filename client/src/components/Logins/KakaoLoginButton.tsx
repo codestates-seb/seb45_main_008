@@ -1,8 +1,10 @@
 // KakaoLoginButton.tsx
 
 import React from 'react';
+import styled from 'styled-components';
 import { useDispatch } from 'react-redux';
-import { setLoginState } from '../../reducer/member/loginSlice'; 
+import { setLoginState } from '../../reducer/member/loginSlice';  
+import kakaoLogo from '../../asset/images/KakaoLogo.svg'; 
 
 interface Props {
   backendURL: string;
@@ -11,16 +13,39 @@ interface Props {
 const KakaoLoginButton: React.FC<Props> = ({ backendURL }) => {
   const dispatch = useDispatch();
 
+  const buttonText = "Login with Kakao";
+
   const handleLoginClick = () => {
     window.location.href = `${backendURL}`;
     dispatch(setLoginState());  // 로그인 상태를 변경합니다.
   };
 
   return (
-    <button onClick={handleLoginClick}>
-      Login with Kakao
-    </button>
+    <KakaoButton onClick={handleLoginClick}>
+      <LogoImage src={kakaoLogo} alt="Kakao Logo" />
+      {buttonText}
+    </KakaoButton>
   );
 }
+
+// Styled Components
+const KakaoButton = styled.button`
+  margin: 10px 0;
+  padding: 10px 20px;
+  background-color: #FFFFFF;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 300px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
+const LogoImage = styled.img`
+  margin-right: 30px;
+  width: 60px;
+  height: auto;
+`;
 
 export default KakaoLoginButton;
