@@ -1,5 +1,5 @@
 import { useQuery, useMutation } from 'react-query';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { setCashId, setMoney } from '../reducer/cash/cashSlice';
 import { useSelector } from 'react-redux';
@@ -12,7 +12,6 @@ const getAuthHeader = () => {
     return {
         'Authorization': `${accessToken}`
     };
-
 };
 
 export const useCreateCash = () => {
@@ -21,22 +20,14 @@ export const useCreateCash = () => {
         headers: getAuthHeader()
     }), {
         onSuccess: (res) => {
-            // 200번 응답 처리
             dispatch(setCashId(res.data.cashId));
             dispatch(setMoney(res.data.money));
         },
         onError: (error) => {
-            const axiosError = error as AxiosError<ErrorResponse>;
-            if (axiosError?.response?.status === 400 || axiosError?.response?.status === 401) {
-                // 에러 메시지 출력
-                const errorMessage = axiosError?.response?.data?.message || 'Unknown error occurred.';
-                alert(errorMessage);
-            }
+            console.error(error);
         }
     });
-}
-
-
+};
 
 export const useGetCash = () => {
     const dispatch = useDispatch();
@@ -48,63 +39,32 @@ export const useGetCash = () => {
 
     return useQuery('money', queryFn, {
         onSuccess: (res) => {
-            // 200번 응답 처리
             dispatch(setCashId(res.data.cashId));
             dispatch(setMoney(res.data.money));
         },
         onError: (error) => {
-            const axiosError = error as AxiosError<ErrorResponse>;
-            switch (axiosError?.response?.status) {
-                case 400:
-                case 401:
-                case 404: {
-                    // 중괄호 내에서 변수 선언
-                    const errorMessage = axiosError?.response?.data?.message || 'Unknown error occurred.';
-                    alert(errorMessage);
-                    break;
-                }
-                default:
-                    alert('Unknown error occurred.');
-                    break;
-            }
+            console.error(error);
         },
-        refetchInterval: false, // 자동 재요청 비활성화
-        retry: false            // 재시도 비활성화
+        refetchInterval: false,
+        retry: false,
+        staleTime: 1000 * 60 * 5
     });
 }
 
-
 export const useResetCash = () => {
-    const cashId = useSelector((state: RootState) => state.cash.cashId);  // cashId를 전역 상태에서 가져옵니다.
+    const cashId = useSelector((state: RootState) => state.cash.cashId);
     const dispatch = useDispatch();
 
     return useMutation((data: { money: string }) => axios.patch(`${BASE_URL}/cash/${cashId}`, { "money": data.money }, {
         headers: getAuthHeader()
     }), {
         onSuccess: (data) => {
-            // 200번 응답 처리
             dispatch(setCashId(data.data.cashId));
             dispatch(setMoney(data.data.money));
         },
         onError: (error) => {
-            const axiosError = error as AxiosError<ErrorResponse>;
-            switch (axiosError?.response?.status) {
-                case 400:
-                case 401:
-                case 404: {
-                    const errorMessage = axiosError?.response?.data?.message || 'Unknown error occurred.';
-                    alert(errorMessage);
-                    break;
-                }
-                default:
-                    alert('Unknown error occurred.');
-                    break;
-            }
+            console.error(error);
         }
     });
 }
 
-
-interface ErrorResponse {
-    message: string;
-}

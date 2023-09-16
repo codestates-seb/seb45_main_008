@@ -13,7 +13,7 @@ const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const createCashButtonText = "현금 생성";
     const cashInputPlaceholder = "현금 입력";
     const resetButtonText = "리셋";
-    const refreshButtonText ="새로고침";
+    // const refreshButtonText ="새로고침";
 
     const dispatch = useDispatch();
     const cashId = useSelector((state: RootState) => state.cash.cashId);
@@ -26,10 +26,12 @@ const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const [cashInput, setCashInput] = useState<string>('0');
     const [initialAmount, setInitialAmount] = useState<string>('0'); // 현금 생성을 위한 상태 변수
 
+    
+
     // 현금 정보 재조회 함수
-    const refreshCashInfo = () => {
-        cashQuery.refetch();  // 현금 정보를 다시 가져옵니다.
-    };
+    // const refreshCashInfo = () => {
+    //     cashQuery.refetch();  // 현금 정보를 다시 가져옵니다.
+    // };
 
     // 현금 생성 및 cashId 전역 저장 함수
     const handleCreateCash = () => {
@@ -76,7 +78,7 @@ const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     <p style={{ display: 'inline-block', margin: '20px' }}>
                         현재 현금: {cashQuery.isLoading ? 'Loading...' : money.toLocaleString()}
                     </p>
-                    <RefreshButton onClick={refreshCashInfo}>{refreshButtonText}</RefreshButton>
+                    {/* <RefreshButton onClick={refreshCashInfo}>{refreshButtonText}</RefreshButton> */}
                 </div>
                 <div>
                     <CashInput
@@ -168,9 +170,9 @@ const CashCreationInput = styled.input`
 
 const CreateCashButton = styled(StyledButton)``;
 
-const RefreshButton = styled(StyledButton)`
-    margin-left:50px;
-`;
+// const RefreshButton = styled(StyledButton)`
+//     margin-left:50px;
+// `;
 
 
 
