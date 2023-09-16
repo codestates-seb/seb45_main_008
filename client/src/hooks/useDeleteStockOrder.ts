@@ -19,10 +19,10 @@ export default useDeleteStockOrder;
 const deleteStockOrder = async (orderId: number, cancleVolume: number) => {
   const url = `http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/stock/stockorders?stockOrderId=${orderId}&stockCount=${cancleVolume}`;
 
-  const authToken = localStorage.getItem("authToken");
+  const accessToken = localStorage.getItem("accessToken");
   const options = {
     headers: {
-      Authorization: `${authToken}`,
+      Authorization: `${accessToken}`,
       "Content-Type": "application/json",
     },
   };

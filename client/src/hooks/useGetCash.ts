@@ -19,10 +19,10 @@ const useGetCash = () => {
 export default useGetCash;
 
 const getCashData = async () => {
-  const token = localStorage.getItem("Authorization");
+  const accessToken = localStorage.getItem("accessToken");
   const options = {
     headers: {
-      Authorization: `${token}`,
+      Authorization: `${accessToken}`,
       "Content-Type": "application/json",
     },
   };

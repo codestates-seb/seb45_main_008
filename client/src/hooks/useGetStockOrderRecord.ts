@@ -24,10 +24,10 @@ const useGetStockOrderRecord = () => {
 export default useGetStockOrderRecord;
 
 const getOrderRecord = async () => {
-  const authToken = localStorage.getItem("authToken");
+  const accessToken = localStorage.getItem("accessToken");
   const options = {
     headers: {
-      Authorization: `${authToken}`,
+      Authorization: `${accessToken}`,
       "Content-Type": "application/json",
     },
   };
