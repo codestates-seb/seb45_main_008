@@ -41,6 +41,9 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
       return passwordRegex.test(password);
     };
 
+        // 일반적인 오류 메시지 상태 추가
+        const [generalError, setGeneralError] = useState('');
+
     const handleConfirmClick = async () => {
         if (!isValidPassword(password)) {
             setPasswordError(strings.passwordError);
@@ -57,47 +60,69 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
         }
 
         try {
-            const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members', {
-                email,
-                name,
-                password,
-                confirmPassword,
-            });
+          const response = await axios.post(
+              'http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members', 
+              {
+                  email,
+                  name,
+                  password,
+                  confirmPassword,
+              },
+              {
+                  validateStatus: function (status) {
+                      return status >= 200 && status < 600;
+                  }
+              }
+          );
 
-            if (response.status === 201) {
-                console.log('Data sent successfully');
+          if (response.status === 201) {
+              console.log('Data sent successfully');
+              dispatch(setMemberInfo(response.data));
+              onClose();
+              onNext();
+          } else if (response.status === 400 && response.data.code === "EMAIL_DUPLICATION") {
+              setGeneralError(response.data.message);
+          } else if (response.status === 404 && response.data.code === "INVALID_PASSWORD") {
+              setGeneralError(JSON.stringify(response.data));
+          } else if (response.status === 500) {
+              setGeneralError(JSON.stringify(response.data));
+          } else {
+              console.error('Error sending data');
+          }
+      } catch (error) {
+          if (axios.isAxiosError(error)) {
+              console.error('Error during data submission:', error);
+              if (error.response) {
+                  console.error('Detailed server response:', error.response.data);
+              }
+          } else {
+              console.error('An unknown error occurred:', error);
+          }
+      }
+  };
 
-                // 여기서 Redux store의 memberInfo에 데이터 저장
-                dispatch(setMemberInfo(response.data));
-                onClose();
-                onNext();
-            } else {
-                console.error('Error sending data');
-            }
-        } catch (error) {
-            console.error('Error sending data:', error);
-        }
-    };
+  return (
+      <ModalBackground>
+          <ModalContainer>
+              <CloseButton onClick={onClose}>&times;</CloseButton>
+              <Title>{strings.titleText}</Title>
+              <Label>{strings.passwordLabelText}</Label>
+              <Input type="password" placeholder="8~16자리 비밀번호를 입력해주세요" value={password} onChange={handlePasswordChange} />
+              {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
 
-    return (
-        <ModalBackground>
-            <ModalContainer>
-                <CloseButton onClick={onClose}>&times;</CloseButton>
-                <Title>{strings.titleText}</Title>
-                <Label>{strings.passwordLabelText}</Label>
-                <Input type="password" placeholder="8~16자리 비밀번호를 입력해주세요" value={password} onChange={handlePasswordChange} />
-                {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
+              <Label>{strings.confirmPasswordLabelText}</Label>
+              <Input type="password" placeholder="비밀번호를 다시 입력해주세요" value={confirmPassword} onChange={handleConfirmPasswordChange} />
+              {confirmPasswordError && <ErrorMessage>{confirmPasswordError}</ErrorMessage>}
 
-                <Label>{strings.confirmPasswordLabelText}</Label>
-                <Input type="password" placeholder="비밀번호를 다시 입력해주세요" value={confirmPassword} onChange={handleConfirmPasswordChange} />
-                {confirmPasswordError && <ErrorMessage>{confirmPasswordError}</ErrorMessage>}
+              <Label>{strings.nicknameLabelText}</Label>
+              <Input type="text" placeholder="닉네임을 입력해주세요" value={name} onChange={handleNameChange} />
 
-                <Label>{strings.nicknameLabelText}</Label>
-                <Input type="text" placeholder="닉네임을 입력해주세요" value={name} onChange={handleNameChange} />
-                <ConfirmButton onClick={handleConfirmClick}>{strings.confirmButtonText}</ConfirmButton>
-            </ModalContainer>
-        </ModalBackground>
-    );
+              {generalError && <ErrorMessage>{generalError}</ErrorMessage>}  {/* 일반 오류 메시지 표시 */}
+
+              <ConfirmButton onClick={handleConfirmClick}>{strings.confirmButtonText}</ConfirmButton>
+          </ModalContainer>
+      </ModalBackground>
+  );
 };
 
 interface PasswordSettingModalProps {
@@ -122,6 +147,7 @@ const ModalBackground = styled.div`
 
 // 모달 컨테이너 스타일
 const ModalContainer = styled.div`
+  z-index:4000;
   position: relative;
   background-color: white;
   padding: 20px;

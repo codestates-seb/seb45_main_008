@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-
+import TokenHandler from './TokenHandler';
 
 const LoginConfirmationModal: React.FC<LoginConfirmationProps> = ({ onClose }) => {
     const messageText = "로그인이 성공적으로 완료되었습니다!";
@@ -9,7 +9,8 @@ const LoginConfirmationModal: React.FC<LoginConfirmationProps> = ({ onClose }) =
     return (
       <ModalBackground>
         <ModalContainer>
-            <Message>{messageText}</Message>
+          <TokenHandler />
+          <Message>{messageText}</Message>
           <ConfirmButton onClick={onClose}>{confirmText}</ConfirmButton>
         </ModalContainer>
       </ModalBackground>
@@ -36,6 +37,7 @@ const ModalBackground = styled.div`
 `;
 
 const ModalContainer = styled.div`
+  z-index:4000;
   position: relative;
   background-color: white;
   padding: 20px;

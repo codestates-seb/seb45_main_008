@@ -15,42 +15,58 @@ const strings = {
 
 const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestVerification }) => {
   const dispatch = useDispatch();
-  // 사용자가 입력한 이메일 상태
   const [email, setEmail] = useState('');
-  const [isInvalidEmail, setIsInvalidEmail] = useState(false);  // 이메일 유효성 상태
-  
+  const [isInvalidEmail, setIsInvalidEmail] = useState(false);  
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-  // 이메일 입력 핸들러
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
     setIsInvalidEmail(false);
   };
 
-  //이메일 유효성 검사
   const validateEmail = (email: string) => {
     return email.includes('@') && email.includes('.com');
   };
 
-  // 이메일 인증 요청 핸들러
   const handleVerificationRequest = async () => {
     if (!validateEmail(email)) {
       setIsInvalidEmail(true);
       return;
     }
-
+  
     try {
-      const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/email/send', { email });
+      const response = await axios.post(
+        'http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/email/send', 
+        { email },
+        {
+          validateStatus: function (status) {
+            return status >= 200 && status < 600;  // Reject only if status code is greater than or equal to 600
+          }
+        }
+      );
+      
       if (response.status === 200) {
-        // 여기서 Redux store의 emailForVerification에 데이터 저장
         dispatch(setEmailForVerification(email));
         onRequestVerification(email);
+      } else if (response.status === 400) {
+        setErrorMessage(response.data.message);
+      } else if (response.status === 500) {
+        setErrorMessage(JSON.stringify(response.data));
       } else {
         console.error('Error sending verification email');
       }
     } catch (error) {
-      console.error('Error sending verification email:', error);
+      if (axios.isAxiosError(error)) {
+        console.error('Error sending verification email:', error);
+        if (error.response) {
+          console.error('Detailed server response:', error.response.data);
+        }
+      } else {
+        console.error('An unknown error occurred:', error);
+      }
     }
   };
+  
 
   return (
     <ModalBackground>
@@ -63,6 +79,7 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
         <SignupButton onClick={handleVerificationRequest}>
           {strings.requestVerificationText}
         </SignupButton>
+        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </ModalContainer>
     </ModalBackground>
   );
@@ -70,10 +87,9 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
 
 export default EmailSignupModal;
 
-// 프롭 타입 정의
 type EmailSignupModalProps = {
   onClose: () => void;
-  onRequestVerification: (email: string) => void;
+  onRequestVerification: (email: string) => void; 
 };
 
 
@@ -92,6 +108,7 @@ const ModalBackground = styled.div`
 
 //모달 컨테이너
 const ModalContainer = styled.div`
+  z-index:4000;
   position: relative;
   background-color: white;
   padding: 20px;

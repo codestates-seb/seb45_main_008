@@ -12,6 +12,7 @@ const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
     const createCashButtonText = "현금 생성";
     const cashInputPlaceholder = "현금 입력";
     const resetButtonText = "리셋";
+    const refreshButtonText ="새로고침"
 
     const dispatch = useDispatch();
     const moneyId = useSelector((state: RootState) => state.cash.moneyId);
@@ -23,6 +24,12 @@ const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
 
     const [cashInput, setCashInput] = useState<string>('0');
     const [initialAmount, setInitialAmount] = useState<string>('0'); // 현금 생성을 위한 상태 변수
+
+    // 현금 정보 재조회 함수
+    const refreshCashInfo = () => {
+        // 여기에 현금 정보를 다시 불러오는 로직을 추가합니다.
+        // 예: useGetCash() hook을 다시 호출한다던지, 특정 상태를 변경하여 리렌더링을 유발하는 등의 방법이 있습니다.
+    };
 
     // 현금 생성 및 cashId 전역 저장
     const handleCreateCash = () => {
@@ -70,8 +77,12 @@ const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
                     />
                     <CreateCashButton onClick={handleCreateCash}>{createCashButtonText}</CreateCashButton>
                 </div>
-
-                <p>현재 현금: {isLoading ? 'Loading...' : moneyAmount.toLocaleString()}</p>
+                <div>
+                    <p style={{ display: 'inline-block', margin: '20px' }}>
+                        현재 현금: {isLoading ? 'Loading...' : moneyAmount.toLocaleString()}
+                    </p>
+                    <RefreshButton onClick={refreshCashInfo}>{refreshButtonText}</RefreshButton>
+                </div>
                 <div>
                     <CashInput
                         type="string"
@@ -85,6 +96,8 @@ const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
         </ModalBackground>
     );
 };
+
+export default CashModal;
 
 interface CashModalProps {
     onClose: () => void;
@@ -106,11 +119,12 @@ const ModalBackground = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  z-index: 11;
+  z-index: 100;
   position: relative;
   background-color: white;
   padding: 20px;
   width: 400px;
+  height:230px;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -133,6 +147,15 @@ const CloseButton = styled.button`
   cursor: pointer;
 `;
 
+const StyledButton = styled.button`
+    padding: 10px 15px;
+    background-color: white;
+    color: darkslategray;
+    border: 1px solid darkslategray;
+    border-radius: 5px;
+    cursor: pointer;
+`;
+
 const CashInput = styled.input`
     padding: 10px;
     border: 1px solid lightgray;
@@ -140,14 +163,8 @@ const CashInput = styled.input`
     margin-right: 10px;
 `;
 
-const ReceiveButton = styled.button`
-    padding: 10px 15px;
-    background-color: darkgreen;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-`;
+const ReceiveButton = styled(StyledButton)``;
+
 const CashCreationInput = styled.input`
     padding: 10px;
     border: 1px solid lightgray;
@@ -155,13 +172,11 @@ const CashCreationInput = styled.input`
     margin-right: 10px;
 `;
 
-const CreateCashButton = styled.button`
-    padding: 10px 15px;
-    background-color: blue;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+const CreateCashButton = styled(StyledButton)``;
+
+const RefreshButton = styled(StyledButton)`
+    margin-left:50px;
 `;
 
-export default CashModal;
+
+

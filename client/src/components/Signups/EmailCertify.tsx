@@ -15,50 +15,63 @@ const strings = {
 
 // 이메일 인증 모달 컴포넌트
 const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({ onClose, onNextStep, initialEmail }) => {
-    // 이메일 및 인증코드에 대한 상태를 선언합니다.
     const [email, setEmail] = useState(initialEmail);
     const [verificationCode, setVerificationCode] = useState('');
-
-    // 동의 상태와 알림 상태를 선언합니다.
     const [hasAgreed, setHasAgreed] = useState(false);
     const [showAgreementError, setShowAgreementError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
-    // 이메일 입력값을 처리하는 함수
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.target.value);
     };
 
-    // 인증코드 입력값을 처리하는 함수
     const handleVerificationCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setVerificationCode(event.target.value);
     };
 
-    // 체크박스의 변경을 감지하는 핸들러
     const handleAgreementChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setHasAgreed(event.target.checked);
         setShowAgreementError(false); // 알림을 숨깁니다.
     };
 
-    // 다음 단계 버튼 클릭시 이메일 인증을 처리하는 함수
     const handleNextStepClick = async () => {
-        // 동의 확인
         if (!hasAgreed) {
-            setShowAgreementError(true); // 알림을 표시합니다.
+            setShowAgreementError(true);
             return;
         }
 
         try {
-            const response = await axios.post('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/email/confirm', { email, code: verificationCode });
+            const response = await axios.post(
+                'http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/email/confirm', 
+                { email, code: verificationCode },
+                {
+                    validateStatus: function (status) {
+                        return status >= 200 && status < 600;
+                    }
+                }
+            );
+
             if (response.status === 200) {
                 onNextStep();
-            } else {
+            } else if (response.status === 400) {
+                setErrorMessage(response.data.message);
+            } else if (response.status === 500) {
+                setErrorMessage(JSON.stringify(response.data));
+              } else {
                 console.error('Error during email confirmation');
             }
         } catch (error) {
-            console.error('Error during email confirmation:', error);
+            if (axios.isAxiosError(error)) {
+                console.error('Error during email confirmation:', error);
+                if (error.response) {
+                    console.error('Detailed server response:', error.response.data);
+                }
+            } else {
+                console.error('An unknown error occurred:', error);
+            }
         }
     };
-
+    
     return (
         <ModalBackground>
             <ModalContainer>
@@ -73,17 +86,19 @@ const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({ onClose
                     <input type="checkbox" id="terms" onChange={handleAgreementChange} />
                     <label htmlFor="terms">{strings.termsText}</label>
                 </TermsCheckbox>
-
+    
                 {showAgreementError && <ErrorMessage>동의하지 않으면 진행할 수 없습니다</ErrorMessage>}
                 <SignupButton onClick={handleNextStepClick}>
                     {strings.nextStepText}
                 </SignupButton>
+                {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
             </ModalContainer>
         </ModalBackground>
     );
-};
+  };
 
-export default EmailVerificationModal;
+  export default EmailVerificationModal;    
+
 
 // 이메일 인증 모달의 Props 타입
 type EmailVerificationModalProps = {
@@ -107,7 +122,8 @@ const ModalBackground = styled.div`
 
 // 모달의 컨테이너 스타일
 const ModalContainer = styled.div`
-position: relative;
+  z-index:4000;
+  position: relative;
   background-color: white;
   padding: 20px;
   width: 400px;
