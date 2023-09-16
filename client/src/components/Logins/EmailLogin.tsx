@@ -40,8 +40,8 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) =
         password,
       });
       if (response.status === 200) {
-        const authToken = response.headers["authorization"];
-        console.log(authToken);
+        const accessToken = response.headers["authorization"];
+        console.log(accessToken);
 
         const refreshToken = response.headers["refresh"];
 
@@ -49,8 +49,8 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) =
         dispatch(setLoginState());
 
         // 토큰들을 로컬 스토리지에 저장
-        if (authToken) localStorage.setItem("Authorization", authToken);
-        if (refreshToken) localStorage.setItem("Refresh-token", refreshToken);
+        if (accessToken) localStorage.setItem("accessToken", accessToken);
+        if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
 
         onLogin();
         onClose();

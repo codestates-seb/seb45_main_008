@@ -23,11 +23,11 @@ const useTradeStock = () => {
 export default useTradeStock;
 
 const postOrderRequest = async (orderType: boolean, companyId: number, price: number, volume: number) => {
-  const authToken = localStorage.getItem("authToken");
-  console.log(authToken);
+  const accessToken = localStorage.getItem("accessToken");
+  console.log(accessToken);
   const options = {
     headers: {
-      Authorization: `${authToken}`,
+      Authorization: `${accessToken}`,
       "Content-Type": "application/json",
     },
   };

@@ -4,9 +4,9 @@ import axios from 'axios';
 const BASE_URL = 'http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080';
 
 const getAuthHeader = () => {
-    const authToken = localStorage.getItem('authToken');
+    const accessToken = localStorage.getItem('accessToken');
     return {
-        'Authorization': `${authToken}`
+        'Authorization': `${accessToken}`
     };
 
 };

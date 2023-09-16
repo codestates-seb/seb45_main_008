@@ -40,7 +40,7 @@ const TimeLineComponent = () => {
   };
 
   // 서브밋 버튼 클릭
-  const authToken = localStorage.getItem("authToken");
+  const accessToken = localStorage.getItem("accessToken");
   const handleClickSubmit = async () => {
     if (inputValue.length !== 0) {
       const newBoardData = {
@@ -53,7 +53,7 @@ const TimeLineComponent = () => {
       try {
         const response = await axios.post(serverUrl, newBoardData, {
           headers: {
-            Authorization: authToken, // 토큰을 헤더에 추가
+            Authorization: accessToken, // 토큰을 헤더에 추가
           },
         });
         if (response.status === 201) {
@@ -93,7 +93,7 @@ const TimeLineComponent = () => {
     try {
       const response = await axios.delete(`${serverUrl}/${boardId}`, {
         headers: {
-          Authorization: authToken, // 토큰을 헤더에 추가
+          Authorization: accessToken, // 토큰을 헤더에 추가
         },
       }); // URL에 boardId 추가
       if (response.status === 200) {

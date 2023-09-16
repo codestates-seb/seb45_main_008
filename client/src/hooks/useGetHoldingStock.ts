@@ -17,10 +17,10 @@ const useGetHoldingStock = () => {
 export default useGetHoldingStock;
 
 const getHoldingStock = async () => {
-  const authToken = localStorage.getItem("authToken");
+  const accessToken = localStorage.getItem("accessToken");
   const options = {
     headers: {
-      Authorization: `${authToken}`,
+      Authorization: `${accessToken}`,
       "Content-Type": "application/json",
     },
   };

@@ -15,8 +15,8 @@ const TokenHandler: React.FC = () => {
         const refreshToken = urlParams.get("refresh_token");
 
         if (accessToken && refreshToken) {
-            localStorage.setItem("Authorization", `Bearer ${accessToken}`);
-            localStorage.setItem("Refresh-token", refreshToken);
+            localStorage.setItem("accessToken", `Bearer ${accessToken}`);
+            localStorage.setItem("refreshToken", refreshToken);
             dispatch(setLoginState());
             navigate('/');
         }
