@@ -3,7 +3,8 @@ import styled from 'styled-components';
 import Header from './Header';
 import StockItem from './StockItem';
 import useCompanyData from '../../hooks/useCompanyData';
-import { useGetCash } from '../../hooks/useCash'; // 훅 가져오기
+import { useSelector } from 'react-redux'; 
+import { RootState } from '../../store/config'; 
 
 const EntireList: React.FC<EntireListProps> = ({ currentListType, onChangeListType }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
@@ -16,9 +17,9 @@ const EntireList: React.FC<EntireListProps> = ({ currentListType, onChangeListTy
   const companiesList = companies || [];
 
     // 현금 보유량 가져오기
-    const moneyId = localStorage.getItem('moneyId');
-    const { data: cashData } = useGetCash(moneyId);
-    const holdingsAmount = cashData?.data?.money || "0";
+  // 현금 보유량 가져오기: Redux store에서 직접 가져옵니다.
+  const holdingsAmount = useSelector((state: RootState) => state.cash.money) || "0";
+
 
   return (
     <WatchListContainer>
@@ -50,6 +51,8 @@ const EntireList: React.FC<EntireListProps> = ({ currentListType, onChangeListTy
     </WatchListContainer>
   );
 };
+
+export default EntireList;
 
 // Props와 상태에 대한 타입 정의
 type EntireListProps = {
@@ -99,4 +102,4 @@ const StockList = styled.div`
   overflow-y: auto; /* 세로 스크롤을 활성화합니다 */
 `;
 
-export default EntireList;
+

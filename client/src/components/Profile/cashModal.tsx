@@ -3,23 +3,24 @@ import styled from 'styled-components';
 import { useSelector, useDispatch } from 'react-redux'; 
 import { useCreateCash, useGetCash, useResetCash } from '../../hooks/useCash'; 
 import { RootState } from '../../store/config'; 
-import { setMoneyId, setMoneyAmount } from '../../reducer/cash/cashSlice';
+import { setCashId, setMoney } from '../../reducer/cash/cashSlice';
 
-const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
+const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
+    // 상태 및 변수 초기화
     const titleText = "현금";
     const cashCreationPlaceholder = "생성할 현금 입력";
     const createCashButtonText = "현금 생성";
     const cashInputPlaceholder = "현금 입력";
     const resetButtonText = "리셋";
-    const refreshButtonText ="새로고침"
+    const refreshButtonText ="새로고침";
 
     const dispatch = useDispatch();
-    const moneyId = useSelector((state: RootState) => state.cash.moneyId);
-    const moneyAmount = useSelector((state: RootState) => state.cash.moneyAmount) || '0';
-    
+    const cashId = useSelector((state: RootState) => state.cash.cashId);
+    const money = useSelector((state: RootState) => state.cash.money) || '0';
+
     const createCashMutation = useCreateCash();
-    const { data: cashData, isLoading } = useGetCash(moneyId); 
+    const cashQuery = useGetCash();
     const updateCashMutation = useResetCash();
 
     const [cashInput, setCashInput] = useState<string>('0');
@@ -27,39 +28,33 @@ const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
 
     // 현금 정보 재조회 함수
     const refreshCashInfo = () => {
-        // 여기에 현금 정보를 다시 불러오는 로직을 추가합니다.
-        // 예: useGetCash() hook을 다시 호출한다던지, 특정 상태를 변경하여 리렌더링을 유발하는 등의 방법이 있습니다.
+        cashQuery.refetch();  // 현금 정보를 다시 가져옵니다.
     };
 
-    // 현금 생성 및 cashId 전역 저장
+    // 현금 생성 및 cashId 전역 저장 함수
     const handleCreateCash = () => {
-        createCashMutation.mutate(initialAmount, {
-            onSuccess: (data) => {
-                dispatch(setMoneyId(data.data.moneyId));
-            }
-        });
+        createCashMutation.mutate(initialAmount);
     };
 
-    // 보유 현금량 조회 및 전역 저장
-    if (cashData && moneyAmount !== cashData.data.cash) {
-        dispatch(setMoneyAmount(cashData.data.cash));
+    // 보유 현금량 조회 및 전역 저장 함수
+    if (cashQuery.data && money !== cashQuery.data.data.cash) {
+        dispatch(setMoney(cashQuery.data.data.cash));
     }
 
-// 현금을 입력한 금액으로 리셋하는 함수
+    // 입력한 금액으로 현금 리셋 함수
     const handleCashReset = () => {
-        if (moneyId) {
-            const numericCashId = parseInt(moneyId, 10);  // cashId를 숫자로 변환
-            const numericCashAmount =cashInput; // cashInput을 숫자로 변환
-            updateCashMutation.mutate({ moneyId: numericCashId, money: numericCashAmount }, {
+        if (cashId) {
+            const numericCashAmount = cashInput; // cashInput을 숫자로 변환
+            updateCashMutation.mutate({ money: numericCashAmount }, {
                 onSuccess: () => {
-                    dispatch(setMoneyAmount(numericCashAmount)); // 현금 금액을 입력한 금액으로 리셋
+                    dispatch(setMoney(numericCashAmount)); // 현금 금액을 입력한 금액으로 리셋
+                    dispatch(setCashId(cashId) );
                 }
             });
         } else {
-            console.error("moneyId is null or not a valid number.");
+            console.error("cashId is null or not a valid number.");
         }
     };
-
 
     return (
         <ModalBackground>
@@ -67,7 +62,7 @@ const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
                 <CloseButton onClick={onClose}>&times;</CloseButton>
                 <Title>{titleText}</Title>
 
-                {/* 현금 생성 입력창 및 버튼 추가 */}
+                {/* 현금 생성 입력창 및 버튼 */}
                 <div>
                     <CashCreationInput
                         type="string"
@@ -79,7 +74,7 @@ const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
                 </div>
                 <div>
                     <p style={{ display: 'inline-block', margin: '20px' }}>
-                        현재 현금: {isLoading ? 'Loading...' : moneyAmount.toLocaleString()}
+                        현재 현금: {cashQuery.isLoading ? 'Loading...' : money.toLocaleString()}
                     </p>
                     <RefreshButton onClick={refreshCashInfo}>{refreshButtonText}</RefreshButton>
                 </div>
@@ -99,10 +94,9 @@ const CashModal: React.FC<CashModalProps> = ({ onClose }) => {
 
 export default CashModal;
 
-interface CashModalProps {
-    onClose: () => void;
-    moneyId: number | null;
-}
+// interface CashModalProps {
+//     onClose: () => void;
+// }
 
 // Styled Components Definitions:
 
