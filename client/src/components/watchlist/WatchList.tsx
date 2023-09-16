@@ -35,6 +35,11 @@ const WatchList: React.FC<WatchListProps> = ({ currentListType, onChangeListType
       // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedCompanyId]);
 
+  //
+  useEffect(() => {
+    localStorage.setItem('searchedCompanyIds', JSON.stringify(searchedCompanyIds));
+  }, [searchedCompanyIds]);
+
   return (
     <WatchListContainer>
       <Header

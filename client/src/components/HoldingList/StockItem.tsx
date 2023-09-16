@@ -21,7 +21,7 @@ export type StockItemProps = {
     stockPrice: string;
     stockChangeAmount: string;
     stockChangeRate: string;
-}[];
+  };
   setShowChangePrice: (value: boolean) => void;
   showChangePrice: boolean;
 };
@@ -31,7 +31,7 @@ export type StockItemProps = {
 const StockItem: React.FC<StockItemProps> = ({ companyData, stockData, setShowChangePrice, showChangePrice }) => {
   const {  stockCount, reserveSellStockCount, totalPrice, percentage, stockReturn } = stockData;
   const totalStocksHeld = stockCount + reserveSellStockCount;
-  const company = companyData ? companyData[0] : undefined;
+  const company = companyData ? companyData : undefined;
 
   const { 
     code = '', 
@@ -82,6 +82,8 @@ const StockItem: React.FC<StockItemProps> = ({ companyData, stockData, setShowCh
     </>
   );
 };
+
+export default StockItem;
 
 const ItemContainer = styled.div`
   display: flex;
@@ -181,4 +183,4 @@ const ThickDivider = styled.div`
   background-color: #aaa; 
   margin: 8px 0; 
 `;
-export default StockItem;
+

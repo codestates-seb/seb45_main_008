@@ -37,17 +37,19 @@ const HoldingList: React.FC<WatchListProps> = ({ currentListType, onChangeListTy
         ) : isError || isCompanyDataError ? (
           <div>Error fetching data</div>
         ) : (
-          stockHolds.map((stockHold: StockItemProps['stockData']) => (
-            companyData ? (
+          stockHolds.map((stockHold: StockItemProps['stockData']) => {
+            const matchedCompany = companyData ? companyData.find(company => company.companyId === stockHold.companyId) : undefined;
+            
+            return matchedCompany ? (
               <StockItem
                 key={stockHold.companyId}
                 stockData={stockHold}
-                companyData={companyData}
+                companyData={matchedCompany}
                 setShowChangePrice={setShowChangePrice}
                 showChangePrice={showChangePrice}
               />
-            ) : null
-          ))
+            ) : null;
+          })
         )}
       </StockList>
     </WatchListContainer>
