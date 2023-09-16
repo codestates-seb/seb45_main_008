@@ -108,6 +108,7 @@ const ModalBackground = styled.div`
 
 //모달 컨테이너
 const ModalContainer = styled.div`
+  z-index:4000;
   position: relative;
   background-color: white;
   padding: 20px;

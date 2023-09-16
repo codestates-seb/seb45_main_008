@@ -122,7 +122,8 @@ const ModalBackground = styled.div`
 
 // 모달의 컨테이너 스타일
 const ModalContainer = styled.div`
-position: relative;
+  z-index:4000;
+  position: relative;
   background-color: white;
   padding: 20px;
   width: 400px;
