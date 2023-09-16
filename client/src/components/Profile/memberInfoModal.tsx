@@ -52,11 +52,12 @@ const ModalBackground = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  z-index: 11;
+  z-index: 100;
   position: relative;
   background-color: white;
   padding: 20px;
   width: 400px;
+  height:230px;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
