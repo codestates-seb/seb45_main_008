@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import useGetStockData from "./useGetStockData";
 
+// 색상
+const upColor = "rgba(198, 6, 6, 0.37)";
+const downColor = "rgba(59, 119, 247, 0.51)";
+const volumColor = "rgba(57, 118, 249, 0.56)";
+const pointerColor = "#cc3c3a";
+const indexColor = "#4479c2";
+
 const useGetStockChart = (companyId: number) => {
   const { stockPrice } = useGetStockData(companyId);
   const [chartData, setChartData] = useState<StockProps[]>([]);
@@ -44,10 +51,6 @@ const useGetStockChart = (companyId: number) => {
     };
   };
 
-  // 색상
-  const upColor = "#e22926";
-  const downColor = "#2679ed";
-
   const organizedChartData = organizeData(chartData);
 
   const options = {
@@ -71,10 +74,11 @@ const useGetStockChart = (companyId: number) => {
         },
       ],
       label: {
-        backgroundColor: "#777",
+        color: pointerColor,
+        backgroundColor: "transparent",
       },
     },
-    toolbox: null,
+    toolbox: { show: false },
     brush: {
       xAxisIndex: "all",
       brushLink: "all",
@@ -123,16 +127,17 @@ const useGetStockChart = (companyId: number) => {
         axisLine: {
           onZero: false,
           lineStyle: {
-            color: "#2f4f4f",
+            color: "black",
             width: 1,
             type: "solid",
           },
         },
-        splitLine: { show: false },
+        splitLine: { show: false, interval: 100 },
         axisLabel: { show: false },
         axisTick: { show: false },
         min: "dataMin",
         max: "dataMax",
+        gridIndex: 0,
         axisPointer: {
           z: 100,
         },
@@ -145,7 +150,7 @@ const useGetStockChart = (companyId: number) => {
         axisLine: {
           onZero: false,
           lineStyle: {
-            color: "#2f4f4f",
+            color: "black",
             width: 1,
             type: "solid",
           },
@@ -156,7 +161,8 @@ const useGetStockChart = (companyId: number) => {
           show: true,
           interval: Math.ceil(organizedChartData.time.length / 13),
           showMinLabel: false, // 왼쪽 끝단 텍스트 숨김
-          showMaxLabel: false, //
+          showMaxLabel: false,
+          color: "black",
         },
         min: "dataMin",
         max: "dataMax",
@@ -168,41 +174,51 @@ const useGetStockChart = (companyId: number) => {
       {
         scale: true,
         splitArea: {
+          show: true,
+        },
+        splitLine: {
           show: false,
         },
         position: "right",
         axisLabel: {
-          fontSize: "0.63rem",
-          color: "#2f4f4f",
-          fontWeight: "650",
+          fontSize: "12px",
+          color: indexColor,
+          fontWeight: "500",
           showMinLabel: false, // 왼쪽 끝단 텍스트 숨김
-          showMaxLabel: false, //
+          showMaxLabel: false,
+          inside: true,
+          padding: 10,
         },
         axisLine: {
           show: true,
           lineStyle: {
-            color: "#2f4f4f",
+            color: "black",
             width: 1,
             type: "solid",
           },
         },
+        gridIndex: 0,
       },
       {
         scale: true,
         position: "right",
         gridIndex: 1,
         splitNumber: 2,
-        axisLabel: { show: false },
+        axisLabel: { show: true, inside: true, color: indexColor, padding: 10, showMinLabel: false, showMaxLabel: false, fontWeight: "500" },
         axisTick: { show: false },
         splitLine: { show: false },
+        splitArea: {
+          show: true,
+        },
         axisLine: {
           show: true,
           lineStyle: {
-            color: "#2f4f4f",
+            color: "black",
             width: 1,
             type: "solid",
           },
         },
+        offset: 0, // 두 번째 y축을 오른쪽으로 이동하여 겹치지 않게 함
       },
     ],
     dataZoom: [
@@ -224,13 +240,17 @@ const useGetStockChart = (companyId: number) => {
           borderColor: undefined,
           borderColor0: undefined,
         },
+        yAxisIndex: 0,
       },
       {
         name: "Volume",
         type: "bar",
         xAxisIndex: 1,
-        yAxisIndex: 1,
         data: organizedChartData.volumes,
+        yAxisIndex: 1,
+        itemStyle: {
+          color: volumColor, // 원하는 색상으로 설정
+        },
       },
     ],
   };
