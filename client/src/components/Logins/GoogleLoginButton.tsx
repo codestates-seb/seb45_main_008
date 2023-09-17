@@ -4,18 +4,15 @@ import { useDispatch } from 'react-redux';
 import { setLoginState } from '../../reducer/member/loginSlice';  
 import googleLogo from '../../asset/images/GoogleLogo.svg'; 
 
-interface Props {
-  backendURL: string;
-}
-
 const GoogleLoginButton: React.FC<Props> = ({ backendURL }) => {
   const dispatch = useDispatch();
 
-  const buttonText = "Login with Google";
+  const buttonText = "구글로 로그인";
 
+  //버튼 클릭시 로그인 상태를 1로 변경
   const handleLoginClick = () => {
     window.location.href = `${backendURL}`;
-    dispatch(setLoginState());  // 로그인 상태를 변경합니다.
+    dispatch(setLoginState()); 
   };
 
   return (
@@ -26,7 +23,13 @@ const GoogleLoginButton: React.FC<Props> = ({ backendURL }) => {
   );
 }
 
-// Styled Components
+export default GoogleLoginButton;
+
+interface Props {
+  backendURL: string;
+}
+
+// 구글 버튼 스타일
 const GoogleButton = styled.button`
   margin: 10px 0;
   padding: 10px 20px;
@@ -38,12 +41,18 @@ const GoogleButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
+
+
+  &:hover {
+    background-color: #f2f2f2;  // Light gray color on hover
+  }
 `;
 
+//구글 로고 스타일
 const LogoImage = styled.img`
   margin-right: 30px;
   width: 60px;
   height: auto;
 `;
 
-export default GoogleLoginButton;
+
