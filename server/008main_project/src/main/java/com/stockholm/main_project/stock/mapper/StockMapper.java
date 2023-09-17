@@ -42,6 +42,16 @@ public interface StockMapper {
     @Mapping(source = "company.companyId", target = "companyId")
     @Mapping(source = "member.memberId", target = "memberId")
     StockOrderResponseDto stockOrderToStockOrderResponseDto(StockOrder stockOrder);
+    default List<StockOrderResponseDto> stockOrdersToStockOrderResponseDtos(List<StockOrder> stockOrders) {
+        List<StockOrderResponseDto> stockOrderResponseDtos = new ArrayList<>();
+
+        for(StockOrder stockOrder : stockOrders) {
+            StockOrderResponseDto stockOrderResponseDto = stockOrderToStockOrderResponseDto(stockOrder);
+            stockOrderResponseDtos.add(stockOrderResponseDto);
+        }
+
+        return stockOrderResponseDtos;
+    }
     default List<StockHoldResponseDto> stockHoldToStockHoldResponseDto(List<StockHold> stockHolds) {
         List<StockHoldResponseDto> stockHoldResponseDtos = new ArrayList<>();
 

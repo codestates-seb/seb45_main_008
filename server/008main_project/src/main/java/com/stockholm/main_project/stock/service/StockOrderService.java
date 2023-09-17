@@ -6,6 +6,7 @@ import com.stockholm.main_project.exception.BusinessLogicException;
 import com.stockholm.main_project.exception.ExceptionCode;
 import com.stockholm.main_project.member.entity.Member;
 import com.stockholm.main_project.member.repository.MemberRepository;
+import com.stockholm.main_project.stock.controller.LongPollingController;
 import com.stockholm.main_project.stock.dto.StockOrderResponseDto;
 import com.stockholm.main_project.stock.entity.Company;
 import com.stockholm.main_project.stock.entity.StockAsBi;
@@ -18,10 +19,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Queue;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,10 +33,10 @@ public class StockOrderService {
     private final StockHoldService stockHoldService;
     private final StockHoldRepository stockHoldRepository;
     private final CashService cashService;
-
     private final StockMapper stockMapper;
+    private final LongPollingController longPollingController;
 
-    public StockOrderService(StockAsBiService stockAsBiService, CompanyService companyService, StockOrderRepository stockOrderRepository, MemberRepository memberRepository, StockHoldService stockHoldService, StockHoldRepository stockHoldRepository, CashService cashService, StockMapper stockMapper) {
+    public StockOrderService(StockAsBiService stockAsBiService, CompanyService companyService, StockOrderRepository stockOrderRepository, MemberRepository memberRepository, StockHoldService stockHoldService, StockHoldRepository stockHoldRepository, CashService cashService, StockMapper stockMapper, LongPollingController longPollingController) {
         this.stockAsBiService = stockAsBiService;
         this.companyService = companyService;
         this.stockOrderRepository = stockOrderRepository;
@@ -47,6 +45,7 @@ public class StockOrderService {
         this.stockHoldRepository = stockHoldRepository;
         this.cashService = cashService;
         this.stockMapper = stockMapper;
+        this.longPollingController = longPollingController;
     }
 
     // 멤버, 회사 id, 가격
@@ -137,6 +136,8 @@ public class StockOrderService {
     public void checkOrder() {
         // 회사 리스트를 받아온다
         List<Company> companyList = companyService.findCompanies();
+        List<StockOrder> updateBuyStockOrders = new ArrayList<>();
+        List<StockOrder> updateSellStockOrders = new ArrayList<>();
         // for문(회사별로)
         for(Company company : companyList) {
             // 회사 호가 리스트를 받아온다
@@ -152,14 +153,21 @@ public class StockOrderService {
                     if(stockOrder.getOrderTypes().equals(StockOrder.OrderTypes.BUY)) {
                         // 호가 리스트 안에 체결 대기중인 stockOrder의 조건이 맞는 것이 있으면 buyStock으로 간다
                         StockOrder buyStock = reserveBuyDiscrimination(stockAsBi, stockOrder);
+                        // 클라이언트로 StockOrder를 보낸다(값이 있으면)
+                        if(buyStock != null)
+                            updateBuyStockOrders.add(buyStock);
                     }
                     // 예약 매도 실행
                     else {
                         StockOrder sellStock = reserveSellDiscrimination(stockAsBi, stockOrder);
+                       // 클라이언트로 StockOrder를 보낸다(값이 있으면)
+                        if(sellStock != null)
+                            updateSellStockOrders.add(sellStock);
                     }
                 }
             }
         }
+        longPollingController.notifyDataUpdated(updateBuyStockOrders, updateSellStockOrders);
    }
 
 
