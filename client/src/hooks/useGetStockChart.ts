@@ -17,42 +17,53 @@ const useGetStockChart = (companyId: number) => {
   const [corpName, setCorpName] = useState("");
 
   // 🔴 비교차트 테스트
-  const [compareChart, setCompare] = useState<CompareProps | undefined>(undefined);
 
-  const testData = organizeData(chartData);
-  const testPrice = testData.values;
-  const prPriceList: number[] = [];
-  // console.log(testPrice);
-  testPrice.forEach((price) => {
-    prPriceList.push(price[0]);
-  });
+  // ✅ 현재까지 구현된 부분 -> 비교차트 버튼을 누른다 -> 리스트가 뜬다 -> 리스트의 개별 요소를 누르면 비교해야할 회사의 companyId가 넘어온다
+  // 🔴 (1. compare 데이터 불러오은 곳에서) 무엇을 해야하는가? 불러온 id 활용 -> stock 데이터를 불러온다 useEffect 활용하여, null 값이 아닐 경우 조건 걸어서 // null 값일 경우 데이터 날리기?-> 데이터를 불러오면 (useEffect 필요) -> organize 함수로 개량 후 상태로 지정한다
+  //    (2. 메인 차트 불러오는 곳에서) 상태가 변경되면? -> 해당 값을 차트 데이터로 활용한다
+  // 🔴 전역상태로 설정해야할 것,,,, -> 비교 차트 데이터? (버튼 눌렀을 때 ~ 변화가 되고, 비교 취소 했을 때 ~ null 값으로 바뀐다)
 
-  console.log(prPriceList);
-  const testCompare = {
-    name: "비교차트 테스트",
-    type: "line",
-    data: prPriceList,
-    lineStyle: {
-      opacity: 0.5,
-    },
-    yAxisIndex: 0,
-  };
+  // 서버에서 특정 종목 차트 데이터를 불러온다 -> 비교차트 id 활용
+  // 해당 데이터를 orgziaed 함수로 개량하고
+  // 개량된 데이터에서 현재값만 추출해서
+  // 차트 정보에 추가해준다
 
-  useEffect(() => {
-    setCompare(testCompare);
-  }, [testCompare]);
+  // const [compareChart, setCompare] = useState<CompareProps | undefined>(undefined);
 
-  useEffect(() => {
-    console.log(compareChart);
-  }, [compareChart]);
+  // const testData = organizeData(chartData);
+  // const testPrice = testData.values;
+  // const prPriceList: number[] = [];
+  // // console.log(testPrice);
+  // testPrice.forEach((price) => {
+  //   prPriceList.push(price[0]);
+  // });
 
-  interface CompareProps {
-    name: string;
-    type: string;
-    data: number[];
-    lineStyle: { opacity: number };
-    yAxisIndex: number;
-  }
+  // console.log(prPriceList);
+  // const testCompare = {
+  //   name: "비교차트 테스트",
+  //   type: "line",
+  //   data: prPriceList,
+  //   lineStyle: {
+  //     opacity: 0.5,
+  //   },
+  //   yAxisIndex: 0,
+  // };
+
+  // useEffect(() => {
+  //   setCompare(testCompare);
+  // }, [testCompare]);
+
+  // useEffect(() => {
+  //   console.log(compareChart);
+  // }, [compareChart]);
+
+  // interface CompareProps {
+  //   name: string;
+  //   type: string;
+  //   data: number[];
+  //   lineStyle: { opacity: number };
+  //   yAxisIndex: number;
+  // }
 
   // 🔴 비교차트 테스트
 
@@ -69,7 +80,7 @@ const useGetStockChart = (companyId: number) => {
 
   // 차트 옵션
   const options = {
-    animation: true,
+    animation: false,
     legend: {
       top: 10,
       left: "left",
@@ -311,7 +322,7 @@ const useGetStockChart = (companyId: number) => {
         },
       },
       // 🔴 비교차트 테스트
-      compareChart,
+      // compareChart,
     ],
   };
 

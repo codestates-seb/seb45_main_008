@@ -9,6 +9,7 @@ import cashSlice from "../reducer/cash/cashSlice";
 import memberInfoReducer from "../reducer/member/memberInfoSlice";
 import { stockOrderVolumeReducer } from "../reducer/StockOrderVolume-Reducer";
 import { setDecisionWindowReducer } from "../reducer/SetDecisionWindow-Reducer";
+import { compareChartReducer } from "../reducer/CompareChart-Reducer";
 
 const store = configureStore({
   reducer: {
@@ -22,6 +23,7 @@ const store = configureStore({
     cash: cashSlice,
     stockOrderVolume: stockOrderVolumeReducer,
     decisionWindow: setDecisionWindowReducer,
+    compareChart: compareChartReducer,
   },
 });
 
