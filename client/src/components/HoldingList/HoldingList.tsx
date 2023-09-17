@@ -22,15 +22,21 @@ const HoldingList: React.FC<WatchListProps> = ({ currentListType, onChangeListTy
 
   return (
     <WatchListContainer>
-      <Header
-        currentListType={currentListType}
-        onChangeListType={onChangeListType}
-        isMenuOpen={isMenuOpen}
-        setMenuOpen={setMenuOpen}
-      />
-      <Divider1 />
-      <EvaluationProfit>평가 수익금: {totalEvaluationProfit.toLocaleString()}원</EvaluationProfit>
-      <Divider2 />
+      <Header1Container>
+        <Header
+          currentListType={currentListType}
+          onChangeListType={onChangeListType}
+          isMenuOpen={isMenuOpen}
+          setMenuOpen={setMenuOpen}
+        />
+      </Header1Container>
+      <Divider />
+      <Header2Container>
+      <EvaluationProfit profit={totalEvaluationProfit}>
+         평가 수익금: {totalEvaluationProfit.toLocaleString()}원
+      </EvaluationProfit>
+      </Header2Container>
+      <Divider />
       <StockList>
         {isLoading || isCompanyDataLoading ? (
           <div>Loading...</div>
@@ -71,33 +77,35 @@ const WatchListContainer = styled.div`
   align-items: flex-start;
 `;
 
-const Divider1 = styled.div`
-  margin: 0px;
-  padding: 0px;
+const Header1Container =styled.div`
+  height: 48px;
+  display: flex;
+`;
+
+const Header2Container =styled.div`
+  height: 43.5px;
+  display: flex;
+  justify-content:center;
+  align-items: center;
+`;
+
+const Divider = styled.div`
   width: 100%;
-  height: 10px;
   display: flex;
   flex-direction: row;
   border-bottom: 1px solid #2f4f4f;
 `;
-const EvaluationProfit = styled.div`
+const EvaluationProfit = styled.div<{ profit: number }>`
   font-size: 16px;
   font-weight: bold;
-  margin: 8px 12px;
+  margin-left: 20px;
   text-align: center;
-  color: red;
+  color: ${props => 
+    props.profit === 0 ? '#000' :
+    props.profit > 0 ? '#e22926' :
+    '#2679ed'
+  };
 `;
-
-const Divider2 = styled.div`
-  margin: 0px;
-  padding: 0px;
-  width: 100%;
-  height: 4.5px;
-  display: flex;
-  flex-direction: row;
-  border-bottom: 1px solid #2f4f4f;
-`;
-
 
 const StockList = styled.div`
   height: 100%;

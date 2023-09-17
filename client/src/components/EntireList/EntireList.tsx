@@ -28,10 +28,14 @@ const EntireList: React.FC<EntireListProps> = ({ currentListType, onChangeListTy
 
   return (
     <WatchListContainer>
-      <Header currentListType={currentListType} onChangeListType={onChangeListType} isMenuOpen={isMenuOpen} setMenuOpen={setMenuOpen} />
-      <Divider1 />
-      {isLogin == 0 ? (<HoldingsAmount>"로그인이 필요한 서비스 입니다."</HoldingsAmount>) : (<HoldingsAmount>현금 보유량: {holdingsAmount}원</HoldingsAmount>)}
-      <Divider2 />
+      <Header1Container>
+        <Header currentListType={currentListType} onChangeListType={onChangeListType} isMenuOpen={isMenuOpen} setMenuOpen={setMenuOpen} />
+      </Header1Container>
+      <Divider />
+      <Header2Container>
+        {isLogin == 0 ? (<HoldingsAmount>로그인이 필요한 서비스 입니다.</HoldingsAmount>) : (<HoldingsAmount>현금 보유량: {holdingsAmount}원</HoldingsAmount>)}
+      </Header2Container>
+      <Divider />
       <StockList>
         {isLoading ? <div>Loading...</div> : isError ? <div>Error fetching data</div> : companiesList.map((company) => <StockItem key={company.companyId} company={company} setShowChangePrice={setShowChangePrice} showChangePrice={showChangePrice} />)}
       </StockList>
@@ -55,11 +59,21 @@ const WatchListContainer = styled.div`
   align-items: flex-start;
 `;
 
-const Divider1 = styled.div`
-  margin: 0px;
-  padding: 0px;
+const Header1Container =styled.div`
+  height: 48px;
+  display: flex;
+
+`;
+
+const Header2Container =styled.div`
+  height: 43.5px;
+  display: flex;
+  justify-content:center;
+  align-items: center;
+`;
+
+const Divider = styled.div`
   width: 100%;
-  height: 10px;
   display: flex;
   flex-direction: row;
   border-bottom: 1px solid #2f4f4f;
@@ -68,19 +82,8 @@ const Divider1 = styled.div`
 const HoldingsAmount = styled.div`
   font-size: 16px;
   font-weight: bold;
-  margin: 8px 12px;
-  text-align: center;
+  margin-left: 20px;
   color: darkslategray; // 현금 보유량을 파란색으로 표시
-`;
-
-const Divider2 = styled.div`
-  margin: 0px;
-  padding: 0px;
-  width: 100%;
-  height: 4.5px;
-  display: flex;
-  flex-direction: row;
-  border-bottom: 1px solid #2f4f4f;
 `;
 
 const StockList = styled.div`

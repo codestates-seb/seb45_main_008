@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useState } from 'react';
 import styled from 'styled-components';
 import logo from '../../asset/images/StockHolmImage.png';
 
@@ -28,7 +28,8 @@ export type StockItemProps = {
 
 
 
-const StockItem: React.FC<StockItemProps> = ({ companyData, stockData, setShowChangePrice, showChangePrice }) => {
+const StockItem: React.FC<StockItemProps> = ({ companyData, stockData }) => {
+  const [showChangePrice, setShowChangePrice] = useState(false);  // local state
   const {  stockCount, reserveSellStockCount, totalPrice, percentage, stockReturn } = stockData;
   const totalStocksHeld = stockCount + reserveSellStockCount;
   const company = companyData ? companyData : undefined;
@@ -41,13 +42,15 @@ const StockItem: React.FC<StockItemProps> = ({ companyData, stockData, setShowCh
     stockChangeRate = '' 
   } = company || {};
   
-    // Format percentage to two decimal places
-    const formattedPercentage = parseFloat(percentage.toFixed(2));
+  // Format percentage to two decimal places
+  const formattedPercentage = parseFloat(percentage.toFixed(2));
 
 
   return (
     <>
-      <ItemContainer>
+      <ItemContainer         onMouseEnter={() => setShowChangePrice(true)}  // Mouse event handlers
+        onMouseLeave={() => setShowChangePrice(false)}>
+        
         <Logo src={logo} alt="stock logo" />
         <StockInfo>
           <StockName>{korName}</StockName>
@@ -165,8 +168,8 @@ const DetailData = styled.span`
 `;
 
 const getColorByValue = (value: string) => {
-  if (value.startsWith('')) return 'red';
-  if (value.startsWith('-')) return 'blue';
+  if (value.startsWith('')) return '#ed2926';
+  if (value.startsWith('-')) return '#2679ed';
   return 'black';
 };
 
