@@ -9,6 +9,8 @@ import { StateProps } from '../../models/stateProps'; // 👈 추가
 import useGetCash from '../../hooks/useGetCash'; 
 
 
+
+
 const EntireList: React.FC<EntireListProps> = ({ currentListType, onChangeListType }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   const [showChangePrice, setShowChangePrice] = useState(false);
