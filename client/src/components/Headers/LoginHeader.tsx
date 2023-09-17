@@ -37,6 +37,7 @@ const LoginHeader: React.FC<LoginHeaderProps> = () => {
     navigate("/");  // 메인 페이지로 이동
   };
 
+  // 로그아웃 클릭 처리 함수
   const handleLogout = () => {
     dispatch(setLogoutState()); // 전역변수에서 로그아웃 상태로 설정
     localStorage.removeItem("accessToken"); // 엑세스 토큰 제거
@@ -53,9 +54,7 @@ const LoginHeader: React.FC<LoginHeaderProps> = () => {
       </LogoButton>
       <StockSearchComponent/>
       <UserActions>
-        <NotificationButton> 
-          <UserNameDisplay>{userName || userEmail}</UserNameDisplay>
-        </NotificationButton>
+        <UserNameDisplay>{userName || userEmail}</UserNameDisplay>
         <ProfileButton onClick={handleProfileOpen}>
           <ProfileImage src={SampleProfile} />
         </ProfileButton>
@@ -112,16 +111,12 @@ const UserActions = styled.div`
   align-items: center;
 `;
 
-// 알림 버튼 스타일
-const NotificationButton = styled.button`
-  margin-right: 1rem; 
-  background-color: #fff;
-  border: none;
-  cursor: pointer;
-  img {   
-    height: 40px;
-    width: auto;
-  }
+//유저 이름 스타일
+const UserNameDisplay = styled.span`
+  font-weight: 400;
+  font-size: 1rem;
+  color: darkslategray;
+  margin-right:1rem;
 `;
 
 // 프로필 버튼 스타일
@@ -141,7 +136,7 @@ const ProfileButton = styled.button`
 
 // 프로필 이미지 스타일
 const ProfileImage = styled.img`
-  height: 40px;
+  height: 35px;
   width: auto;
 `;
 
@@ -159,8 +154,3 @@ const LogoutButton = styled.button`
   }
 `;
 
-const UserNameDisplay = styled.span`
-  font-weight: 400;
-  font-size: 1rem;
-  color: darkslategray;
-`;
