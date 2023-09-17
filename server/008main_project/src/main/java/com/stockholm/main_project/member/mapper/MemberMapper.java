@@ -14,6 +14,7 @@ public interface MemberMapper {
     Member memberPostToMember(MemberPostDto requestBody);
     Member memberPatchToMember(MemberPatchDto requestBody);
 
+    @Mapping(source = "cash.cashId", target = "cash")
     MemberResponseDto memberToMemberResponseDto(Member member);
 }
 

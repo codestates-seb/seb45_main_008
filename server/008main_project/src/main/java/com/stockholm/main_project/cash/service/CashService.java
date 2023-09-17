@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -24,6 +25,10 @@ public class CashService {
     }
 
     public Cash createCash(Cash cash) {
+
+        if (isCashAlreadyExists(cash)) {
+            throw new BusinessLogicException(ExceptionCode.CASH_DUPLICATION);
+        }
 
         Cash saveCash = cashRepository.save(cash);
         System.out.println("# Create Cash");
@@ -64,5 +69,13 @@ public class CashService {
         if (!cash.getMember().equals(member)) {
             throw new BusinessLogicException(ExceptionCode.INVALID_CASH);
         }
+    }
+    private boolean isCashAlreadyExists(Cash cash) {
+        Member member = cash.getMember();
+        long money = cash.getMoney();
+
+        List<Cash> existingCashList = cashRepository.findByMemberAndMoney(member, money);
+
+        return !existingCashList.isEmpty();
     }
 }
