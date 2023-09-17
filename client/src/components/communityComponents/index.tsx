@@ -180,12 +180,12 @@ const timeLineText = {
 //드롭다운 글작성 스타일 및 닫기버튼 스타일
 const DropdownInput = styled.input`
   text-align: center;
-  border: 1px solid#40797c;
-  width: 100%;
+  border: 0.1px solid#40797c;
+  width: 50%;
   height: 80px;
   outline: none;
   &:focus {
-    border: 2px solid#40797c;
+    border: 1px solid#40797c;
   }
 `;
 
@@ -201,11 +201,13 @@ const DropDownClose = styled.div`
 //글작성을위해 클릭시 드롭다운 열어주는 버튼
 
 const Button = styled.button`
-  border-style: none;
-  background-color: #2d4f51;
+  background-color: white;
+  color: darkslategray;
+  border-color: darkslategray;
+
   width: 380px;
   height: 30px;
-  border-radius: 30px 30px;
+  border-radius: 5px ;
   margin: 0 auto;
   margin-bottom: 15px;
 
@@ -216,8 +218,7 @@ const Button = styled.button`
   &:after {
     content: "무슨 생각을하고 계신가요?";
     display: block;
-
-    color: #fff;
+    color: darkslategray;
     width: 100%;
   }
 `;

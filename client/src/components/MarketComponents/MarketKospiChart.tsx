@@ -50,9 +50,9 @@ const MarketkospiChart = () => {
           yAxis: [
             {
               type: "value",
-              boundaryGap: [0, "10%"],
+              boundaryGap: [0, '10%'],
               position: "left",
-              interval: 100,
+              interval: 200,
               min: 2000,
               splitLine: {
                 show: true,
@@ -80,19 +80,19 @@ const MarketkospiChart = () => {
                 color: function (params: any) {
                   // 주식 상승이면 빨간색, 하락이면 파란색 반환
                   return params.data[1] >= params.data[0]
-                    ? "rgb(255, 0, 0)"
-                    : "rgb(0, 0, 255)";
+                    ? "#f87369"
+                    : "#5a99f8";
                 },
               },
               areaStyle: {
                 color: new echarts.graphic.LinearGradient(0, 0, 0, 1, [
                   {
                     offset: 0,
-                    color: "rgb(0,0, 200)",
+                    color: "#5a99f8",
                   },
                   {
                     offset: 1,
-                    color: "rgb(250, 0, 0)",
+                    color: 'white',
                   },
                 ]),
               },
@@ -108,8 +108,8 @@ const MarketkospiChart = () => {
                   // 현재 가격과 이전 가격을 비교하여 색상 설정
                   const color =
                     currentPrice > previousPrice
-                      ? "rgb(255, 0, 0)"
-                      : "rgb(0, 0, 255)";
+                      ? "#f87369"
+                      : "#5a99f8";
 
                   return {
                     value: currentPrice,
@@ -122,10 +122,10 @@ const MarketkospiChart = () => {
             },
           ],
           grid: {
-            left: "10%",
-            right: "15%",
+            left: "15%",
+            right: "0%",
             top: "20%",
-            bottom: "40%",
+            bottom: "33%",
           },
         });
       }
@@ -146,10 +146,11 @@ interface KospiProps {
   bstp_nmix_prpr: string;
   mod_yn: string;
   stck_bsop_date: string;
+  param: string;
 }
 
 const KospiChartStyle = styled.div`
-  margin-top: 30px;
+  margin-top: 0px;
   width: 100%;
   height: 200px;
 `;
