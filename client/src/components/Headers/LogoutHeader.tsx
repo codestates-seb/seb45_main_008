@@ -2,13 +2,13 @@ import React from "react";
 import styled from "styled-components";
 import StockHolmLogo from "../../asset/images/StockHolmLogo.png";
 import { useNavigate } from "react-router-dom";  // 라우터의 네비게이션을 사용하기 위해 가져옴
-import { setLogoutState } from '../../reducer/member/loginSlice';
-import { useDispatch} from 'react-redux';
+// import { setLogoutState } from '../../reducer/member/loginSlice';
+// import { useDispatch} from 'react-redux';
 import StockSearchComponent from './stockSearchComponent';
 
 const LogoutHeader: React.FC<LogoutHeaderProps> = ({ onLoginClick }) => {
   //reduc-toolkit 활용
-  const dispatch = useDispatch();
+  // const dispatch = useDispatch();
 
   const navigate = useNavigate();  // 라우터 네비게이션 훅 사용
   
@@ -20,8 +20,8 @@ const LogoutHeader: React.FC<LogoutHeaderProps> = ({ onLoginClick }) => {
     navigate("/");  // 메인 페이지로 이동
   };
 
-  // isLoggedOut 변수를 항상 0으로 설정
-  dispatch(setLogoutState());
+  // // isLoggedOut 변수를 항상 0으로 설정
+  // dispatch(setLogoutState());
 
   // 컴포넌트 렌더링
   return (

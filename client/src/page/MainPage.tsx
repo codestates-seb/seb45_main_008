@@ -34,7 +34,18 @@ const MainPage = () => {
   const [isWelcomeModalOpen, setWelcomeModalOpen] = useState(false);
   const [isProfileModalOpen, setProfileModalOpen] = useState(false); //프로필 모달 보이기/숨기기
 
+  const dispatch = useDispatch();
 
+  // 🔴 페이지 로드 시 로컬 스토리지의 토큰을 기반으로 로그인 상태를 확인합니다.
+  useEffect(() => {
+    const acessToken = localStorage.getItem("accessToken");
+    if (acessToken !== null) {
+      dispatch(setLoginState());
+    }
+  }, [dispatch]);
+  
+  const isLogin = useSelector((state: RootState) => state.login);
+  console.log(isLogin);
 
   const openOAuthModal = useCallback(() => {
     setOAuthModalOpen(true);
@@ -95,18 +106,6 @@ const MainPage = () => {
     setWelcomeModalOpen(false);
   }, []);
 
-  const dispatch = useDispatch();
-  const isLogin = useSelector((state: RootState) => state.login);
-  console.log(isLogin);
-
-  // 🔴 페이지 로드 시 로컬 스토리지의 토큰을 기반으로 로그인 상태를 확인합니다.
-  useEffect(() => {
-    const acessToken = localStorage.getItem("acessToken");
-    if (acessToken !== null) {
-      dispatch(setLoginState());
-    }
-  }, [dispatch]);
-
   const handleOAuthLoginSuccess = useCallback(() => {
     setLoginConfirmationModalOpen(true);  // 로그인 확인 모달 열기
 }, []);
@@ -139,7 +138,7 @@ const MainPage = () => {
 
   return (
     <Container>
-      {isLogin === 1 ? (
+      {isLogin == 1 ? (
         <LoginHeader onProfileClick={openProfileModal} />
       ) : (
         <LogoutHeader onLoginClick={openOAuthModal} />
