@@ -8,7 +8,6 @@ const downColor = "rgba(59, 119, 247, 0.51)";
 const volumColor = "rgba(57, 118, 249, 0.56)";
 const pointerColor = "#cc3c3a";
 const indexColor = "#4479c2";
-// const indexColor = "black";
 const averageLineMinute = 10;
 
 const useGetStockChart = (companyId: number) => {
@@ -17,6 +16,50 @@ const useGetStockChart = (companyId: number) => {
   const [chartData, setChartData] = useState<StockProps[]>([]);
   const [corpName, setCorpName] = useState("");
 
+  // 🔴 비교차트 테스트
+  const [compareChart, setCompare] = useState<CompareProps | undefined>(undefined);
+
+  const testData = organizeData(chartData);
+  const testPrice = testData.values;
+  const prPriceList: number[] = [];
+  // console.log(testPrice);
+  testPrice.forEach((price) => {
+    prPriceList.push(price[0]);
+  });
+
+  console.log(prPriceList);
+  const testCompare = {
+    name: "비교차트 테스트",
+    type: "line",
+    data: prPriceList,
+    lineStyle: {
+      opacity: 0.5,
+    },
+    yAxisIndex: 0,
+  };
+
+  useEffect(() => {
+    setCompare(testCompare);
+  }, [testCompare]);
+
+  useEffect(() => {
+    console.log(compareChart);
+  }, [compareChart]);
+
+  interface CompareProps {
+    name: string;
+    type: string;
+    data: number[];
+    lineStyle: { opacity: number };
+    yAxisIndex: number;
+  }
+
+  // 🔴 비교차트 테스트
+
+  // 차트 데이터
+  const organizedChartData = organizeData(chartData);
+  const movingAvgLine = calculateMovingAvgLine(averageLineMinute, organizedChartData);
+
   useEffect(() => {
     if (stockPrice && stockInfo) {
       setChartData(stockPrice);
@@ -24,76 +67,7 @@ const useGetStockChart = (companyId: number) => {
     }
   }, [stockPrice, stockInfo]);
 
-  // 1) 차트 데이터 정리 (x축 날짜 데이터, y축 종가 및 거래량 데이터)
-  const organizeData = (rawData: StockProps[]) => {
-    const tooltipTitle = [];
-    const time = [];
-    const values = [];
-    const volumes = [];
-
-    for (let i = 0; i < rawData.length; i++) {
-      const date = new Date(rawData[i].stockTradeTime);
-
-      // 1) x축 날짜
-      const hour = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
-      const minute = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
-      const priceTime = `${hour}:${minute}`;
-      time.push(priceTime);
-
-      // 2) 툴팁 날짜
-      const dayList = ["일", "월", "화", "수", "목", "금", "토"];
-
-      const year = date.getFullYear();
-      const month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
-      const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
-      const dayOfWeek = dayList[date.getDay()];
-      const tooltipDay = `${year}.${month}.${day}(${dayOfWeek}) ${priceTime}`;
-      tooltipTitle.push(tooltipDay);
-
-      // 3) 주가
-      const openPrice = parseInt(rawData[i].stck_oprc);
-      const closePrice = parseInt(rawData[i].stck_prpr);
-      const lowestPrice = parseInt(rawData[i].stck_lwpr);
-      const highestPrice = parseInt(rawData[i].stck_hgpr);
-      values.push([openPrice, closePrice, lowestPrice, highestPrice]);
-
-      // 4) 거래량
-      const volume = parseInt(rawData[i].cntg_vol);
-      const priceChange = openPrice < closePrice ? 1 : -1;
-      volumes.push([i, volume, priceChange]);
-    }
-    return {
-      time: time,
-      tooltipTitle: tooltipTitle,
-      values: values,
-      volumes: volumes,
-    };
-  };
-
-  // // 🔴 [테스트] 2) 이동 평균선 데이터 정리
-
-  function calculateMovingAvgLine(minuteCount: number, data: OrganizedChartProps) {
-    const result = [];
-    const length = data.values.length;
-
-    for (let i = 0; i < length; i++) {
-      if (i < minuteCount) {
-        result.push("-");
-        continue;
-      }
-
-      let sum = 0;
-      for (let j = 0; j < minuteCount; j++) {
-        sum += data.values[i - j][1];
-      }
-      result.push(+(sum / minuteCount).toFixed(3));
-    }
-    return result;
-  }
-
-  const organizedChartData = organizeData(chartData);
-  const movingAvgLine = calculateMovingAvgLine(averageLineMinute, organizedChartData);
-
+  // 차트 옵션
   const options = {
     animation: true,
     legend: {
@@ -316,7 +290,6 @@ const useGetStockChart = (companyId: number) => {
         },
         yAxisIndex: 0,
       },
-      // 🔴 이동 평균선 테스트
       {
         name: `이동평균선 (${averageLineMinute}분)`,
         type: "line",
@@ -325,6 +298,7 @@ const useGetStockChart = (companyId: number) => {
         lineStyle: {
           opacity: 0.5,
         },
+        yAxisIndex: 0,
       },
       {
         name: `거래량`,
@@ -336,6 +310,8 @@ const useGetStockChart = (companyId: number) => {
           color: volumColor, // 원하는 색상으로 설정
         },
       },
+      // 🔴 비교차트 테스트
+      compareChart,
     ],
   };
 
@@ -352,6 +328,72 @@ const useGetStockChart = (companyId: number) => {
 
 export default useGetStockChart;
 
+// 1) 차트 데이터 정리 (x축 날짜 데이터, y축 종가 및 거래량 데이터)
+const organizeData = (rawData: StockProps[]) => {
+  const tooltipTitle = [];
+  const time = [];
+  const values = [];
+  const volumes = [];
+
+  for (let i = 0; i < rawData.length; i++) {
+    const date = new Date(rawData[i].stockTradeTime);
+
+    // 1) x축 날짜
+    const hour = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
+    const minute = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
+    const priceTime = `${hour}:${minute}`;
+    time.push(priceTime);
+
+    // 2) 툴팁 날짜
+    const dayList = ["일", "월", "화", "수", "목", "금", "토"];
+
+    const year = date.getFullYear();
+    const month = date.getMonth() + 1 < 10 ? `0${date.getMonth() + 1}` : date.getMonth() + 1;
+    const day = date.getDate() < 10 ? `0${date.getDate()}` : date.getDate();
+    const dayOfWeek = dayList[date.getDay()];
+    const tooltipDay = `${year}.${month}.${day}(${dayOfWeek}) ${priceTime}`;
+    tooltipTitle.push(tooltipDay);
+
+    // 3) 주가
+    const openPrice = parseInt(rawData[i].stck_oprc);
+    const closePrice = parseInt(rawData[i].stck_prpr);
+    const lowestPrice = parseInt(rawData[i].stck_lwpr);
+    const highestPrice = parseInt(rawData[i].stck_hgpr);
+    values.push([openPrice, closePrice, lowestPrice, highestPrice]);
+
+    // 4) 거래량
+    const volume = parseInt(rawData[i].cntg_vol);
+    const priceChange = openPrice < closePrice ? 1 : -1;
+    volumes.push([i, volume, priceChange]);
+  }
+  return {
+    time: time,
+    tooltipTitle: tooltipTitle,
+    values: values,
+    volumes: volumes,
+  };
+};
+
+// 2) 이동 평균선 데이터 정리
+const calculateMovingAvgLine = (minuteCount: number, data: OrganizedChartProps) => {
+  const result = [];
+  const length = data.values.length;
+
+  for (let i = 0; i < length; i++) {
+    if (i < minuteCount) {
+      result.push("-");
+      continue;
+    }
+
+    let sum = 0;
+    for (let j = 0; j < minuteCount; j++) {
+      sum += data.values[i - j][1];
+    }
+    result.push(+(sum / minuteCount).toFixed(3));
+  }
+  return result;
+};
+
 interface StockProps {
   stockMinId: number;
   companyId: number;
@@ -364,7 +406,6 @@ interface StockProps {
   cntg_vol: string;
 }
 
-// 🔴 테스트
 interface OrganizedChartProps {
   time: string[];
   tooltipTitle: string[];
