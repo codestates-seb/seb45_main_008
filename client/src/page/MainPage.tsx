@@ -1,21 +1,28 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
+
 import LogoutHeader from "../components/Headers/LogoutHeader";
 import LoginHeader from "../components/Headers/LoginHeader";
+
 import OAuthLoginModal from "../components/Logins/OAuthLogin";
 import EmailLoginModal from "../components/Logins/EmailLogin";
 import LoginConfirmationModal from "../components/Logins/LoginConfirmatationModal";
+
 import EmailSignupModal from "../components/Signups/EmailSignup";
 import EmailVerificationModal from "../components/Signups/EmailCertify";
 import PasswordSettingModal from "../components/Signups/Password";
+import Welcome from "../components/Signups/Welcome";
+import GuideModal from "../components/Signups/Guide";
+
 import CentralChart from "../components/CentralChart/Index";
+
 import EntireList from "../components/EntireList/EntireList";
 import HoldingList from "../components/HoldingList/HoldingList"; 
 import WatchList from "../components/WatchList/WatchList"; // Assuming you have a Holdings component
 import CompareChartSection from "../components/CompareChartSection/Index";
 import StockOrderSection from "../components/StockOrderSection/Index";
-import Welcome from "../components/Signups/Welcome";
+
 import ProfileModal from "../components/Profile/profileModal";
 import { StateProps } from "../models/stateProps";
 import { TabContainerPage } from "./TabPages/TabContainerPage";
@@ -105,7 +112,13 @@ const MainPage = () => {
 
   const closeWelcomeModal = useCallback(() => {
     setWelcomeModalOpen(false);
+    setGuideModalOpen(true);  // Open the GuideModal after closing the WelcomeModal
   }, []);
+
+  const closeGuideModal = useCallback(() => {
+    setGuideModalOpen(false);
+    openOAuthModal();
+  }, [openOAuthModal]);
 
   const handleOAuthLoginSuccess = useCallback(() => {
     setLoginConfirmationModalOpen(true);  // 로그인 확인 모달 열기
@@ -136,6 +149,8 @@ const MainPage = () => {
   const handleMenuChange = (menu: "전체종목" | "관심종목" | "보유종목") => {
     setSelectedMenu(menu);
   };
+
+  const [isGuideModalOpen, setGuideModalOpen] = useState(false);
 
   return (
     <Container>
@@ -192,6 +207,7 @@ const MainPage = () => {
           }}
         />
       )}
+      {isGuideModalOpen && <GuideModal onClose={closeGuideModal} />}
       {isProfileModalOpen && <ProfileModal onClose={() => setProfileModalOpen(false)} />}
     </Container>
   );
