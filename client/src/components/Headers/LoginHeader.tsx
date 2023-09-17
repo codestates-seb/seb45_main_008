@@ -37,6 +37,9 @@ const LoginHeader: React.FC<LoginHeaderProps> = () => {
     dispatch(setLogoutState()); // 전역변수에서 로그아웃 상태로 설정
     localStorage.removeItem("accessToken"); // 엑세스 토큰 제거
     localStorage.removeItem("refreshToken"); // 리프레시 토큰 제거
+
+    // 페이지를 새로고침합니다.
+     window.location.reload();
 };
 
   return (

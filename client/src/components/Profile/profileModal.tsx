@@ -70,17 +70,6 @@ const Tabs = styled.div`
     z-index: 1002; // 이 값을 추가하여 Tabs를 최상위로 올립니다.
 `;
 
-// // 모달 닫기 버튼 스타일
-// const CloseButton = styled.button`
-//   position: absolute;
-//   top: 10px;
-//   right: 10px;
-//   background: #FFFFFF;
-//   border: 1px solid lightgray;
-//   font-size: 1.5rem;
-//   cursor: pointer;
-// `;
-
 // TabButton 컴포넌트 스타일링
 const TabButton = styled.button<{ isActive?: boolean }>`
     flex: 1;

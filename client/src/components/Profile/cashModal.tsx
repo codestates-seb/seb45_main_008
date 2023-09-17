@@ -1,62 +1,61 @@
 import React, { useState } from 'react';
 import styled from 'styled-components'; 
-import { useSelector, useDispatch } from 'react-redux'; 
-import { useCreateCash, useGetCash, useResetCash } from '../../hooks/useCash'; 
-import { RootState } from '../../store/config'; 
+import { useDispatch} from 'react-redux'; // <-- Import useSelector
+import { useCreateCash, useResetCash } from '../../hooks/useCash'; 
+import useGetCash from '../../hooks/useGetCash'; 
+import useGetCashId from '../../hooks/useGetCashId';
 import { setCashId, setMoney } from '../../reducer/cash/cashSlice';
+
+
 
 const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
     // 상태 및 변수 초기화
-    const titleText = "현금";
+    const titleText = "현금생성/리셋";
     const cashCreationPlaceholder = "생성할 현금 입력";
     const createCashButtonText = "현금 생성";
     const cashInputPlaceholder = "현금 입력";
-    const resetButtonText = "리셋";
+    const resetButtonText = "현금 리셋";
     // const refreshButtonText ="새로고침";
 
     const dispatch = useDispatch();
-    const cashId = useSelector((state: RootState) => state.cash.cashId);
-    const money = useSelector((state: RootState) => state.cash.money) || '0';
+
+    // useGetCash 훅을 사용하여 현금 보유량 가져오기
+    const { cashData: holdingsAmount } = useGetCash(); // 👈 useGetCash 훅을 사용하여 현금 보유량 데이터를 가져옵니다.
+
+    // useGetCashId 훅을 사용하여 cashId 가져오기
+    const { cashData: cashId } = useGetCashId(); // 👈 useGetCash 훅을 사용하여 현금 보유량 데이터를 가져옵니다. 
 
     const createCashMutation = useCreateCash();
-    const cashQuery = useGetCash();
     const updateCashMutation = useResetCash();
 
     const [cashInput, setCashInput] = useState<string>('0');
     const [initialAmount, setInitialAmount] = useState<string>('0'); // 현금 생성을 위한 상태 변수
 
-    
-
-    // 현금 정보 재조회 함수
-    // const refreshCashInfo = () => {
-    //     cashQuery.refetch();  // 현금 정보를 다시 가져옵니다.
-    // };
-
     // 현금 생성 및 cashId 전역 저장 함수
     const handleCreateCash = () => {
-        createCashMutation.mutate(initialAmount);
+        createCashMutation.mutate(initialAmount, {
+            onSuccess: () => {
+                window.location.reload();
+            }
+        });
     };
-
-    // 보유 현금량 조회 및 전역 저장 함수
-    if (cashQuery.data && money !== cashQuery.data.data.cash) {
-        dispatch(setMoney(cashQuery.data.data.cash));
-    }
 
     // 입력한 금액으로 현금 리셋 함수
     const handleCashReset = () => {
         if (cashId) {
-            const numericCashAmount = cashInput; // cashInput을 숫자로 변환
+            const numericCashAmount = cashInput;
             updateCashMutation.mutate({ money: numericCashAmount }, {
                 onSuccess: () => {
-                    dispatch(setMoney(numericCashAmount)); // 현금 금액을 입력한 금액으로 리셋
-                    dispatch(setCashId(cashId) );
+                    dispatch(setMoney(numericCashAmount));
+                    dispatch(setCashId(cashId));
+                    window.location.reload(); 
                 }
             });
         } else {
             console.error("cashId is null or not a valid number.");
         }
-    };
+};
 
     return (
         <ModalBackground>
@@ -75,12 +74,6 @@ const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     <CreateCashButton onClick={handleCreateCash}>{createCashButtonText}</CreateCashButton>
                 </div>
                 <div>
-                    <p style={{ display: 'inline-block', margin: '20px' }}>
-                        현재 현금: {cashQuery.isLoading ? 'Loading...' : money.toLocaleString()}
-                    </p>
-                    {/* <RefreshButton onClick={refreshCashInfo}>{refreshButtonText}</RefreshButton> */}
-                </div>
-                <div>
                     <CashInput
                         type="string"
                         value={cashInput}
@@ -89,16 +82,17 @@ const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     />
                     <ReceiveButton onClick={handleCashReset}>{resetButtonText}</ReceiveButton>
                 </div>
+                <div>
+                    <p style={{ display: 'inline-block', margin: '20px' }}>
+                        현금 보유량: {holdingsAmount}원
+                    </p>
+                </div>
             </ModalContainer>
         </ModalBackground>
     );
 };
 
 export default CashModal;
-
-// interface CashModalProps {
-//     onClose: () => void;
-// }
 
 // Styled Components Definitions:
 
@@ -169,10 +163,5 @@ const CashCreationInput = styled.input`
 `;
 
 const CreateCashButton = styled(StyledButton)``;
-
-// const RefreshButton = styled(StyledButton)`
-//     margin-left:50px;
-// `;
-
 
 

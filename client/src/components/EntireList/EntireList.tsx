@@ -4,8 +4,9 @@ import styled from 'styled-components';
 import Header from './Header';
 import StockItem from './StockItem';
 import useCompanyData from '../../hooks/useCompanyData';
-import { useSelector } from 'react-redux'; 
-import { RootState } from '../../store/config'; 
+import { useSelector } from 'react-redux'; // 👈 추가
+import { StateProps } from '../../models/stateProps'; // 👈 추가
+import useGetCash from '../../hooks/useGetCash'; 
 
 
 const EntireList: React.FC<EntireListProps> = ({ currentListType, onChangeListType }) => {
@@ -18,17 +19,18 @@ const EntireList: React.FC<EntireListProps> = ({ currentListType, onChangeListTy
   // 'companies'가 'undefined'인 경우를 처리하기 위해 빈 배열로 초기화
   const companiesList = companies || [];
 
-    // 현금 보유량 가져오기
-  // 현금 보유량 가져오기: Redux store에서 직접 가져옵니다.
-  const holdingsAmount = useSelector((state: RootState) => state.cash.money) || "0";
+  // 로그인 상태 가져오기
+  const isLogin = useSelector((state: StateProps) => state.login);
 
+  // useGetCash 훅을 사용하여 현금 보유량 가져오기
+  const { cashData: holdingsAmount } = useGetCash(); // 👈 useGetCash 훅을 사용하여 현금 보유량 데이터를 가져옵니다.
 
 
   return (
     <WatchListContainer>
       <Header currentListType={currentListType} onChangeListType={onChangeListType} isMenuOpen={isMenuOpen} setMenuOpen={setMenuOpen} />
       <Divider1 />
-      <HoldingsAmount>현금 보유량: {holdingsAmount}원</HoldingsAmount> {/* 현금 보유량 표시 */}
+      {isLogin == 0 ? (<HoldingsAmount>"로그인이 필요한 서비스 입니다."</HoldingsAmount>) : (<HoldingsAmount>현금 보유량: {holdingsAmount}원</HoldingsAmount>)}
       <Divider2 />
       <StockList>
         {isLoading ? <div>Loading...</div> : isError ? <div>Error fetching data</div> : companiesList.map((company) => <StockItem key={company.companyId} company={company} setShowChangePrice={setShowChangePrice} showChangePrice={showChangePrice} />)}
