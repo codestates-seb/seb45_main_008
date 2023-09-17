@@ -3,8 +3,7 @@ package com.stockholm.main_project.stock.controller;
 import com.stockholm.main_project.stock.dto.CompanyResponseDto;
 import com.stockholm.main_project.stock.dto.StockMinResponseDto;
 import com.stockholm.main_project.stock.entity.Company;
-import com.stockholm.main_project.stock.entity.StockMin;
-import com.stockholm.main_project.stock.mapper.CompanyMapper;
+import com.stockholm.main_project.stock.mapper.StockMapper;
 import com.stockholm.main_project.stock.service.CompanyService;
 import com.stockholm.main_project.stock.service.StockMinService;
 import io.swagger.v3.oas.annotations.Operation;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/companies")
@@ -32,12 +30,12 @@ import java.util.stream.Collectors;
 public class CompanyController {
 
     private final CompanyService companyService;
-    private final CompanyMapper companyMapper;
+    private final StockMapper stockMapper;
     private StockMinService stockMinService;
 
-    public CompanyController(CompanyService companyService, CompanyMapper companyMapper, StockMinService stockMinService) {
+    public CompanyController(CompanyService companyService, StockMapper stockMapper, StockMinService stockMinService) {
         this.companyService = companyService;
-        this.companyMapper = companyMapper;
+        this.stockMapper = stockMapper;
         this.stockMinService = stockMinService;
     }
     // swagger 추가
@@ -51,9 +49,9 @@ public class CompanyController {
     })
     // 전체 회사 리스트
     @GetMapping
-    public ResponseEntity getCompanyList() throws InterruptedException {
+    public ResponseEntity getCompanyList() {
         List<Company> companyList = companyService.findCompanies();
-        List<CompanyResponseDto> companyResponseDtoList = companyMapper.CompaniesToCompanyResponseDtos(companyList);
+        List<CompanyResponseDto> companyResponseDtoList = stockMapper.CompaniesToCompanyResponseDtos(companyList);
 
         return new ResponseEntity<>(companyResponseDtoList, HttpStatus.OK);
     }
@@ -71,7 +69,7 @@ public class CompanyController {
     @GetMapping("/{companyId}")
     public ResponseEntity getCompanyStockAsBi(@PathVariable("companyId") Long comanyId) {
         Company company = companyService.findCompanyById(comanyId);
-        CompanyResponseDto companyResponseDto = companyMapper.companyToCompanyResponseDto(company);
+        CompanyResponseDto companyResponseDto = stockMapper.companyToCompanyResponseDto(company);
 
         return new ResponseEntity<>(companyResponseDto, HttpStatus.OK);
     }

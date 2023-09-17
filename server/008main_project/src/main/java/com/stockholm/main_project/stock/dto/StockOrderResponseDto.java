@@ -4,6 +4,8 @@ import com.stockholm.main_project.stock.entity.StockOrder;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.LocalDateTime;
+
 @Getter
 @Setter
 public class StockOrderResponseDto {
@@ -20,4 +22,6 @@ public class StockOrderResponseDto {
     private com.stockholm.main_project.stock.entity.StockOrder.OrderStates OrderStates;
 
     private long price;
+
+    private LocalDateTime modifiedAt;
 }

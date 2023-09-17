@@ -6,22 +6,20 @@ import com.stockholm.main_project.exception.BusinessLogicException;
 import com.stockholm.main_project.exception.ExceptionCode;
 import com.stockholm.main_project.member.entity.Member;
 import com.stockholm.main_project.member.repository.MemberRepository;
+import com.stockholm.main_project.stock.controller.LongPollingController;
 import com.stockholm.main_project.stock.dto.StockOrderResponseDto;
 import com.stockholm.main_project.stock.entity.Company;
 import com.stockholm.main_project.stock.entity.StockAsBi;
 import com.stockholm.main_project.stock.entity.StockHold;
 import com.stockholm.main_project.stock.entity.StockOrder;
-import com.stockholm.main_project.stock.mapper.CompanyMapper;
+import com.stockholm.main_project.stock.mapper.StockMapper;
 import com.stockholm.main_project.stock.repository.StockHoldRepository;
 import com.stockholm.main_project.stock.repository.StockOrderRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Optional;
-import java.util.Queue;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -35,10 +33,10 @@ public class StockOrderService {
     private final StockHoldService stockHoldService;
     private final StockHoldRepository stockHoldRepository;
     private final CashService cashService;
+    private final StockMapper stockMapper;
+    private final LongPollingController longPollingController;
 
-    private final CompanyMapper companyMapper;
-
-    public StockOrderService(StockAsBiService stockAsBiService, CompanyService companyService, StockOrderRepository stockOrderRepository, MemberRepository memberRepository, StockHoldService stockHoldService, StockHoldRepository stockHoldRepository, CashService cashService, CompanyMapper companyMapper) {
+    public StockOrderService(StockAsBiService stockAsBiService, CompanyService companyService, StockOrderRepository stockOrderRepository, MemberRepository memberRepository, StockHoldService stockHoldService, StockHoldRepository stockHoldRepository, CashService cashService, StockMapper stockMapper, LongPollingController longPollingController) {
         this.stockAsBiService = stockAsBiService;
         this.companyService = companyService;
         this.stockOrderRepository = stockOrderRepository;
@@ -46,7 +44,8 @@ public class StockOrderService {
         this.stockHoldService = stockHoldService;
         this.stockHoldRepository = stockHoldRepository;
         this.cashService = cashService;
-        this.companyMapper = companyMapper;
+        this.stockMapper = stockMapper;
+        this.longPollingController = longPollingController;
     }
 
     // 멤버, 회사 id, 가격
@@ -137,6 +136,8 @@ public class StockOrderService {
     public void checkOrder() {
         // 회사 리스트를 받아온다
         List<Company> companyList = companyService.findCompanies();
+        List<StockOrder> updateBuyStockOrders = new ArrayList<>();
+        List<StockOrder> updateSellStockOrders = new ArrayList<>();
         // for문(회사별로)
         for(Company company : companyList) {
             // 회사 호가 리스트를 받아온다
@@ -152,14 +153,21 @@ public class StockOrderService {
                     if(stockOrder.getOrderTypes().equals(StockOrder.OrderTypes.BUY)) {
                         // 호가 리스트 안에 체결 대기중인 stockOrder의 조건이 맞는 것이 있으면 buyStock으로 간다
                         StockOrder buyStock = reserveBuyDiscrimination(stockAsBi, stockOrder);
+                        // 클라이언트로 StockOrder를 보낸다(값이 있으면)
+                        if(buyStock != null)
+                            updateBuyStockOrders.add(buyStock);
                     }
                     // 예약 매도 실행
                     else {
                         StockOrder sellStock = reserveSellDiscrimination(stockAsBi, stockOrder);
+                       // 클라이언트로 StockOrder를 보낸다(값이 있으면)
+                        if(sellStock != null)
+                            updateSellStockOrders.add(sellStock);
                     }
                 }
             }
         }
+        longPollingController.notifyDataUpdated(updateBuyStockOrders, updateSellStockOrders);
    }
 
 
@@ -366,9 +374,9 @@ public class StockOrderService {
 
     // 멤버의 모든 StockOrders 불러오기
     public List<StockOrderResponseDto> getMemberStockOrders(long memberId) {
-        List<StockOrder> stockOrders = stockOrderRepository.findAllByMember_MemberId(memberId);
+        List<StockOrder> stockOrders = stockOrderRepository.findAllByMember_MemberIdOrderByModifiedAtDesc(memberId);
         List<StockOrderResponseDto> stockOrderRepositories = stockOrders.stream()
-                .map(stockOrder -> companyMapper.stockOrderToStockOrderResponseDto(stockOrder)).collect(Collectors.toList());
+                .map(stockOrder -> stockMapper.stockOrderToStockOrderResponseDto(stockOrder)).collect(Collectors.toList());
 
         return stockOrderRepositories;
     }
@@ -386,7 +394,7 @@ public class StockOrderService {
             throw new BusinessLogicException(ExceptionCode.STOCKORDER_ALREADY_FINISH);
         // 수량 선택해서 취소 할 수 있게(취소한 만큼 보유 주식 돌아오게) 0이 되면 미체결 스톡 오더 삭제
         else {
-            if(stockOrder.getStockCount() >= stockCount)
+            if(stockOrder.getStockCount() <= stockCount)
                 stockOrderRepository.delete(stockOrder);
             else {
                 stockOrder.setStockCount(stockOrder.getStockCount() - stockCount);
