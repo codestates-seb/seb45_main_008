@@ -8,7 +8,8 @@ const downColor = "rgba(59, 119, 247, 0.51)";
 const volumColor = "rgba(57, 118, 249, 0.56)";
 const pointerColor = "#cc3c3a";
 const indexColor = "#4479c2";
-// const indexColor = "#cc3c3a";
+// const indexColor = "black";
+const averageLineMinute = 10;
 
 const useGetStockChart = (companyId: number) => {
   const { stockPrice } = useGetStockData(companyId);
@@ -23,7 +24,7 @@ const useGetStockChart = (companyId: number) => {
     }
   }, [stockPrice, stockInfo]);
 
-  // 🔴 테스트
+  // 1) 차트 데이터 정리 (x축 날짜 데이터, y축 종가 및 거래량 데이터)
   const organizeData = (rawData: StockProps[]) => {
     const tooltipTitle = [];
     const time = [];
@@ -31,11 +32,9 @@ const useGetStockChart = (companyId: number) => {
     const volumes = [];
 
     for (let i = 0; i < rawData.length; i++) {
-      // 날짜
       const date = new Date(rawData[i].stockTradeTime);
-      console.log(date);
 
-      // 2) 1축 날짜
+      // 1) x축 날짜
       const hour = date.getHours() < 10 ? `0${date.getHours()}` : date.getHours();
       const minute = date.getMinutes() < 10 ? `0${date.getMinutes()}` : date.getMinutes();
       const priceTime = `${hour}:${minute}`;
@@ -51,30 +50,58 @@ const useGetStockChart = (companyId: number) => {
       const tooltipDay = `${year}.${month}.${day}(${dayOfWeek}) ${priceTime}`;
       tooltipTitle.push(tooltipDay);
 
-      // 주가
+      // 3) 주가
       const openPrice = parseInt(rawData[i].stck_oprc);
       const closePrice = parseInt(rawData[i].stck_prpr);
       const lowestPrice = parseInt(rawData[i].stck_lwpr);
       const highestPrice = parseInt(rawData[i].stck_hgpr);
       values.push([openPrice, closePrice, lowestPrice, highestPrice]);
 
-      // 거래량
+      // 4) 거래량
       const volume = parseInt(rawData[i].cntg_vol);
       const priceChange = openPrice < closePrice ? 1 : -1;
       volumes.push([i, volume, priceChange]);
     }
     return {
-      tooltipTitle: tooltipTitle,
       time: time,
+      tooltipTitle: tooltipTitle,
       values: values,
       volumes: volumes,
     };
   };
 
+  // // 🔴 [테스트] 2) 이동 평균선 데이터 정리
+
+  function calculateMovingAvgLine(minuteCount: number, data: OrganizedChartProps) {
+    const result = [];
+    const length = data.values.length;
+
+    for (let i = 0; i < length; i++) {
+      if (i < minuteCount) {
+        result.push("-");
+        continue;
+      }
+
+      let sum = 0;
+      for (let j = 0; j < minuteCount; j++) {
+        sum += data.values[i - j][1];
+      }
+      result.push(+(sum / minuteCount).toFixed(3));
+    }
+    return result;
+  }
+
   const organizedChartData = organizeData(chartData);
+  const movingAvgLine = calculateMovingAvgLine(averageLineMinute, organizedChartData);
 
   const options = {
     animation: true,
+    legend: {
+      top: 10,
+      left: "left",
+      padding: [4, 0, 0, 15],
+      data: [`주가`, `거래량`, `이동평균선 (${averageLineMinute}분)`],
+    },
     tooltip: {
       trigger: "axis",
       axisPointer: {
@@ -93,22 +120,25 @@ const useGetStockChart = (companyId: number) => {
 
         // 툴팁 내용을 원하는 형식으로 조합
         const tooltipContent = `
-          ${date}<br/><br/>
-          📈 ${corpName}<br/>
-          • 시가 ${openPrice} 원<br/>
-          • 종가 ${closePrice} 원<br/>
-          • 고가 ${highPrice} 원<br/>
-          • 저가 ${lowPrice} 원<br/>
-          • 거래량 ${volume} 주<br/>
+        <div style="width: 120px;">
+          <div>${date}<br/><br/></div>
+          <div>📈 ${corpName}<br/></div>
+          <div>• 시가 ${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}<b>${openPrice}</b> 원<br/></div>
+          <div>• 종가 ${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}<b>${closePrice}</b> 원<br/></div>
+          <div>• 고가 ${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}<b>${highPrice}</b> 원<br/></div>
+          <div>• 저가 ${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}<b>${lowPrice}</b> 원<br/></div>
+          <div>• 거래량 ${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}${"&nbsp;"}<b>${volume}</b> 주<br/></div>
+          <div>
         `;
 
         return tooltipContent;
       },
       borderWidth: 1,
       borderColor: "#ccc",
-      padding: 10,
+      padding: 15,
       textStyle: {
         color: "#000",
+        fontSize: 12.5,
       },
     },
     axisPointer: {
@@ -151,13 +181,13 @@ const useGetStockChart = (companyId: number) => {
         top: "0%",
         left: "0%",
         right: "0%",
-        height: "70%",
+        height: "72.5%",
       },
       {
         containLabel: true,
         left: "0%",
         right: "0%",
-        top: "72.5%",
+        top: "72.6%",
         height: "27%",
       },
     ],
@@ -275,7 +305,7 @@ const useGetStockChart = (companyId: number) => {
     ],
     series: [
       {
-        name: `${corpName} 주가`,
+        name: `주가`,
         type: "candlestick",
         data: organizedChartData.values,
         itemStyle: {
@@ -286,8 +316,18 @@ const useGetStockChart = (companyId: number) => {
         },
         yAxisIndex: 0,
       },
+      // 🔴 이동 평균선 테스트
       {
-        name: "거래량",
+        name: `이동평균선 (${averageLineMinute}분)`,
+        type: "line",
+        data: movingAvgLine,
+        smooth: true,
+        lineStyle: {
+          opacity: 0.5,
+        },
+      },
+      {
+        name: `거래량`,
         type: "bar",
         xAxisIndex: 1,
         data: organizedChartData.volumes,
@@ -312,19 +352,6 @@ const useGetStockChart = (companyId: number) => {
 
 export default useGetStockChart;
 
-// // y축 눈금 옵션 설정하는 함수
-// const calculateYAxisOptions = (data: StockProps[]) => {
-//   const stockPrice = data.map((stock) => parseFloat(stock.stck_prpr));
-
-//   const maxPrice = Math.max(...stockPrice);
-//   const minPrice = Math.min(...stockPrice);
-
-//   const interval = Math.ceil((maxPrice - minPrice) / 10);
-//   const min = Math.floor(minPrice - interval * 5);
-
-//   return { interval, min };
-// };
-
 interface StockProps {
   stockMinId: number;
   companyId: number;
@@ -335,4 +362,12 @@ interface StockProps {
   stck_hgpr: string;
   stck_lwpr: string;
   cntg_vol: string;
+}
+
+// 🔴 테스트
+interface OrganizedChartProps {
+  time: string[];
+  tooltipTitle: string[];
+  values: number[][];
+  volumes: number[][];
 }
