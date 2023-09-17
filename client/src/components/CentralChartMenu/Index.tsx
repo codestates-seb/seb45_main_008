@@ -33,7 +33,7 @@ const Container = styled.div`
     height: 44px;
     display: flex;
     flex-direction: row;
-    border-bottom: 1px solid #2f4f4f;
+    border-bottom: 1px solid black;
   }
 
   .SecondLine {
@@ -43,6 +43,6 @@ const Container = styled.div`
     flex-direction: row;
     justify-content: space-between;
     align-items: center;
-    border-bottom: 1px solid #2f4f4f;
+    border-bottom: 1px solid black;
   }
 `;

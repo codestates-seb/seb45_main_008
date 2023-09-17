@@ -18,7 +18,7 @@ import GuideModal from "../components/Signups/Guide";
 import CentralChart from "../components/CentralChart/Index";
 
 import EntireList from "../components/EntireList/EntireList";
-import HoldingList from "../components/HoldingList/HoldingList"; 
+import HoldingList from "../components/HoldingList/HoldingList";
 import WatchList from "../components/WatchList/WatchList"; // Assuming you have a Holdings component
 import CompareChartSection from "../components/CompareChartSection/Index";
 import StockOrderSection from "../components/StockOrderSection/Index";
@@ -29,7 +29,7 @@ import { TabContainerPage } from "./TabPages/TabContainerPage";
 import { RootState } from "../store/config";
 
 // 🔴 로그아웃 관련 action 함수
-import {  setLoginState } from "../reducer/member/loginSlice"
+import { setLoginState } from "../reducer/member/loginSlice";
 
 const MainPage = () => {
   const expandScreen = useSelector((state: StateProps) => state.expandScreen);
@@ -53,7 +53,6 @@ const MainPage = () => {
       dispatch(setLoginState());
     }
   }, [dispatch]);
-
 
   const openOAuthModal = useCallback(() => {
     setOAuthModalOpen(true);
@@ -112,7 +111,7 @@ const MainPage = () => {
 
   const closeWelcomeModal = useCallback(() => {
     setWelcomeModalOpen(false);
-    setGuideModalOpen(true);  // Open the GuideModal after closing the WelcomeModal
+    setGuideModalOpen(true); // Open the GuideModal after closing the WelcomeModal
   }, []);
 
   const closeGuideModal = useCallback(() => {
@@ -121,8 +120,8 @@ const MainPage = () => {
   }, [openOAuthModal]);
 
   const handleOAuthLoginSuccess = useCallback(() => {
-    setLoginConfirmationModalOpen(true);  // 로그인 확인 모달 열기
-}, []);
+    setLoginConfirmationModalOpen(true); // 로그인 확인 모달 열기
+  }, []);
 
   //프로필 모달 열고닫는 매커니즘
   const openProfileModal = useCallback(() => {
@@ -136,7 +135,6 @@ const MainPage = () => {
     setLoginConfirmationModalOpen(true);
     dispatch(setLoginState());
   };
-
 
   const handleLoginConfirmationClose = () => {
     setLoginConfirmationModalOpen(false);
@@ -154,38 +152,34 @@ const MainPage = () => {
 
   return (
     <Container>
-      {isLogin == 1 ? (
-        <LoginHeader onProfileClick={openProfileModal} />
-      ) : (
-        <LogoutHeader onLoginClick={openOAuthModal} />
-      )}
+      {isLogin == 1 ? <LoginHeader onProfileClick={openProfileModal} /> : <LogoutHeader onLoginClick={openOAuthModal} />}
       <Main>
         <CompareChartSection />
         {!expandScreen.left && (
-           <LeftSection>
-          {selectedMenu === "전체종목" ? (
-            <EntireList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
-          ) : selectedMenu === "관심종목" ? (
-           <WatchList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
-          ) : selectedMenu === "보유종목" ? (
-            <HoldingList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
-          ) : null}
-         </LeftSection>
+          <LeftSection>
+            {selectedMenu === "전체종목" ? (
+              <EntireList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+            ) : selectedMenu === "관심종목" ? (
+              <WatchList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+            ) : selectedMenu === "보유종목" ? (
+              <HoldingList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+            ) : null}
+          </LeftSection>
         )}
         <CentralChart />
         <StockOrderSection />
         {!expandScreen.right && <TabContainerPage></TabContainerPage>}
       </Main>
       {isOAuthModalOpen && (
-            <OAuthLoginModal 
-                onClose={closeOAuthModal} 
-                onEmailLoginClick={openEmailLoginModal} 
-                onEmailSignupClick={openEmailSignupModal} 
-                onLoginSuccess={handleOAuthLoginSuccess}  // 추가된 부분
-                onWatchListClick={() => handleMenuChange("관심종목")} 
-                onHoldingsClick={() => handleMenuChange("보유종목")} 
-            />
-        )}
+        <OAuthLoginModal
+          onClose={closeOAuthModal}
+          onEmailLoginClick={openEmailLoginModal}
+          onEmailSignupClick={openEmailSignupModal}
+          onLoginSuccess={handleOAuthLoginSuccess} // 추가된 부분
+          onWatchListClick={() => handleMenuChange("관심종목")}
+          onHoldingsClick={() => handleMenuChange("보유종목")}
+        />
+      )}
 
       {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} />}
       {isLoginConfirmationModalOpen && <LoginConfirmationModal onClose={handleLoginConfirmationClose} />}
@@ -237,7 +231,7 @@ const Main = styled.main`
 const LeftSection = styled.section`
   min-width: 248px;
   height: 100%;
-  border: 1px solid black;
+  border-right: 1px solid black;
 `;
 
 export const RightSection = styled.section`
