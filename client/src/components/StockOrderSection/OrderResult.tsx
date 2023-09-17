@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { styled } from "styled-components";
 import { toast } from "react-toastify";
@@ -20,7 +20,7 @@ const orderPendingEmptyMessage: string = "거래 내역이 없습니다";
 
 const OrderResult = () => {
   const { orderRecordData } = useGetStockOrderRecord();
-  const [recordType, setRecordType] = useState(false);
+  const [recordType, setRecordType] = useState(true);
 
   const orderWaitList = orderRecordData.filter((order: OrderRecordProps) => order.orderStates === "ORDER_WAIT");
   const orderCompleteList = orderRecordData.filter((order: OrderRecordProps) => order.orderStates === "ORDER_COMPLETE");
@@ -32,12 +32,12 @@ const OrderResult = () => {
   const orderListNum = orderList.length;
 
   const handleChangeRecordType = (type: string) => {
-    if (type === "wait") {
-      setRecordType(false);
-    }
-
     if (type === "complete") {
       setRecordType(true);
+    }
+
+    if (type === "wait") {
+      setRecordType(false);
     }
   };
 
@@ -65,7 +65,7 @@ const OrderResult = () => {
           <div className="emptyIndicator">{orderPendingEmptyMessage}</div>
         ) : (
           <>
-            {orderList.map((stock: OrderRecordProps) => {
+            {orderList.map((stock: OrderRecordProps, index: number) => {
               const orderType = stock.orderTypes === "BUY" ? "매수" : "매도";
               const price = stock.price;
               const volume = stock.stockCount;
@@ -79,7 +79,7 @@ const OrderResult = () => {
                   animate={{ opacity: 1, y: 0 }} // 애니메이션 중인 상태
                   exit={{ opacity: 0, y: -20 }} // 빠져나가는 상태
                 >
-                  <OrderedStock recordType={recordType} orderType={orderType} orderPrice={price} orderVolume={volume} companyId={companyId} orderId={orderId} />
+                  <OrderedStock index={index} recordType={recordType} orderType={orderType} orderPrice={price} orderVolume={volume} companyId={companyId} orderId={orderId} />
                 </motion.div>
               );
             })}
@@ -94,10 +94,11 @@ export default OrderResult;
 
 // 개별 거래내역
 const OrderedStock = (props: OrderdStockProps) => {
-  const { orderType, orderPrice, orderVolume, companyId, orderId, recordType } = props;
+  const { index, orderType, orderPrice, orderVolume, companyId, orderId, recordType } = props;
 
-  const [orderCancle, setOrderCancle] = useState(false);
   const { companyList } = useGetCompanyList();
+  const [orderCancle, setOrderCancle] = useState(false);
+  const ref = useRef<HTMLDivElement | null>(null);
 
   const dummyDate = "2023-09-15"; // dummyData
   const price = orderPrice.toLocaleString();
@@ -111,9 +112,16 @@ const OrderedStock = (props: OrderdStockProps) => {
     setOrderCancle(!orderCancle);
   };
 
+  useEffect(() => {
+    if (index === 0 && ref.current) {
+      ref.current.focus();
+      ref.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  }, [recordType]);
+
   return (
     <>
-      <StockContainer orderType={orderType}>
+      <StockContainer orderType={orderType} ref={index === 0 ? ref : null}>
         <div className="logoContainer">
           <img className="corpLogo" src={dummyImg} />
         </div>
@@ -306,6 +314,7 @@ interface OrderdStockProps {
   companyId: number;
   orderId: number;
   recordType: boolean;
+  index: number;
 }
 
 interface CancelConfirmProps {
