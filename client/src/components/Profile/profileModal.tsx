@@ -1,34 +1,29 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 import MemberInfoModal from './memberInfoModal'; 
 import MemberWithdrawalModal from './memberWithdrawalModal';
 import CashModal from './cashModal'; 
-import { RootState } from '../../store/config'; 
 
 const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
-
     const memberInfoText = "회원정보";
     const cashText = "현금";
     const memberWithdrawText = "회원탈퇴";
-    const moneyId = useSelector((state: RootState) => state.cash.moneyId); 
 
-    const [selectedTab, setSelectedTab] = useState(1); // 1: MemberInfo, 2: CashModal, 3: WithdrawalModal
+    const [selectedTab, setSelectedTab] = useState(1);
 
     return (
         <ModalBackground>
             <ModalContainer>
-            <Tabs>
-                <TabButton isActive={selectedTab === 1} onClick={() => setSelectedTab(1)}>{memberInfoText}</TabButton>
-                <TabButton isActive={selectedTab === 2} onClick={() => setSelectedTab(2)}>{cashText}</TabButton>
-                <TabButton isActive={selectedTab === 3} onClick={() => setSelectedTab(3)}>{memberWithdrawText}</TabButton>
-            </Tabs>
+                <Tabs>
+                    <TabButton isActive={selectedTab === 1} onClick={() => setSelectedTab(1)}>{memberInfoText}</TabButton>
+                    <TabButton isActive={selectedTab === 2} onClick={() => setSelectedTab(2)}>{cashText}</TabButton>
+                    <TabButton isActive={selectedTab === 3} onClick={() => setSelectedTab(3)}>{memberWithdrawText}</TabButton>
+                </Tabs>
                 <TabContent>
                     {selectedTab === 1 && <MemberInfoModal onClose={onClose} />}
-                    {selectedTab === 2 && <CashModal onClose={onClose} moneyId={moneyId} />}
+                    {selectedTab === 2 && <CashModal onClose={onClose} />}
                     {selectedTab === 3 && <MemberWithdrawalModal onClose={onClose} />}
                 </TabContent>
-                {/* <CloseButton onClick={onClose}>&times;</CloseButton> */}
             </ModalContainer>
         </ModalBackground>
     );

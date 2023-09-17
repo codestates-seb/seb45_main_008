@@ -2,11 +2,13 @@ import React, { useState } from 'react';
 import styled from 'styled-components'; 
 import { useDeleteMember } from '../../hooks/useDeleteMembers';
 
+
 const MemberWithdrawalModal: React.FC<MemberWithdrawalModalProps> = ({ onClose }) => {
 
     const [inputString, setInputString] = useState<string>('');
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
     const deleteMemberMutation = useDeleteMember();
+
 
     const withdrawalTitle = "StockHolm에서 탈퇴하시겠습니까?";
     const inputStringLabel = "다음 문자열을 입력해주세요: Codestates";
@@ -14,13 +16,8 @@ const MemberWithdrawalModal: React.FC<MemberWithdrawalModalProps> = ({ onClose }
     const withdrawalButtonText = "회원탈퇴";
 
     const handleWithdrawal = () => {
-        if (inputString === "Codestates/seb-45_main_008") {
-            deleteMemberMutation.mutate(inputString, {
-                onSuccess: () => {
-                    alert('회원탈퇴 되었습니다!');
-                    onClose();
-                }
-            });
+        if (inputString === "Codestates") {
+            deleteMemberMutation.mutate();
         } else {
             setErrorMsg(incorrectStringMsg);
         }
