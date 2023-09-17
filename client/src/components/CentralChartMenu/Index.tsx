@@ -1,37 +1,23 @@
-import { useSelector } from "react-redux";
 import { styled } from "styled-components";
-import { StateProps } from "../../models/stateProps";
-
 import ExpandScreenBtn from "./ExpandScreenBtn";
 import StockOverview from "./StockOverview";
 import StockOrderBtn from "./StockOrderBtn";
-import CompareChartBtn from "./CompareChartBtn";
+// import CompareChartBtn from "./CompareChartBtn";
 
 const UpperMenuBar = () => {
-  const companyId = useSelector((state: StateProps) => state.companyId);
-
-  console.log(localStorage.getItem("accessToken"));
-
   return (
     <Container>
       <div className="FirstLine">
         <ExpandScreenBtn direction="left" />
-        {companyId === 0 ? (
-          <div>구현 예정</div>
-        ) : (
-          <>
-            <StockOverview />
-            {/* <BookmarkBtn /> */}
-            <StockOrderBtn type="buying" />
-            <StockOrderBtn type="selling" />
-          </>
-        )}
+        <StockOverview />
+        {/* <BookmarkBtn /> */}
+        <StockOrderBtn type="buying" />
+        <StockOrderBtn type="selling" />
         <ExpandScreenBtn direction="right" />
       </div>
-      <div className="SecondLine">
+      {/* <div className="SecondLine">
         <CompareChartBtn />
-        {/* <ChangeChartCycleBtn /> */}
-      </div>
+      </div> */}
     </Container>
   );
 };

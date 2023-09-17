@@ -117,7 +117,7 @@ const LoginRequestIndicator = () => {
 const Container = styled.aside<{ orderSet: boolean }>`
   position: fixed;
   z-index: 1;
-  right: ${(props) => (props.orderSet ? "0px" : "-50vw")};
+  right: ${(props) => (props.orderSet ? "0px" : "-100vw")};
   transition: right 0.3s ease-in-out;
   display: flex;
   flex-direction: column;
