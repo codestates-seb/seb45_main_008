@@ -1,26 +1,27 @@
-import React from 'react';
+import React,{ useState } from 'react';
 import styled from 'styled-components';
 import logo from '../../asset/images/StockHolmImage.png';
 
-const StockItem: React.FC<StockItemProps> = ({ company, setShowChangePrice, showChangePrice }) => {
+const StockItem: React.FC<StockItemProps> = ({ company }) => {
+  const [showChangePrice, setShowChangePrice] = useState(false);  
   const isPositiveChange = parseFloat(company.stockChangeRate) > 0;
-  const priceColor = isPositiveChange ? 'red' : 'blue';
+  const priceColor1 = isPositiveChange ? "#ed2926" : "#2679ed";
+  const priceColor2 = isPositiveChange ? "#f87369" : "#5a99f8";
 
   return (
-    <StockItemWrapper>
+    <StockItemWrapper 
+      onMouseEnter={() => setShowChangePrice(true)}
+      onMouseLeave={() => setShowChangePrice(false)}
+    >
       <Logo src={logo} alt="stock logo" />
       <StockInfo>
         <StockName>{company.korName}</StockName>
         <StockCode>{company.code}</StockCode>
       </StockInfo>
       <StockPriceSection>
-        <StockPrice change={priceColor}>{company.stockPrice}</StockPrice>
-        <StockChange
-          change={priceColor}
-          onMouseEnter={() => setShowChangePrice(true)}
-          onMouseLeave={() => setShowChangePrice(false)}
-        >
-          {showChangePrice ? `${company.stockChangeAmount}%` : `${company.stockChangeRate}%`}
+        <StockPrice change={priceColor1}>{company.stockPrice}</StockPrice>
+        <StockChange change={priceColor2}>
+          {showChangePrice ? `${company.stockChangeAmount}` : `${company.stockChangeRate}%`}
         </StockChange>
       </StockPriceSection>
     </StockItemWrapper>
@@ -38,8 +39,6 @@ type NewCompanyData = {
 
 type StockItemProps = {
   company: NewCompanyData;
-  setShowChangePrice: React.Dispatch<React.SetStateAction<boolean>>;
-  showChangePrice: boolean;
 };
 
 const StockItemWrapper = styled.div`
@@ -69,18 +68,21 @@ const StockInfo = styled.div`
 `;
 
 const StockName = styled.span`
-  font-weight: bold;
+  font-weight: 500;
 `;
 
 const StockCode = styled.span`
   color: gray;
+  font-weight: 400;
+  font-size: 14px;
 `;
 
 const StockPriceSection = styled.div`
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-end;
   margin-left: auto; /* 자동으로 왼쪽 여백 추가 */
+  margin-right: 10px;
 `;
 
 const StockPrice = styled.span<{ change: string }>`
@@ -90,6 +92,7 @@ const StockPrice = styled.span<{ change: string }>`
 const StockChange = styled.span<{ change: string }>`
   color: ${(props) => props.change};
   cursor: pointer;
+  font-size:14px;
 `;
 
 export default StockItem;

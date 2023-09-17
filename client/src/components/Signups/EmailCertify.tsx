@@ -10,7 +10,8 @@ const strings = {
     codeLabelText: "인증코드",
     nextStepText: "인증 후 다음단계",
     codeHintText: "이메일로 전송된 코드를 입력하세요",
-    termsText: "개인정보 처리방침 및 서비스 이용약관에 동의합니다"
+    termsText: "개인정보 처리방침 및 서비스 이용약관에 동의합니다",
+    agreementError: "동의하지 않으면 진행할 수 없습니다"
 };
 
 // 이메일 인증 모달 컴포넌트
@@ -21,19 +22,23 @@ const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({ onClose
     const [showAgreementError, setShowAgreementError] = useState(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+    //이메일 입력
     const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setEmail(event.target.value);
     };
 
+    //인증코드 입력
     const handleVerificationCodeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setVerificationCode(event.target.value);
     };
 
+    //동의 체크박스
     const handleAgreementChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         setHasAgreed(event.target.checked);
         setShowAgreementError(false); // 알림을 숨깁니다.
     };
 
+    //인증후 다음단계 버튼 클릭 시 요청
     const handleNextStepClick = async () => {
         if (!hasAgreed) {
             setShowAgreementError(true);
@@ -87,7 +92,7 @@ const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({ onClose
                     <label htmlFor="terms">{strings.termsText}</label>
                 </TermsCheckbox>
     
-                {showAgreementError && <ErrorMessage>동의하지 않으면 진행할 수 없습니다</ErrorMessage>}
+                {showAgreementError && <ErrorMessage>{strings.agreementError}</ErrorMessage>}
                 <SignupButton onClick={handleNextStepClick}>
                     {strings.nextStepText}
                 </SignupButton>
@@ -97,7 +102,7 @@ const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({ onClose
     );
   };
 
-  export default EmailVerificationModal;    
+export default EmailVerificationModal;    
 
 
 // 이메일 인증 모달의 Props 타입
@@ -139,6 +144,7 @@ const CloseButton = styled.button`
   top: 10px;
   right: 10px;
   background: #FFFFFF;
+  border-radius: 5px; // 모서리를 5px만큼 둥글게 함
   border: 1px solid lightgray;
   font-size: 1.5rem;
   cursor: pointer;
@@ -175,11 +181,16 @@ const SignupButton = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+
+    //호버 시 밝게
+  &:hover {
+    background-color: rgba(47, 79, 79, 0.8); 
+  }
 `;
 
 // 힌트 텍스트의 스타일
 const HintText = styled.p`
-  color: red;
+  color: #e22926;
   font-size: 0.8rem;
   margin-top: 5px;
 `;
@@ -201,7 +212,7 @@ const TermsCheckbox = styled.div`
 
 // 오류 메시지 스타일을 추가합니다.
 const ErrorMessage = styled.p`
-  color: red;
+  color: #e22926;
   margin-top: 5px;
   margin-bottom: 10px;
   font-size: 0.8rem;

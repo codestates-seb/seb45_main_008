@@ -118,6 +118,7 @@ const CloseButton = styled.button`
   border: 1px solid lightgray;
   font-size: 1.5rem;
   cursor: pointer;
+  border-radius: 5px;
 `;
 
 const Title = styled.h2`
@@ -157,6 +158,11 @@ const LoginButton = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  
+  //호버 시 밝게
+  &:hover {
+    background-color: rgba(47, 79, 79, 0.8); 
+  }
 `;
 
 const BottomText = styled.div`
@@ -171,7 +177,7 @@ const RegisterButton = styled.button`
   cursor: pointer;
 `;
 const ErrorMessage = styled.p`
-  color: red;
+  color: #e22926;
   margin-top: 5px;
   margin-bottom: 10px;
   font-size: 0.8rem;

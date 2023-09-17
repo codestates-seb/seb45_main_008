@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import StockHolmLogo from '../../asset/images/StockHolmLogo.png';
 
 const LoginConfirmationModal: React.FC<LoginConfirmationProps> = ({ onClose }) => {
     const messageText = "로그인이 성공적으로 완료되었습니다!";
@@ -9,6 +10,7 @@ const LoginConfirmationModal: React.FC<LoginConfirmationProps> = ({ onClose }) =
       <ModalBackground>
         <ModalContainer>
           <Message>{messageText}</Message>
+          <Logo src={StockHolmLogo} alt="StockHolm Logo" />
           <ConfirmButton onClick={onClose}>{confirmText}</ConfirmButton>
         </ModalContainer>
       </ModalBackground>
@@ -48,10 +50,16 @@ const ModalContainer = styled.div`
 
 const Message = styled.h2`
   margin-bottom: 20px;
-  font-size: 1.6rem;
+  font-size: 1.5rem;
   font-weight: 400;
 `;
 
+const Logo = styled.img`
+  margin-top: 20px;
+  margin-bottom: 20px;
+  width: 150px;
+  height: auto;
+`;
 
 // 확인 버튼 스타일
 const ConfirmButton = styled.button`
@@ -63,4 +71,9 @@ const ConfirmButton = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+
+  //호버 시 밝게
+  &:hover {
+    background-color: rgba(47, 79, 79, 0.8); 
+  }
 `;

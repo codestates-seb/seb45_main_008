@@ -79,8 +79,9 @@ const StyledSearchInput = styled.input.attrs({
   width: 100%;
   padding: 0.5rem;
   border: 1px solid #ccc;
-  border-radius: 4px;
+  border-radius: 5px;
   flex: 1;
+  margin-left:8px;
 `;
 
 const StyledSearchButton = styled.button`

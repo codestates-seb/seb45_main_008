@@ -10,7 +10,7 @@ const MemberWithdrawalModal: React.FC<MemberWithdrawalModalProps> = ({ onClose }
     const deleteMemberMutation = useDeleteMember();
 
 
-    const withdrawalTitle = "StockHolm에서 탈퇴하시겠습니까?";
+    const withdrawalTitle = "탈퇴하시겠습니까?";
     const inputStringLabel = "다음 문자열을 입력해주세요: Codestates";
     const incorrectStringMsg = "문자열이 일치하지 않습니다!";
     const withdrawalButtonText = "회원탈퇴";
@@ -78,19 +78,24 @@ const CloseButton = styled.button`
   top: 10px;
   right: 10px;
   background: #FFFFFF;
+  border-radius:5px;
   border: 1px solid lightgray;
   font-size: 1.5rem;
   cursor: pointer;
 `;
 
-const Title = styled.h3`
-    font-size: 1.2rem;
+const Title = styled.h2`
+    font-size: 1.6rem;
     margin-bottom: 20px;
+    font-weight: 400;
 `;
 
 const Label = styled.label`
-    display: block;
-    margin-bottom: 10px;
+    margin: 15px 0;  // 간격 조정
+    font-size: 1.1rem;  // 폰트 크기 증가
+    line-height: 1.5;
+    color: #555;  // 색상 변경
+    text-align: center;  // 텍스트 중앙 정렬
 `;
 
 const PasswordInput = styled.input`
@@ -103,11 +108,15 @@ const PasswordInput = styled.input`
 
 const WithdrawalButton = styled.button`
     padding: 10px 20px;
-    background-color: white;
-    color: darkslategray;
+    background-color: darkslategray;
+    color: white;
     border: 1px solid lightslategray;
     border-radius: 5px;
     cursor: pointer;
+    //호버 시 밝게
+    &:hover {
+        background-color: rgba(47, 79, 79, 0.8); 
+    }
 `;
 
 

@@ -10,6 +10,7 @@ import memberInfoReducer from "../reducer/member/memberInfoSlice";
 import { stockOrderVolumeReducer } from "../reducer/StockOrderVolume-Reducer";
 import { setDecisionWindowReducer } from "../reducer/SetDecisionWindow-Reducer";
 
+
 const store = configureStore({
   reducer: {
     stockOrderType: stockOrderTypeReducer,

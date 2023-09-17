@@ -6,13 +6,11 @@ const loginSlice = createSlice({
   name: "login",
   initialState: initialState,
   reducers: {
-    setLoginState: (state) => {
-      state = 1;
-      return state;
+    setLoginState: () => {
+      return 1;
     },
-    setLogoutState: (state) => {
-      state = 0;
-      return state;
+    setLogoutState: () => {
+      return 0;
     },
   },
 });

@@ -19,12 +19,15 @@ const Header: React.FC<HeaderProps> = ({ currentListType, onChangeListType, isMe
         <SlideMenu>
           <MenuItem onClick={() => { onChangeListType(ALL_LIST); setMenuOpen(false); }}>{ALL_LIST}</MenuItem>
           <MenuItem onClick={() => { onChangeListType(INTEREST_LIST); setMenuOpen(false); }}>{INTEREST_LIST}</MenuItem>
-          <MenuItem onClick={() => { onChangeListType(HOLDING_LIST); setMenuOpen(false); }}>{HOLDING_LIST}</MenuItem>
+          <MenuItem1 onClick={() => { onChangeListType(HOLDING_LIST); setMenuOpen(false); }}>{HOLDING_LIST}</MenuItem1>
         </SlideMenu>
       )}
     </HeaderWrapper>
   );
 };
+
+export default Header;
+
 
 type HeaderProps = {
   currentListType: string;
@@ -41,16 +44,15 @@ const HeaderWrapper = styled.div`
 `;
 
 const Icon = styled.img`
-  margin-top: 9.5px;
   width: 24px;
   height: 24px;
   cursor: pointer;
   margin-right: 10px;
-  margin-left:10px;
+  margin-left: 10px;
 `;
 
 const HeaderText = styled.span`
-  margin-top: 9.5px;
+  margin-top: 2px;
   font-size: 18px;
 `;
 
@@ -58,19 +60,30 @@ const SlideMenu = styled.div`
   position: absolute;
   top: 100%;
   left: 0;
-  width: 248px;
+  width: 247px;
   background-color: #f7f7f7;
-  border: 1px solid #e0e0e0; /* 밑에 가로줄 추가 */
+  border-top: 1px solid black; 
+  border-right: 1px solid black; 
+  border-left: 1px solid black; 
   display: flex;
   flex-direction: column;
 `;
 
 const MenuItem = styled.button`
-  padding: 8px 16px;
+  height: 40px;
+  padding: 8px 44px;
   border: none;
-  background-color: transparent;
+  background-color: white;
   cursor: pointer;
   text-align: left;
+  border-bottom:1px solid black;
+  font-size: 17px;
+
+  &:hover {
+    background-color: #f2f2f2; 
+  }
+`;
+const MenuItem1 = styled(MenuItem)`
+  border-left: 4px solid darkslategray; 
 `;
 
-export default Header;

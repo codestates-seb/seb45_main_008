@@ -1,13 +1,18 @@
 import { useMutation } from 'react-query';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';  // <-- 이 부분을 추가하세요.
+import { useDispatch } from 'react-redux';
 import { setLogoutState } from '../reducer/member/loginSlice';
 
 export function useDeleteMember() {
-    const dispatch = useDispatch();  // <-- useDispatch를 호출해 dispatch 함수를 가져옵니다.
+    const dispatch = useDispatch();
 
     return useMutation(async () => {
-        const response = await axios.delete(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/members`, {});
+        const accessToken = localStorage.getItem('accessToken');
+        const response = await axios.delete(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/members`, {
+            headers: {
+                Authorization: `${accessToken}`
+            }
+        });
 
         if (response.status !== 204) {
             throw new Error('Failed to delete member');

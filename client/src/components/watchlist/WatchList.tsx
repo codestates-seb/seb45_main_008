@@ -9,7 +9,6 @@ import { RootState } from '../../store/config.ts';  // Redux store의 RootState�
 
 const WatchList: React.FC<WatchListProps> = ({ currentListType, onChangeListType }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
-  const [showChangePrice, setShowChangePrice] = useState(false);
 
   const loginStatus = useSelector((state: RootState) => state.login);
 
@@ -42,35 +41,34 @@ const WatchList: React.FC<WatchListProps> = ({ currentListType, onChangeListType
 
   return (
     <WatchListContainer>
-      <Header
-        currentListType={currentListType}
-        onChangeListType={onChangeListType}
-        isMenuOpen={isMenuOpen}
-        setMenuOpen={setMenuOpen}
-      />
-      <Divider1 />
-      <StockSearchComponent />
-      <Divider2 />
-      <StockList>
-  {isLoading ? (
-    <div>Loading...</div>
-  ) : isError ? (
-    <div>Error fetching data</div>
-  ) : loginStatus === 1 ? (
-    companiesList
-      .filter(company => searchedCompanyIds.includes(company.companyId))
-      .map((company) => (
-        <StockItem
-          key={company.companyId}
-          company={company}
-          setShowChangePrice={setShowChangePrice}
-          showChangePrice={showChangePrice}
+      <Header1Container>
+        <Header
+          currentListType={currentListType}
+          onChangeListType={onChangeListType}
+          isMenuOpen={isMenuOpen}
+          setMenuOpen={setMenuOpen}
         />
-      ))
-  ) : (
-    <div>로그인이 필요합니다.</div>
-  )}
-</StockList>
+      </Header1Container>
+      <Divider />
+      <Header2Container>
+        <StockSearchComponent />
+      </Header2Container>
+      <Divider />
+      <StockList>
+        {isLoading ? (
+          <div>Loading...</div>
+        ) : isError ? (
+          <div>Error fetching data</div>
+        ) : loginStatus === 1 ? (
+        companiesList
+        .filter(company => searchedCompanyIds.includes(company.companyId))
+        .map((company) => (
+            <StockItem key={company.companyId} company={company} />
+          ))
+        ) : (
+        <div>로그인이 필요합니다.</div>
+  )   }
+    </StockList>
 
     </WatchListContainer>
   );
@@ -90,21 +88,18 @@ const WatchListContainer = styled.div`
   align-items: flex-start;
 `;
 
-const Divider1 = styled.div`
-  margin:0px;
-  padding:0px;
-  width: 100%;
-  height: 10px;
+const Header1Container =styled.div`
+  height: 48px;
   display: flex;
-  flex-direction: row;
-  border-bottom: 1px solid #2f4f4f;
 `;
 
-const Divider2 = styled.div`
-  margin:0px;
-  padding:0px;
+const Header2Container =styled.div`
+  height: 43.5px;
+  display: flex;
+`;
+
+const Divider = styled.div`
   width: 100%;
-  height: 4.5px;
   display: flex;
   flex-direction: row;
   border-bottom: 1px solid #2f4f4f;
