@@ -89,16 +89,19 @@ const SlideMenu = styled.div`
 
 const MenuItem = styled.button`
   height: 40px;
-  padding: 8px 44px;
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
   border: none;
   background-color: white;
   cursor: pointer;
   text-align: left;
   border-bottom: 1px solid black;
-  font-size: 17px;
+  font-size: 15.5px;
 
   &:hover {
     background-color: #f2f2f2;
+    color: darkslategray;
   }
 `;
 const MenuItem1 = styled(MenuItem)`

@@ -20,7 +20,7 @@ import useGetCash from "../../hooks/useGetCash";
   4) 금액에 회계 단위 (toLocaleString) 적용 -> 이를 위해 useEffect, useState 활용
   */
 
-const holdingAmountText = "현금 보유량 :";
+const holdingAmountText = "보유 현금";
 const amountUnit = "원";
 
 const EntireList: React.FC<EntireListProps> = ({ currentListType, onChangeListType }) => {
@@ -61,8 +61,8 @@ const EntireList: React.FC<EntireListProps> = ({ currentListType, onChangeListTy
         <HoldingsAmount isLogin={isLogin}>
           {isLogin === 1 && (
             <>
-              <div>{holdingAmountText}</div>
-              <div>
+              <div className="amountText">{holdingAmountText}</div>
+              <div className="amount">
                 {holdingCash} {amountUnit}
               </div>
             </>
@@ -125,12 +125,16 @@ const HoldingsAmount = styled.div<{ isLogin: number }>`
   height: 100%;
   display: ${(props) => (props.isLogin === 0 ? "none" : "flex")};
   flex-direction: row;
-  padding-left: 13px;
+  padding-left: 14px;
   align-items: center;
-  gap: 5px;
+  gap: 6.5px;
   font-size: 0.95em;
   font-weight: 570;
-  color: #2f4f4f;
+  color: black;
+
+  .amount {
+    color: #2f4f4f;
+  }
 `;
 
 const StockList = styled.div`

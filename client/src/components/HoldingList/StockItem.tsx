@@ -1,6 +1,6 @@
-import React,{ useState } from 'react';
-import styled from 'styled-components';
-import logo from '../../asset/images/StockHolmImage.png';
+import React, { useState } from "react";
+import styled from "styled-components";
+import logo from "../../asset/images/StockHolmImage.png";
 
 export type StockItemProps = {
   stockData: {
@@ -26,62 +26,58 @@ export type StockItemProps = {
   showChangePrice: boolean;
 };
 
-
-
 const StockItem: React.FC<StockItemProps> = ({ companyData, stockData }) => {
-  const [showChangePrice, setShowChangePrice] = useState(false);  // local state
-  const {  stockCount, reserveSellStockCount, totalPrice, percentage, stockReturn } = stockData;
+  const [showChangePrice, setShowChangePrice] = useState(false); // local state
+  const { stockCount, reserveSellStockCount, totalPrice, percentage, stockReturn } = stockData;
   const totalStocksHeld = stockCount + reserveSellStockCount;
   const company = companyData ? companyData : undefined;
 
-  const { 
-    code = '', 
-    korName = '', 
-    stockPrice='',
-    stockChangeAmount = '', 
-    stockChangeRate = '' 
-  } = company || {};
-  
+  const { code = "", korName = "", stockPrice = "", stockChangeAmount = "", stockChangeRate = "" } = company || {};
+  const price = parseInt(stockPrice);
+  const priceChangeAmount = parseInt(stockChangeAmount);
+
   // Format percentage to two decimal places
   const formattedPercentage = parseFloat(percentage.toFixed(2));
 
-
   return (
     <>
-      <ItemContainer         onMouseEnter={() => setShowChangePrice(true)}  // Mouse event handlers
-        onMouseLeave={() => setShowChangePrice(false)}>
-        
-        <Logo src={logo} alt="stock logo" />
+      <ItemContainer
+        onMouseEnter={() => setShowChangePrice(true)} // Mouse event handlers
+        onMouseLeave={() => setShowChangePrice(false)}
+      >
+        <LogoContainer>
+          <Logo src={logo} alt="stock logo" />
+        </LogoContainer>
         <StockInfo>
           <StockName>{korName}</StockName>
           <StockCode>{code}</StockCode>
         </StockInfo>
         <StockPriceSection>
-          <StockPrice change={`${stockChangeRate}%`}>{stockPrice.toLocaleString()} 원</StockPrice>
-          <StockChange 
-              change={`${stockChangeRate}%`} 
-              onMouseEnter={() => setShowChangePrice(true)} 
-              onMouseLeave={() => setShowChangePrice(false)}
-              >
-              {showChangePrice ? stockChangeAmount.toLocaleString() : `${stockChangeRate}%`}
+          <StockPrice priceChangeAmount={priceChangeAmount}>{price.toLocaleString()} 원</StockPrice>
+          <StockChange priceChangeAmount={priceChangeAmount} onMouseEnter={() => setShowChangePrice(true)} onMouseLeave={() => setShowChangePrice(false)}>
+            {showChangePrice ? `${priceChangeAmount.toLocaleString()} 원` : `${stockChangeRate}%`}
           </StockChange>
         </StockPriceSection>
       </ItemContainer>
       <StockDetails>
-        <DetailSection>
+        <DetailSection01>
           <DetailTitle>수익</DetailTitle>
           <DetailTitle>보유</DetailTitle>
-        </DetailSection>
-        <DetailSection>
-          <ColoredDetailData value={stockReturn.toString()}>{stockReturn.toLocaleString()} 원</ColoredDetailData>
+        </DetailSection01>
+        <DetailSection02>
+          <ColoredDetailData priceChangeAmount={priceChangeAmount} value={stockReturn.toString()}>
+            {stockReturn.toLocaleString()} 원
+          </ColoredDetailData>
           <DetailData>{totalPrice.toLocaleString()} 원</DetailData>
-        </DetailSection>
-        <DetailSection>
-          <ColoredDetailData value={`${formattedPercentage}%`}>{formattedPercentage}%</ColoredDetailData>
+        </DetailSection02>
+        <DetailSection03>
+          <ColoredDetailData priceChangeAmount={priceChangeAmount} value={`${formattedPercentage}%`}>
+            {formattedPercentage}%
+          </ColoredDetailData>
           <DetailTitle>{totalStocksHeld}주</DetailTitle>
-        </DetailSection>
+        </DetailSection03>
       </StockDetails>
-      <ThickDivider />
+      {/* <ThickDivider /> */}
     </>
   );
 };
@@ -90,100 +86,148 @@ export default StockItem;
 
 const ItemContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: center;
+  /* gap: 8px; */
   width: 100%;
-  padding: 8px 0;
+  padding: 12px 0;
   border-bottom: 1px solid #e0e0e0; // Holdings에서의 스타일 추가
+`;
+
+const LogoContainer = styled.div`
+  flex: 1 0 0;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  /* margin: 10px; */
+  padding-left: 12px;
+  /* padding-right: 5px/; */
 `;
 
 const Logo = styled.img`
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  margin-right: 12px;
+  width: 28px;
+  height: 28px;
+  /* margin-left: 10px; */
+  /* margin-right: 5px; */
 `;
 
 const StockInfo = styled.div`
+  flex: 5 0 0;
+  height: 100%;
+  padding-top: 3px;
+  padding-left: 6px;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
-  margin-right: 16px;
 `;
 
 const StockName = styled.span`
-  font-weight: bold;
+  font-size: 15px;
+  font-weight: 400;
 `;
 
 const StockCode = styled.span`
-  color: gray;
+  color: darkgray;
+  font-weight: 400;
+  font-size: 13px;
 `;
 
 const StockPriceSection = styled.div`
+  flex: 5 0 0;
+  padding-top: 3px;
+  margin-left: auto; /* 자동으로 왼쪽 여백 추가 */
+  /* margin-right: 10px; */
+  padding-right: 12px;
   display: flex;
   flex-direction: column;
-  align-items: flex-start;
+  align-items: flex-end;
 `;
 
-const getColorByChange = (change: string) => {
-  if (change.startsWith('')) return 'red';
-  if (change.startsWith('-')) return 'blue';
-  return 'black';
-};
+// const getColorByChange = (change: string) => {
+//   if (change.startsWith("")) return "red";
+//   if (change.startsWith("-")) return "blue";
+//   return "black";
+// };
 
-const StockPrice = styled.span.attrs<{ change: string }>(({ change }) => ({
-  style: {
-    color: getColorByChange(change),
-  },
-}))``;
+const StockPrice = styled.span<{ priceChangeAmount: number }>`
+  color: ${(props) => (props.priceChangeAmount > 0 ? "#e22926" : "#2679ed")};
+  font-size: 15px;
+`;
 
-const StockChange = styled.span.attrs<{ change: string }>(({ change }) => ({
-  style: {
-    color: getColorByChange(change),
-  },
-}))`
+const StockChange = styled.span<{ priceChangeAmount: number }>`
+  color: ${(props) => (props.priceChangeAmount > 0 ? "#e22926" : "#2679ed")};
+  font-size: 13px;
   cursor: pointer;
 `;
 
 const StockDetails = styled.div`
   display: flex;
-  justify-content: space-between;
-  padding: 8px 0;
+  /* justify-content: space-between; */
+  /* gap: 15px; */
+  /* padding: 8px 0; */
+  align-items: center;
+  padding-top: 11px;
+  padding-bottom: 11px;
+  border-bottom: 1px solid darkgray;
   width: 100%;
 `;
 
-const DetailSection = styled.div`
+const DetailSection01 = styled.div`
+  flex: 1.4 0 0;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: flex-start;
+  padding-left: 12px;
+  gap: 2px;
+  /* padding-right: 10px; */
+`;
+
+const DetailSection02 = styled.div`
+  flex: 4 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  /* align-items: center; */
+  justify-content: center;
+  gap: 2px;
+  /* padding-left: 1px; */
+  /* padding-right: 10px; */
+`;
+
+const DetailSection03 = styled.div`
+  flex: 4 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 2px;
+  padding-left: 10px;
+  padding-right: 12px;
 `;
 
 const DetailTitle = styled.span`
   font-weight: light;
-  font-size : 14px;
+  /* font-weight: 420; */
+  font-size: 14px;
 `;
 
 const DetailData = styled.span`
-  font-size: 14px;  // Setting standardized font size for all data
+  font-size: 14px; // Setting standardized font size for all data
 `;
 
-const getColorByValue = (value: string) => {
-  if (value.startsWith('')) return '#ed2926';
-  if (value.startsWith('-')) return '#2679ed';
-  return 'black';
-};
+// const getColorByValue = (value: string) => {
+//   if (value.startsWith("")) return "#ed2926";
+//   if (value.startsWith("-")) return "#2679ed";
+//   return "black";
+// };
 
-const ColoredDetailData = styled.span.attrs<{ value: string }>(({ value }) => ({
-  style: {
-    color: getColorByValue(value),
-  },
-}))`
-  font-size: 14px;  // Setting standardized font size for all data
+const ColoredDetailData = styled.span<{ priceChangeAmount: number }>`
+  color: ${(props) => (props.priceChangeAmount > 0 ? "#e22926" : "#2679ed")};
+  font-size: 14px; // Setting standardized font size for all data
 `;
 
-const ThickDivider = styled.div`
-  height: 3px;
-  background-color: #aaa; 
-  margin: 8px 0; 
-`;
-
+// const ThickDivider = styled.div`
+//   height: 3px;
+//   background-color: #aaa;
+//   margin: 8px 0;
+// `;
