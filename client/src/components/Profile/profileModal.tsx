@@ -64,9 +64,9 @@ const Tabs = styled.div`
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
     position: relative; // 위치를 조절하기 위한 속성
-    top: -30px; // 위로 30px 올립니다
+    top: -33px; // 위로 30px 올립니다
     z-index: 1002; // 이 값을 추가하여 Tabs를 최상위로 올립니다.
 `;
 
@@ -75,7 +75,7 @@ const TabButton = styled.button<{ isActive?: boolean }>`
     flex: 1;
     padding: 10px;
     border: 1px solid lightgray;
-    border-bottom: ${({ isActive }) => (isActive ? '3px solid darkred' : '1px solid lightgray')};
+    border-bottom: ${({ isActive }) => (isActive ? '3px solid darkslategray' : '1px solid lightgray')};
     border-radius: 5px;
     cursor: pointer;
     background-color: #FFFFFF;

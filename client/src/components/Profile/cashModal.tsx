@@ -83,9 +83,9 @@ const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     <ReceiveButton onClick={handleCashReset}>{resetButtonText}</ReceiveButton>
                 </div>
                 <div>
-                    <p style={{ display: 'inline-block', margin: '20px' }}>
+                    <Content style={{ display: 'inline-block', margin: '20px' }}>
                         현금 보유량: {holdingsAmount}원
-                    </p>
+                    </Content>
                 </div>
             </ModalContainer>
         </ModalBackground>
@@ -132,6 +132,7 @@ const CloseButton = styled.button`
   top: 10px;
   right: 10px;
   background: #FFFFFF;
+  border-radius:5px;
   border: 1px solid lightgray;
   font-size: 1.5rem;
   cursor: pointer;
@@ -143,7 +144,13 @@ const StyledButton = styled.button`
     color: darkslategray;
     border: 1px solid darkslategray;
     border-radius: 5px;
+    margin-bottom:5px;
     cursor: pointer;
+
+    //호버 시 회색
+    &:hover {
+        background-color: #f2f2f2; 
+    }
 `;
 
 const CashInput = styled.input`
@@ -164,4 +171,10 @@ const CashCreationInput = styled.input`
 
 const CreateCashButton = styled(StyledButton)``;
 
-
+const Content = styled.p`
+    margin: 15px 0;  // 간격 조정
+    font-size: 1.1rem;  // 폰트 크기 증가
+    line-height: 1.5;
+    color: #555;  // 색상 변경
+    text-align: center;  // 텍스트 중앙 정렬
+`;
