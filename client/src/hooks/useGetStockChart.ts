@@ -95,7 +95,7 @@ const useGetStockChart = (companyId: number) => {
   const movingAvgLine = calculateMovingAvgLine(averageLineMinute, organizedChartData);
 
   const options = {
-    animation: false,
+    animation: true,
     legend: {
       top: 10,
       left: "left",

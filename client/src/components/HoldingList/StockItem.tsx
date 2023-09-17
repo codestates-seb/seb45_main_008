@@ -191,7 +191,7 @@ const DetailSection02 = styled.div`
   /* align-items: center; */
   justify-content: center;
   gap: 2px;
-  /* padding-left: 1px; */
+  padding-left: 3px;
   /* padding-right: 10px; */
 `;
 
