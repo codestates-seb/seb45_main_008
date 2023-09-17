@@ -118,6 +118,7 @@ const CloseButton = styled.button`
   border: 1px solid lightgray;
   font-size: 1.5rem;
   cursor: pointer;
+  border-radius: 5px;
 `;
 
 const Title = styled.h2`

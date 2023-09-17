@@ -92,6 +92,7 @@ const CloseButton = styled.button`
     border: 1px solid lightgray;
     font-size: 1.5rem;
     cursor: pointer;
+    border-radius: 5px;
 `;
 
 //제목 스타일

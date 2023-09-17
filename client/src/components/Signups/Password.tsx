@@ -2,7 +2,6 @@
 import axios from 'axios';
 import React, { useState } from 'react';
 import styled from 'styled-components';
-
 import { useDispatch } from 'react-redux';
 import { setMemberInfo } from '../../reducer/member/memberInfoSlice';
 
@@ -17,34 +16,41 @@ const strings = {
 };
 
 const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, onNext, email }) => {
-    const dispatch = useDispatch();
+
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [name, setName] = useState('');
     const [passwordError, setPasswordError] = useState('');
     const [confirmPasswordError, setConfirmPasswordError] = useState('');
+    const dispatch = useDispatch();
 
+    //비밀번호 입력창
     const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setPassword(e.target.value);
     };
 
+    //비밀번호 확인 입력창
     const handleConfirmPasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setConfirmPassword(e.target.value);
     };
 
+    //이름 입력창
     const handleNameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         setName(e.target.value);
     };
 
+    //비밀번호 유효성 검사
     const isValidPassword = (password: string) => {
       const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,16}$/;
       return passwordRegex.test(password);
     };
 
-        // 일반적인 오류 메시지 상태 추가
-        const [generalError, setGeneralError] = useState('');
+    // 일반적인 오류 메시지 상태 추가
+    const [generalError, setGeneralError] = useState('');
 
     const handleConfirmClick = async () => {
+
+        //비밀번호 유효성 에러 메시지
         if (!isValidPassword(password)) {
             setPasswordError(strings.passwordError);
             return;
@@ -52,6 +58,7 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
             setPasswordError('');
         }
 
+        //비밀번호 확인 유효성 에러 메시지
         if (password !== confirmPassword) {
             setConfirmPasswordError(strings.passwordMismatch);
             return;
@@ -117,7 +124,7 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
               <Label>{strings.nicknameLabelText}</Label>
               <Input type="text" placeholder="닉네임을 입력해주세요" value={name} onChange={handleNameChange} />
 
-              {generalError && <ErrorMessage>{generalError}</ErrorMessage>}  {/* 일반 오류 메시지 표시 */}
+              {generalError && <ErrorMessage>{generalError}</ErrorMessage>}
 
               <ConfirmButton onClick={handleConfirmClick}>{strings.confirmButtonText}</ConfirmButton>
           </ModalContainer>
@@ -125,12 +132,13 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
   );
 };
 
+export default PasswordSettingModal;
+
 interface PasswordSettingModalProps {
   onClose: () => void;
   onNext: () => void; 
   email: string;
 }
-export default PasswordSettingModal;
 
 // 모달 배경 스타일
 const ModalBackground = styled.div`
@@ -171,6 +179,7 @@ const CloseButton = styled.button`
   top: 10px;
   right: 10px;
   background: #FFFFFF;
+  border-radius:5px;
   border: 1px solid lightgray;
   font-size: 1.5rem;
   cursor: pointer;
@@ -191,6 +200,14 @@ const Input = styled.input`
   border-radius: 5px;
 `;
 
+//에러 버튼 스타일
+const ErrorMessage = styled.p`
+  color: #e22926;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+`;
+
 // 확인 버튼 스타일
 const ConfirmButton = styled.button`
   width: 100%;
@@ -201,11 +218,10 @@ const ConfirmButton = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+
+  //호버 시 밝게
+  &:hover {
+    background-color: rgba(47, 79, 79, 0.8); 
+  }
 `;
 
-const ErrorMessage = styled.p`
-  color: red;
-  margin-top: 5px;
-  margin-bottom: 10px;
-  font-size: 0.8rem;
-`;

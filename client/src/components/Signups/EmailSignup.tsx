@@ -19,15 +19,18 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);  
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // 이메일 입력값 변경 핸들러
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
     setIsInvalidEmail(false);
   };
 
+  // 이메일 유효성 검사 함수
   const validateEmail = (email: string) => {
     return email.includes('@') && email.includes('.com');
   };
 
+  // 이메일 인증 요청 핸들러
   const handleVerificationRequest = async () => {
     if (!validateEmail(email)) {
       setIsInvalidEmail(true);
@@ -40,11 +43,12 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
         { email },
         {
           validateStatus: function (status) {
-            return status >= 200 && status < 600;  // Reject only if status code is greater than or equal to 600
+            return status >= 200 && status < 600;  // 상태 코드가 600 이상인 경우만 거부
           }
         }
       );
       
+      // 응답 상태에 따른 처리
       if (response.status === 200) {
         dispatch(setEmailForVerification(email));
         onRequestVerification(email);
@@ -53,45 +57,44 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
       } else if (response.status === 500) {
         setErrorMessage(JSON.stringify(response.data));
       } else {
-        console.error('Error sending verification email');
+        console.error('이메일 인증 발송 중 오류 발생');
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error('Error sending verification email:', error);
+        console.error('이메일 인증 발송 중 오류:', error);
         if (error.response) {
-          console.error('Detailed server response:', error.response.data);
+          console.error('상세한 서버 응답:', error.response.data);
         }
       } else {
-        console.error('An unknown error occurred:', error);
+        console.error('알 수 없는 오류 발생:', error);
       }
     }
   };
   
-
   return (
     <ModalBackground>
       <ModalContainer>
-        <CloseButton onClick={onClose}>&times;</CloseButton>
+        <CloseButton onClick={onClose}>×</CloseButton>
         <Title>{strings.titleText}</Title>
         <Label>{strings.emailLabelText}</Label>
         <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} />
-        {isInvalidEmail && <ErrorMessage>{strings.invalidEmailText}</ErrorMessage>}
+          {isInvalidEmail && <ErrorMessage>{strings.invalidEmailText}</ErrorMessage>}
         <SignupButton onClick={handleVerificationRequest}>
           {strings.requestVerificationText}
         </SignupButton>
-        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </ModalContainer>
     </ModalBackground>
-  );
-};
-
+    );
+  };
+    
 export default EmailSignupModal;
-
+    
+//변수 타입 정의
 type EmailSignupModalProps = {
-  onClose: () => void;
-  onRequestVerification: (email: string) => void; 
+onClose: () => void;
+onRequestVerification: (email: string) => void;
 };
-
 
 //모달 배경
 const ModalBackground = styled.div`
@@ -129,12 +132,15 @@ const CloseButton = styled.button`
   border: 1px solid lightgray;
   font-size: 1.5rem;
   cursor: pointer;
+  border-radius: 5px;
 `;
 
 //제목 :이메일로 회원가입
 const Title = styled.h2`
   margin-bottom: 20px;
   font-size: 1.6rem;
+  font-weight:400;
+
 `;
 
 //라벨 : 이메일
@@ -152,6 +158,14 @@ const Input = styled.input`
   border-radius: 5px;
 `;
 
+// 오류 메시지 스타일
+const ErrorMessage = styled.p`
+  color: #e22926;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
+`;
+
 //이메일 인증요청 버튼
 const SignupButton = styled.button`
   width: 100%;
@@ -162,12 +176,10 @@ const SignupButton = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+
+  //호버 시 밝게
+  &:hover {
+    background-color: rgba(47, 79, 79, 0.8); 
+  }
 `;
 
-// 오류 메시지 스타일
-const ErrorMessage = styled.p`
-  color: red;
-  margin-top: 5px;
-  margin-bottom: 10px;
-  font-size: 0.8rem;
-`;

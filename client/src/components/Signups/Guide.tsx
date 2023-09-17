@@ -4,7 +4,7 @@ import styled from 'styled-components';
 const STRINGS = {
     GUIDE_TITLE: "StockHolm 가이드",
     LOGIN_GUIDE: "로그인을 하면 다양한 기능을 활용할 수 있습니다.",
-    CASH_GUIDE: "프로필 버튼 - 현금 탭을 가면 현금을 충전할 수 있습니다."
+    CASH_GUIDE: "프로필 버튼 - 현금 탭을 으로 이동하면 현금을 충전할 수 있습니다."
 };
 
 const GuideModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
@@ -62,10 +62,13 @@ const CloseButton = styled.button`
     border: 1px solid lightgray;
     font-size: 1.5rem;
     cursor: pointer;
+    border-radius: 5px;
 `;
 
 const Content = styled.p`
-    margin: 10px 0;
-    font-size: 1rem;
-    line-height: 1.4;
+    margin: 15px 0;  // 간격 조정
+    font-size: 1.1rem;  // 폰트 크기 증가
+    line-height: 1.5;
+    color: #555;  // 색상 변경
+    text-align: center;  // 텍스트 중앙 정렬
 `;
