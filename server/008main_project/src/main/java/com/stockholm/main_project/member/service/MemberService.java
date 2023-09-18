@@ -3,14 +3,13 @@ package com.stockholm.main_project.member.service;
 import com.stockholm.main_project.auth.utils.CustomAuthorityUtils;
 import com.stockholm.main_project.exception.BusinessLogicException;
 import com.stockholm.main_project.exception.ExceptionCode;
-import com.stockholm.main_project.member.dto.MemberPostDto;
 import com.stockholm.main_project.member.entity.Member;
 import com.stockholm.main_project.member.repository.MemberRepository;
+import com.stockholm.main_project.stock.entity.StockOrder;
+import com.stockholm.main_project.stock.repository.StockOrderRepository;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Optional;
@@ -22,11 +21,13 @@ public class MemberService {
     private final MemberRepository memberRepository;
     private final PasswordEncoder passwordEncoder;
     private final CustomAuthorityUtils authorityUtils;
+    private final StockOrderRepository stockOrderRepository;
 
-    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils) {
+    public MemberService(MemberRepository memberRepository, PasswordEncoder passwordEncoder, CustomAuthorityUtils authorityUtils, StockOrderRepository stockOrderRepository) {
         this.memberRepository = memberRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityUtils = authorityUtils;
+        this.stockOrderRepository = stockOrderRepository;
     }
 
     public Member createMember(Member member) {
@@ -78,6 +79,9 @@ public class MemberService {
     public void deleteMember(long memberId) {
 
         memberRepository.deleteById(memberId);
+
+        List<StockOrder> orders = stockOrderRepository.findByMemberMemberId(memberId);
+        stockOrderRepository.deleteAll(orders);
     }
 
     public Member findVerifiedMember(long memberId) {
