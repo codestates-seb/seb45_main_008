@@ -65,13 +65,13 @@ const StockItem: React.FC<StockItemProps> = ({ companyData, stockData }) => {
           <DetailTitle>보유</DetailTitle>
         </DetailSection01>
         <DetailSection02>
-          <ColoredDetailData priceChangeAmount={priceChangeAmount} value={stockReturn.toString()}>
+          <ColoredDetailData priceChangeAmount={priceChangeAmount}>
             {stockReturn.toLocaleString()} 원
           </ColoredDetailData>
           <DetailData>{totalPrice.toLocaleString()} 원</DetailData>
         </DetailSection02>
         <DetailSection03>
-          <ColoredDetailData priceChangeAmount={priceChangeAmount} value={`${formattedPercentage}%`}>
+          <ColoredDetailData priceChangeAmount={priceChangeAmount}>
             {formattedPercentage}%
           </ColoredDetailData>
           <DetailTitle>{totalStocksHeld}주</DetailTitle>
@@ -223,7 +223,7 @@ const DetailData = styled.span`
 
 const ColoredDetailData = styled.span<{ priceChangeAmount: number }>`
   color: ${(props) => (props.priceChangeAmount > 0 ? "#e22926" : "#2679ed")};
-  font-size: 14px; // Setting standardized font size for all data
+  font-size: 14px; 
 `;
 
 // const ThickDivider = styled.div`
