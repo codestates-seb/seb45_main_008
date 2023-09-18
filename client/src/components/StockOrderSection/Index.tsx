@@ -2,6 +2,10 @@ import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
 import useGetStockInfo from "../../hooks/useGetStockInfo";
 import useGetStockData from "../../hooks/useGetStockData";
+import useGetCash from "../../hooks/useGetCash";
+import useGetStockOrderRecord from "../../hooks/useGetStockOrderRecord";
+import useGetHoldingStock from "../../hooks/useGetHoldingStock";
+import useGetCompanyList from "../../hooks/useGetCompanyList";
 import { stockOrderClose } from "../../reducer/StockOrderSet-Reducer";
 import { StateProps } from "../../models/stateProps";
 import StockOrder from "./StockOrder";
@@ -9,10 +13,8 @@ import OrderResult from "./OrderResult";
 
 const errorMessage: string = "정보를 불러올 수 없습니다";
 const errorButtonText: string = "닫기";
-
 const loginRequiredText: string = "로그인이 필요한 서비스입니다";
 const loginBtnText: string = "StockHolm 로그인";
-
 const upperbarTitle: string = "주식주문";
 const marketType: string = "코스피";
 
@@ -27,25 +29,35 @@ const StockOrderSection = () => {
 
   const { stockInfo, stockInfoLoading, stockInfoError } = useGetStockInfo(companyId);
   const { stockPrice, stockPriceLoading, stockPriceError } = useGetStockData(companyId);
+  const { cashLoading, cashError } = useGetCash();
+  const { orderRecordLoading, orderRecordError } = useGetStockOrderRecord();
+  const { holdingStockLoading, holdingStockError } = useGetHoldingStock();
+  const { compnayListLoading, companyListError } = useGetCompanyList();
 
-  console.log(isLogin);
-  const localData = localStorage.getItem("authToken");
-  console.log(localData);
+  // fetching 데이터 loading, error 여부
+  const isLoading = stockInfoLoading || stockPriceLoading || cashLoading || orderRecordLoading || holdingStockLoading || compnayListLoading;
+  const isError = stockInfoError || stockPriceError || cashError || orderRecordError || holdingStockError || companyListError;
+
+  // 1) 데이터 로딩 중
+  if (isLoading) {
+    return <Container orderSet={stockOrderSet}>로딩 중</Container>;
+  }
 
   // 주식주문 창 닫기
   const handleStockOrderClose = () => {
     dispatch(stockOrderClose());
   };
 
-  // 1) 데이터 로딩 중
-  if (stockInfoLoading || stockPriceLoading) {
-    return <Container orderSet={stockOrderSet}>로딩 중</Container>;
-  }
-
-  // 2) 데이터 받아오기 실패 + 성공했으나 빈 데이터일 때
-  if (stockInfoError || stockPriceError || stockPrice.length === 0) {
+  // 2) 데이터 받아오기 실패 or 성공했으나 빈 데이터일 때
+  if (isError || stockPrice.length === 0) {
     return (
       <Container orderSet={stockOrderSet}>
+        <UpperBar>
+          <h2 className="Title">{upperbarTitle}</h2>
+          <button className="CloseButton" onClick={handleStockOrderClose}>
+            &#10005;
+          </button>
+        </UpperBar>
         <div className="ErrorContainer">
           <div className="ErrorMessage">{errorMessage}</div>
           <button className="ErrorCloseButton" onClick={handleStockOrderClose}>
@@ -69,7 +81,7 @@ const StockOrderSection = () => {
         </button>
       </UpperBar>
       {isLogin === 1 ? (
-        <>
+        <div className="mainContent">
           <StockName>
             <img className="CorpLogo" src={dummyLogo} />
             <div className="NameContainer">
@@ -81,7 +93,7 @@ const StockOrderSection = () => {
           </StockName>
           <StockOrder corpName={corpName} />
           <OrderResult />
-        </>
+        </div>
       ) : (
         <LoginRequestIndicator />
       )}
@@ -105,7 +117,7 @@ const LoginRequestIndicator = () => {
 const Container = styled.aside<{ orderSet: boolean }>`
   position: fixed;
   z-index: 1;
-  right: ${(props) => (props.orderSet ? "0px" : "-500px")};
+  right: ${(props) => (props.orderSet ? "0px" : "-100vw")};
   transition: right 0.3s ease-in-out;
   display: flex;
   flex-direction: column;
@@ -113,8 +125,11 @@ const Container = styled.aside<{ orderSet: boolean }>`
   min-width: 400px;
   height: 100%;
   box-shadow: -1px 0px 10px darkgray;
-
   background-color: #ffffff;
+
+  .mainContent {
+    height: 100%;
+  }
 
   .ErrorContainer {
     width: 100%;

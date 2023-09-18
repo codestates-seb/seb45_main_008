@@ -1,34 +1,29 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import { useSelector } from 'react-redux';
 import MemberInfoModal from './memberInfoModal'; 
 import MemberWithdrawalModal from './memberWithdrawalModal';
 import CashModal from './cashModal'; 
-import { RootState } from '../../store/config'; 
 
 const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
-
     const memberInfoText = "회원정보";
     const cashText = "현금";
     const memberWithdrawText = "회원탈퇴";
-    const moneyId = useSelector((state: RootState) => state.cash.moneyId); 
 
-    const [selectedTab, setSelectedTab] = useState(1); // 1: MemberInfo, 2: CashModal, 3: WithdrawalModal
+    const [selectedTab, setSelectedTab] = useState(1);
 
     return (
         <ModalBackground>
             <ModalContainer>
                 <Tabs>
-                    <TabButton onClick={() => setSelectedTab(1)}>{memberInfoText}</TabButton>
-                    <TabButton onClick={() => setSelectedTab(2)}>{cashText}</TabButton>
-                    <TabButton onClick={() => setSelectedTab(3)}>{memberWithdrawText}</TabButton>
+                    <TabButton isActive={selectedTab === 1} onClick={() => setSelectedTab(1)}>{memberInfoText}</TabButton>
+                    <TabButton isActive={selectedTab === 2} onClick={() => setSelectedTab(2)}>{cashText}</TabButton>
+                    <TabButton isActive={selectedTab === 3} onClick={() => setSelectedTab(3)}>{memberWithdrawText}</TabButton>
                 </Tabs>
                 <TabContent>
                     {selectedTab === 1 && <MemberInfoModal onClose={onClose} />}
-                    {selectedTab === 2 && <CashModal onClose={onClose} moneyId={moneyId} />}
+                    {selectedTab === 2 && <CashModal onClose={onClose} />}
                     {selectedTab === 3 && <MemberWithdrawalModal onClose={onClose} />}
                 </TabContent>
-                {/* <CloseButton onClick={onClose}>&times;</CloseButton> */}
             </ModalContainer>
         </ModalBackground>
     );
@@ -69,25 +64,18 @@ const Tabs = styled.div`
     display: flex;
     justify-content: space-between;
     width: 100%;
-    margin-bottom: 20px;
+    margin-bottom: 0px;
+    position: relative; // 위치를 조절하기 위한 속성
+    top: -33px; // 위로 30px 올립니다
     z-index: 1002; // 이 값을 추가하여 Tabs를 최상위로 올립니다.
 `;
 
-// // 모달 닫기 버튼 스타일
-// const CloseButton = styled.button`
-//   position: absolute;
-//   top: 10px;
-//   right: 10px;
-//   background: #FFFFFF;
-//   border: 1px solid lightgray;
-//   font-size: 1.5rem;
-//   cursor: pointer;
-// `;
-
-const TabButton = styled.button`
+// TabButton 컴포넌트 스타일링
+const TabButton = styled.button<{ isActive?: boolean }>`
     flex: 1;
     padding: 10px;
     border: 1px solid lightgray;
+    border-bottom: ${({ isActive }) => (isActive ? '3px solid darkslategray' : '1px solid lightgray')};
     border-radius: 5px;
     cursor: pointer;
     background-color: #FFFFFF;

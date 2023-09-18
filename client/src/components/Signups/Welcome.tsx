@@ -9,7 +9,8 @@ const START_TEXT = "시작하기";
 const JOINED_DATE_TEXT = "가입일: ";
 
 const Welcome: React.FC<WelcomeProps> = ({ onClose }) => {
-    // Access the memberInfo state from the Redux store
+
+    //스토어에서 유저정보 불러오기
     const memberInfo = useSelector((state: RootState) => state.memberInfo.memberInfo);
 
     return (
@@ -30,13 +31,13 @@ interface WelcomeProps {
     onClose: () => void;
 }
 
-// State type definition
+// 유저 정보 변수 타입
 interface MemberInfo {
   email: string;
   name: string;
   password: string;
   confirmPassword: string;
-  createdAt: string;  // Assuming createdAt is a string in the format "YYYY-MM-DD" or similar
+  createdAt: string;  
 }
 
 interface RootState {
@@ -58,6 +59,7 @@ const ModalBackground = styled.div`
 `;
 
 const ModalContainer = styled.div`
+  z-index:4000;
   position: relative;
   background-color: white;
   padding: 20px;
@@ -79,7 +81,7 @@ const Subtitle = styled.h3`
   margin-bottom: 20px;
   font-size: 1.2rem;
   font-weight: 300;
-  color: gray;
+  color: slategray;
 `;
 
 const Logo = styled.img`
@@ -98,4 +100,9 @@ const ConfirmButton = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+
+  //호버 시 밝게
+  &:hover {
+    background-color: rgba(47, 79, 79, 0.8); 
+  }
 `;

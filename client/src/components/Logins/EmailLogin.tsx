@@ -4,9 +4,7 @@ import React, { useState } from "react";
 import { setLoginState } from "../../reducer/member/loginSlice";
 import { useDispatch } from "react-redux";
 
-// 이메일 로그인 모달 컴포넌트
 const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) => {
-  // 상수 문자열 정의
   const titleText = "이메일로 로그인";
   const emailLabelText = "이메일";
   const passwordLabelText = "비밀번호";
@@ -15,55 +13,51 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) =
   const noAccountText = "계정이 없습니까?";
   const registerButtonText = "회원가입하기";
 
-  //디스패치 함수 가져오기
   const dispatch = useDispatch();
 
-  // 상태 변수 정의
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [generalError, setGeneralError] = useState<string | null>(null);
 
-  // 이메일 변경 핸들러
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
   };
 
-  // 비밀번호 변경 핸들러
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
   };
 
-  // 로그인 버튼 클릭 핸들러
   const handleLoginClick = async () => {
     try {
-      const response = await axios.post("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members/login", {
-        email,
-        password,
-      });
-      if (response.status === 200) {
-        const authToken = response.headers["authorization"];
-        console.log(authToken);
+      const response = await axios.post(
+        "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members/login", 
+        { email, password },
+        { validateStatus: (status) => status >= 200 && status < 600 }
+      );
 
+      if (response.status === 200) {
+        const accessToken = response.headers["authorization"];
         const refreshToken = response.headers["refresh"];
 
-        // 로그인 상태로 만들기
         dispatch(setLoginState());
-
-        // 토큰들을 로컬 스토리지에 저장
-        if (authToken) localStorage.setItem("authToken", authToken);
+        if (accessToken) localStorage.setItem("accessToken", accessToken);
         if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
 
         onLogin();
         onClose();
       } else {
-        console.error("로그인 중 오류 발생");
+        setGeneralError(response.data.message || JSON.stringify(response.data));
       }
     } catch (error) {
-      console.error("로그인 중 오류:", error);
+      if (axios.isAxiosError(error) && error.response) {
+        setGeneralError(error.response.data.message || JSON.stringify(error.response.data));
+      } else {
+        console.error("로그인 중 오류:", error);
+      }
     }
   };
 
   return (
-    // 모달 레이아웃
     <ModalBackground>
       <ModalContainer>
         <CloseButton onClick={onClose}>&times;</CloseButton>
@@ -72,6 +66,7 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) =
         <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} />
         <Label>{passwordLabelText}</Label>
         <Input type="password" placeholder="비밀번호를 입력하세요" value={password} onChange={handlePasswordChange} />
+        {generalError && <ErrorMessage>{generalError}</ErrorMessage>}
         <RightAlignedButton>{findPasswordText}</RightAlignedButton>
         <LoginButton onClick={handleLoginClick}>{loginButtonText}</LoginButton>
         <BottomText>
@@ -104,6 +99,7 @@ const ModalBackground = styled.div`
 `;
 
 const ModalContainer = styled.div`
+  z-index:4000;
   position: relative;
   background-color: white;
   padding: 20px;
@@ -122,6 +118,7 @@ const CloseButton = styled.button`
   border: 1px solid lightgray;
   font-size: 1.5rem;
   cursor: pointer;
+  border-radius: 5px;
 `;
 
 const Title = styled.h2`
@@ -161,6 +158,11 @@ const LoginButton = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
+  
+  //호버 시 밝게
+  &:hover {
+    background-color: rgba(47, 79, 79, 0.8); 
+  }
 `;
 
 const BottomText = styled.div`
@@ -173,4 +175,10 @@ const RegisterButton = styled.button`
   border: none;
   color: slategray;
   cursor: pointer;
+`;
+const ErrorMessage = styled.p`
+  color: #e22926;
+  margin-top: 5px;
+  margin-bottom: 10px;
+  font-size: 0.8rem;
 `;

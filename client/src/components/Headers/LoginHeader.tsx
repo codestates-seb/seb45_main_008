@@ -4,19 +4,24 @@ import styled from 'styled-components';
 import StockHolmLogo from "../../asset/images/StockHolmLogo.png";
 import SampleProfile from "../../asset/images/ProfileSample.png"; 
 import { useNavigate } from "react-router-dom";  
-import AlarmImage from "../../asset/images/alarm.png"; 
 import ProfileModal from "../Profile/profileModal";
 import StockSearchComponent from './stockSearchComponent';
+import { setLogoutState } from '../../reducer/member/loginSlice';
+import { useDispatch } from 'react-redux';
+import { useGetMemberInfo } from '../../hooks/useGetMemberInfo';// import the hook
 
 
 // 로그인 상태일 때의 헤더 컴포넌트
-const LoginHeader: React.FC<LoginHeaderProps> = ({ onLogoutClick }) => {
+const LoginHeader: React.FC<LoginHeaderProps> = () => {
   const [isProfileModalOpen, setProfileModalOpen] = useState(false); // 프로필 모달 상태
   const navigate = useNavigate();  // 페이지 이동 함수
-
-
-
   const logoutText = "로그아웃";
+  const dispatch = useDispatch();  // 
+
+  const { data: memberInfo } = useGetMemberInfo(); // use the hook here
+  const userName = memberInfo?.name; // retrieve the user's name
+  const userEmail = memberInfo?.email; // retrieve the user's email
+
   // 프로필 모달 열기 함수
   const handleProfileOpen = () => {
     setProfileModalOpen(true);
@@ -32,22 +37,29 @@ const LoginHeader: React.FC<LoginHeaderProps> = ({ onLogoutClick }) => {
     navigate("/");  // 메인 페이지로 이동
   };
 
+  // 로그아웃 클릭 처리 함수
+  const handleLogout = () => {
+    dispatch(setLogoutState()); // 전역변수에서 로그아웃 상태로 설정
+    localStorage.removeItem("accessToken"); // 엑세스 토큰 제거
+    localStorage.removeItem("refreshToken"); // 리프레시 토큰 제거
+
+    // 페이지를 새로고침합니다.
+     window.location.reload();
+};
+
   return (
     <HeaderContainer>
       <LogoButton onClick={handleLogoClick}>
         <LogoImage src={StockHolmLogo} />
       </LogoButton>
-      {/* <SearchBar value={searchValue} onChange={handleSearchChange} /> */}
       <StockSearchComponent/>
       <UserActions>
-        <NotificationButton> 
-          <img src={AlarmImage} alt="Notification" />
-        </NotificationButton>
+        <UserNameDisplay>{userName || userEmail}</UserNameDisplay>
         <ProfileButton onClick={handleProfileOpen}>
           <ProfileImage src={SampleProfile} />
         </ProfileButton>
         {isProfileModalOpen && <ProfileModal onClose={handleProfileClose} />}
-        <LogoutButton onClick={onLogoutClick}>{logoutText}</LogoutButton> 
+        <LogoutButton onClick={handleLogout}>{logoutText}</LogoutButton>
       </UserActions>
     </HeaderContainer>
   );
@@ -57,7 +69,6 @@ export default LoginHeader;
 
 // 로그아웃 클릭 이벤트 타입 정의
 interface LoginHeaderProps {
-  onLogoutClick: () => void;
   onProfileClick: () => void;
 }
 
@@ -82,6 +93,9 @@ const LogoButton = styled.button`
   &:focus {
     outline: none;
   }
+  &:hover img {
+    filter: brightness(0.97);  // darken the logo image slightly on hover
+  }
 `;
 
 // 로고 이미지 스타일
@@ -97,16 +111,12 @@ const UserActions = styled.div`
   align-items: center;
 `;
 
-// 알림 버튼 스타일
-const NotificationButton = styled.button`
-  margin-right: 1rem; 
-  background-color: #fff;
-  border: none;
-  cursor: pointer;
-  img {   
-    height: 40px;
-    width: auto;
-  }
+//유저 이름 스타일
+const UserNameDisplay = styled.span`
+  font-weight: 400;
+  font-size: 1rem;
+  color: darkslategray;
+  margin-right:1rem;
 `;
 
 // 프로필 버튼 스타일
@@ -119,11 +129,14 @@ const ProfileButton = styled.button`
   &:focus {
     outline: none;
   }
+  &:hover {
+    background-color: #f2f2f2;  // light gray color on hover
+  }
 `;
 
 // 프로필 이미지 스타일
 const ProfileImage = styled.img`
-  height: 40px;
+  height: 35px;
   width: auto;
 `;
 
@@ -140,5 +153,4 @@ const LogoutButton = styled.button`
     background-color: #f2f2f2; 
   }
 `;
-
 

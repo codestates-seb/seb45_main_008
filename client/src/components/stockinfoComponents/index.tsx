@@ -1,13 +1,14 @@
+import styled from "styled-components";
+
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/config";
-import styled from "styled-components";
+
 const DetailStockInformation: React.FC = () => {
   // Redux의 companyId 상태를 구독합니다.
-  const companyId = useSelector((state: RootState) => state.companyId);
 
   // ...
-
-  const InfoData = {
+  const companyId = useSelector((state: RootState) => state.companyId);
+  const InfoDatas = {
     companyIds: companyId,
     companyInfo: [
       {
@@ -493,23 +494,37 @@ const DetailStockInformation: React.FC = () => {
       },
     ],
   };
+
+  const InfoData = InfoDatas;
   const matchingCompany = InfoData.companyInfo.find(
     (el) => el.companysId === InfoData.companyIds
   );
 
   return (
     <StockInfoContainer>
-      {matchingCompany && (
+      {matchingCompany ? (
         <StockInfo>
           <StockHeader>
             <div>
               <StockImg src={matchingCompany.company.companyImageUrl} />
             </div>
+
             <StockName>
               <li>{matchingCompany.company.companyName}</li>
               <li>{matchingCompany.company.companyKospi}</li>
             </StockName>
           </StockHeader>
+          <StockSkillContainer>
+            {}
+            <StockSkills>
+              <li>{matchingCompany.company.companySkill.sk1}</li>
+              <li>{matchingCompany.company.companySkill.sk2}</li>
+              <li>{matchingCompany.company.companySkill.sk3}</li>
+              <li>{matchingCompany.company.companySkill.sk4}</li>
+              <li> {matchingCompany.company.companySkill.sk5}</li>
+              <li>{matchingCompany.company.companySkill.sk6}</li>
+            </StockSkills>
+          </StockSkillContainer>
           <div>
             <hr />
           </div>
@@ -558,16 +573,27 @@ const DetailStockInformation: React.FC = () => {
               <li>
                 <div>자산비율</div>
               </li>
-              <li>{}</li>
-              <li>{}</li>
+              <li>{matchingCompany.company.companyAsset.total}</li>
+              <li>
+                자본비중 :{matchingCompany.company.companyAsset.assetRatio}
+              </li>
+              <li>
+                부채비중 :{matchingCompany.company.companyAsset.lentRatio}
+              </li>
             </ul>
           </StockDetail>
         </StockInfo>
+      ) : (
+        <div>종목을 선택 해 주세요</div>
       )}
     </StockInfoContainer>
   );
 };
-
+//companyAsset: {
+// total: "자산총계" + "4,480,005.60" + "억",
+//lentRatio: "19.87" + "%",
+// assetRatio: "80.13" + "%",
+//}
 export default DetailStockInformation;
 
 const StockInfoContainer = styled.div`
@@ -578,6 +604,7 @@ const StockInfo = styled.div``;
 
 const StockHeader = styled.div`
   display: flex;
+  align-items: column;
 `;
 const StockName = styled.ul`
   display: flex;
@@ -589,6 +616,20 @@ const StockName = styled.ul`
     font-size: 20px;
   }
 `;
+
+const StockSkillContainer = styled.div``;
+const StockSkills = styled.ul`
+  display: flex;
+
+  li {
+    box-shadow :1px 1px 1px 1px  rgba(0,0,0,0.6)
+    font-size: 13px;
+    padding: 5px 7px;
+    margin-left: 10px;
+    border: 1px solid#333;
+  }
+`;
+
 const StockImg = styled.img`
   width: 50px;
   height: 50px;
