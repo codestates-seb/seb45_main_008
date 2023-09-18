@@ -116,10 +116,17 @@ public class BoardController {
         List<Board> foundBoards = boardService.getAllBoards();
 
         List<AllBoardResponseDto> responseDtos = foundBoards.stream()
-                .map(mapper::boardToAllBoardResponseDto)
+                .map(board -> {
+                    AllBoardResponseDto responseDto = mapper.boardToAllBoardResponseDto(board);
+                    List<Comment> comments = commentService.findComments(board.getBoardId());
+                    List<BoardCommentDto> boardCommentDtos = comments.stream()
+                            .map(mapper::boardCommentToBoardCommentsDto)
+                            .collect(Collectors.toList());
+                    responseDto.setComments(boardCommentDtos);
+                    return responseDto;
+                })
                 .collect(Collectors.toList());
-
-        return new ResponseEntity<>(responseDtos,HttpStatus.OK);
+        return new ResponseEntity<>(responseDtos, HttpStatus.OK);
     }
 
     @Operation(summary = "게시물 삭제", description = "게시물을 삭제합니다.", tags = { "Board" })
