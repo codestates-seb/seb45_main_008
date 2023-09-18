@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../store/config';
 
 
-const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick, onEmailSignupClick, onLoginSuccess  }) => {
+const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick, onEmailSignupClick }) => {
     const titleText = "로그인";
     const orText = "또는";
     const emailLoginText = "이메일로 로그인";
@@ -22,7 +22,6 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
     // 이미 로그인상태라면 모달창 닫기
     useEffect(() => {
         if (loginState === 1) {
-            onLoginSuccess(); 
             onClose();
         }
     }, [loginState, onClose]);
@@ -51,7 +50,7 @@ interface LoginModalProps {
     onClose: () => void;
     onEmailLoginClick: () => void;
     onEmailSignupClick: () => void;
-    onLoginSuccess: () => void;  
+    onLoginSuccess?: () => void;  
     onWatchListClick: () => void;
     onHoldingsClick: () => void;
 }

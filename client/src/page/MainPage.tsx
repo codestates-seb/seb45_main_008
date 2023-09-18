@@ -195,7 +195,6 @@ const MainPage = () => {
           onClose={closeOAuthModal}
           onEmailLoginClick={openEmailLoginModal}
           onEmailSignupClick={openEmailSignupModal}
-          onLoginSuccess={handleOAuthLoginSuccess} // 추가된 부분
           onWatchListClick={() => handleMenuChange("관심종목")}
           onHoldingsClick={() => handleMenuChange("보유종목")}
         />
