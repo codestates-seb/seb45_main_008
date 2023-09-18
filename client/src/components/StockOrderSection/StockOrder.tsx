@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { isHoliday } from "@hyunbinseo/holidays-kr";
+// import { isHoliday } from "@hyunbinseo/holidays-kr";
 import { setStockOrderVolume } from "../../reducer/StockOrderVolume-Reducer";
 import { closeDecisionWindow } from "../../reducer/SetDecisionWindow-Reducer";
 import { styled } from "styled-components";
@@ -87,8 +87,8 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
   };
 
   // 1) 주말, 공휴일 여부 체크
-  const today = new Date();
-  const nonBusinessDay = isHoliday(today, { include: { saturday: true, sunday: true } }); // 토요일, 일요일, 공휴일 (임시 공휴일 포함)
+  // const today = new Date();
+  // const nonBusinessDay = isHoliday(today, { include: { saturday: true, sunday: true } }); // 토요일, 일요일, 공휴일 (임시 공휴일 포함)
 
   // 🟢 2) 개장시간 여부 체크
   // const currentHour = today.getHours();

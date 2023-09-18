@@ -3,10 +3,9 @@ import { useState, useEffect } from "react"; // useEffect 추가
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { changeCompanyId } from "../../reducer/CompanyId-Reducer";
-import logo from '../../asset/images/StockHolmImage.png';
+import logo from "../../asset/images/StockHolmImage.png";
 
-const MarketServerUrl =
-  "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/companies";
+const MarketServerUrl = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/companies";
 
 const MarketStockList: React.FC = () => {
   const [marketStockList, setMarketStockList] = useState<any[]>([]);
@@ -16,7 +15,6 @@ const MarketStockList: React.FC = () => {
   const numberWithCommas = (x: number): string => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   };
-  
 
   useEffect(() => {
     MarketDataFromServer();
@@ -34,7 +32,6 @@ const MarketStockList: React.FC = () => {
     }
   };
   const SortName = () => {
-    
     const sortedList = [...marketStockList];
     sortedList.sort((a, b) => a.korName.localeCompare(b.korName));
     setMarketStockList(sortedList);
@@ -87,43 +84,33 @@ const MarketStockList: React.FC = () => {
         <StockListHeaderItem5>거래량(주)</StockListHeaderItem5>
       </StockListHeader>
 
-
-      {marketStockList.slice(0, 10).map((el, index) => (
-  <StockListInfo onClick={() => dispatch(changeCompanyId(el.companyId))}>
-    {isLoading === true ? (
-      <div>{MarketStockLists.isLoading}</div>
-    ) : (
-      <>
-      <RankingBadge rank={index + 1} />
-      <Logo src={logo} alt="stock logo" />
-      <StockNameWrapper>
-        <StockName key={el.korName}>{el.korName}</StockName>
-        <StockCode key={el.code}>{el.code}</StockCode>
-      </StockNameWrapper>
-      <StockDetailWrapper>
-        <StockDetail>
-        <StockDetailItem key={el.stockInfResponseDto.stck_prpr}>
-          {numberWithCommas(parseFloat(el.stockInfResponseDto.stck_prpr))}
-        </StockDetailItem>
-          <StockDetailItem 
-            key={el.stockInfResponseDto.prdy_ctrt}
-            variation={
-            parseFloat(el.stockInfResponseDto.prdy_ctrt) > 0
-            ? 'positive'
-            : parseFloat(el.stockInfResponseDto.prdy_ctrt) < 0
-            ? 'negative'
-            : 'neutral'
-            }
-          >
-          {el.stockInfResponseDto.prdy_ctrt}
-        </StockDetailItem>
-          <StockDetailItem key={el.stockInfResponseDto.acml_vol}>{numberWithCommas(parseFloat(el.stockInfResponseDto.acml_vol))}</StockDetailItem>
-        </StockDetail>
-      </StockDetailWrapper>
-    </>
-    )}
-  </StockListInfo>
-))}
+      <StockInfoContainer>
+        {marketStockList.slice(0, 10).map((el, index) => (
+          <StockListInfo onClick={() => dispatch(changeCompanyId(el.companyId))}>
+            {isLoading === true ? (
+              <div>{MarketStockLists.isLoading}</div>
+            ) : (
+              <>
+                <RankingBadge rank={index + 1} />
+                <Logo src={logo} alt="stock logo" />
+                <StockNameWrapper>
+                  <StockName key={el.korName}>{el.korName}</StockName>
+                  <StockCode key={el.code}>{el.code}</StockCode>
+                </StockNameWrapper>
+                <StockDetailWrapper>
+                  <StockDetail>
+                    <StockDetailItem key={el.stockInfResponseDto.stck_prpr}>{numberWithCommas(parseFloat(el.stockInfResponseDto.stck_prpr))}</StockDetailItem>
+                    <StockDetailItem key={el.stockInfResponseDto.prdy_ctrt} variation={parseFloat(el.stockInfResponseDto.prdy_ctrt) > 0 ? "positive" : parseFloat(el.stockInfResponseDto.prdy_ctrt) < 0 ? "negative" : "neutral"}>
+                      {el.stockInfResponseDto.prdy_ctrt}
+                    </StockDetailItem>
+                    <StockDetailItem key={el.stockInfResponseDto.acml_vol}>{numberWithCommas(parseFloat(el.stockInfResponseDto.acml_vol))}</StockDetailItem>
+                  </StockDetail>
+                </StockDetailWrapper>
+              </>
+            )}
+          </StockListInfo>
+        ))}
+      </StockInfoContainer>
     </StockListContainer>
   );
 };
@@ -166,7 +153,7 @@ const StockListDetail = styled.div<{ selected?: boolean }>`
   margin-right: 10px;
   cursor: pointer;
   transition: all 0.3s;
-  
+
   &:hover {
     background-color: #3a5a8a;
     color: white;
@@ -239,6 +226,16 @@ const StockListHeaderItem5 = styled.div`
     margin-right: 0;
   }
 `;
+
+const StockInfoContainer = styled.div`
+  width: 100%;
+  height: calc(100vh - 266px);
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
 const StockListInfo = styled.div`
   display: flex;
   flex-direction: row;
@@ -286,18 +283,18 @@ const StockDetail = styled.div`
   align-items: center;
 `;
 
-const StockDetailItem = styled.div<{ variation?: 'positive' | 'neutral' | 'negative' }>`
+const StockDetailItem = styled.div<{ variation?: "positive" | "neutral" | "negative" }>`
   flex: 1;
   text-align: right;
   color: ${({ variation }) => {
     switch (variation) {
-      case 'positive':
-        return 'red';
-      case 'negative':
-        return 'blue';
-      case 'neutral':
+      case "positive":
+        return "red";
+      case "negative":
+        return "blue";
+      case "neutral":
       default:
-        return 'black';
+        return "black";
     }
   }};
 `;
