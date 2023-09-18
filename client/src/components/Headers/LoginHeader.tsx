@@ -1,22 +1,20 @@
-
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import styled from "styled-components";
 import StockHolmLogo from "../../asset/images/StockHolmLogo.png";
-import SampleProfile from "../../asset/images/ProfileSample.png"; 
-import { useNavigate } from "react-router-dom";  
+import SampleProfile from "../../asset/images/ProfileSample.png";
+import { useNavigate } from "react-router-dom";
 import ProfileModal from "../Profile/profileModal";
-import StockSearchComponent from './stockSearchComponent';
-import { setLogoutState } from '../../reducer/member/loginSlice';
-import { useDispatch } from 'react-redux';
-import { useGetMemberInfo } from '../../hooks/useGetMemberInfo';// import the hook
-
+import StockSearchComponent from "./stockSearchComponent";
+import { setLogoutState } from "../../reducer/member/loginSlice";
+import { useDispatch } from "react-redux";
+import { useGetMemberInfo } from "../../hooks/useGetMemberInfo"; // import the hook
 
 // 로그인 상태일 때의 헤더 컴포넌트
 const LoginHeader: React.FC<LoginHeaderProps> = () => {
   const [isProfileModalOpen, setProfileModalOpen] = useState(false); // 프로필 모달 상태
-  const navigate = useNavigate();  // 페이지 이동 함수
+  const navigate = useNavigate(); // 페이지 이동 함수
   const logoutText = "로그아웃";
-  const dispatch = useDispatch();  // 
+  const dispatch = useDispatch(); //
 
   const { data: memberInfo } = useGetMemberInfo(); // use the hook here
   const userName = memberInfo?.name; // retrieve the user's name
@@ -34,7 +32,7 @@ const LoginHeader: React.FC<LoginHeaderProps> = () => {
 
   // 로고 클릭 처리 함수
   const handleLogoClick = () => {
-    navigate("/");  // 메인 페이지로 이동
+    navigate("/"); // 메인 페이지로 이동
   };
 
   // 로그아웃 클릭 처리 함수
@@ -44,15 +42,15 @@ const LoginHeader: React.FC<LoginHeaderProps> = () => {
     localStorage.removeItem("refreshToken"); // 리프레시 토큰 제거
 
     // 페이지를 새로고침합니다.
-     window.location.reload();
-};
+    window.location.reload();
+  };
 
   return (
     <HeaderContainer>
       <LogoButton onClick={handleLogoClick}>
         <LogoImage src={StockHolmLogo} />
       </LogoButton>
-      <StockSearchComponent/>
+      <StockSearchComponent />
       <UserActions>
         <UserNameDisplay>{userName || userEmail}</UserNameDisplay>
         <ProfileButton onClick={handleProfileOpen}>
@@ -73,13 +71,14 @@ interface LoginHeaderProps {
 }
 
 // 헤더 컨테이너 스타일
+// 🔴 border 색상, 굵기
 const HeaderContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 1rem 2rem;
   background-color: #fff;
-  border-bottom: 1px solid #2F4F4F; 
+  border-bottom: 1px solid black;
   width: 100%;
   height: 51px;
 `;
@@ -94,7 +93,7 @@ const LogoButton = styled.button`
     outline: none;
   }
   &:hover img {
-    filter: brightness(0.97);  // darken the logo image slightly on hover
+    filter: brightness(0.97); // darken the logo image slightly on hover
   }
 `;
 
@@ -103,7 +102,6 @@ const LogoImage = styled.img`
   height: 40px;
   width: auto;
 `;
-
 
 // 사용자 액션 버튼들의 스타일
 const UserActions = styled.div`
@@ -116,7 +114,7 @@ const UserNameDisplay = styled.span`
   font-weight: 400;
   font-size: 1rem;
   color: darkslategray;
-  margin-right:1rem;
+  margin-right: 1rem;
 `;
 
 // 프로필 버튼 스타일
@@ -130,7 +128,7 @@ const ProfileButton = styled.button`
     outline: none;
   }
   &:hover {
-    background-color: #f2f2f2;  // light gray color on hover
+    background-color: #f2f2f2; // light gray color on hover
   }
 `;
 
@@ -143,14 +141,13 @@ const ProfileImage = styled.img`
 // 로그아웃 버튼 스타일
 const LogoutButton = styled.button`
   background-color: #fff;
-  color: #2F4F4F; 
-  border: 1px solid #2F4F4F; 
+  color: #2f4f4f;
+  border: 1px solid #2f4f4f;
   padding: 0.5rem 1rem;
   border-radius: 5px;
   cursor: pointer;
   transition: background-color 0.3s;
   &:hover {
-    background-color: #f2f2f2; 
+    background-color: #f2f2f2;
   }
 `;
-
