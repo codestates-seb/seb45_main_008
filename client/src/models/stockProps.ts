@@ -27,4 +27,5 @@ export interface OrderRecordProps {
   price: number;
   stockCount: number;
   stockOrderId: number;
+  modifiedAt: string;
 }

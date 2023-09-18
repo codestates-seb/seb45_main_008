@@ -11,10 +11,10 @@ const useGetStockOrderRecord = () => {
   const { data, isLoading, isError } = useQuery("orderRecord", getOrderRecord, {
     enabled: isLogin === 1,
     // 🔴 fetching 점검
-    onSuccess: (data) => {
+    onSuccess: () => {
       console.log(new Date());
       console.log("통신 점검");
-      console.log(data);
+      // console.log(data);
     },
   });
 

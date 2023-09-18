@@ -25,9 +25,6 @@ const OrderResult = () => {
   const orderWaitList = orderRecordData.filter((order: OrderRecordProps) => order.orderStates === "ORDER_WAIT");
   const orderCompleteList = orderRecordData.filter((order: OrderRecordProps) => order.orderStates === "ORDER_COMPLETE");
 
-  // 최근 주문이 상단에 노출되도록 배열 순서 변경
-  // orderWaitList.reverse();
-  // orderCompleteList.reverse();
   const orderList = recordType ? orderCompleteList : orderWaitList;
   const orderListNum = orderList.length;
 
@@ -72,6 +69,16 @@ const OrderResult = () => {
               const companyId = stock.companyId;
               const orderId = stock.stockOrderId;
 
+              // 거래 시간
+              const recordTime = stock.modifiedAt;
+              const orderDate = new Date(recordTime);
+              const year = orderDate.getFullYear();
+              const month = orderDate.getMonth() + 1 < 10 ? `0${orderDate.getMonth() + 1}` : orderDate.getMonth() + 1;
+              const date = orderDate.getDate() < 10 ? `0${orderDate.getDate()}` : orderDate.getDate();
+              const hour = orderDate.getHours() < 10 ? `0${orderDate.getHours()}` : orderDate.getHours();
+              const minute = orderDate.getMinutes() < 10 ? `0${orderDate.getMinutes()}` : orderDate.getMinutes();
+              const orderTime = `${year}-${month}-${date} ${hour}:${minute}`;
+
               return (
                 <motion.div
                   key={orderId}
@@ -79,7 +86,7 @@ const OrderResult = () => {
                   animate={{ opacity: 1, y: 0 }} // 애니메이션 중인 상태
                   exit={{ opacity: 0, y: -20 }} // 빠져나가는 상태
                 >
-                  <OrderedStock index={index} recordType={recordType} orderType={orderType} orderPrice={price} orderVolume={volume} companyId={companyId} orderId={orderId} />
+                  <OrderedStock index={index} recordType={recordType} orderType={orderType} orderPrice={price} orderVolume={volume} orderTime={orderTime} companyId={companyId} orderId={orderId} />
                 </motion.div>
               );
             })}
@@ -94,13 +101,12 @@ export default OrderResult;
 
 // 개별 거래내역
 const OrderedStock = (props: OrderdStockProps) => {
-  const { index, orderType, orderPrice, orderVolume, companyId, orderId, recordType } = props;
+  const { index, orderType, orderPrice, orderVolume, orderTime, companyId, orderId, recordType } = props;
 
   const { companyList } = useGetCompanyList();
   const [orderCancle, setOrderCancle] = useState(false);
   const ref = useRef<HTMLDivElement | null>(null);
 
-  const dummyDate = "2023-09-15"; // dummyData
   const price = orderPrice.toLocaleString();
   const volume = orderVolume.toLocaleString();
   const totalOrderPrice = (orderPrice * orderVolume).toLocaleString();
@@ -145,7 +151,7 @@ const OrderedStock = (props: OrderdStockProps) => {
               <span className="totalPrice">{totalOrderPrice}</span>
               <span className="priceUnit">{priceUnit}</span>
             </div>
-            <div className="orderDate">{dummyDate}</div>
+            <div className="orderDate">{orderTime}</div>
           </div>
         ) : (
           <div className="buttonContainer">
@@ -311,6 +317,7 @@ interface OrderdStockProps {
   orderType: string;
   orderPrice: number;
   orderVolume: number;
+  orderTime: string;
   companyId: number;
   orderId: number;
   recordType: boolean;
