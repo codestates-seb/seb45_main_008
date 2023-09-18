@@ -13,6 +13,22 @@ import StockOrderSetting from "./StockOrderSetting";
 // dummyData
 import dummyImg from "../../asset/CentralSectionMenu-dummyImg.png";
 
+//import company logos
+import kia from '../../asset/logos/기아.svg';
+import dy from '../../asset/logos/디와이.jpeg';
+import logosamsung from '../../asset/logos/삼성전자.svg';
+import celltrion from '../../asset/logos/셀트리온.svg';
+import ecopro from '../../asset/logos/에코프로.jpeg';
+import ecoproBM from '../../asset/logos/에코프로비엠.svg';
+import kakaoBank from '../../asset/logos/카카오뱅크.svg';
+import kuckoo from '../../asset/logos/쿠쿠홀딩스.jpeg';
+import hanse from '../../asset/logos/한세엠케이.jpeg';
+import hyundai from '../../asset/logos/현대차.svg';
+import KG from '../../asset/logos/KG케미칼.png';
+import LGelec from '../../asset/logos/LG전자.svg';
+import LGchem from '../../asset/logos/LG화학.svg';
+import posco from '../../asset/logos/POSCO홀딩스.svg';
+
 const orderFailureMessage01: string = "주문 실패";
 const orderFailureMessage02: string = "주문 수량이 없습니다";
 const orderFailureMessage03: string = "입력하신 가격이 올바르지 않습니다";
@@ -42,6 +58,26 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
   const volume = orderVolume.toLocaleString();
   const totalPrice = (orderPrice * orderVolume).toLocaleString();
 
+  // 이미 import된 로고들을 바탕으로 logos 객체 생성
+  const logos: { [key: string]: string } = {
+      '삼성전자': logosamsung,
+      'POSCO홀딩스': posco,
+      '셀트리온': celltrion,
+      '에코프로': ecopro,
+      '에코프로비엠': ecoproBM,
+      '디와이': dy,
+      '쿠쿠홀딩스': kuckoo,
+      '카카오뱅크': kakaoBank,
+      '한세엠케이': hanse,
+      'KG케미칼': KG,
+      'LG화학': LGchem,
+      '현대차': hyundai,
+      'LG전자': LGelec,
+      '기아': kia,
+      };
+      // 그리고 나서, 이 `logos` 객체를 사용하여 기업명에 따라 적절한 로고를 선택할 수 있습니다.
+    const companyLogo = logos[corpName] || dummyImg; // 기본 로고를 대체로 사용
+
   const handleCloseDecisionWindow = () => {
     dispatch(closeDecisionWindow());
   };
@@ -64,7 +100,7 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
     toast(
       <ToastMessage orderType={orderType}>
         <div className="overview">
-          <img src={dummyImg} />
+          <img src={companyLogo} alt="stock logo" />
           <div className="orderInfo">
             {corpName} {volume}
             {volumeUnit}
@@ -126,7 +162,7 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
         ) : (
           <OrderConfirm orderType={orderType}>
             <div className="Container">
-              <img className="CorpLogo" src={dummyImg} />
+              <img className="CorpLogo" src={companyLogo} alt="stock logo" />
               <div className="OrderOverview">
                 <span className="CorpName">{corpName}</span>
                 <span className="OrderType">{orderTypeText}</span>
