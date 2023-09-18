@@ -27,7 +27,7 @@ const useGetStockChart = (companyId: number) => {
   const url = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/companies/charts/";
   const averageDay = 10;
 
-  const getCompareChart = async (compareId: number, compareName: strign) => {
+  const getCompareChart = async (compareId: number, compareName: string) => {
     const response = await axios.get(`${url}${compareId}`);
     const data = await response.data;
 
