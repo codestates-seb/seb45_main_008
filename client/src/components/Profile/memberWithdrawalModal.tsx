@@ -70,13 +70,13 @@ const ModalContainer = styled.div`
   background-color: white;
   padding: 20px;
   width: 400px;
-  min-height: 250px;  // 높이를 최소 높이로 변경
+  height:230px;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: space-between;
 `;
+
 
 const CloseButton = styled.button`
   position: absolute;
@@ -91,7 +91,7 @@ const CloseButton = styled.button`
 
 const Title = styled.h2`
     font-size: 1.6rem;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
     font-weight: 400;
 `;
 
@@ -105,14 +105,14 @@ const Label = styled.label`
 
 const PasswordInput = styled.input`
     width: 100%;
-    padding: 10px;
+    padding: 5px;
     border: 1px solid lightgray;
     border-radius: 5px;
-    margin-bottom: 20px;
+    margin-bottom: 10px;
 `;
 
 const MessageWrapper = styled.div`
-  height: 20px;  // 에러 메시지를 위한 공간 확보
+  height: 10px;  // 에러 메시지 공간을 좀 더 확보합니다.
   width: 100%;
   display: flex;
   justify-content: center;
@@ -134,6 +134,6 @@ const WithdrawalButton = styled.button`
 
 const ErrorMessage = styled.p`
   color: red;
-  margin: 0;
   font-size: 0.8rem;
+  margin-bottom:5px;
 `;

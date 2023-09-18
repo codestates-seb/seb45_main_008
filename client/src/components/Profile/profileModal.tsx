@@ -29,9 +29,10 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
                     {selectedTab === 2 && <CashModal onClose={onClose} />}
                     {selectedTab === 3 && <MemberWithdrawalModal onErrorVisibility={handleErrorVisibility} onClose={onClose} />}
                 </TabContent>
+
             </ModalContainer>
         </ModalBackground>
-    );
+      );
 };
 
 export default ProfileModal;
@@ -59,15 +60,14 @@ const ModalBackground = styled.div`
 const ModalContainer = styled.div`
   z-index: 1001;
   position: relative;
-  padding: 20px;
+  padding: 0px;
   width: 400px;
+  height: 300px;
   border-radius: 10px;
-  max-height : 800px;
   display: flex;
-  flex-direction: column;
+  flex-direction: column; 
   align-items: center;
-  background-color: transparent; // 배경색을 투명하게 설정
-  border: none; // 테두리를 없앱니다.
+  background-color: none;  // 배경색을 하얀색으로 변경
 `;
 
 const Tabs = styled.div`
@@ -75,8 +75,6 @@ const Tabs = styled.div`
     justify-content: space-between;
     width: 100%;
     margin-bottom: 0px;
-    position: relative; // 위치를 조절하기 위한 속성
-    top: -33px; // 위로 30px 올립니다
     z-index: 1002; // 이 값을 추가하여 Tabs를 최상위로 올립니다.
 `;
 
@@ -100,6 +98,7 @@ const TabContent = styled.div<{ isErrorVisible: boolean }>`
     align-items: center;
     justify-content: flex-start;
     overflow-y: auto;
-    position: relative;
-    min-height: ${({ isErrorVisible }) => isErrorVisible ? '400px' : '250px'}; // 에러 발생 시 높이 조절
+    position: top;
+    min-height: 200px;
+
 `;
