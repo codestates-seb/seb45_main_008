@@ -19,20 +19,22 @@ const useGetStockChart = (companyId: number) => {
   const [corpName, setCorpName] = useState("");
 
   // 비교차트 설정 (10일 기준, 이동 평균선)
+  const [compareName, setCompareName] = useState("");
   const [compareChart, setCompare] = useState<any>(undefined);
   const compareId = useSelector((state: StateProps) => state.compareChart);
+  const { stockInfo: compareInfo } = useGetStockInfo(compareId);
 
   const url = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/companies/charts/";
   const averageDay = 10;
 
-  const getCompareChart = async (compareId: number) => {
+  const getCompareChart = async (compareId: number, compareName: strign) => {
     const response = await axios.get(`${url}${compareId}`);
     const data = await response.data;
 
     const compareChartData = organizeData(data);
     const compareMovingAvgData = calculateMovingAvgLine(averageDay, compareChartData);
     const compareMovingAvgChart = {
-      name: "비교차트",
+      name: `${compareName}`,
       type: "line",
       data: compareMovingAvgData,
       smooth: true,
@@ -47,14 +49,22 @@ const useGetStockChart = (companyId: number) => {
   };
 
   useEffect(() => {
+    if (compareInfo && compareId !== null) {
+      const compareStockName = compareInfo.korName;
+      console.log(compareStockName);
+      setCompareName(compareStockName);
+    }
+  }, [compareInfo]);
+
+  useEffect(() => {
     if (compareId !== null) {
-      getCompareChart(compareId);
+      getCompareChart(compareId, compareName);
     }
 
     if (companyId === null) {
       setCompare(undefined);
     }
-  }, [compareId]);
+  }, [compareId, compareName]);
 
   useEffect(() => {
     if (stockPrice && stockInfo) {
@@ -72,7 +82,7 @@ const useGetStockChart = (companyId: number) => {
       top: 10,
       left: "left",
       padding: [4, 0, 0, 15],
-      data: [`주가`, `거래량`, `이동평균선 (${averageLineMinute}분)`, compareChart !== undefined && "비교차트"],
+      data: [`주가`, `거래량`, `이동평균선 (${averageLineMinute}분)`, compareChart !== undefined && `${compareName}`],
     },
     tooltip: {
       trigger: "axis",
