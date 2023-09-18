@@ -42,7 +42,7 @@ public class CashController {
     @Operation(summary = "현금 정보 생성", description = "새로운 현금 정보를 생성합니다.", tags = { "Cash" })
     @ApiResponse(responseCode = "201", description = "Created",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CashResponseDto.class)))
-    @ApiResponse(responseCode = "400", description = "Bad Request")
+    @ApiResponse(responseCode = "400", description = "이미 보유한 현금이 있습니다.")
     @ApiResponse(responseCode = "401", description = "Not Enough Money")
     public ResponseEntity postCash(@Schema(implementation = CashPostDto.class)@Valid @RequestBody CashPostDto cashPostDto,
                                    @AuthenticationPrincipal Member member){

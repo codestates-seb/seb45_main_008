@@ -9,6 +9,7 @@ public enum ExceptionCode {
     INVALID_NAME(400, "이름이 유효하지 않습니다"),
     INVALID_CASH(404, "금액을 조회할 수 없습니다."),
     EMAIL_DUPLICATION(400, "이미 존재하는 이메일입니다."),
+    CASH_DUPLICATION(400, "이미 보유한 현금이 있습니다."),
     INVALID_PASSWORD(404, "비밀번호가 일치하지 않거나 유효하지 않습니다."),
     BOARD_NOT_FOUND(404, "게시물을 찾을 수 없습니다."),
     COMMENT_NOT_FOUND(404, "댓글을 찾을 수 없습니다."),

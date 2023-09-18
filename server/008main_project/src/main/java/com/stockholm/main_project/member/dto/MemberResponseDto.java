@@ -15,6 +15,8 @@ public class MemberResponseDto {
     public String email;
     @Schema(description = "이름", defaultValue = "TestName")
     private String name;
+    @Schema(description = "CashID", defaultValue = "1")
+    private String cash;
     @Schema(description = "생성 시간", defaultValue = "LocalDateTime")
     private LocalDateTime createdAt;
 }
