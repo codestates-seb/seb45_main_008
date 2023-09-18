@@ -18,7 +18,6 @@ public interface BoardMapper {
     Board boardRequestToBoard(BoardRequestDto requestBody);
 
     @Mapping(source = "member.name", target = "member")
-    @Mapping(source = "imageUrl", target = "imageUrl")
     SingleBoardResponseDto boardToBoardResponseDto(Board board);
 
     @Mapping(source = "member.name", target = "member")

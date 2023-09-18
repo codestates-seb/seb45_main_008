@@ -22,40 +22,23 @@ public class BoardService {
     @Autowired
     private BoardRepository boardRepository;
 
-    @Autowired
-    private AwsS3Service awsS3Service;
+    public Board createBoard(Board board) {
 
-    public Board createBoard(Board board, MultipartFile imageFile) throws Exception {
-        if (imageFile != null) {
-            URL imageUrl = awsS3Service.uploadFile("boards", imageFile);
-            board.setImageUrl(imageUrl.toString());
-        }
         return boardRepository.save(board);
     }
 
-    public Board updateBoard(long boardId, Board updatedBoard, MultipartFile imageFile, Member member) throws Exception {
-        Board existingBoard = findBoard(boardId);
+    public Board updateBoard(long boardId, Board updatedBoard, Member member) {
+        Board board = findBoard(boardId);
 
-        if (existingBoard.getMember().getMemberId() != member.getMemberId()) {
+        if (board.getMember().getMemberId() != member.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.INVALID_FAILED);
         }
-        if (imageFile != null) {
-            // 기존 이미지 삭제
-            if (existingBoard.getImageUrl() != null) {
-                awsS3Service.deleteFile("boards", existingBoard.getImageUrl());
-            }
 
-            // 새 이미지 업로드
-            URL imageUrl = awsS3Service.uploadFile("boards", imageFile);
-            existingBoard.setImageUrl(imageUrl.toString());
-        }
+        board.setTitle(updatedBoard.getTitle());
+        board.setContent(updatedBoard.getContent());
 
-        existingBoard.setTitle(updatedBoard.getTitle());
-        existingBoard.setContent(updatedBoard.getContent());
-        return boardRepository.save(existingBoard);
+        return boardRepository.save(board);
     }
-
-
 
     public Board findBoard(long boardId) {
 
@@ -68,12 +51,11 @@ public class BoardService {
 
     public void deleteBoard(long boardId, Member member) {
         Board board = findBoard(boardId);
+
         if (board.getMember().getMemberId() != member.getMemberId()) {
             throw new BusinessLogicException(ExceptionCode.INVALID_FAILED);
         }
-        if (board.getImageUrl() != null) {
-            awsS3Service.deleteFile("boards", board.getImageUrl());
-        }
+
         boardRepository.delete(board);
     }
 
