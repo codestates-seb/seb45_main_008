@@ -1,7 +1,7 @@
-import React from 'react';
-import styled from 'styled-components';
-import { useSelector } from 'react-redux';
-import StockHolmLogo from '../../asset/images/StockHolmLogo.png';
+import React from "react";
+import styled from "styled-components";
+import { useSelector } from "react-redux";
+import StockHolmLogo from "../../asset/images/StockHolmLogo.png";
 
 // Constants for the text strings
 const WELCOME_TEXT = "환영합니다, ";
@@ -9,26 +9,33 @@ const START_TEXT = "시작하기";
 const JOINED_DATE_TEXT = "가입일: ";
 
 const Welcome: React.FC<WelcomeProps> = ({ onClose }) => {
+  //스토어에서 유저정보 불러오기
+  const memberInfo = useSelector((state: RootState) => state.memberInfo.memberInfo);
 
-    //스토어에서 유저정보 불러오기
-    const memberInfo = useSelector((state: RootState) => state.memberInfo.memberInfo);
-
-    return (
-        <ModalBackground>
-            <ModalContainer>
-                <Title>{WELCOME_TEXT}{memberInfo?.name}님!</Title>  {/* Display the member's name */}
-                <Subtitle>{JOINED_DATE_TEXT}{memberInfo?.createdAt}</Subtitle> {/* Display the member's createdAt */}
-                <Logo src={StockHolmLogo} alt="StockHolm Logo" />
-                <ConfirmButton onClick={onClose}>{START_TEXT}</ConfirmButton> 
-            </ModalContainer>
-        </ModalBackground>
-    );
+  return (
+    <ModalBackground>
+      <ModalContainer>
+        <Title>
+          {WELCOME_TEXT}
+          {memberInfo?.name}님!
+        </Title>{" "}
+        {/* Display the member's name */}
+        <Subtitle>
+          {JOINED_DATE_TEXT}
+          {memberInfo?.createdAt}
+        </Subtitle>{" "}
+        {/* Display the member's createdAt */}
+        <Logo src={StockHolmLogo} alt="StockHolm Logo" />
+        <ConfirmButton onClick={onClose}>{START_TEXT}</ConfirmButton>
+      </ModalContainer>
+    </ModalBackground>
+  );
 };
 
 export default Welcome;
 
 interface WelcomeProps {
-    onClose: () => void;
+  onClose: () => void;
 }
 
 // 유저 정보 변수 타입
@@ -37,7 +44,7 @@ interface MemberInfo {
   name: string;
   password: string;
   confirmPassword: string;
-  createdAt: string;  
+  createdAt: string;
 }
 
 interface RootState {
@@ -51,6 +58,7 @@ const ModalBackground = styled.div`
   justify-content: center;
   align-items: center;
   position: fixed;
+  z-index: 100;
   top: 0;
   left: 0;
   width: 100%;
@@ -59,7 +67,7 @@ const ModalBackground = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  z-index:4000;
+  z-index: 100;
   position: relative;
   background-color: white;
   padding: 20px;
@@ -103,6 +111,6 @@ const ConfirmButton = styled.button`
 
   //호버 시 밝게
   &:hover {
-    background-color: rgba(47, 79, 79, 0.8); 
+    background-color: rgba(47, 79, 79, 0.8);
   }
 `;
