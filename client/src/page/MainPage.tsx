@@ -150,6 +150,26 @@ const MainPage = () => {
     setSelectedMenu(menu);
   };
 
+  useEffect(() => {
+    const urlParams = new URLSearchParams(window.location.search);
+    const accessToken = urlParams.get("access_token");
+    const refreshToken = urlParams.get("refresh_token");
+
+    if (accessToken && refreshToken) {
+        localStorage.setItem("accessToken", `Bearer ${accessToken}`);
+        localStorage.setItem("refreshToken", refreshToken);
+        dispatch(setLoginState());
+        // Remove access_token and refresh_token from the URL
+        urlParams.delete("access_token");
+        urlParams.delete("refresh_token");
+        window.history.replaceState({}, "", "?" + urlParams.toString());
+
+        window.location.reload();
+
+
+    }
+  }, [dispatch]);
+
   const [isGuideModalOpen, setGuideModalOpen] = useState(false);
 
   return (

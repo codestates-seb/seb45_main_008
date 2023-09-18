@@ -23,6 +23,21 @@ const TimeLineComponent = () => {
       console.error("데이터 가져오기 중 오류 발생:", error);
     }
   };
+  // 작성 시각을 원하는 형식으로 변환하는 유틸리티 함수
+const formatDate = (isoString: string): string => {
+  const date = new Date(isoString);
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const day = date.getDate();
+  const hours = date.getHours();
+  const minutes = date.getMinutes();
+
+  const formattedHours = hours > 12 ? hours - 12 : hours;
+  const ampm = hours >= 12 ? '오후' : '오전';
+  const formattedMinutes = minutes < 10 ? '0' + minutes : minutes;
+
+  return `${year}년 ${month}월 ${day}일 ${ampm} ${formattedHours}:${formattedMinutes}`;
+};
 
   //드롭다운 버튼 텍스트 작성창 열기
   const [openDropDown, setOpenDropDown] = useState(false);
@@ -121,47 +136,51 @@ const TimeLineComponent = () => {
   return (
     <TimeLine>
       {openDropDown === false && <Button onClick={handleSetOpenDropDown}></Button>}
-
+  
       {openDropDown === true && (
-        <>
-          <DropDownClose onClick={handleSetOpenDropDown}>
-            <p>{timeLineText.close}</p>
-          </DropDownClose>
-          <DropdownInput type="text" placeholder="이곳에 작성해 주세요" value={inputValue} onChange={handleOnChange}></DropdownInput>
-
-          <SubmitButton onClick={handleClickSubmit}>Submit</SubmitButton>
-        </>
+      <>
+        <DropDownClose onClick={handleSetOpenDropDown}>×</DropDownClose>
+        <DropdownInput type="text" placeholder="이곳에 작성해 주세요" value={inputValue} onChange={handleOnChange}></DropdownInput>
+        <SubmitButton onClick={handleClickSubmit}>Submit</SubmitButton>
+      </>
       )}
       <DevideLine></DevideLine>
       <BoardArea className="scroll">
-        {boardData.length === 0 ? (
-          <BoardTextAreaNoText>{timeLineText.notYetWriting}</BoardTextAreaNoText>
-        ) : (
-          boardData
-            .slice()
-            .reverse()
-            .map((el: BoardData) => (
+      {boardData.length === 0 ? (
+        <BoardTextAreaNoText>{timeLineText.notYetWriting}</BoardTextAreaNoText>
+      ) : (
+        boardData
+          .slice()
+          .reverse()
+          .map((el: BoardData) => (
+            <BoardContainer>
               <BoardTextArea>
                 <Delete>
                   <div onClick={() => handleDotOpen(el.boardId)}>
                     <DotIcon />
                   </div>
-                  {dotMenuOpenMap[el.boardId] && <DeleteBoard onClick={() => handleDeleteClick(el.boardId)}>{timeLineText.delete}</DeleteBoard>}
+                  {dotMenuOpenMap[el.boardId] && (
+                    <DeleteBoard onClick={() => handleDeleteClick(el.boardId)}>
+                      {timeLineText.delete}
+                    </DeleteBoard>
+                  )}
                 </Delete>
                 <BoardText>
-                  {el.member}
-                  <br />
-                  {el.content}
+                  <div className="memberName">{el.member}</div>
+                  <div className="createdAt">{formatDate(el.createdAt)}</div>
+                  <div className="content">{el.content}</div>
                 </BoardText>
                 <DevideLine2 />
                 <Comments boardId={el.boardId}></Comments>
               </BoardTextArea>
-            ))
+            </BoardContainer>
+          ))
         )}
       </BoardArea>
     </TimeLine>
   );
 };
+
 export default TimeLineComponent;
 
 interface BoardData {
@@ -170,6 +189,7 @@ interface BoardData {
   content: string;
   comments: string;
   member: string;
+  createdAt: string; // 작성 시각
 }
 const timeLineText = {
   close: "닫기",
@@ -181,9 +201,11 @@ const timeLineText = {
 const DropdownInput = styled.input`
   text-align: center;
   border: 0.1px solid#40797c;
-  width: 50%;
+  margin-left:5%;
+  width: 90%;
   height: 80px;
   outline: none;
+  border-radius: 5px;  // 모서리 둥글게 처리
   &:focus {
     border: 1px solid#40797c;
   }
@@ -193,6 +215,8 @@ const DropDownClose = styled.div`
   text-align: right;
   cursor: pointer;
   color: #40797c;
+  font-size: 30px; // x 아이콘 크기를 조절
+  margin-right:10px;
   &:hover {
     color: #2d4f51;
   }
@@ -203,16 +227,16 @@ const DropDownClose = styled.div`
 const Button = styled.button`
   background-color: white;
   color: darkslategray;
-  border-color: darkslategray;
+  border: 1px solid darkslategray;
 
-  width: 380px;
+  width: 300px;
   height: 30px;
   border-radius: 5px ;
   margin: 0 auto;
   margin-bottom: 15px;
 
   &:hover {
-    background-color: #40797c;
+    background-color: #f2f2f2;
     cursor: pointer;
   }
   &:after {
@@ -232,7 +256,7 @@ const DevideLine2 = styled.div`
     position: absolute;
     top: 5px;
     content: "";
-    border-bottom: 2px solid#e1e1e1;
+    border-bottom: 1px solid#e1e1e1;
     display: block;
     width: 100%;
     height: 5px;
@@ -247,7 +271,7 @@ const DevideLine = styled.div`
     position: absolute;
     top: 5px;
     content: "";
-    border-bottom: 2px solid#e1e1e1;
+    border-bottom: 1px solid#e1e1e1;
     display: block;
     width: 100%;
     height: 5px;
@@ -277,9 +301,15 @@ const SubmitButton = styled.button`
 //게시판 전체 영역
 const BoardArea = styled.div`
   text-align: center;
-  max-height: 500px;
+  max-height: 700px;
   margin-top: 25px;
   width: 100%;
+  overflow-y: auto;  // 스크롤 설정
+
+  ::-webkit-scrollbar {
+    display : none;
+  }
+
 `;
 //게시글 스타일
 const BoardTextAreaNoText = styled.div`
@@ -291,12 +321,24 @@ const BoardTextAreaNoText = styled.div`
   margin-bottom: 10px;
   padding-top: 10px;
   color: #c3c3c3;
+
+  ::-webkit-scrollbar {
+    display : none;
+  }
 `;
+
+const BoardContainer = styled.div`
+  border-radius: 5px;
+  overflow: hidden;  // 내부의 둥근 모서리가 잘리지 않도록
+  background-color: white;  // 배경색 지정
+  border: 1px solid lightslategray;
+
+  margin: 10px;
+`;
+
 const BoardTextArea = styled.div`
   width: 100%;
   padding-bottom: 10px;
-  background-color: #f3f3f3;
-  border-bottom: 10px solid#333;
   padding-top: 10px;
   color: #333;
 `;
@@ -304,12 +346,35 @@ const BoardText = styled.div`
   margin-top: 10px;
   margin-left: 25px;
   min-height: 100px;
+  text-align: left; // 왼쪽 정렬
+
+  .memberName {
+    font-weight: bold;
+  }
+
+  .createdAt {
+    font-size: 12px;
+    color: #888;
+    margin-top: 5px;
+    margin-bottom: 10px;
+  }
+
+  .content {
+    margin-top: 10px;
+  }
+  ::-webkit-scrollbar {
+    display : none;
+  }
 `;
 const TimeLine = styled.div`
   display: flex;
   flex-direction: column;
   align-content: space-around;
   flex-wrap: wrap;
+
+  ::-webkit-scrollbar {
+    display : none;
+  }
 `;
 //게시글 삭제
 const Delete = styled.div`

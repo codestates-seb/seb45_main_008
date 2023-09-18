@@ -32,6 +32,7 @@ const MarketkospiChart = () => {
         myChart.setOption({
           title: {
             text: "Kospi",
+            left: "center",
           },
           tooltip: {
             trigger: "axis",
@@ -41,16 +42,16 @@ const MarketkospiChart = () => {
             type: "category",
             boundaryGap: true,
             data: kospiData.map((kospi: KospiProps) => {
-              const year = kospi.stck_bsop_date.slice(0, 4);
+              // const year = kospi.stck_bsop_date.slice(0, 4);
               const month = kospi.stck_bsop_date.slice(4, 6);
-              const period = `${year}년 ${month}월`;
+              const period = ` ${month}월`;
               return period;
             }),
           },
           yAxis: [
             {
               type: "value",
-              boundaryGap: [0, '10%'],
+              boundaryGap: [10, '10%'],
               position: "left",
               interval: 200,
               min: 2000,
@@ -77,7 +78,7 @@ const MarketkospiChart = () => {
               symbol: "none",
               sampling: "lttb",
               itemStyle: {
-                color: function (params: any) {
+                color: function (params: { data: number[] }) {
                   // 주식 상승이면 빨간색, 하락이면 파란색 반환
                   return params.data[1] >= params.data[0]
                     ? "#f87369"
@@ -123,9 +124,9 @@ const MarketkospiChart = () => {
           ],
           grid: {
             left: "15%",
-            right: "0%",
+            right: "10%",
             top: "20%",
-            bottom: "33%",
+            bottom: "20%",
           },
         });
       }
@@ -150,7 +151,7 @@ interface KospiProps {
 }
 
 const KospiChartStyle = styled.div`
-  margin-top: 0px;
+  margin: 0px;
   width: 100%;
   height: 200px;
 `;
