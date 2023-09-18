@@ -19,7 +19,6 @@ public class SingleBoardResponseDto {
     private String createdAt;
     private String modifiedAt;
     private List<BoardCommentDto> comments;
-    private String imageUrl; // S3에 저장된 이미지 URL
 
 
 }

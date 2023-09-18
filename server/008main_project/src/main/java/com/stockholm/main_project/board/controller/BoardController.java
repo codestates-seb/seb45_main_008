@@ -50,7 +50,7 @@ public class BoardController {
     }
 
     // 게시물 생성
-    @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    @PostMapping
     @Operation(summary = "게시물 생성", description = "새로운 게시물을 생성합니다.", tags = { "Board" })
     @ApiResponses({
             @ApiResponse(responseCode = "201", description = "Created", content = @Content(schema = @Schema(implementation = Board.class))),
@@ -58,37 +58,37 @@ public class BoardController {
             @ApiResponse(responseCode = "405", description = "Method Not Allowed"),
             @ApiResponse(responseCode = "500", description = "Internal Server Error")
     })
-    public ResponseEntity<SingleBoardResponseDto> createBoard(@Valid @RequestPart("boardData") BoardRequestDto boardPostDto,
-                                                              @RequestPart(value = "image", required = false) MultipartFile imageFile,
-                                                              @AuthenticationPrincipal Member member) throws Exception {
+    public ResponseEntity<SingleBoardResponseDto> createBoard(@Valid @RequestBody BoardRequestDto boardPostDto, @AuthenticationPrincipal Member member) throws Exception {
         Board boardToCreate = mapper.boardRequestToBoard(boardPostDto);
         boardToCreate.setMember(member);
-        Board createdBoard = boardService.createBoard(boardToCreate, imageFile);
+
+        Board createdBoard = boardService.createBoard(boardToCreate);
         SingleBoardResponseDto responseDto = mapper.boardToBoardResponseDto(createdBoard);
-        return ResponseEntity.status(HttpStatus.CREATED).contentType(MediaType.APPLICATION_JSON).body(responseDto);
+
+        return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
 
     @Operation(summary = "게시물 정보 변경", description = "게시물을 수정합니다.", tags = { "Board" })
     @ApiResponse(responseCode = "200", description = "OK",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SingleBoardResponseDto.class)))
+            content = @Content(schema = @Schema(implementation = BoardRequestDto.class)))
     @ApiResponse(responseCode = "400", description = "BAD REQUEST")
     @ApiResponse(responseCode = "404", description = "NOT FOUND")
     @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     @PatchMapping("{boardId}")
-    public ResponseEntity<SingleBoardResponseDto> updateBoard(@PathVariable long boardId,
-                                                              @RequestPart("boardData") BoardRequestDto boardUpdateDto,
-                                                              @RequestPart(value = "image", required = false) MultipartFile imageFile,
+    public ResponseEntity<SingleBoardResponseDto> updateBoard(@Valid @PathVariable long boardId,@RequestBody BoardRequestDto boardRequestDto,
                                                               @AuthenticationPrincipal Member member) throws Exception {
-        Board boardToUpdate = mapper.boardRequestToBoard(boardUpdateDto);
-        boardToUpdate.setMember(member);
-        Board updatedBoard = boardService.updateBoard(boardId, boardToUpdate, imageFile, member);
-        SingleBoardResponseDto responseDto = mapper.boardToBoardResponseDto(updatedBoard);
+        Board boardToUpdate = mapper.boardRequestToBoard(boardRequestDto);
+
+        Board board = boardService.updateBoard(boardId, boardToUpdate, member);
+
+        SingleBoardResponseDto responseDto = mapper.boardToBoardResponseDto(board);
+
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
     @Operation(summary = "게시물 정보 조회", description = "게시물을 조회합니다.", tags = { "Board" })
     @ApiResponse(responseCode = "200", description = "OK",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = SingleBoardResponseDto.class)))
+            content = @Content(schema = @Schema(implementation = SingleBoardResponseDto.class)))
     @ApiResponse(responseCode = "400", description = "BAD REQUEST")
     @ApiResponse(responseCode = "404", description = "NOT FOUND")
     @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
@@ -109,24 +109,17 @@ public class BoardController {
 
     @Operation(summary = "전체 게시물 조회", description = "모든 게시물을 조회합니다.", tags = { "Board" })
     @ApiResponse(responseCode = "200", description = "OK",
-            content = @Content(mediaType = "application/json", schema = @Schema(implementation = AllBoardResponseDto.class)))
+            content = @Content(schema = @Schema(implementation = AllBoardResponseDto.class)))
     @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     @GetMapping
     public ResponseEntity<List<AllBoardResponseDto>> getBoards(){
         List<Board> foundBoards = boardService.getAllBoards();
 
         List<AllBoardResponseDto> responseDtos = foundBoards.stream()
-                .map(board -> {
-                    AllBoardResponseDto responseDto = mapper.boardToAllBoardResponseDto(board);
-                    List<Comment> comments = commentService.findComments(board.getBoardId());
-                    List<BoardCommentDto> boardCommentDtos = comments.stream()
-                            .map(mapper::boardCommentToBoardCommentsDto)
-                            .collect(Collectors.toList());
-                    responseDto.setComments(boardCommentDtos);
-                    return responseDto;
-                })
+                .map(mapper::boardToAllBoardResponseDto)
                 .collect(Collectors.toList());
-        return new ResponseEntity<>(responseDtos, HttpStatus.OK);
+
+        return new ResponseEntity<>(responseDtos,HttpStatus.OK);
     }
 
     @Operation(summary = "게시물 삭제", description = "게시물을 삭제합니다.", tags = { "Board" })

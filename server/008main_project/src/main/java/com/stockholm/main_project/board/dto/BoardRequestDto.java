@@ -23,6 +23,4 @@ public class BoardRequestDto {
     @Size(max = 100, message = "내용은 100자를 넘을 수 없습니다")
     private String content;
 
-    private MultipartFile image; // 이미지 파일
-
 }
