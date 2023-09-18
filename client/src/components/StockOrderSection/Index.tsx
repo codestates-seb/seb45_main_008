@@ -21,6 +21,23 @@ const marketType: string = "코스피";
 // dummyData
 import dummyLogo from "../../asset/CentralSectionMenu-dummyImg.png";
 
+//import company logo
+import kia from '../../asset/logos/기아.svg';
+import dy from '../../asset/logos/디와이.jpeg';
+import logosamsung from '../../asset/logos/삼성전자.svg';
+import celltrion from '../../asset/logos/셀트리온.svg';
+import ecopro from '../../asset/logos/에코프로.jpeg';
+import ecoproBM from '../../asset/logos/에코프로비엠.svg';
+import kakaoBank from '../../asset/logos/카카오뱅크.svg';
+import kuckoo from '../../asset/logos/쿠쿠홀딩스.jpeg';
+import hanse from '../../asset/logos/한세엠케이.jpeg';
+import hyundai from '../../asset/logos/현대차.svg';
+import KG from '../../asset/logos/KG케미칼.png';
+import LGelec from '../../asset/logos/LG전자.svg';
+import LGchem from '../../asset/logos/LG화학.svg';
+import posco from '../../asset/logos/POSCO홀딩스.svg';
+
+
 const StockOrderSection = () => {
   const dispatch = useDispatch();
   const isLogin = useSelector((state: StateProps) => state.login);
@@ -72,6 +89,26 @@ const StockOrderSection = () => {
   const corpName = stockInfo.korName;
   const stockCode = stockInfo.code;
 
+      // 이미 import된 로고들을 바탕으로 logos 객체 생성
+      const logos: { [key: string]: string } = {
+        '삼성전자': logosamsung,
+        'POSCO홀딩스': posco,
+        '셀트리온': celltrion,
+        '에코프로': ecopro,
+        '에코프로비엠': ecoproBM,
+        '디와이': dy,
+        '쿠쿠홀딩스': kuckoo,
+        '카카오뱅크': kakaoBank,
+        '한세엠케이': hanse,
+        'KG케미칼': KG,
+        'LG화학': LGchem,
+        '현대차': hyundai,
+        'LG전자': LGelec,
+        '기아': kia,
+        };
+         // 그리고 나서, 이 `logos` 객체를 사용하여 기업명에 따라 적절한 로고를 선택할 수 있습니다.
+        const companyLogo = logos[corpName] || dummyLogo; // 기본 로고를 대체로 사용
+
   return (
     <Container orderSet={stockOrderSet}>
       <UpperBar>
@@ -83,7 +120,7 @@ const StockOrderSection = () => {
       {isLogin === 1 ? (
         <div className="mainContent">
           <StockName>
-            <img className="CorpLogo" src={dummyLogo} />
+            <img className="CorpLogo" src={companyLogo} alt="stock logo" />
             <div className="NameContainer">
               <div className="CorpName">{corpName}</div>
               <div className="StockCode">
