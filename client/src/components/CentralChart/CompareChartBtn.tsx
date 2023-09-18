@@ -5,28 +5,30 @@ import useCompanyData from "../../hooks/useCompanyData";
 import CompareList from "./CompareList";
 import IconImg from "../../asset/CentralSectionMenu-compareChart.png";
 
-const buttonText: string = "비교차트";
+const buttonText: string = "비교종목";
 
 const CompareChartBtn = () => {
   const { data: companyList } = useCompanyData(1, 14);
   const [compare, setCompare] = useState(false);
 
-  const handleCompareChart = () => {
-    setCompare(!compare);
+  const handleOnCompareList = () => {
+    setCompare(true);
   };
 
-  // console.log(companyList);
+  const handleOffCompareList = () => {
+    setCompare(false);
+  };
 
   return (
     <Container>
       <div className="compareButtonContainer">
         <Icon src={IconImg} />
-        <div className="compareButton" onClick={handleCompareChart}>
+        <div className="compareButton" onMouseOver={handleOnCompareList}>
           {buttonText}
         </div>
       </div>
       {compare && (
-        <CompareContainer>
+        <CompareContainer onMouseOver={handleOnCompareList} onMouseLeave={handleOffCompareList}>
           <StockList>
             {companyList?.map((company) => {
               const corpName = company.korName;
@@ -79,20 +81,31 @@ const Icon = styled.img`
 `;
 
 const CompareContainer = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
+  position: relative;
   z-index: 1;
-  background-color: rgba(0, 0, 0, 0.5);
 `;
 
 const StockList = styled.div`
   position: absolute;
-  width: 100px;
-  height: 300px;
-  z-index: 2;
+  right: 0;
+  top: 24px;
 
-  background-color: white;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 12px;
+  font-weight: 500;
+  line-height: 147%;
+
+  width: 92px;
+  height: 260px;
+  padding: 5px;
+  border-radius: 0.4rem;
+  z-index: 2;
+  border: none;
+  color: #b7b5b5;
+  background-color: #bfdaf6e8;
+  opacity: 0.65;
 `;

@@ -6,11 +6,6 @@ import { styled } from "styled-components";
 const CompareList = (props: OwnProps) => {
   const { corpName, compareCompanyId } = props;
 
-  //🔴 확인 직업
-  // const compareInfo = useSelector((state: StateProps) => state.compareChart);
-  // console.log(compareInfo);
-  //
-
   const dispatch = useDispatch();
   const currentCompanyid = useSelector((state: StateProps) => state.companyId);
 
@@ -18,7 +13,6 @@ const CompareList = (props: OwnProps) => {
     if (currentCompanyid === compareCompanyId) {
       return;
     }
-
     dispatch(setCompareStock(compareCompanyId));
   };
 
@@ -31,4 +25,10 @@ interface OwnProps {
   compareCompanyId: number;
 }
 
-const Contianer = styled.div``;
+const Contianer = styled.div`
+  &:hover {
+    color: black;
+    transition: color 0.3s ease;
+    cursor: pointer;
+  }
+`;

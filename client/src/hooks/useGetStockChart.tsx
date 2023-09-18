@@ -1,19 +1,15 @@
 import { useState, useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 import useGetStockData from "./useGetStockData";
 import useGetStockInfo from "./useGetStockInfo";
-
 import { StateProps } from "../models/stateProps";
 import axios from "axios";
 
-// 색상
 const upColor = "rgba(198, 6, 6, 0.37)";
 const downColor = "rgba(59, 119, 247, 0.51)";
 const volumColor = "rgba(57, 118, 249, 0.56)";
 const pointerColor = "#cc3c3a";
 const indexColor = "#4479c2";
-const compareChartColor = '#738f8fc7"';
-// const indexColor = "black";
 const averageLineMinute = 10;
 
 const useGetStockChart = (companyId: number) => {
@@ -21,27 +17,11 @@ const useGetStockChart = (companyId: number) => {
   const { stockInfo } = useGetStockInfo(companyId);
   const [chartData, setChartData] = useState<StockProps[]>([]);
   const [corpName, setCorpName] = useState("");
-  // 🔴 비교차트 테스트
 
-  // ✅ 현재까지 구현된 부분 -> 비교차트 버튼을 누른다 -> 리스트가 뜬다 -> 리스트의 개별 요소를 누르면 비교해야할 회사의 companyId가 넘어온다
-
-  // 비교할 id를 전역상태로 설정 -> 해당 값을 의존성 배열에 설정하여, 해당 값이 변경되면
-
-  // 🔴 (1. compare 데이터 불러오은 곳에서) 무엇을 해야하는가? 불러온 id 활용 -> stock 데이터를 불러온다 useEffect 활용하여, null 값이 아닐 경우 조건 걸어서
-  // null 값일 경우 데이터 날리기?-> 데이터를 불러오면 (useEffect 필요) -> organize 함수로 개량 후 상태로 지정한다
-  //    (2. 메인 차트 불러오는 곳에서) 상태가 변경되면? -> 해당 값을 차트 데이터로 활용한다
-  // 🔴 전역상태로 설정해야할 것,,,, -> 비교 차트 데이터? (버튼 눌렀을 때 ~ 변화가 되고, 비교 취소 했을 때 ~ null 값으로 바뀐다)
-
-  // 서버에서 특정 종목 차트 데이터를 불러온다 -> 비교차트 id 활용
-  // 해당 데이터를 orgziaed 함수로 개량하고
-  // 개량된 데이터에서 현재값만 추출해서
-  // 차트 정보에 추가해준다
-
-  // ✅ 비교차트 데이터로 설정될 상태
+  // 비교차트 설정 (10일 기준, 이동 평균선)
   const [compareChart, setCompare] = useState<any>(undefined);
   const compareId = useSelector((state: StateProps) => state.compareChart);
 
-  // ✅ 데이터 fetching 로직
   const url = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/companies/charts/";
   const averageDay = 10;
 
@@ -49,12 +29,9 @@ const useGetStockChart = (companyId: number) => {
     const response = await axios.get(`${url}${compareId}`);
     const data = await response.data;
 
-    const compareData = organizeData(data);
-    console.log(compareData);
-    const compareMovingAvgData = calculateMovingAvgLine(averageDay, compareData);
-    console.log(compareMovingAvgData);
-
-    const compareMovingChart = {
+    const compareChartData = organizeData(data);
+    const compareMovingAvgData = calculateMovingAvgLine(averageDay, compareChartData);
+    const compareMovingAvgChart = {
       name: "비교차트",
       type: "line",
       data: compareMovingAvgData,
@@ -66,24 +43,9 @@ const useGetStockChart = (companyId: number) => {
       yAxisIndex: 2,
     };
 
-    // const compareCanlde = {
-    //   name: `비교차트`,
-    //   type: "candlestick",
-    //   data: compareData.values,
-    //   itemStyle: {
-    //     color: upColor,
-    //     color0: downColor,
-    //     borderColor: undefined,
-    //     borderColor0: undefined,
-    //   },
-    //   yAxisIndex: 2,
-    // };
-
-    setCompare(compareMovingChart);
-    // setCompare(compareCanlde);
+    setCompare(compareMovingAvgChart);
   };
 
-  // ✅ 비교차트 발동 -> 비교차트 데이터 셋팅
   useEffect(() => {
     if (compareId !== null) {
       getCompareChart(compareId);
@@ -93,56 +55,6 @@ const useGetStockChart = (companyId: number) => {
       setCompare(undefined);
     }
   }, [compareId]);
-
-  // useEffect(() => {
-  //   console.log(compareChart);
-  // }, [compareChart]);
-  // console.log(compareChart);
-
-  // interface CompareProps {
-  //   name: string;
-  //   type: string;
-  //   data: number[];
-  //   lineStyle: { opacity: number };
-  //   yAxisIndex: number;
-  // }
-
-  // const testData = organizeData(chartData);
-  // const testPrice = testData.values;
-  // const prPriceList: number[] = [];
-  // // console.log(testPrice);
-  // testPrice.forEach((price) => {
-  //   prPriceList.push(price[0]);
-  // });
-
-  // console.log(prPriceList);
-  // const testCompare = {
-  //   name: "비교차트 테스트",
-  //   type: "line",
-  //   data: prPriceList,
-  //   lineStyle: {
-  //     opacity: 0.5,
-  //   },
-  //   yAxisIndex: 0,
-  // };
-
-  // useEffect(() => {
-  //   setCompare(testCompare);
-  // }, [testCompare]);
-
-  // useEffect(() => {
-  //   console.log(compareChart);
-  // }, [compareChart]);
-
-  // interface CompareProps {
-  //   name: string;
-  //   type: string;
-  //   data: string | number[];
-  //   lineStyle: { opacity: number };
-  //   yAxisIndex: number;
-  // }
-
-  // // 🔴 비교차트 테스트
 
   useEffect(() => {
     if (stockPrice && stockInfo) {
@@ -160,7 +72,7 @@ const useGetStockChart = (companyId: number) => {
       top: 10,
       left: "left",
       padding: [4, 0, 0, 15],
-      data: compareChart === undefined ? [`주가`, `거래량`, `이동평균선 (${averageLineMinute}분)`] : [`주가`, `거래량`, `이동평균선 (${averageLineMinute}분)`, "비교차트"],
+      data: [`주가`, `거래량`, `이동평균선 (${averageLineMinute}분)`, compareChart !== undefined && "비교차트"],
     },
     tooltip: {
       trigger: "axis",
@@ -276,7 +188,6 @@ const useGetStockChart = (companyId: number) => {
       },
     ],
 
-    // 🟢 x축
     xAxis: [
       {
         type: "category",
@@ -318,7 +229,7 @@ const useGetStockChart = (companyId: number) => {
         axisLabel: {
           show: true,
           interval: Math.ceil(organizedChartData.time.length / 13),
-          showMinLabel: false, // 왼쪽 끝단 텍스트 숨김
+          showMinLabel: false,
           showMaxLabel: false,
           color: "black",
         },
@@ -327,7 +238,6 @@ const useGetStockChart = (companyId: number) => {
       },
     ],
 
-    // 🟢 y축
     yAxis: [
       {
         scale: true,
@@ -443,22 +353,18 @@ const useGetStockChart = (companyId: number) => {
         data: organizedChartData.volumes,
         yAxisIndex: 1,
         itemStyle: {
-          color: volumColor, // 원하는 색상으로 설정
+          color: volumColor,
         },
       },
       compareChart,
-      // 🔴 비교차트 테스트
-      // compareChart,
     ],
   };
 
-  // 스타일 설정
   const chartStyle = {
     width: "100%",
     height: "100% ",
   };
 
-  // 해당 값 리턴
   return { options, chartStyle };
 };
 
@@ -529,7 +435,7 @@ const organizeData = (rawData: StockProps[]) => {
   };
 };
 
-// 2) 이동 평균선 데이터 정리
+// 2) 이동 평균선 데이터 계산
 function calculateMovingAvgLine(minuteCount: number, data: OrganizedChartProps) {
   const result = [];
   const length = data.values.length;
