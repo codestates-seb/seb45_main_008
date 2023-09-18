@@ -11,35 +11,33 @@ const MarketSummary: React.FC = () => {
   return (
     <Market>
       <MarketH3>{SummaryText.now}</MarketH3>
-      <Kospiul>
+      <KospiContaienr>
         <MarketkospiChart />
-      </Kospiul>
+      </KospiContaienr>
       <News>
         <MarketH3>{SummaryText.liveNews}</MarketH3>
         <NewsCompany>
-        <A className="naver" href={NewsListLink.NaverNews} target="_blank">
-          <img src={naver_logo} alt="Naver Logo" /> {SummaryText.naverNews}
-        </A>
-        <A className="daum" href={NewsListLink.DaumNews} target="_blank">
-          <img src={daum_logo} alt="Daum Logo" /> {SummaryText.daumNews}
-        </A>
-        <A className="chosun" href={NewsListLink.chosunNews} target="_blank">
-          <img src={chosun_logo} alt="Chosun Ilbo Logo" /> {SummaryText.chosunNews}
-        </A>
-        <A className="donga" href={NewsListLink.dongaNews} target="_blank">
-          <img src={donga_logo} alt="Donga Ilbo Logo" /> {SummaryText.dongaNews}
-        </A>
-        <A className="jtbc" href={NewsListLink.jtbcNews} target="_blank">
-          <img src={jtbc_logo} alt="JTBC Logo" /> {SummaryText.jtbcNews}
-        </A>
-      </NewsCompany>
+          <A className="naver" href={NewsListLink.NaverNews} target="_blank">
+            <img src={naver_logo} alt="Naver Logo" /> {SummaryText.naverNews}
+          </A>
+          <A className="daum" href={NewsListLink.DaumNews} target="_blank">
+            <img src={daum_logo} alt="Daum Logo" /> {SummaryText.daumNews}
+          </A>
+          <A className="chosun" href={NewsListLink.chosunNews} target="_blank">
+            <img src={chosun_logo} alt="Chosun Ilbo Logo" /> {SummaryText.chosunNews}
+          </A>
+          <A className="donga" href={NewsListLink.dongaNews} target="_blank">
+            <img src={donga_logo} alt="Donga Ilbo Logo" /> {SummaryText.dongaNews}
+          </A>
+          <A className="jtbc" href={NewsListLink.jtbcNews} target="_blank">
+            <img src={jtbc_logo} alt="JTBC Logo" /> {SummaryText.jtbcNews}
+          </A>
+        </NewsCompany>
       </News>
     </Market>
   );
 };
 export default MarketSummary;
-
-
 
 interface StockStatus {
   now: string;
@@ -54,8 +52,14 @@ interface StockStatus {
 }
 
 const Market = styled.div`
-  margin:0px;
-  padding:0px;
+  height: calc(100vh - 147px);
+  margin: 0px;
+  padding: 0px;
+  overflow-y: scroll;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const SummaryText: StockStatus = {
@@ -78,7 +82,6 @@ const NewsListLink = {
   jtbcNews: "https://news.jtbc.co.kr/section/index.aspx?scode=20",
 };
 
-
 const MarketH3 = styled.div`
   text-align: center;
   margin-top: 10px;
@@ -87,12 +90,14 @@ const MarketH3 = styled.div`
   color: #2d4f51;
 `;
 
-const Kospiul = styled.ul`
+const KospiContaienr = styled.div`
+  width: 100%;
   display: flex;
   justify-content: center;
-  align-items : center;
+  align-items: center;
   margin-top: 10px;
-  margin-left:-30px;
+  /* margin-left: -30px; */
+
   &.active {
     background-color: white; /* 원하는 활성화 스타일 지정 */
   }
@@ -111,10 +116,8 @@ const NewsCompany = styled.div`
   display: flex;
   margin-top: 0px;
   width: 100%;
-  flex-direction: column;  // 세로 방향으로 아이템들을 배열
-  align-items: center;     // 아이템들을 세로 방향으로 중앙에 정렬
-
-
+  flex-direction: column; // 세로 방향으로 아이템들을 배열
+  align-items: center; // 아이템들을 세로 방향으로 중앙에 정렬
 `;
 
 const A = styled.a`
@@ -128,18 +131,18 @@ const A = styled.a`
   padding: 10px 10px;
   border: 1px solid#333;
   margin-top: 20px;
-  
-  & img { // 로고 이미지 스타일링
+
+  & img {
+    // 로고 이미지 스타일링
     width: 90px;
     height: 30px;
-    margin-right: 8px;  // 로고와 텍스트 사이의 여백을 조정
+    margin-right: 8px; // 로고와 텍스트 사이의 여백을 조정
   }
   &.naver {
     background-color: white;
     border: 1px solid lightslategray;
     &:hover {
       background-color: #f2f2f2;
-
     }
   }
   &.daum {
@@ -147,14 +150,12 @@ const A = styled.a`
     border: 1px solid lightslategray;
     &:hover {
       background-color: #f2f2f2;
-
     }
   }
   &.chosun {
     background-color: white;
     border: 1px solid lightslategray;
     &:hover {
-
       background-color: #f2f2f2;
     }
   }
@@ -163,10 +164,9 @@ const A = styled.a`
     border: 1px solid lightslategray;
     &:hover {
       background-color: #f2f2f2;
-
     }
   }
-  &.jtbc {    
+  &.jtbc {
     background-color: white;
     border: 1px solid lightslategray;
     &:hover {
@@ -174,5 +174,3 @@ const A = styled.a`
     }
   }
 `;
-
-

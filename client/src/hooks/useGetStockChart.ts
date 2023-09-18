@@ -95,7 +95,7 @@ const useGetStockChart = (companyId: number) => {
   const movingAvgLine = calculateMovingAvgLine(averageLineMinute, organizedChartData);
 
   const options = {
-    animation: true,
+    animation: false,
     legend: {
       top: 10,
       left: "left",
@@ -258,7 +258,7 @@ const useGetStockChart = (companyId: number) => {
           fontSize: "12px",
           color: indexColor,
           fontWeight: "500",
-          showMinLabel: false, // 왼쪽 끝단 텍스트 숨김
+          showMinLabel: false,
           showMaxLabel: false,
           inside: true,
           padding: 10,
@@ -343,7 +343,6 @@ const useGetStockChart = (companyId: number) => {
   const chartStyle = {
     width: "100%",
     height: "100% ",
-    overflow: "hidden",
   };
 
   // 해당 값 리턴
