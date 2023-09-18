@@ -50,11 +50,12 @@ const TabContainerText = {
 const TabContainerStyle = styled.div`
   width: 26%;
   min-width: 400px;
-  overflow: scroll;
+
   border-left: 1px solid #2d4f51;
+  /* overflow: scroll;
   &.scroll::-webkit-scrollbar {
     display: none;
-  }
+  } */
 `;
 
 const TabNavArea = styled.div`

@@ -128,6 +128,7 @@ const StockPrice = styled.span<{ change: string }>`
 const StockChange = styled.span<{ change: string }>`
   color: ${(props) => props.change};
   cursor: pointer;
+
   font-size: 13px;
 `;
 
