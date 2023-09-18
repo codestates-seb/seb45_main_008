@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import { useDeleteMember } from '../../hooks/useDeleteMembers';
 
 
-const MemberWithdrawalModal: React.FC<MemberWithdrawalModalProps> = ({ onClose }) => {
+const MemberWithdrawalModal: React.FC<MemberWithdrawalModalProps> = ({ onClose, onErrorVisibility }) => {
 
     const [inputString, setInputString] = useState<string>('');
     const [errorMsg, setErrorMsg] = useState<string | null>(null);
@@ -20,6 +20,7 @@ const MemberWithdrawalModal: React.FC<MemberWithdrawalModalProps> = ({ onClose }
             deleteMemberMutation.mutate();
         } else {
             setErrorMsg(incorrectStringMsg);
+            onErrorVisibility(true); // 에러가 발생했을 때 높이를 280px로 조절
         }
     };
 
@@ -30,7 +31,9 @@ const MemberWithdrawalModal: React.FC<MemberWithdrawalModalProps> = ({ onClose }
                 <Title>{withdrawalTitle}</Title>
                 <Label>{inputStringLabel}</Label>
                 <PasswordInput type="text" value={inputString} onChange={e => setInputString(e.target.value)} />
-                {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
+                <MessageWrapper>
+                    {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
+                </MessageWrapper>
                 <WithdrawalButton onClick={handleWithdrawal}>{withdrawalButtonText}</WithdrawalButton>
             </ModalContainer>
         </ModalBackground>
@@ -42,8 +45,10 @@ export default MemberWithdrawalModal;
 
 interface MemberWithdrawalModalProps {
     onClose: () => void;
+    onErrorVisibility: (visibility: boolean) => void;
 
 }
+
 
 // Styled Components Definitions:
 
@@ -65,13 +70,13 @@ const ModalContainer = styled.div`
   background-color: white;
   padding: 20px;
   width: 400px;
-  height:230px;
+  min-height: 250px;  // 높이를 최소 높이로 변경
   border-radius: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: space-between;
 `;
-
 
 const CloseButton = styled.button`
   position: absolute;
@@ -106,6 +111,14 @@ const PasswordInput = styled.input`
     margin-bottom: 20px;
 `;
 
+const MessageWrapper = styled.div`
+  height: 20px;  // 에러 메시지를 위한 공간 확보
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
 const WithdrawalButton = styled.button`
     padding: 10px 20px;
     background-color: darkslategray;
@@ -119,10 +132,8 @@ const WithdrawalButton = styled.button`
     }
 `;
 
-
 const ErrorMessage = styled.p`
   color: red;
-  margin-top: 5px;
-  margin-bottom: 10px;
+  margin: 0;
   font-size: 0.8rem;
 `;

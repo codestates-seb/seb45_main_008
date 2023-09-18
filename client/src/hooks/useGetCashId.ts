@@ -14,6 +14,9 @@ const useGetCashId = () => {
     enabled: isLogin === 1,
     onSuccess: (data) => {
       dispatch(setCashId(data)); // Dispatch the setCashId action with fetched data
+    },
+    onError: (error) => {
+      console.error("Error fetching cashId:", error);
     }
   });
 
@@ -23,15 +26,18 @@ const useGetCashId = () => {
 export default useGetCashId;
 
 const getCashData = async () => {
-  const accessToken = localStorage.getItem("accessToken");
-  const options = {
-    headers: {
-      Authorization: `${accessToken}`,
-      "Content-Type": "application/json",
-    },
+    const accessToken = localStorage.getItem("accessToken");
+    const options = {
+      headers: {
+        Authorization: `${accessToken}`,
+        "Content-Type": "application/json",
+      },
+    };
+  
+    try {
+      const response = await axios.get(url, options);
+      return response.data.cashId;
+    } catch (error) {
+      throw new Error((error as Error).message || "Failed to fetch cashId");
+    }
   };
-
-  const response = await axios.get(url, options);
-  const cashId = await response.data.cashId;
-  return cashId;
-};

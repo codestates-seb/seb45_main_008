@@ -24,7 +24,7 @@ const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const { cashData: holdingsAmount } = useGetCash(); // 👈 useGetCash 훅을 사용하여 현금 보유량 데이터를 가져옵니다.
 
     // useGetCashId 훅을 사용하여 cashId 가져오기
-    const { cashData: cashId } = useGetCashId(); // 👈 useGetCash 훅을 사용하여 현금 보유량 데이터를 가져옵니다. 
+    const { cashData: cashId, cashError } = useGetCashId();
 
     const createCashMutation = useCreateCash();
     const updateCashMutation = useResetCash();
@@ -57,13 +57,14 @@ const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         }
 };
 
-    return (
-        <ModalBackground>
-            <ModalContainer>
-                <CloseButton onClick={onClose}>&times;</CloseButton>
-                <Title>{titleText}</Title>
+return (
+    <ModalBackground>
+        <ModalContainer>
+            <CloseButton onClick={onClose}>&times;</CloseButton>
+            <Title>{titleText}</Title>
 
-                {/* 현금 생성 입력창 및 버튼 */}
+            {/* cashId가 없거나 cashId 요청에 오류가 있으면 현금 생성 UI 표시 */}
+            {(!cashId || cashError) && (
                 <div>
                     <CashCreationInput
                         type="string"
@@ -73,6 +74,10 @@ const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     />
                     <CreateCashButton onClick={handleCreateCash}>{createCashButtonText}</CreateCashButton>
                 </div>
+            )}
+
+            {/* cashId가 있으면 현금 리셋 UI 표시 */}
+            {cashId && !cashError && (
                 <div>
                     <CashInput
                         type="string"
@@ -82,16 +87,18 @@ const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     />
                     <ReceiveButton onClick={handleCashReset}>{resetButtonText}</ReceiveButton>
                 </div>
-                <div>
-                    <Content style={{ display: 'inline-block', margin: '20px' }}>
-                        현금 보유량: {holdingsAmount}원
-                    </Content>
-                </div>
-            </ModalContainer>
-        </ModalBackground>
-    );
-};
+            )}
 
+            <div>
+                <Content style={{ display: 'inline-block', margin: '20px' }}>
+                    현금 보유량: {holdingsAmount}원
+                </Content>
+            </div>
+        </ModalContainer>
+    </ModalBackground>
+);
+
+};
 export default CashModal;
 
 // Styled Components Definitions:

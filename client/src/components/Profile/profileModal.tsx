@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
 import MemberInfoModal from './memberInfoModal'; 
 import MemberWithdrawalModal from './memberWithdrawalModal';
@@ -10,6 +10,11 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
     const memberWithdrawText = "회원탈퇴";
 
     const [selectedTab, setSelectedTab] = useState(1);
+    const [isErrorVisible, setIsErrorVisible] = useState(false);
+
+    const handleErrorVisibility = useCallback((visibility: boolean) => {
+        setIsErrorVisible(visibility);
+    }, []);
 
     return (
         <ModalBackground>
@@ -19,19 +24,23 @@ const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
                     <TabButton isActive={selectedTab === 2} onClick={() => setSelectedTab(2)}>{cashText}</TabButton>
                     <TabButton isActive={selectedTab === 3} onClick={() => setSelectedTab(3)}>{memberWithdrawText}</TabButton>
                 </Tabs>
-                <TabContent>
+                <TabContent isErrorVisible={isErrorVisible}>
                     {selectedTab === 1 && <MemberInfoModal onClose={onClose} />}
                     {selectedTab === 2 && <CashModal onClose={onClose} />}
-                    {selectedTab === 3 && <MemberWithdrawalModal onClose={onClose} />}
+                    {selectedTab === 3 && <MemberWithdrawalModal onErrorVisibility={handleErrorVisibility} onClose={onClose} />}
                 </TabContent>
             </ModalContainer>
         </ModalBackground>
     );
 };
 
+export default ProfileModal;
+
+
 interface ProfileModalProps {
     onClose: () => void;
 }
+
 
 // 모달 배경 스타일
 const ModalBackground = styled.div`
@@ -53,6 +62,7 @@ const ModalContainer = styled.div`
   padding: 20px;
   width: 400px;
   border-radius: 10px;
+  max-height : 800px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -82,7 +92,7 @@ const TabButton = styled.button<{ isActive?: boolean }>`
     color: darkslategray;
 `;
 
-const TabContent = styled.div`
+const TabContent = styled.div<{ isErrorVisible: boolean }>`
     width: 100%;
     flex: 1;
     display: flex;
@@ -91,7 +101,5 @@ const TabContent = styled.div`
     justify-content: flex-start;
     overflow-y: auto;
     position: relative;
-    min-height: 200px;
+    min-height: ${({ isErrorVisible }) => isErrorVisible ? '400px' : '250px'}; // 에러 발생 시 높이 조절
 `;
-
-export default ProfileModal;
