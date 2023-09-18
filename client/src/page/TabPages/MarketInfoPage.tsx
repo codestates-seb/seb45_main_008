@@ -15,24 +15,15 @@ const MarketInfo: React.FC<Props> = () => {
   };
   return (
     <MarketInfoContainer>
-      <style>
-        @import
-        url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@500&display=swap');
-      </style>
+      <style>@import url('https://fonts.googleapis.com/css2?family=Jua&family=Noto+Sans+KR:wght@500&display=swap');</style>
       <MarketInfoStyle>
         <TabStyle onClick={() => handleTabStyle(1)}>
-          <Market
-            onClick={() => handleTabClick("market")}
-            className={`tab ${tabStyle === 1 ? "active-tab" : "inactive-tab"}`}
-          >
+          <Market onClick={() => handleTabClick("market")} className={`tab ${tabStyle === 1 ? "active-tab" : "inactive-tab"}`}>
             {MarketInfoText.MarketSummary}
           </Market>
         </TabStyle>
         <TabStyle onClick={() => handleTabStyle(2)}>
-          <StockList
-            onClick={() => handleTabClick("stockList")}
-            className={`tab ${tabStyle === 2 ? "active-tab" : "inactive-tab"}`}
-          >
+          <StockList onClick={() => handleTabClick("stockList")} className={`tab ${tabStyle === 2 ? "active-tab" : "inactive-tab"}`}>
             {MarketInfoText.AllStockList}
           </StockList>
         </TabStyle>
@@ -55,22 +46,20 @@ const MarketInfoText = {
 
 const MarketInfoContainer = styled.div`
   max-height: 500px;
-
 `;
 
 const TabStyle = styled.div`
   cursor: pointer;
-
 `;
 //시장정보 탭의 프레임 스타일
 const MarketInfoStyle = styled.div`
   display: flex;
   justify-content: center;
-  width:100%;
+  width: 100%;
 `;
 
 const Market = styled.div`
-  flex: 1 0 0;  // 버튼을 동일한 크기로 만듭니다.
+  flex: 1 0 0; // 버튼을 동일한 크기로 만듭니다.
   display: flex;
   justify-content: center;
   align-items: center;
@@ -79,7 +68,7 @@ const Market = styled.div`
   text-align: center;
   cursor: pointer;
   padding: 10px;
-  margin-right :30px;
+  margin-right: 30px;
 
   // 활성/비활성 탭 스타일
   &.active-tab {
@@ -94,7 +83,7 @@ const Market = styled.div`
 `;
 
 const StockList = styled.div`
-  flex: 1 0 0;  // 버튼을 동일한 크기로 만듭니다.
+  flex: 1 0 0; // 버튼을 동일한 크기로 만듭니다.
   display: flex;
   justify-content: center;
   align-items: center;
@@ -103,7 +92,7 @@ const StockList = styled.div`
   text-align: center;
   cursor: pointer;
   padding: 10px;
-  margin-left :30px;
+  margin-left: 30px;
 
   // 활성/비활성 탭 스타일
   &.active-tab {
@@ -117,9 +106,7 @@ const StockList = styled.div`
   }
 `;
 
-
 const TabChangeEffectLine = ({ tabStyle }: { tabStyle: number }) => {
-  
   return (
     <DividingContainer tabStyle={tabStyle}>
       <DefaultLine tabStyle={tabStyle}>
@@ -131,9 +118,8 @@ const TabChangeEffectLine = ({ tabStyle }: { tabStyle: number }) => {
 
 const DividingContainer = styled.div<{ tabStyle: number }>`
   background-color: darkgray;
-  width:66%;
-  margin-left:17%
-
+  width: 66%;
+  margin-left: 17%;
 `;
 
 const DefaultLine = styled.div<{ tabStyle: number }>`
@@ -148,8 +134,3 @@ const DivdingLine = styled.div<{ tabStyle: number }>`
   height: 2px;
   background-color: ${(props) => (props.tabStyle === 1 ? " darkslategray" : "lightslategray")};
 `;
-
-
-
-
-
