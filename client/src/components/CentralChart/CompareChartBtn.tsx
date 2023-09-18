@@ -31,7 +31,6 @@ const CompareChartBtn = () => {
             {companyList?.map((company) => {
               const corpName = company.korName;
               const companyId = company.companyId;
-              console.log(corpName);
 
               return <CompareList corpName={corpName} compareCompanyId={companyId} />;
             })}
@@ -85,6 +84,7 @@ const CompareContainer = styled.div`
   left: 0;
   width: 100vw;
   height: 100vh;
+  z-index: 1;
   background-color: rgba(0, 0, 0, 0.5);
 `;
 

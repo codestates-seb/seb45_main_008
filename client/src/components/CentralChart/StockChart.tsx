@@ -44,7 +44,7 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   overflow: hidden;
-  z-index: 2;
+  z-index: 1;
 `;
 
 const ChartContainer = styled.div`

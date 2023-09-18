@@ -7,8 +7,8 @@ const CompareList = (props: OwnProps) => {
   const { corpName, compareCompanyId } = props;
 
   //🔴 확인 직업
-  //   const compareInfo = useSelector((state: StateProps) => state.compareChart);
-  //   console.log(compareInfo);
+  // const compareInfo = useSelector((state: StateProps) => state.compareChart);
+  // console.log(compareInfo);
   //
 
   const dispatch = useDispatch();
