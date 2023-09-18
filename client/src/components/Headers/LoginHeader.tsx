@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import StockHolmLogo from "../../asset/images/StockHolmLogo.png";
-import SampleProfile from "../../asset/images/ProfileSample.png";
+// import SampleProfile from "../../asset/images/ProfileSample.png";
 import { useNavigate } from "react-router-dom";
 import ProfileModal from "../Profile/profileModal";
 import StockSearchComponent from "./stockSearchComponent";
@@ -17,8 +17,18 @@ const LoginHeader: React.FC<LoginHeaderProps> = () => {
   const dispatch = useDispatch(); //
 
   const { data: memberInfo } = useGetMemberInfo(); // use the hook here
-  const userName = memberInfo?.name; // retrieve the user's name
-  const userEmail = memberInfo?.email; // retrieve the user's email
+  // const userName = memberInfo?.name; // retrieve the user's name
+  // const userEmail = memberInfo?.email; // retrieve the user's email
+
+  // 🔴 프로필에 들어갈 텍스트
+  const [profileText, setProfileText] = useState("");
+  useEffect(() => {
+    if (memberInfo) {
+      const userEmail = memberInfo.email;
+      const firstText = userEmail.slice(0, 1);
+      setProfileText(firstText);
+    }
+  }, [memberInfo]);
 
   // 프로필 모달 열기 함수
   const handleProfileOpen = () => {
@@ -52,9 +62,10 @@ const LoginHeader: React.FC<LoginHeaderProps> = () => {
       </LogoButton>
       <StockSearchComponent />
       <UserActions>
-        <UserNameDisplay>{userName || userEmail}</UserNameDisplay>
+        {/* <UserNameDisplay>{userName || userEmail}</UserNameDisplay> */}
         <ProfileButton onClick={handleProfileOpen}>
-          <ProfileImage src={SampleProfile} />
+          {profileText}
+          {/* <ProfileImage src={SampleProfile} /> */}
         </ProfileButton>
         {isProfileModalOpen && <ProfileModal onClose={handleProfileClose} />}
         <LogoutButton onClick={handleLogout}>{logoutText}</LogoutButton>
@@ -109,18 +120,43 @@ const UserActions = styled.div`
   align-items: center;
 `;
 
-//유저 이름 스타일
-const UserNameDisplay = styled.span`
-  font-weight: 400;
-  font-size: 1rem;
-  color: darkslategray;
-  margin-right: 1rem;
-`;
+// //유저 이름 스타일
+// const UserNameDisplay = styled.span`
+//   font-weight: 400;
+//   font-size: 1rem;
+//   color: darkslategray;
+//   margin-right: 1rem;
+// `;
+
+// // 프로필 버튼 스타일
+// const ProfileButton = styled.button`
+//   margin-right: 1rem;
+//   background-color: transparent;
+//   border: none;
+//   cursor: pointer;
+//   padding: 0;
+//   &:focus {
+//     outline: none;
+//   }
+//   &:hover {
+//     background-color: #f2f2f2; // light gray color on hover
+//   }
+// `;
 
 // 프로필 버튼 스타일
 const ProfileButton = styled.button`
-  margin-right: 1rem;
-  background-color: transparent;
+  width: 32px;
+  height: 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  border-radius: 50%;
+  margin-right: 0.75rem;
+  margin-top: 0.1rem;
+
+  background-color: #274949;
+  color: white;
   border: none;
   cursor: pointer;
   padding: 0;
@@ -128,15 +164,16 @@ const ProfileButton = styled.button`
     outline: none;
   }
   &:hover {
-    background-color: #f2f2f2; // light gray color on hover
+    background-color: #587878; // light gray color on hover
   }
+  transition: background-color 0.3s ease;
 `;
 
-// 프로필 이미지 스타일
-const ProfileImage = styled.img`
-  height: 35px;
-  width: auto;
-`;
+// // 프로필 이미지 스타일
+// const ProfileImage = styled.img`
+//   height: 35px;
+//   width: auto;
+// `;
 
 // 로그아웃 버튼 스타일
 const LogoutButton = styled.button`
