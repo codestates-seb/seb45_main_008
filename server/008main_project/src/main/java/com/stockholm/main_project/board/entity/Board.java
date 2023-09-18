@@ -35,6 +35,4 @@ public class Board extends Auditable {
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 
-    private String imageUrl; // 이미지 URL
-
 }
