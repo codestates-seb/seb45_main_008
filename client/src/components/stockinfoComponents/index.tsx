@@ -1,7 +1,8 @@
 import styled from "styled-components";
-
+import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/config";
+import PortFolioChart from "./stockinfoChart";
 
 const DetailStockInformation: React.FC = () => {
   // Redux의 companyId 상태를 구독합니다.
@@ -92,9 +93,9 @@ const DetailStockInformation: React.FC = () => {
             sk1: "바이오시밀러",
             sk2: "결핵",
             sk3: "김동연",
-            sk4: "",
-            sk5: "",
-            sk6: "",
+            sk4: "헬스케어",
+            sk5: "건강기능",
+            sk6: "제약",
           },
           companyValue: "21조 6,090억",
           companyRank: "코스피 15위",
@@ -141,7 +142,8 @@ const DetailStockInformation: React.FC = () => {
             "주요 종속기업은 (주)에코프로에이치엔, (주)에코프로비엠, (주)에코프로이엠 등이 있다.",
           companyExample3:
             "주요 매출은 종속사를 통한 전지 재료 사업 부문에서 발생하고 있다.",
-          companyExample4: "",
+          companyExample4:
+            "종속사 및 자회사를 통해 전고체 전해질 개발(황화물계)과 NMX, OLO 차세대 양극재 개발, 배터리 및 전자재료 소재사업 등의 신규사업을 추진하고 있다.",
 
           companyAsset: {
             total: "자산총계" + "64,883.18" + "억",
@@ -163,7 +165,7 @@ const DetailStockInformation: React.FC = () => {
             sk3: "2차전지-소재부품",
             sk4: "테슬라",
             sk5: "전구체배터리",
-            sk6: "",
+            sk6: "건설",
           },
           companyValue: "27조 8,733억",
           companyRank: "코스닥 1위",
@@ -196,8 +198,8 @@ const DetailStockInformation: React.FC = () => {
             sk2: "자율주행",
             sk3: "지주사",
             sk4: "자동차부품",
-            sk5: "",
-            sk6: "",
+            sk5: "크레인",
+            sk6: "디와이",
           },
           companyValue: "1,834억",
           companyRank: "코스피 532위",
@@ -208,9 +210,8 @@ const DetailStockInformation: React.FC = () => {
             "디와이는 1978년 설립된 기업으로 디와이 그룹의 지주회사이다.",
           companyExample2:
             "주요 종속기업은 디와이오토, 디와이이노베이트, DY AMERICA INC 등이 있다.",
-          companyExample3:
-            "주요 매출은 크레인 부문에서 발생하고 있으며 골프카 판매, 세차기 판매 등이 뒤를 잇고 있다.",
-          companyExample4: "",
+          companyExample3: "주요 매출은 크레인 부문에서 발생하고 있으며 ",
+          companyExample4: "골프카 판매, 세차기 판매 등이 뒤를 잇고 있다.",
           companyAsset: {
             total: "자산총계" + "9,167.66" + "억",
             lentRatio: "42.91" + "%",
@@ -228,10 +229,6 @@ const DetailStockInformation: React.FC = () => {
           companySkill: {
             sk1: "지주사",
             sk2: "렌탈",
-            sk3: "",
-            sk4: "",
-            sk5: "",
-            sk6: "",
           },
           companyValue: "6,753억",
           companyRank: "코스피 251위",
@@ -263,9 +260,9 @@ const DetailStockInformation: React.FC = () => {
             sk1: "금리인상",
             sk2: "은행",
             sk3: "카카오뱅크",
-            sk4: "",
-            sk5: "",
-            sk6: "",
+            sk4: "대출",
+            sk5: "저축",
+            sk6: "인터넷뱅킹",
           },
           companyValue: "11조 9,430억",
           companyRank: "코스피 27위",
@@ -277,8 +274,9 @@ const DetailStockInformation: React.FC = () => {
           companyExample2:
             "주요 매출은 이자수익에서 대부분 발생하고 있으며, 수수료, 유가증권 평가 및 처분이익이 뒤를 잇고 있다.",
           companyExample3:
-            "당사는 인터넷전문은행으로서 기본적인 여수신 상품을 포함한 은행업 상품 및 서비스를 제공하는 한편, 모바일 앱 기반의 디지털 플랫폼 사업자로서 금융업 뿐 아니라 비금융업 전반에 걸친 여러 파트너사들과 제휴하여 고객들에게 다각적인 서비스를 제공하고 있다.",
-          companyExample4: "",
+            "당사는 인터넷전문은행으로서 기본적인 여수신 상품을 포함한 은행업 상품 및 서비스를 제공하는 한편, 모바일 앱 기반의 디지털 플랫폼 사업자로서 ",
+          companyExample4:
+            "금융업 뿐 아니라 비금융업 전반에 걸친 여러 파트너사들과 제휴하여 고객들에게 다각적인 서비스를 제공하고 있다.",
           companyAsset: {
             total: "자산총계" + "505,269.79" + "억",
             lentRatio: "88.37" + "%",
@@ -296,10 +294,10 @@ const DetailStockInformation: React.FC = () => {
           companySkill: {
             sk1: "최재형",
             sk2: "패션/의류",
-            sk3: "",
-            sk4: "",
-            sk5: "",
-            sk6: "",
+            sk3: "코스피",
+            sk4: "패션",
+            sk5: "성장",
+            sk6: "잡화",
           },
           companyValue: "757억",
           companyRank: "코스피 740위",
@@ -311,8 +309,9 @@ const DetailStockInformation: React.FC = () => {
           companyExample2:
             "주요 매출은 백화점에서의 제품, 자회사, 지점의 제품 판매에서 발생하고 있다.",
           companyExample3:
-            "당사는 캐주얼, 여성복, 남성복, 유아동복, 스포츠, 골프 등 복종별로 구분되는 전체 의류패션시장 중에서 시장 성장률이 높고 상대적으로 경기변동에 민감하지 않은 캐주얼시장과 골프웨어를 주요 목표시장으로 하고 있다.",
-          companyExample4: "",
+            "당사는 캐주얼, 여성복, 남성복, 유아동복, 스포츠, 골프 등 복종별로 구분되는 전체 의류패션시장 중에서 ",
+          companyExample4:
+            "시장 성장률이 높고 상대적으로 경기변동에 민감하지 않은 캐주얼시장과 골프웨어를 주요 목표시장으로 하고 있다.",
           companyAsset: {
             total: "자산총계" + "2,655.05" + "억",
             lentRatio: "61.74" + "%",
@@ -448,9 +447,8 @@ const DetailStockInformation: React.FC = () => {
             "LG전자는 LG전자㈜의 전자 및 정보통신 사업부문을 인적분할하여 설립된 기업이다.",
           companyExample2:
             "주요 종속기업은 엘지이노텍㈜, ㈜하이프라자, 엘지마그나 이파워트레인㈜가 있다.",
-          companyExample3:
-            "주요 매출은 HA사업부, HE사업부, 이노텍, BS사업부 등의 제품 및 상품 판매에서 발생하고 있다.",
-          companyExample4: "",
+          companyExample3: "주요 매출은 HA사업부, HE사업부, 이노텍, BS사업부 ",
+          companyExample4: "등의 제품 및 상품 판매에서 발생하고 있다.",
           companyAsset: {
             total: "자산총계" + "581,604.46" + "억",
             lentRatio: "59.51" + "%",
@@ -483,8 +481,9 @@ const DetailStockInformation: React.FC = () => {
           companyExample2:
             "국내는 물론 독일, 미국, 캐나다, 영국 등 해외에도 완성차 및 부품 생산공장을 보유하고 있다.",
           companyExample3:
-            "전체 판매 비중에서 40%는 국내, 60%는 해외에서 판매되고 있으며, 매출액 제고를 위해 SUV, 승합차, 전기차 모델 등의 신차를 출시하고 있다.",
-          companyExample4: "",
+            "전체 판매 비중에서 40%는 국내, 60%는 해외에서 판매되고 있으며, 매출액 제고를 위해 ",
+          companyExample4:
+            "SUV, 승합차, 전기차 모델 등의 신차를 출시하고 있다.",
           companyAsset: {
             total: "자산총계" + "783,970.10" + "억",
             lentRatio: "45.23" + "%",
@@ -499,6 +498,14 @@ const DetailStockInformation: React.FC = () => {
   const matchingCompany = InfoData.companyInfo.find(
     (el) => el.companysId === InfoData.companyIds
   );
+  const [moreView, setMoreview] = useState(false);
+  const [moreView2, setMoreview2] = useState(false);
+  const handleOpenMoreView2 = () => {
+    setMoreview2(!moreView2);
+  };
+  const handleOpenMoreView = () => {
+    setMoreview(!moreView);
+  };
 
   return (
     <StockInfoContainer>
@@ -515,24 +522,34 @@ const DetailStockInformation: React.FC = () => {
             </StockName>
           </StockHeader>
           <StockSkillContainer>
-            {}
-            <StockSkills>
-              <li>{matchingCompany.company.companySkill.sk1}</li>
-              <li>{matchingCompany.company.companySkill.sk2}</li>
-              <li>{matchingCompany.company.companySkill.sk3}</li>
-              <li>{matchingCompany.company.companySkill.sk4}</li>
-              <li> {matchingCompany.company.companySkill.sk5}</li>
-              <li>{matchingCompany.company.companySkill.sk6}</li>
-            </StockSkills>
+            {moreView === true ? (
+              <StockSkills className="Allskills">
+                <li>{matchingCompany.company.companySkill.sk1}</li>
+                <li>{matchingCompany.company.companySkill.sk2}</li>
+                <li>{matchingCompany.company.companySkill.sk3}</li>
+                <li>{matchingCompany.company.companySkill.sk4}</li>
+                <li>{matchingCompany.company.companySkill.sk5}</li>
+                <li>{matchingCompany.company.companySkill.sk6}</li>
+                <More onClick={handleOpenMoreView}>
+                  {DetailStockText.moreView}
+                </More>
+              </StockSkills>
+            ) : (
+              <StockSkills className="PartOfSkills">
+                <li>{matchingCompany.company.companySkill.sk1}</li>
+                <li>{matchingCompany.company.companySkill.sk2}</li>
+
+                <More onClick={handleOpenMoreView}>
+                  {DetailStockText.moreView}
+                </More>
+              </StockSkills>
+            )}
           </StockSkillContainer>
-          <div>
-            <hr />
-          </div>
 
           <StockDetail>
             <ul>
               <li>
-                <div>시가총액</div>
+                <div>{DetailStockText.companyValue}</div>
               </li>
               <li>
                 <div>{matchingCompany.company.companyValue}</div>
@@ -540,51 +557,70 @@ const DetailStockInformation: React.FC = () => {
             </ul>
             <ul>
               <li>
-                <div>기업순위</div>
+                <div>{DetailStockText.companyRanking}</div>
               </li>
               <li>{matchingCompany.company.companyRank}</li>
             </ul>
             <ul>
               <li>
-                <div>주식수</div>
+                <div>{DetailStockText.stock}</div>
               </li>
               <li>{matchingCompany.company.companyStock}</li>
             </ul>
             <ul>
               <li>
-                <div>산업군</div>
+                <div>{DetailStockText.indust}</div>
               </li>
               <li>{matchingCompany.company.compnayIndustrial} </li>
             </ul>
             <ul>
               <li>
-                <div>세부산업군</div>
+                <div>{DetailStockText.detailIndust}</div>
               </li>
               <li>{matchingCompany.company.companyIndustDetail}</li>
             </ul>
+          </StockDetail>
+          <DevideLine></DevideLine>
+          <StockDetail2>
+            {moreView2 === true ? (
+              <ul>
+                <li>
+                  <div>{DetailStockText.companyEx}</div>
+                </li>
+                <li>{matchingCompany.company.companyExample}</li>
+                <li>{matchingCompany.company.companyExample2}</li>
+                <li>{matchingCompany.company.companyExample3}</li>
+                <li>{matchingCompany.company.companyExample4}</li>
+                <MoreView2 onClick={handleOpenMoreView2}>
+                  {" "}
+                  <span>{DetailStockText.moreView}</span>
+                </MoreView2>
+              </ul>
+            ) : (
+              <ul>
+                <li>
+                  <div>{DetailStockText.companyEx}</div>
+                </li>
+                <li>{matchingCompany.company.companyExample}</li>
+                <MoreView2 onClick={handleOpenMoreView2}>
+                  <span>{DetailStockText.moreView}</span>
+                </MoreView2>
+              </ul>
+            )}
+          </StockDetail2>
+          <DevideLine></DevideLine>
+          <StockDetail2>
             <ul>
               <li>
-                <div>기업개요</div>
-              </li>
-              <li>{matchingCompany.company.companyExample}</li>
-            </ul>
-
-            <ul>
-              <li>
-                <div>자산비율</div>
+                <div>{DetailStockText.totalRatio}</div>
               </li>
               <li>{matchingCompany.company.companyAsset.total}</li>
-              <li>
-                자본비중 :{matchingCompany.company.companyAsset.assetRatio}
-              </li>
-              <li>
-                부채비중 :{matchingCompany.company.companyAsset.lentRatio}
-              </li>
             </ul>
-          </StockDetail>
+            <PortFolioChart />
+          </StockDetail2>
         </StockInfo>
       ) : (
-        <div>종목을 선택 해 주세요</div>
+        <div>{DetailStockText.plzPickTheStock}</div>
       )}
     </StockInfoContainer>
   );
@@ -595,11 +631,28 @@ const DetailStockInformation: React.FC = () => {
 // assetRatio: "80.13" + "%",
 //}
 export default DetailStockInformation;
-
+const DetailStockText = {
+  plzPickTheStock: "종목을 선택 해 주세요",
+  moreView: "더보기",
+  lentRatio: "부채비중 :",
+  AssetRatio: "자본비중 :",
+  totalRatio: "자산비율",
+  companyEx: "기업개요",
+  companyValue: "시가총액",
+  companyRanking: "기업순위",
+  stock: "주식수",
+  indust: "산업군",
+  detailIndust: "세부산업군",
+};
 const StockInfoContainer = styled.div`
   max-height: 500px;
 `;
-
+const DevideLine = styled.div`
+  width: 90%;
+  margin: 0 auto;
+  margin-top: 30px;
+  border-bottom: 1px solid#c3c3c3;
+`;
 const StockInfo = styled.div``;
 
 const StockHeader = styled.div`
@@ -609,37 +662,132 @@ const StockHeader = styled.div`
 const StockName = styled.ul`
   display: flex;
   flex-direction: column;
+  font-size: 15px;
 
-  margin-left: -25px;
+  margin-left: -30px;
   margin-top: 10px;
-  &:nth-child(1) {
-    font-size: 20px;
+  li:nth-child(1) {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+  }
+  li:nth-child(2) {
+    font-size: 13px;
+    color: #a3a3a3;
   }
 `;
-
-const StockSkillContainer = styled.div``;
+const More = styled.li`
+  font-size: 12px !important;
+  margin-left: 15px !important;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 20px;
+`;
+const MoreView2 = styled.li`
+  font-size: 13px;
+  font-weight: bold;
+  cursor: pointer;
+  text-align: right;
+  color: #737373;
+  &:hover {
+    color: #333;
+  }
+`;
+const StockSkillContainer = styled.div`
+  &:after {
+    content: "";
+    display: block;
+    width: 90%;
+    margin: 0 auto;
+    height: 10px;
+    border-bottom: 1px solid#c3c3c3;
+  }
+  margin-bottom: 15px;
+`;
 const StockSkills = styled.ul`
   display: flex;
+  &.Allskills {
+    flex-wrap: wrap;
+  }
 
+  &.PartOfSkills {
+  }
+  margin-left: -20px;
+  margin-top: 20px;
   li {
-    box-shadow :1px 1px 1px 1px  rgba(0,0,0,0.6)
-    font-size: 13px;
+    margin-bottom: 5px;
+    box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.2);
+    border-radius: 20px 20px;
+    font-size: 12px;
     padding: 5px 7px;
     margin-left: 10px;
-    border: 1px solid#333;
   }
 `;
 
 const StockImg = styled.img`
-  width: 50px;
-  height: 50px;
+  width: 45px;
+  height: 45px;
   margin-left: 10px;
   border-radius: 50%;
-  box-shadow: rgba(1px, 1px, 1px, 1px, 0.5);
+  box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
 `;
 
 const StockDetail = styled.div`
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
+  width: 90%;
+
+  ul {
+    margin-top: 10px;
+
+    li:nth-child(1) {
+      margin-bottom: 5px !important;
+      font-size: 16px;
+      color: #a3a3a3;
+    }
+    li:nth-child(2) {
+      font-size: 17px;
+      color: #333;
+    }
+  }
+  ul:nth-child(1) {
+    width: 50%;
+  }
+  ul:nth-child(2) {
+    width: 50%;
+  }
+  ul:nth-child(3) {
+    width: 50%;
+  }
+  ul:nth-child(4) {
+    width: 50%;
+  }
+  ul:nth-child(5) {
+    width: 50%;
+  }
+`;
+const StockDetail2 = styled.ul`
+display: flex;
+flex-direction: row;
+flex-wrap: wrap;
+
+width: 90%;
+margin-left:-10px;
+ul {
+  margin-top: 25px;
+ 
+  
+
+  li:nth-child(1) {
+    
+    margin-bottom:10px !important;
+    font-size: 14px;
+    color: #a3a3a3;
+  }
+  li:nth-child(2) {
+    font-size: 16px;
+    color: #333;
+  }
+
 `;

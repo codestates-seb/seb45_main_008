@@ -1,6 +1,7 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/config";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
+
 const PortFolioChart = () => {
   const companyId = useSelector((state: RootState) => state.companyId);
   const InfoDatas = {
@@ -495,19 +496,83 @@ const PortFolioChart = () => {
   // lentRatio: "19.87" + "%",
   // assetRatio: "80.13" + "%",
   //}
+  const matchingCompany = InfoDatas.companyInfo.find(
+    (el: any) => el.companysId === companyId
+  );
+  const AssetData = InfoDatas.companyInfo;
+  const lentAsset = AssetData.map((el) => el.company.companyAsset.lentRatio);
+  const assetRatio = AssetData.map((el) => el.company.companyAsset.assetRatio);
 
-  const totalAsset = () => {
-    let total = 100 / 100;
-    let a = InfoDatas.companyInfo.map((el) => {
-      el.company.companyAsset.assetRatio;
-    });
-    let b = InfoDatas.companyInfo.map((el) => {
-      el.company.companyAsset.lentRatio;
-    });
-  };
-  return <InfoChart></InfoChart>;
+  const a = matchingCompany.company.companyAsset.assetRatio;
+  const b = matchingCompany.company.companyAsset.lentRatio;
+  console.log(a);
+
+  return (
+    <InfoChart>
+      {matchingCompany && (
+        <>
+          <Ratio>
+            <AssetRatio
+              style={{
+                width: `${parseInt(a)}%`,
+              }}
+            >
+              {a}
+            </AssetRatio>
+
+            <LentRatio
+              style={{
+                width: `${parseInt(b)}%`,
+              }}
+            >
+              {b}
+            </LentRatio>
+          </Ratio>
+          <RatioText>
+            <div>{ChartText.AssetRatio}</div>
+            <div>{ChartText.LentRatio}</div>
+          </RatioText>
+        </>
+      )}
+    </InfoChart>
+  );
 };
 
 export default PortFolioChart;
 
 const InfoChart = styled.div``;
+const ChartText = {
+  LentRatio: "부채비중",
+  AssetRatio: "자본비중",
+};
+const RatioText = styled.div`
+  display: flex;
+  margin-left: 20px;
+  margin-top: 20px;
+  justify-content: space-between;
+  font-size: 15px;
+  color: #5f5f5f;
+`;
+const Ratio = styled.div`
+  margin-left: 20px;
+  margin-top: 20px;
+  width: 420px;
+  display: flex;
+  borer: 1px solid#333;
+  text-align: center;
+`;
+
+const LentRatio = styled.div`
+  height: 50px;
+  padding-top: 14px;
+  font-size: 13px;
+  color: white;
+  background-color: rgba(0, 0, 255, 0.75);
+`;
+const AssetRatio = styled.div`
+  height: 50px;
+  padding-top: 14px;
+  font-size: 13px;
+  color: white;
+  background-color: rgba(255, 0, 0, 0.75);
+`;

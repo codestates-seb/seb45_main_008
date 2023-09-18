@@ -69,11 +69,12 @@ const TabContainerText = {
 const TabContainerStyle = styled.div`
   width: 26%;
   min-width: 400px;
-  overflow: scroll;
-  border-left: 1px solid #2d4f51;
+
+  border-left: 1px solid black;
+  /* overflow: scroll;
   &.scroll::-webkit-scrollbar {
     display: none;
-  }
+  } */
 `;
 
 const TabNavArea = styled.div`
@@ -95,7 +96,7 @@ const Nav = styled(Link)`
     height: 44px;
     font-family: "Noto Sans KR", sans-serif;
     color: #2d4f51;
-    border-bottom: 1px solid#2d4f51;
+    border-bottom: 1px solid black;
     margin-top: -20px;
     padding-top: 15px;
   }

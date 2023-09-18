@@ -49,8 +49,8 @@ const Button = styled.div<OwnProps>`
   display: flex;
   justify-content: center;
   align-items: center;
-  color: #2f4f4f;
+  color: black;
   font-size: 22px;
-  border-right: ${(props) => props.direction === "left" && "1px solid #2F4F4F"};
-  border-left: ${(props) => props.direction === "right" && "1px solid #2F4F4F"};
+  border-right: ${(props) => props.direction === "left" && "1px solid black"};
+  border-left: ${(props) => props.direction === "right" && "1px solid black"};
 `;
