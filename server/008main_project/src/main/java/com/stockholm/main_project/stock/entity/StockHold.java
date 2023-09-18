@@ -32,6 +32,9 @@ public class StockHold extends Auditable {
     private int stockCount;
 
     @Column
+    private int reserveStockCount;
+
+    @Column
     private long price;
 
 }

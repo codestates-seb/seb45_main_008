@@ -62,18 +62,18 @@ public class StockHoldService {
     public List<StockHoldResponseDto> findStockHolds(long memberId) {
         List<StockHold> stockHoldList = stockHoldRepository.findAllByMember_MemberId(memberId);
         List<StockHoldResponseDto> stockHoldResponseDtos = stockMapper.stockHoldToStockHoldResponseDto(stockHoldList);
-        for(StockHoldResponseDto stockHold : stockHoldResponseDtos) {
-
-            List<StockOrder> stockOrders =  stockOrderRepository
-                    .findAllByMember_MemberIdAndCompany_CompanyIdAndOrderStatesAndOrderTypes(
-                            stockHold.getMemberId(),
-                            stockHold.getCompanyId(),
-                            StockOrder.OrderStates.ORDER_WAIT,
-                            StockOrder.OrderTypes.SELL
-                    );
-            int orderWaitCount = stockOrders.stream().mapToInt(StockOrder::getStockCount).sum();
-            stockHold.setReserveSellStockCount(orderWaitCount);
-        }
+//        for(StockHoldResponseDto stockHold : stockHoldResponseDtos) {
+//
+//            List<StockOrder> stockOrders =  stockOrderRepository
+//                    .findAllByMember_MemberIdAndCompany_CompanyIdAndOrderStatesAndOrderTypes(
+//                            stockHold.getMemberId(),
+//                            stockHold.getCompanyId(),
+//                            StockOrder.OrderStates.ORDER_WAIT,
+//                            StockOrder.OrderTypes.SELL
+//                    );
+//            int orderWaitCount = stockOrders.stream().mapToInt(StockOrder::getStockCount).sum();
+//            stockHold.setReserveSellStockCount(orderWaitCount);
+//        }
 
         return stockHoldResponseDtos;
     }
