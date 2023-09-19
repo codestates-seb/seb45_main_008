@@ -64,7 +64,7 @@ export default ExpandScreenBtn;
 // type 정의
 interface OwnProps {
   direction: string;
-  buttonHover: boolean;
+  buttonHover?: boolean; //build error 해결을 위해 ?를 붙였습니다
 }
 
 // component 생성
