@@ -62,8 +62,6 @@ const StockItem: React.FC<StockItemProps> = ({ companyData, stockData }) => {
 
   // Format percentage to two decimal places
   const formattedPercentage = parseFloat(percentage.toFixed(2));
-
-
     // 이미 import된 로고들을 바탕으로 logos 객체 생성
   const logos: { [key: string]: string } = {
       '삼성전자': logosamsung,
@@ -113,7 +111,6 @@ const StockItem: React.FC<StockItemProps> = ({ companyData, stockData }) => {
     }
     setIsFavorited(!isFavorited);
   };
-
 
   return (
     <EntireContainer>
@@ -216,12 +213,6 @@ const FavoriteStarFilled = styled(FavoriteStar)<{ opacity: number }>`
   background: url(${star_filled_icon}) no-repeat center;
   background-size: contain;
 `;
-
-
-
-
-
-
 
 const StockInfo = styled.div`
   flex: 5 0 0;
