@@ -9,11 +9,32 @@ const START_TEXT = "시작하기";
 const JOINED_DATE_TEXT = "가입일: ";
 
 const Welcome: React.FC<WelcomeProps> = ({ onClose }) => {
+  
   //스토어에서 유저정보 불러오기
   const memberInfo = useSelector((state: RootState) => state.memberInfo.memberInfo);
+  // 엔터키를 눌렀을 때의 핸들러
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter') {
+      onClose();
+    }
+  };
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더함
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+  
+    return `${year}년 ${month}월 ${day}일 ${hours}:${minutes}`;
+  };
+
+
+
 
   return (
-    <ModalBackground>
+    <ModalBackground onKeyDown={handleKeyPress} tabIndex={0}>
       <ModalContainer>
         <Title>
           {WELCOME_TEXT}
@@ -22,7 +43,7 @@ const Welcome: React.FC<WelcomeProps> = ({ onClose }) => {
         {/* Display the member's name */}
         <Subtitle>
           {JOINED_DATE_TEXT}
-          {memberInfo?.createdAt}
+          {memberInfo?.createdAt && formatDate(memberInfo.createdAt)}
         </Subtitle>{" "}
         {/* Display the member's createdAt */}
         <Logo src={StockHolmLogo} alt="StockHolm Logo" />

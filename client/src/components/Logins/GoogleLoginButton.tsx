@@ -1,18 +1,13 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import { setLoginState } from '../../reducer/member/loginSlice';  
 import googleLogo from '../../asset/images/GoogleLogo.svg'; 
 
 const GoogleLoginButton: React.FC<Props> = ({ backendURL }) => {
-  const dispatch = useDispatch();
 
   const buttonText = "구글로 로그인";
 
-  //버튼 클릭시 로그인 상태를 1로 변경
   const handleLoginClick = () => {
     window.location.href = `${backendURL}`;
-    dispatch(setLoginState()); 
   };
 
   return (

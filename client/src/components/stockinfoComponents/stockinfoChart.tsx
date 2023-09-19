@@ -560,7 +560,7 @@ const Ratio = styled.div`
   margin-top: 20px;
   width: 360px;
   display: flex;
-  borer: 1px solid#333;
+  border: 1px solid#333;
   text-align: center;
 `;
 

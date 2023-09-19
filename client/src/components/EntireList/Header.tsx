@@ -76,6 +76,7 @@ const HeaderText = styled.span`
 `;
 
 const SlideMenu = styled.div`
+  z-index:30;
   position: absolute;
   top: 100%;
   left: 0;

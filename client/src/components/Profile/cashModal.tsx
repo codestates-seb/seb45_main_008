@@ -11,11 +11,11 @@ import { setCashId, setMoney } from '../../reducer/cash/cashSlice';
 const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
     // 상태 및 변수 초기화
-    const titleText = "현금생성/리셋";
-    const cashCreationPlaceholder = "생성할 현금 입력";
+    const titleText = "현금생성/재생성";
+    const cashCreationPlaceholder = "1백만원~5억원 사이를 입력하세요";
     const createCashButtonText = "현금 생성";
-    const cashInputPlaceholder = "현금 입력";
-    const resetButtonText = "현금 리셋";
+    const cashInputPlaceholder = "1백만원~5억원 사이를 입력하세요";
+    const resetButtonText = "현금 재생성";
     // const refreshButtonText ="새로고침";
 
     const dispatch = useDispatch();
@@ -55,7 +55,13 @@ const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         } else {
             console.error("cashId is null or not a valid number.");
         }
-};
+    };
+
+    const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>, action: () => void) => {
+        if (event.key === 'Enter') {
+            action();
+        }
+    };
 
 return (
     <ModalBackground>
@@ -71,6 +77,7 @@ return (
                         value={initialAmount}
                         onChange={e => setInitialAmount(e.target.value)}
                         placeholder={cashCreationPlaceholder}
+                        onKeyDown={(event) => handleEnterPress(event, handleCreateCash)}
                     />
                     <CreateCashButton onClick={handleCreateCash}>{createCashButtonText}</CreateCashButton>
                 </div>
@@ -84,6 +91,7 @@ return (
                         value={cashInput}
                         onChange={e => setCashInput(e.target.value)}
                         placeholder={cashInputPlaceholder}
+                        onKeyDown={(event) => handleEnterPress(event, handleCashReset)}
                     />
                     <ReceiveButton onClick={handleCashReset}>{resetButtonText}</ReceiveButton>
                 </div>
