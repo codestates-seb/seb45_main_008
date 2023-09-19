@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { toast } from "react-toastify";
 import axios from "axios";
 
 const Comments = ({ boardId }: { boardId: number }) => {
@@ -13,9 +14,7 @@ const Comments = ({ boardId }: { boardId: number }) => {
 
   const fetchCommentsFromServer = async () => {
     try {
-      const response = await axios.get(
-        `http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}`
-      );
+      const response = await axios.get(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}`);
 
       // 게시판 데이터에서 댓글 부분을 추출합니다.
       const comments = response.data.comments || [];
@@ -43,22 +42,24 @@ const Comments = ({ boardId }: { boardId: number }) => {
       };
 
       try {
-        const response = await axios.post(
-          `http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}/comments`,
-          newCommentData,
-          {
-            headers: {
-              Authorization: accessToken,
-            },
-          }
-        );
+        const response = await axios.post(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}/comments`, newCommentData, {
+          headers: {
+            Authorization: accessToken,
+          },
+        });
         if (response.status === 201) {
           setCommentsValue("");
           fetchCommentsFromServer();
         } else {
+          toast.error("댓글 작성 실패", {
+            autoClose: 1000,
+          });
           console.log("댓글 작성 실패:", response.data);
         }
       } catch (error) {
+        toast.error("댓글 작성 실패", {
+          autoClose: 1000,
+        });
         console.error("댓글 작성 중 오류 발생:", error);
       }
     }
@@ -66,28 +67,32 @@ const Comments = ({ boardId }: { boardId: number }) => {
 
   const handleDeleteComment = async (commentId: number) => {
     try {
-      const response = await axios.delete(
-        `http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}/comments/${commentId}`,
-        {
-          headers: {
-            Authorization: accessToken,
-          },
-        }
-      );
+      const response = await axios.delete(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}/comments/${commentId}`, {
+        headers: {
+          Authorization: accessToken,
+        },
+      });
       if (response.status === 200) {
         // 삭제 성공 처리
-        alert("댓글이 삭제되었습니다");
+        toast.success("댓글이 삭제 되었습니다", {
+          autoClose: 1000,
+        });
+        // alert("댓글이 삭제되었습니다");
 
-        const updatedCommentData = commentData.filter(
-          (el: CommentContent) => el.id !== commentId
-        );
+        const updatedCommentData = commentData.filter((el: CommentContent) => el.id !== commentId);
         setCommentData(updatedCommentData);
       } else {
-        alert("댓글 삭제 실패");
+        toast.error("댓글 삭제 실패", {
+          autoClose: 1000,
+        });
+        // alert("댓글 삭제 실패");
       }
     } catch (error) {
       console.error("댓글 삭제 중 오류 발생:", error);
-      alert("댓글 삭제 실패");
+      toast.error("댓글 삭제 실패", {
+        autoClose: 1000,
+      });
+      // alert("댓글 삭제 실패");
     }
   };
 
@@ -101,11 +106,8 @@ const Comments = ({ boardId }: { boardId: number }) => {
     const currentTime: Date = new Date();
     const createdAtTime: Date = new Date(createdAt);
 
-    const timeDifferenceInMilliseconds: number =
-      currentTime.getTime() - createdAtTime.getTime();
-    const timeDifferenceInSeconds = Math.floor(
-      timeDifferenceInMilliseconds / 1000
-    );
+    const timeDifferenceInMilliseconds: number = currentTime.getTime() - createdAtTime.getTime();
+    const timeDifferenceInSeconds = Math.floor(timeDifferenceInMilliseconds / 1000);
 
     if (timeDifferenceInSeconds < 60) {
       return "방금 전";
@@ -124,14 +126,8 @@ const Comments = ({ boardId }: { boardId: number }) => {
   return (
     <CommentContainer>
       <div>
-        <CommentInput
-          type="text"
-          value={commentsValue}
-          onChange={handleOnChange}
-        />
-        <CommentInputSubmit onClick={handleClickSubmit}>
-          {CommentText.write}
-        </CommentInputSubmit>
+        <CommentInput type="text" value={commentsValue} onChange={handleOnChange} />
+        <CommentInputSubmit onClick={handleClickSubmit}>{CommentText.write}</CommentInputSubmit>
         <CommentCount onClick={handleShowMoreComments}>
           {CommentText.replyCount} {commentData.length} {CommentText.replyText}
         </CommentCount>
@@ -142,9 +138,7 @@ const Comments = ({ boardId }: { boardId: number }) => {
               <CommentDate>{getTimeAgoString(el.createdAt)}</CommentDate>
             </div>
             <CommentTextDiv>{el.content}</CommentTextDiv>
-            <CommentDeleteButton onClick={() => handleDeleteComment(el.id)}>
-              삭제
-            </CommentDeleteButton>
+            <CommentDeleteButton onClick={() => handleDeleteComment(el.id)}>삭제</CommentDeleteButton>
           </CommentsDiv>
         ))}
       </div>
