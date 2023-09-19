@@ -9,7 +9,6 @@ const deleteStarData = async (companyId: number) => {
       'Content-Type': 'application/json',
       'Authorization': `${accessToken}`
     },
-    body: JSON.stringify({ companyId }),
   });
 
   if (!response.ok) {

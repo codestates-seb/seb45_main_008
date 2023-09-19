@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import StockSearchComponent from "./StockSearchComponent";
 import Header from "./Header";
@@ -16,8 +16,23 @@ const WatchList: React.FC<WatchListProps> = ({ currentListType, onChangeListType
   const companiesList = companies || [];
 
   const { data: starredData } = useGetStars();
-  const starredCompanyIds = starredData?.map(item => item.companyResponseDto.companyId) || [];
 
+  const [starredCompanyIds, setStarredCompanyIds] = useState<number[]>([]);
+  useEffect(() => {
+    if (starredData) {
+      
+      setStarredCompanyIds(starredData.map(item => item.companyResponseDto.companyId));
+    }
+  }, [starredData]);
+
+  useEffect(() => {
+    console.log("Updated starredCompanyIds:", starredCompanyIds);  // 여기가 출력되는지 확인
+  }, [starredCompanyIds]);
+  
+  const handleCompanyDelete = (deletedCompanyId: number) => {
+    console.log("Company ID to delete:", deletedCompanyId);  // 여기가 출력되는지 확인
+    setStarredCompanyIds(prevState => prevState.filter(id => id !== deletedCompanyId));
+  };
   return (
     <WatchListContainer>
       <Header1Container>
@@ -34,7 +49,7 @@ const WatchList: React.FC<WatchListProps> = ({ currentListType, onChangeListType
         ) : isError ? (
           <div>Error fetching data</div>
         ) : loginStatus === 1 ? (
-          companiesList.filter((company) => starredCompanyIds.includes(company.companyId)).map((company) => <StockItem key={company.companyId} company={company} />)
+          companiesList.filter((company) => starredCompanyIds.includes(company.companyId)).map((company) => <StockItem key={company.companyId} company={company} onDelete={handleCompanyDelete} />)
         ) : (
           <div>로그인이 필요합니다.</div>
         )}
