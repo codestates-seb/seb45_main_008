@@ -32,6 +32,9 @@ https://drive.google.com/file/d/1ej4sYQusG8g3uFPHRILq7Khd8m1evz4X/view?usp=shari
 ## 화면 정의서
 https://docs.google.com/presentation/d/1yyUBoyX8Yo7ZQxZXg2CFiZDh6W0j4_jSM8UTPLbnvy8/edit?usp=sharing
 
+## 요구 사항 정의서
+https://docs.google.com/spreadsheets/d/1SYxtZdxv-H4Cm4O124we4IPbjh4eNBDV/edit#gid=1436212772
+
 ## Github Rule
 
 ### Commit Convention
