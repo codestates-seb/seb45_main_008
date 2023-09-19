@@ -4,7 +4,7 @@ import React, { useState } from "react";
 import { setLoginState } from "../../reducer/member/loginSlice";
 import { useDispatch } from "react-redux";
 
-const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) => {
+const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onSignup  }) => {
   const titleText = "이메일로 로그인";
   const emailLabelText = "이메일";
   const passwordLabelText = "비밀번호";
@@ -25,6 +25,10 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) =
 
   const handlePasswordChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(event.target.value);
+  };
+
+  const handleFindPasswordClick = () => {
+    alert("당신의 비밀번호는 !1q2w3e입니다.!");
   };
 
   const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>, target?: "password" | "loginButton") => {
@@ -74,10 +78,10 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) =
         <Label>{passwordLabelText}</Label>
         <Input type="password" placeholder="비밀번호를 입력하세요" value={password} onChange={handlePasswordChange} onKeyDown={(event) => handleEnterPress(event, "loginButton")}/>
         {generalError && <ErrorMessage>{generalError}</ErrorMessage>}
-        <RightAlignedButton>{findPasswordText}</RightAlignedButton>
+        <RightAlignedButton onClick={handleFindPasswordClick}>{findPasswordText}</RightAlignedButton>
         <LoginButton onClick={handleLoginClick}>{loginButtonText}</LoginButton>
         <BottomText>
-          {noAccountText} <RegisterButton>{registerButtonText}</RegisterButton>
+        {noAccountText} <RegisterButton onClick={onSignup}>{registerButtonText}</RegisterButton>
         </BottomText>
       </ModalContainer>
     </ModalBackground>
@@ -90,6 +94,7 @@ export default EmailLoginModal;
 interface EmailLoginModalProps {
   onClose: () => void;
   onLogin: () => void;
+  onSignup: () => void;
 }
 
 // 스타일드 컴포넌트 정의

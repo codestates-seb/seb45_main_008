@@ -81,6 +81,10 @@ const MainPage = () => {
   const closeEmailSignupModal = useCallback(() => {
     setEmailSignupModalOpen(false);
   }, []);
+  const openEmailSignupFromLogin = useCallback(() => {
+    closeEmailLoginModal();
+    openEmailSignupModal();
+  }, [closeEmailLoginModal, openEmailSignupModal]);
 
   const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] = useState(false);
 
@@ -120,7 +124,6 @@ const MainPage = () => {
     setGuideModalOpen(false);
     openOAuthModal();
   }, [openOAuthModal]);
-
 
   //프로필 모달 열고닫는 매커니즘
   const openProfileModal = useCallback(() => {
@@ -195,7 +198,7 @@ const MainPage = () => {
         />
       )}
 
-      {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} />}
+{isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} onSignup={openEmailSignupFromLogin} />}
       {isLoginConfirmationModalOpen && <LoginConfirmationModal onClose={handleLoginConfirmationClose} />}
 
       {isEmailSignupModalOpen && <EmailSignupModal onClose={closeEmailSignupModal} onRequestVerification={openEmailVerificationModal} />}
