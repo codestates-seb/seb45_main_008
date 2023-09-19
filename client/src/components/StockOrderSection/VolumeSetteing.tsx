@@ -1,0 +1,272 @@
+import { useEffect } from "react";
+import { useSelector, useDispatch } from "react-redux";
+import { styled } from "styled-components";
+import useGetCash from "../../hooks/useGetCash";
+import useGetHoldingStock from "../../hooks/useGetHoldingStock";
+import { StateProps } from "../../models/stateProps";
+import { HoldingStockProps } from "../../models/stockProps";
+import { setStockOrderVolume, plusStockOrderVolume, minusStockOrderVolume } from "../../reducer/StockOrderVolume-Reducer";
+
+const volumeSettingTitle: string = "수량";
+const maximumVolumeText01: string = "최대";
+const volumeUnit: string = "주";
+
+const volumPercentage01: number = 10;
+const volumPercentage02: number = 25;
+const volumPercentage03: number = 50;
+const volumPercentage04: number = 100;
+const percentageUnit: string = "%";
+
+const VolumeSetting = () => {
+  const dispatch = useDispatch();
+  const companyId = useSelector((state: StateProps) => state.companyId);
+  const orderType = useSelector((state: StateProps) => state.stockOrderType);
+  const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
+  const orderVolume = useSelector((state: StateProps) => state.stockOrderVolume);
+
+  // 거래가능 주식 수
+  let avaiableSellingStock: number = 0;
+
+  const { cashData } = useGetCash();
+  const { holdingStockData } = useGetHoldingStock();
+  const maximumBuyingVolume = orderPrice !== 0 ? Math.trunc(cashData / orderPrice) : Math.trunc(cashData / 1);
+  const holdingCompanyStock = holdingStockData.filter((stock: HoldingStockProps) => stock.companyId === companyId);
+
+  // 해당 company 보유 주식이 0이 아닐 때
+  if (holdingCompanyStock.length !== 0) {
+    avaiableSellingStock = holdingCompanyStock[0].stockCount;
+  }
+
+  const handlePlusOrderVolume = () => {
+    // 매수 -> 증가 버튼 클릭 시, 최대 구매수량 보다 낮으면 개수 1증가
+    if (!orderType) {
+      orderVolume < maximumBuyingVolume && dispatch(plusStockOrderVolume());
+    }
+    // 매도 -> 증가 버튼 클릭 시, 보유 주식수량 보다 낮으면 개수 1증가
+    if (orderType) {
+      orderVolume < avaiableSellingStock && dispatch(plusStockOrderVolume());
+    }
+  };
+
+  const handleMinusOrderVolume = () => {
+    if (0 < orderVolume) {
+      dispatch(minusStockOrderVolume());
+    }
+  };
+
+  // 위-아래 방향키 입력 시
+  const handleInputArrowBtn = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.code === "ArrowUp") {
+      handlePlusOrderVolume();
+    } else if (event.code === "ArrowDown") {
+      handleMinusOrderVolume();
+    }
+  };
+
+  // 거래량 직접 기입 시
+  const handleWriteOrderVolume = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const inputValue = event.target.value;
+    const numberInputValue = parseInt(inputValue, 10);
+
+    // 1) 음수를 임력하거나, 숫자 아닌 값 기입 시 -> 입력 무시  2) 값을 다 지워서 빈 문자열인 경우 -> 0으로 설정  3) 최대 구매가능 수량 보다 높게 기입 -> 입력 무시
+    if (numberInputValue < 0 || isNaN(numberInputValue)) {
+      if (inputValue === "") {
+        dispatch(setStockOrderVolume(0));
+      }
+      return;
+    }
+
+    if (!orderType) {
+      if (maximumBuyingVolume < numberInputValue) {
+        return;
+      } else {
+        dispatch(setStockOrderVolume(numberInputValue));
+      }
+    }
+
+    if (orderType) {
+      if (avaiableSellingStock < numberInputValue) {
+        return;
+      } else {
+        dispatch(setStockOrderVolume(numberInputValue));
+      }
+    }
+  };
+
+  const handleSetVolumePercentage = (volumePerentage: number) => {
+    // 매수 -> percentage 버튼 클릭 시, 최대 구매수량 내에서 계산
+    if (!orderType) {
+      const orderVolume = Math.trunc(maximumBuyingVolume * (volumePerentage / 100));
+      dispatch(setStockOrderVolume(orderVolume));
+    }
+
+    // 매도 -> percentage 버튼 클릭 시, 보유 주식수량 내에서 계산
+    if (orderType) {
+      const orderVolume = Math.trunc(avaiableSellingStock * (volumePerentage / 100));
+      dispatch(setStockOrderVolume(orderVolume));
+    }
+  };
+
+  // 지정가 증가 -> (현재 주문수량 > 최대 주문가능 수량)일 경우 -> 현재 주문수량을 최대 주문수량으로 변경
+  useEffect(() => {
+    if (maximumBuyingVolume < orderVolume) {
+      dispatch(setStockOrderVolume(maximumBuyingVolume));
+    }
+  }, [maximumBuyingVolume]);
+
+  // 조회하는 종목을 변경하면 구매수량 0으로 설정
+  useEffect(() => {
+    dispatch(setStockOrderVolume(0));
+  }, [companyId]);
+
+  return (
+    <Container>
+      <TitleContainer orderType={orderType}>
+        <div className="Title">{volumeSettingTitle}</div>
+        <div className="MaximumVolumeContainer">
+          <span>{maximumVolumeText01}</span>
+          <span className="maximumVolume">{orderType ? avaiableSellingStock : maximumBuyingVolume}</span>
+          <span>{volumeUnit}</span>
+        </div>
+      </TitleContainer>
+      <VolumeSettingBox>
+        <VolumeController defaultValue={orderVolume} value={orderVolume} onChange={handleWriteOrderVolume} onKeyDown={handleInputArrowBtn} />
+        <UnitContent>{volumeUnit}</UnitContent>
+        <div className="DirectionContainer">
+          <button className="VolumeUp" onClick={handlePlusOrderVolume}>
+            &#8896;
+          </button>
+          <button className="VolumeDown" onClick={handleMinusOrderVolume}>
+            &#8897;
+          </button>
+        </div>
+      </VolumeSettingBox>
+      <PercentageBox>
+        <button onClick={() => handleSetVolumePercentage(volumPercentage01)}>
+          {volumPercentage01}
+          {percentageUnit}
+        </button>
+        <button onClick={() => handleSetVolumePercentage(volumPercentage02)}>
+          {volumPercentage02}
+          {percentageUnit}
+        </button>
+        <button onClick={() => handleSetVolumePercentage(volumPercentage03)}>
+          {volumPercentage03}
+          {percentageUnit}
+        </button>
+        <button onClick={() => handleSetVolumePercentage(volumPercentage04)}>
+          {volumPercentage04}
+          {percentageUnit}
+        </button>
+      </PercentageBox>
+    </Container>
+  );
+};
+
+export default VolumeSetting;
+
+// component 생성
+const Container = styled.div`
+  width: 100%;
+  margin-top: 16px;
+  margin-bottom: 56px;
+`;
+
+const TitleContainer = styled.div<{ orderType: boolean }>`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-bottom: 8px;
+
+  .Title {
+    padding-left: 5px;
+    font-size: 13px;
+    color: #999999;
+  }
+
+  .MaximumVolumeContainer {
+    display: flex;
+    flex-direction: row;
+    gap: 3px;
+
+    & span {
+      font-size: 14px;
+      color: #999999;
+    }
+
+    .maximumVolume {
+      color: ${(props) => (props.orderType ? "#3177d7" : "#ed2926")};
+    }
+  }
+`;
+
+const VolumeSettingBox = styled.div`
+  display: flex;
+  flex-direction: row;
+
+  .DirectionContainer {
+    display: flex;
+    flex-direction: column;
+
+    & button {
+      width: 31px;
+      height: 15px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 10px;
+      border: 1px solid darkgray;
+      border-radius: 0%;
+
+      &.VolumeUp {
+        border-bottom: none;
+        border-radius: 0 0.2rem 0 0;
+      }
+
+      &.VolumeDown {
+        border-radius: 0 0 0.2rem 0;
+      }
+    }
+  }
+`;
+
+const VolumeController = styled.input`
+  flex: 1 0 0;
+  height: 30px;
+  border: 1px solid darkgray;
+  border-right: none;
+  border-radius: 0.2rem 0 0 0.2rem;
+  font-size: 15px;
+  font-weight: 500;
+  text-align: right;
+  padding-bottom: 3px;
+`;
+
+const PercentageBox = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  margin-top: 8px;
+  gap: 8px;
+
+  & button {
+    width: 56px;
+    height: 28px;
+    border: none;
+    border-radius: 0.2rem;
+  }
+`;
+
+const UnitContent = styled.div`
+  height: 30px;
+  color: #999999;
+  font-size: 13px;
+  font-weight: 400;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-right: 8px;
+  border-top: 1px solid darkgray;
+  border-bottom: 1px solid darkgray;
+  background-color: #ffffff;
+`;
