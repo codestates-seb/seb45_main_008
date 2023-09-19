@@ -1,17 +1,17 @@
 import React from "react";
 import styled from "styled-components";
 import StockHolmLogo from "../../asset/images/StockHolmLogo.png";
-import { useNavigate } from "react-router-dom";
+
 import StockSearchComponent from "./stockSearchComponent";
 
 const LogoutHeader: React.FC<LogoutHeaderProps> = ({ onLoginClick }) => {
-  const navigate = useNavigate();
+
 
   const loginText = "로그인"; // 로그인 버튼 텍스트
 
   // 로고 클릭 핸들러
   const handleLogoClick = () => {
-    navigate("/"); // 메인 페이지로 이동
+    window.location.reload()
   };
 
   // 컴포넌트 렌더링

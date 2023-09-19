@@ -2,6 +2,7 @@ import { useQuery } from "react-query";
 import axios from "axios";
 
 export function useGetMemberInfo() {
+
   return useQuery(["member"], async () => {
     const accessToken = localStorage.getItem("accessToken"); // 로컬 스토리지에서 AuthToken 가져오기
 
