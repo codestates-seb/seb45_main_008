@@ -118,6 +118,7 @@ public class StockOrderService {
             // 보유 주식 설정
             StockHold stockHold = stockHoldService.findStockHold(companyId, member.getMemberId());
             stockHold.setStockCount(stockHold.getStockCount() - stockCount);
+            stockHold.setReserveStockCount(stockCount);
 
         }
         StockOrder stockOrder = new StockOrder();
@@ -264,7 +265,8 @@ public class StockOrderService {
         updateStockOrder.setOrderTypes(StockOrder.OrderTypes.SELL);
         // 보유 주식 설정
         StockHold stockHold = stockHoldService.findStockHold(stockOrder.getCompany().getCompanyId(), stockOrder.getMember().getMemberId());
-        stockHold.setPrice(stockHold.getPrice() - (stockHold.getPrice() / stockHold.getStockCount()) * stockOrder.getStockCount());
+        stockHold.setPrice(stockHold.getPrice() - (stockHold.getPrice() / (stockHold.getStockCount()+stockHold.getReserveStockCount())) * stockOrder.getStockCount());
+        stockHold.setReserveStockCount(stockHold.getReserveStockCount() - stockOrder.getStockCount());
         // 현금량 증가
         Member member = updateStockOrder.getMember();
         Cash cash = member.getCash();
@@ -274,7 +276,7 @@ public class StockOrderService {
 
         stockOrderRepository.save(stockOrder);
         memberRepository.save(member);
-        if(stockHold.getStockCount() == 0)
+        if(stockHold.getStockCount() + stockHold.getReserveStockCount() == 0)
             stockHoldRepository.delete(stockHold);
         else
             stockHoldRepository.save(stockHold);
@@ -327,7 +329,7 @@ public class StockOrderService {
     public StockOrder sellStock(Member member, long price, int stockCount, long companyId) {
         // 보유 주식 설정
         StockHold stockHold = stockHoldService.findStockHold(companyId, member.getMemberId());
-        stockHold.setPrice(stockHold.getPrice() - (stockHold.getPrice() / stockHold.getStockCount()) * stockCount);
+        stockHold.setPrice(stockHold.getPrice() - (stockHold.getPrice() / (stockHold.getStockCount()+stockHold.getReserveStockCount())) * stockCount);
         stockHold.setStockCount(stockHold.getStockCount() - stockCount);
 
         // 스톡 오더 작성
@@ -348,7 +350,10 @@ public class StockOrderService {
 
         stockOrderRepository.save(stockOrder);
         memberRepository.save(member);
-        if(stockHold.getStockCount() == 0)
+        // 여기서 stockhold 삭제됨
+        // 예약 매도 걸 때 reserveStockCount 늘어가네
+        // 예약 매도 취소 할 때 reserveStockCount 줄어들게
+        if(stockHold.getStockCount() + stockHold.getReserveStockCount() == 0)
             stockHoldRepository.delete(stockHold);
         else
             stockHoldRepository.save(stockHold);
@@ -402,10 +407,9 @@ public class StockOrderService {
             if(StockOrder.OrderTypes.SELL.equals(stockOrder.getOrderTypes())) {
                 StockHold stockHold = stockHoldService.findStockHold(stockOrder.getCompany().getCompanyId(), stockOrder.getMember().getMemberId());
                 stockHold.setStockCount(stockHold.getStockCount() + stockCount);
+                stockHold.setReserveStockCount(stockHold.getReserveStockCount() - stockCount);
             }
 
         }
-
-
     }
 }

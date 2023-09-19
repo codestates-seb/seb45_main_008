@@ -63,10 +63,11 @@ public interface StockMapper {
             stockHoldResponseDto.setCompanyKorName(stockHold.getCompany().getKorName());
             stockHoldResponseDto.setMemberId(stockHold.getMember().getMemberId());
             stockHoldResponseDto.setStockCount(stockHold.getStockCount());
+            stockHoldResponseDto.setReserveSellStockCount(stockHold.getReserveStockCount());
             stockHoldResponseDto.setTotalPrice(stockHold.getPrice());
             stockHoldResponseDto.setPercentage(0D);
             stockHoldResponseDto.setStockReturn(0);
-            stockHoldResponseDto.setReserveSellStockCount(0);
+
 
             stockHoldResponseDtos.add(stockHoldResponseDto);
         }
