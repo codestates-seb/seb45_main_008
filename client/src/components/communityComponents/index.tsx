@@ -117,11 +117,11 @@ const TimeLineComponent = () => {
         setBoardData(updatedBoardData);
       } else {
         alert("삭제 되었습니다");
-        window.location.href = "http://localhost:5173/community";
+        window.location.href = "/community";
       }
     } catch (error) {
-      console.error("데이터 삭제 중 오류 발생:", error);
-      alert("삭제 되었습니다");
+      console.error("작성자만 삭제 할 수 있습니다:", error);
+      alert("작성자만 삭제 할 수 있습니다");
       console.log(boardData);
     }
   };

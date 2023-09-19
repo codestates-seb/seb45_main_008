@@ -56,6 +56,36 @@ export const InvestImage = () => {
     </>
   );
 };
+
+export const ProFileImage = () => {
+  return (
+    <>
+      <link
+        href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css"
+        rel="stylesheet"
+      />
+
+      <ProFileImages className="bx bxs-doughnut-chart"></ProFileImages>
+    </>
+  );
+};
+
+const ProFileImages = styled.i`
+  font-size: 20px;
+  position: relative;
+  margin-left: 6px;
+
+  width: 45px;
+  top: 10px;
+  &:after {
+    content: "StockHolm";
+    font-size: 8px;
+    position: absolute;
+    top: 23px;
+    left: -13px;
+  }
+  color: rgba(205, 140, 150, 0.4);
+`;
 const InvestImages = styled.i`
   font-size: 18px;
   color: #2d4f51;
