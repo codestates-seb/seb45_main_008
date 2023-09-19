@@ -1,4 +1,4 @@
-// 🟢 기존 로직
+import { isHoliday } from "@hyunbinseo/holidays-kr";
 import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
@@ -14,49 +14,50 @@ const useGetStockData = (companyId: number) => {
   const timeZone = minute === 0 || minute === 30 ? "30 or 60" : 0 < minute && minute < 30 ? "1~29" : "31~59";
   const queryKey = `${month}월 ${day}일 ${hour}시 ${timeZone}`;
 
-  // 현재 시각이 30분, 정각이 아닌 경우 남은 시간 계산하여 checkTime 함수 다시 실행
+  // 1) 주말, 공휴일 여부 체크
+  const today = new Date();
+  const nonBusinessDay = isHoliday(today, { include: { saturday: true, sunday: true } }); // 토요일, 일요일, 공휴일 (임시 공휴일 포함)
+
+  // 🟢 2) 개장시간 여부 체크
+  const currentHour = today.getHours();
+  const currentMinute = today.getMinutes();
+  const isBefore9AM = currentHour < 9;
+  const isAfter330PM = currentHour > 15 || (currentHour === 15 && currentMinute >= 30);
+  const closingTime = isBefore9AM || isAfter330PM;
+
+  // 🟢 기존로직
+  const notRenwalTime = nonBusinessDay || closingTime;
+
+  // 개장 시간 이내일 경우, 현재 시각이 30분, 정각이 아닌 경우 남은 시간 계산하여 checkTime 함수 다시 실행
   useEffect(() => {
-    if (minute === 0 || minute === 30) {
-      setAutoRefetch(true);
-    } else if (0 < minute && minute < 30) {
-      const delayTime = (30 - minute) * 60000;
-      setTimeout(() => {
-        refetch();
+    if (!notRenwalTime) {
+      if (minute === 0 || minute === 30) {
         setAutoRefetch(true);
-      }, delayTime);
-    } else if (30 < minute && minute < 60) {
-      const delayTime = (60 - minute) * 60000;
-      setTimeout(() => {
-        refetch();
-        setAutoRefetch(true);
-      }, delayTime);
+      } else if (0 < minute && minute < 30) {
+        const delayTime = (30 - minute) * 60000;
+        setTimeout(() => {
+          refetch();
+          setAutoRefetch(true);
+        }, delayTime);
+      } else if (30 < minute && minute < 60) {
+        const delayTime = (60 - minute) * 60000;
+        setTimeout(() => {
+          refetch();
+          setAutoRefetch(true);
+        }, delayTime);
+      }
     }
   }, []);
 
   const { data, isLoading, error, refetch } = useQuery(`chartData${companyId} ${queryKey}`, () => getChartData(companyId), {
     enabled: true,
-    refetchInterval: autoRefetch ? 60000 * 10 : false, // 정각 혹은 30분에 맞춰서 10분 마다 데이터 리패칭
+    refetchInterval: autoRefetch && !notRenwalTime ? 60000 * 30 : false, // 정각 혹은 30분에 맞춰서 30분 마다 데이터 리패칭
     onSuccess: () => {
       queryClient.invalidateQueries("cash");
       queryClient.invalidateQueries("holdingStock");
       queryClient.invalidateQueries("orderRecord");
     },
   });
-  // 🟢 기존 로직
-
-  // 🔴 테스트 로직
-  // const queryClient = useQueryClient();
-
-  // const { data, isLoading, error } = useQuery(`chartData`, () => getChartData(companyId), {
-  //   enabled: true,
-  //   refetchInterval: 1000 * 10, // 정각 혹은 30분에 맞춰서 10분 마다 데이터 리패칭
-  //   onSuccess: () => {
-  //     queryClient.invalidateQueries("cash");
-  //     queryClient.invalidateQueries("holdingStock");
-  //     queryClient.invalidateQueries("orderRecord");
-  //   },
-  // });
-  // 🔴 테스트 로직
 
   return { stockPrice: data, stockPriceLoading: isLoading, stockPriceError: error };
 };
