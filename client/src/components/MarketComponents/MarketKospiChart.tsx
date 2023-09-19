@@ -51,26 +51,16 @@ const MarketkospiChart = () => {
           yAxis: [
             {
               type: "value",
-              boundaryGap: [10, '10%'],
-              position: "left",
-              interval: 200,
+              boundaryGap: [0, "10%"],
+              position: "right",
+              interval: 100,
               min: 2000,
               splitLine: {
                 show: true,
               },
             },
           ],
-          dataZoom: [
-            {
-              type: "inside",
-              start: 0,
-              end: 100,
-            },
-            {
-              start: 0,
-              end: 10,
-            },
-          ],
+
           series: [
             {
               name: "코스피 지수",
@@ -93,7 +83,7 @@ const MarketkospiChart = () => {
                   },
                   {
                     offset: 1,
-                    color: 'white',
+                    color: "white",
                   },
                 ]),
               },
@@ -108,9 +98,7 @@ const MarketkospiChart = () => {
 
                   // 현재 가격과 이전 가격을 비교하여 색상 설정
                   const color =
-                    currentPrice > previousPrice
-                      ? "#f87369"
-                      : "#5a99f8";
+                    currentPrice > previousPrice ? "#f87369" : "#5a99f8";
 
                   return {
                     value: currentPrice,
@@ -123,10 +111,10 @@ const MarketkospiChart = () => {
             },
           ],
           grid: {
-            left: "15%",
-            right: "10%",
+            left: "5%",
+            right: "15%",
             top: "20%",
-            bottom: "20%",
+            bottom: "10%",
           },
         });
       }

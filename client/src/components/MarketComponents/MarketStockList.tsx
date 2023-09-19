@@ -5,24 +5,32 @@ import { useDispatch } from "react-redux";
 import { changeCompanyId } from "../../reducer/CompanyId-Reducer";
 import logo from "../../asset/images/StockHolmImage.png";
 
-import kia from '../../asset/logos/기아.svg';
-import dy from '../../asset/logos/디와이.jpeg';
-import logosamsung from '../../asset/logos/삼성전자.svg';
-import celltrion from '../../asset/logos/셀트리온.svg';
-import ecopro from '../../asset/logos/에코프로.jpeg';
-import ecoproBM from '../../asset/logos/에코프로비엠.svg';
-import kakaoBank from '../../asset/logos/카카오뱅크.svg';
-import kuckoo from '../../asset/logos/쿠쿠홀딩스.jpeg';
-import hanse from '../../asset/logos/한세엠케이.jpeg';
-import hyundai from '../../asset/logos/현대차.svg';
-import KG from '../../asset/logos/KG케미칼.png';
-import LGelec from '../../asset/logos/LG전자.svg';
-import LGchem from '../../asset/logos/LG화학.svg';
-import posco from '../../asset/logos/POSCO홀딩스.svg';
-
+import kia from "../../asset/logos/기아.svg";
+import dy from "../../asset/logos/디와이.jpeg";
+import logosamsung from "../../asset/logos/삼성전자.svg";
+import celltrion from "../../asset/logos/셀트리온.svg";
+import ecopro from "../../asset/logos/에코프로.jpeg";
+import ecoproBM from "../../asset/logos/에코프로비엠.svg";
+import kakaoBank from "../../asset/logos/카카오뱅크.svg";
+import kuckoo from "../../asset/logos/쿠쿠홀딩스.jpeg";
+import hanse from "../../asset/logos/한세엠케이.jpeg";
+import hyundai from "../../asset/logos/현대차.svg";
+import KG from "../../asset/logos/KG케미칼.png";
+import LGelec from "../../asset/logos/LG전자.svg";
+import LGchem from "../../asset/logos/LG화학.svg";
+import posco from "../../asset/logos/POSCO홀딩스.svg";
+interface StockInfo {
+  korName: string;
+  companyId: string;
+  stockInfResponseDto: {
+    stck_prpr: string;
+    prdy_ctrt: string;
+    acml_vol: string;
+  };
+  code: string;
+}
 const MarketServerUrl =
   "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/companies";
-
 
 const MarketStockList: React.FC = () => {
   const [marketStockList, setMarketStockList] = useState<StockInfo[]>([]);
@@ -30,20 +38,20 @@ const MarketStockList: React.FC = () => {
   const [selectedSort, setSelectedSort] = useState<string | null>(null);
 
   const logos: { [key: string]: string } = {
-    '삼성전자': logosamsung,
-    'POSCO홀딩스': posco,
-    '셀트리온': celltrion,
-    '에코프로': ecopro,
-    '에코프로비엠': ecoproBM,
-    '디와이': dy,
-    '쿠쿠홀딩스': kuckoo,
-    '카카오뱅크': kakaoBank,
-    '한세엠케이': hanse,
-    'KG케미칼': KG,
-    'LG화학': LGchem,
-    '현대차': hyundai,
-    'LG전자': LGelec,
-    '기아': kia,
+    삼성전자: logosamsung,
+    POSCO홀딩스: posco,
+    셀트리온: celltrion,
+    에코프로: ecopro,
+    에코프로비엠: ecoproBM,
+    디와이: dy,
+    쿠쿠홀딩스: kuckoo,
+    카카오뱅크: kakaoBank,
+    한세엠케이: hanse,
+    KG케미칼: KG,
+    LG화학: LGchem,
+    현대차: hyundai,
+    LG전자: LGelec,
+    기아: kia,
   };
 
   const numberWithCommas = (x: number): string => {
@@ -62,7 +70,6 @@ const MarketStockList: React.FC = () => {
       setIsLoading(false);
     } catch (error) {
       console.error("데이터 가져오기 중 오류 발생:", error);
-      setIsLoading(false);
     }
   };
 
@@ -75,21 +82,33 @@ const MarketStockList: React.FC = () => {
 
   const SortPrice = () => {
     const sortedList = [...marketStockList];
-    sortedList.sort((a, b) => parseFloat(b.stockInfResponseDto.stck_prpr) - parseFloat(a.stockInfResponseDto.stck_prpr));
+    sortedList.sort(
+      (a, b) =>
+        parseFloat(b.stockInfResponseDto.stck_prpr) -
+        parseFloat(a.stockInfResponseDto.stck_prpr)
+    );
     setMarketStockList(sortedList);
     setSelectedSort("price");
   };
 
   const SortRate = () => {
     const sortedList = [...marketStockList];
-    sortedList.sort((a, b) => parseFloat(b.stockInfResponseDto.prdy_ctrt) - parseFloat(a.stockInfResponseDto.prdy_ctrt));
+    sortedList.sort(
+      (a, b) =>
+        parseFloat(b.stockInfResponseDto.prdy_ctrt) -
+        parseFloat(a.stockInfResponseDto.prdy_ctrt)
+    );
     setMarketStockList(sortedList);
     setSelectedSort("rate");
   };
 
   const SortTrade = () => {
     const sortedList = [...marketStockList];
-    sortedList.sort((a, b) => parseFloat(b.stockInfResponseDto.acml_vol) - parseFloat(a.stockInfResponseDto.acml_vol));
+    sortedList.sort(
+      (a, b) =>
+        parseFloat(b.stockInfResponseDto.acml_vol) -
+        parseFloat(a.stockInfResponseDto.acml_vol)
+    );
     setMarketStockList(sortedList);
     setSelectedSort("trade");
   };
@@ -102,13 +121,19 @@ const MarketStockList: React.FC = () => {
         <StockListDetail onClick={SortName} selected={selectedSort === "name"}>
           {MarketStockLists.stockName}
         </StockListDetail>
-        <StockListDetail onClick={SortPrice} selected={selectedSort === "price"}>
+        <StockListDetail
+          onClick={SortPrice}
+          selected={selectedSort === "price"}
+        >
           {MarketStockLists.stockPrice}
         </StockListDetail>
         <StockListDetail onClick={SortRate} selected={selectedSort === "rate"}>
           {MarketStockLists.stockRate}
         </StockListDetail>
-        <StockListDetail onClick={SortTrade} selected={selectedSort === "trade"}>
+        <StockListDetail
+          onClick={SortTrade}
+          selected={selectedSort === "trade"}
+        >
           {MarketStockLists.stockTrade}
         </StockListDetail>
       </StockListTitle>
@@ -126,7 +151,9 @@ const MarketStockList: React.FC = () => {
 
           return (
             <div key={index}>
-              <StockListInfo onClick={() => dispatch(changeCompanyId(el.companyId))}>
+              <StockListInfo
+                onClick={() => dispatch(changeCompanyId(el.companyId))}
+              >
                 {isLoading === true ? (
                   <div>{MarketStockLists.isLoading}</div>
                 ) : (
@@ -139,11 +166,28 @@ const MarketStockList: React.FC = () => {
                     </StockNameWrapper>
                     <StockDetailWrapper>
                       <StockDetail>
-                        <StockDetailItem key={el.stockInfResponseDto.stck_prpr}>{numberWithCommas(parseFloat(el.stockInfResponseDto.stck_prpr))}</StockDetailItem>
-                        <StockDetailItem key={el.stockInfResponseDto.prdy_ctrt} variation={parseFloat(el.stockInfResponseDto.prdy_ctrt) > 0 ? "positive" : parseFloat(el.stockInfResponseDto.prdy_ctrt) < 0 ? "negative" : "neutral"}>
+                        <StockDetailItem key={el.stockInfResponseDto.stck_prpr}>
+                          {numberWithCommas(
+                            parseFloat(el.stockInfResponseDto.stck_prpr)
+                          )}
+                        </StockDetailItem>
+                        <StockDetailItem
+                          key={el.stockInfResponseDto.prdy_ctrt}
+                          variation={
+                            parseFloat(el.stockInfResponseDto.prdy_ctrt) > 0
+                              ? "positive"
+                              : parseFloat(el.stockInfResponseDto.prdy_ctrt) < 0
+                              ? "negative"
+                              : "neutral"
+                          }
+                        >
                           {el.stockInfResponseDto.prdy_ctrt}
                         </StockDetailItem>
-                        <StockDetailItem key={el.stockInfResponseDto.acml_vol}>{numberWithCommas(parseFloat(el.stockInfResponseDto.acml_vol))}</StockDetailItem>
+                        <StockDetailItem key={el.stockInfResponseDto.acml_vol}>
+                          {numberWithCommas(
+                            parseFloat(el.stockInfResponseDto.acml_vol)
+                          )}
+                        </StockDetailItem>
                       </StockDetail>
                     </StockDetailWrapper>
                   </>
@@ -166,18 +210,6 @@ const MarketStockLists = {
   stockTrade: "#거래량",
   isLoading: "isLoading...",
 };
-
-type StockInfo = {
-  companyId: number;
-  code: string;
-  korName: string;
-  stockInfResponseDto: {
-    stck_prpr: string;
-    prdy_ctrt: string;
-    acml_vol: string;
-  };
-};
-
 
 const StockListContainer = styled.div`
   max-height: 285px;
@@ -337,7 +369,9 @@ const StockDetail = styled.div`
   align-items: center;
 `;
 
-const StockDetailItem = styled.div<{ variation?: "positive" | "neutral" | "negative" }>`
+const StockDetailItem = styled.div<{
+  variation?: "positive" | "neutral" | "negative";
+}>`
   flex: 1;
   text-align: right;
   color: ${({ variation }) => {

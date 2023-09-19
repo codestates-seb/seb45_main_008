@@ -24,13 +24,19 @@ const MemberWithdrawalModal: React.FC<MemberWithdrawalModalProps> = ({ onClose, 
         }
     };
 
+    const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            handleWithdrawal();
+        }
+    };
+
     return (
         <ModalBackground>
             <ModalContainer>
                 <CloseButton onClick={onClose}>&times;</CloseButton>
                 <Title>{withdrawalTitle}</Title>
                 <Label>{inputStringLabel}</Label>
-                <PasswordInput type="text" value={inputString} onChange={e => setInputString(e.target.value)} />
+                <PasswordInput type="text" value={inputString} onChange={e => setInputString(e.target.value)} onKeyDown={handleEnterPress} />
                 <MessageWrapper>
                     {errorMsg && <ErrorMessage>{errorMsg}</ErrorMessage>}
                 </MessageWrapper>

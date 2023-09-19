@@ -55,7 +55,13 @@ const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         } else {
             console.error("cashId is null or not a valid number.");
         }
-};
+    };
+
+    const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>, action: () => void) => {
+        if (event.key === 'Enter') {
+            action();
+        }
+    };
 
 return (
     <ModalBackground>
@@ -71,6 +77,7 @@ return (
                         value={initialAmount}
                         onChange={e => setInitialAmount(e.target.value)}
                         placeholder={cashCreationPlaceholder}
+                        onKeyDown={(event) => handleEnterPress(event, handleCreateCash)}
                     />
                     <CreateCashButton onClick={handleCreateCash}>{createCashButtonText}</CreateCashButton>
                 </div>
@@ -84,6 +91,7 @@ return (
                         value={cashInput}
                         onChange={e => setCashInput(e.target.value)}
                         placeholder={cashInputPlaceholder}
+                        onKeyDown={(event) => handleEnterPress(event, handleCashReset)}
                     />
                     <ReceiveButton onClick={handleCashReset}>{resetButtonText}</ReceiveButton>
                 </div>

@@ -1,22 +1,22 @@
 // client/src/components/Signups/EmailSignup.tsx
-import axios from 'axios';
-import styled from 'styled-components';
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { setEmailForVerification } from '../../reducer/member/memberInfoSlice';
+import axios from "axios";
+import styled from "styled-components";
+import React, { useState } from "react";
+import { useDispatch } from "react-redux";
+import { setEmailForVerification } from "../../reducer/member/memberInfoSlice";
 
 // 문자열 상수 정의
 const strings = {
   titleText: "이메일로 회원가입",
   emailLabelText: "이메일",
   requestVerificationText: "이메일 인증요청",
-  invalidEmailText: "유효하지 않은 이메일입니다"
+  invalidEmailText: "유효하지 않은 이메일입니다",
 };
 
 const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestVerification }) => {
   const dispatch = useDispatch();
-  const [email, setEmail] = useState('');
-  const [isInvalidEmail, setIsInvalidEmail] = useState(false);  
+  const [email, setEmail] = useState("");
+  const [isInvalidEmail, setIsInvalidEmail] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
   // 이메일 입력값 변경 핸들러
@@ -27,7 +27,14 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
 
   // 이메일 유효성 검사 함수
   const validateEmail = (email: string) => {
-    return email.includes('@') && email.includes('.com');
+    return email.includes("@") && email.includes(".com");
+  };
+
+  // 이메일 입력창에서 엔터키를 눌렀을 때의 핸들러
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleVerificationRequest();
+    }
   };
 
   // 이메일 인증 요청 핸들러
@@ -39,15 +46,15 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
   
     try {
       const response = await axios.post(
-        'http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/email/send', 
+        "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/email/send",
         { email },
         {
           validateStatus: function (status) {
-            return status >= 200 && status < 600;  // 상태 코드가 600 이상인 경우만 거부
-          }
+            return status >= 200 && status < 600; // 상태 코드가 600 이상인 경우만 거부
+          },
         }
       );
-      
+
       // 응답 상태에 따른 처리
       if (response.status === 200) {
         dispatch(setEmailForVerification(email));
@@ -57,43 +64,41 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
       } else if (response.status === 500) {
         setErrorMessage(JSON.stringify(response.data));
       } else {
-        console.error('이메일 인증 발송 중 오류 발생');
+        console.error("이메일 인증 발송 중 오류 발생");
       }
     } catch (error) {
       if (axios.isAxiosError(error)) {
-        console.error('이메일 인증 발송 중 오류:', error);
+        console.error("이메일 인증 발송 중 오류:", error);
         if (error.response) {
-          console.error('상세한 서버 응답:', error.response.data);
+          console.error("상세한 서버 응답:", error.response.data);
         }
       } else {
-        console.error('알 수 없는 오류 발생:', error);
+        console.error("알 수 없는 오류 발생:", error);
       }
     }
   };
-  
+
   return (
     <ModalBackground>
       <ModalContainer>
         <CloseButton onClick={onClose}>×</CloseButton>
         <Title>{strings.titleText}</Title>
         <Label>{strings.emailLabelText}</Label>
-        <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} />
-          {isInvalidEmail && <ErrorMessage>{strings.invalidEmailText}</ErrorMessage>}
-        <SignupButton onClick={handleVerificationRequest}>
-          {strings.requestVerificationText}
-        </SignupButton>
-      {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+        <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} onKeyDown={handleKeyPress} />
+        {isInvalidEmail && <ErrorMessage>{strings.invalidEmailText}</ErrorMessage>}
+        <SignupButton onClick={handleVerificationRequest}>{strings.requestVerificationText}</SignupButton>
+        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
       </ModalContainer>
     </ModalBackground>
-    );
-  };
-    
+  );
+};
+
 export default EmailSignupModal;
-    
+
 //변수 타입 정의
 type EmailSignupModalProps = {
-onClose: () => void;
-onRequestVerification: (email: string) => void;
+  onClose: () => void;
+  onRequestVerification: (email: string) => void;
 };
 
 //모달 배경
@@ -102,6 +107,7 @@ const ModalBackground = styled.div`
   justify-content: center;
   align-items: center;
   position: fixed;
+  z-index: 100;
   top: 0;
   left: 0;
   width: 100%;
@@ -111,7 +117,7 @@ const ModalBackground = styled.div`
 
 //모달 컨테이너
 const ModalContainer = styled.div`
-  z-index:4000;
+  z-index: 100;
   position: relative;
   background-color: white;
   padding: 20px;
@@ -122,13 +128,12 @@ const ModalContainer = styled.div`
   align-items: center;
 `;
 
-
 //닫기 버튼
 const CloseButton = styled.button`
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #FFFFFF;
+  background: #ffffff;
   border: 1px solid lightgray;
   font-size: 1.5rem;
   cursor: pointer;
@@ -139,8 +144,7 @@ const CloseButton = styled.button`
 const Title = styled.h2`
   margin-bottom: 20px;
   font-size: 1.6rem;
-  font-weight:400;
-
+  font-weight: 400;
 `;
 
 //라벨 : 이메일
@@ -179,7 +183,6 @@ const SignupButton = styled.button`
 
   //호버 시 밝게
   &:hover {
-    background-color: rgba(47, 79, 79, 0.8); 
+    background-color: rgba(47, 79, 79, 0.8);
   }
 `;
-
