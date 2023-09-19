@@ -58,6 +58,7 @@ const MarketStockList: React.FC = () => {
       const response = await axios.get(MarketServerUrl);
       const marketListData = response.data;
       setMarketStockList(marketListData);
+      setIsLoading(false);
     } catch (error) {
       console.error("데이터 가져오기 중 오류 발생:", error);
     }

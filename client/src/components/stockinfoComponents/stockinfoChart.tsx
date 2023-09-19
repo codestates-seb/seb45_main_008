@@ -499,9 +499,6 @@ const PortFolioChart = () => {
   const matchingCompany = InfoDatas.companyInfo.find(
     (el: any) => el.companysId === companyId
   );
-  const AssetData = InfoDatas.companyInfo;
-  const lentAsset = AssetData.map((el) => el.company.companyAsset.lentRatio);
-  const assetRatio = AssetData.map((el) => el.company.companyAsset.assetRatio);
 
   const a = matchingCompany.company.companyAsset.assetRatio;
   const b = matchingCompany.company.companyAsset.lentRatio;
@@ -556,7 +553,7 @@ const RatioText = styled.div`
 const Ratio = styled.div`
   margin-left: 20px;
   margin-top: 20px;
-  width: 420px;
+  width: 360px;
   display: flex;
   borer: 1px solid#333;
   text-align: center;

@@ -63,10 +63,10 @@ const Comments = ({ boardId }: { boardId: number }) => {
     }
   };
 
-  // const handleDeleteComment = async (commentId: number) => {
+  // const handleDeleteComment = async () => {
   //   try {
   //     const response = await axios.delete(
-  //       `http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}/comments/${commentId}`,
+  //       `http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}/comments`,
   //       {
   //         headers: {
   //           Authorization: accessToken,
@@ -76,7 +76,7 @@ const Comments = ({ boardId }: { boardId: number }) => {
   //     if (response.status === 200) {
   //       // 삭제 성공 처리
   //       alert("댓글이 삭제되었습니다");
-  //       // 삭제한 댓글을 클라이언트 데이터에서도 제거
+  //
   //       const updatedCommentData = commentData.filter(
   //         (el: CommentContent) => el.id !== commentId
   //       );
