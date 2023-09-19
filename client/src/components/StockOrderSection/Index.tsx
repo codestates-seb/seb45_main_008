@@ -40,7 +40,7 @@ import LGelec from "../../asset/logos/LG전자.svg";
 import LGchem from "../../asset/logos/LG화학.svg";
 import posco from "../../asset/logos/POSCO홀딩스.svg";
 
-const StockOrderSection = () => {
+const StockOrderSection: React.FC<StockOrderSectionProps> = (props) => {
   const dispatch = useDispatch();
   const isLogin = useSelector((state: StateProps) => state.login);
   const companyId = useSelector((state: StateProps) => state.companyId);
@@ -96,7 +96,7 @@ const StockOrderSection = () => {
             &#10005;
           </button>
         </UpperBar>
-        <MoneyReqireIndicator />
+        <MoneyReqireIndicator openProfileModal={props.openProfileModal} />
       </Container>
     );
   }
@@ -149,7 +149,7 @@ const StockOrderSection = () => {
           <WaitOrderIndicator />
         </div>
       ) : (
-        <LoginRequestIndicator />
+          <LoginRequestIndicator openOAuthModal={props.openOAuthModal} /> //props전달
       )}
     </Container>
   );
@@ -157,25 +157,40 @@ const StockOrderSection = () => {
 
 export default StockOrderSection;
 
+interface StockOrderSectionProps {
+  openOAuthModal: () => void;
+  openProfileModal: () => void;  // Add this line
+}
+
+
 // 미로그인 시 -> 로그인 요청 화면
-const LoginRequestIndicator = () => {
+//props 전달
+const LoginRequestIndicator: React.FC<LoginRequestIndicatorProps> = ({ openOAuthModal }) => {
   return (
     <LoginRequestContainer>
       <div className="Notification">{loginRequiredText}</div>
-      <button className="LoginButton">{loginBtnText}</button>
+      <button className="LoginButton" onClick={openOAuthModal}>{loginBtnText}</button>
     </LoginRequestContainer>
   );
 };
+interface LoginRequestIndicatorProps {
+  openOAuthModal: () => void;
+}
 
 // 현금 충전요청 화면
-const MoneyReqireIndicator = () => {
+//props 전달
+const MoneyReqireIndicator: React.FC<MoneyReqireIndicatorProps> = ({ openProfileModal }) => {
   return (
     <MoneyRequireContainer>
       <div className="Notification">{moneyRequireText}</div>
-      <button className="LoginButton">{moenyRequireBtnText}</button>
+      <button className="LoginButton" onClick={openProfileModal}>{moenyRequireBtnText}</button>
     </MoneyRequireContainer>
   );
 };
+
+interface MoneyReqireIndicatorProps {
+  openProfileModal: () => void;
+}
 
 // component 생성
 const Container = styled.aside<{ orderSet: boolean }>`
@@ -270,6 +285,7 @@ const LoginRequestContainer = styled.div`
     background-color: #2f4f4f;
     border: none;
     border-radius: 0.3rem;
+    cursor: pointer;  
   }
 `;
 
