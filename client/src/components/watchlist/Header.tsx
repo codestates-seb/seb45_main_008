@@ -70,6 +70,7 @@ const HeaderText = styled.span`
   font-size: 18px;
 `;
 const SlideMenu = styled.div`
+  z-index:30;
   position: absolute;
   top: 100%;
   left: 0;

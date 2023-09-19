@@ -119,9 +119,6 @@ const MainPage = () => {
     openOAuthModal();
   }, [openOAuthModal]);
 
-  const handleOAuthLoginSuccess = useCallback(() => {
-    setLoginConfirmationModalOpen(true); // 로그인 확인 모달 열기
-  }, []);
 
   //프로필 모달 열고닫는 매커니즘
   const openProfileModal = useCallback(() => {
