@@ -27,11 +27,8 @@ const TimeLineComponent = () => {
     const currentTime: Date = new Date();
     const createdAtTime: Date = new Date(createdAt);
 
-    const timeDifferenceInMilliseconds: number =
-      currentTime.getTime() - createdAtTime.getTime();
-    const timeDifferenceInSeconds = Math.floor(
-      timeDifferenceInMilliseconds / 1000
-    );
+    const timeDifferenceInMilliseconds: number = currentTime.getTime() - createdAtTime.getTime();
+    const timeDifferenceInSeconds = Math.floor(timeDifferenceInMilliseconds / 1000);
 
     if (timeDifferenceInSeconds < 60) {
       return "방금 전";
@@ -125,18 +122,21 @@ const TimeLineComponent = () => {
       }); // URL에 boardId 추가
       if (response.status === 200) {
         // 삭제 성공 처리
-        alert("삭제되었습니다");
+
         // 삭제한 게시물을 클라이언트 데이터에서도 제거
         const updatedBoardData = boardData.filter((el) => el.boardId !== boardId); // boardId로 수정
         setBoardData(updatedBoardData);
       } else {
-        alert("삭제 되었습니다");
+        toast.success("삭제 되었습니다", {
+          autoClose: 1000,
+        });
         window.location.href = "/community";
       }
     } catch (error) {
       console.error("작성자만 삭제 할 수 있습니다:", error);
-      alert("작성자만 삭제 할 수 있습니다");
-      console.log(boardData);
+      toast.info("작성자만 삭제할 수 있습니다", {
+        autoClose: 1000,
+      });
     }
   };
 
