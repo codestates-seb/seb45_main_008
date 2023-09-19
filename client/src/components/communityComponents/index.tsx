@@ -209,6 +209,8 @@ const DropdownInput = styled.input`
   }
 `;
 
+//버튼 과 글영역 구분
+
 const Button = styled.button`
   background-color: white;
   color: darkslategray;
@@ -231,8 +233,6 @@ const Button = styled.button`
     width: 100%;
   }
 `;
-
-//버튼 과 글영역 구분
 
 const DevideLine = styled.div`
   margin-bottom: 10px;
