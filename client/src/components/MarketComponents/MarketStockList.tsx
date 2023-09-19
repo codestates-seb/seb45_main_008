@@ -377,9 +377,9 @@ const StockDetailItem = styled.div<{
   color: ${({ variation }) => {
     switch (variation) {
       case "positive":
-        return "red";
+        return "#e22926";
       case "negative":
-        return "blue";
+        return "#2679ed";
       case "neutral":
       default:
         return "black";

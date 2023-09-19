@@ -33,10 +33,7 @@ const useGetStockInfo = (companyId: number) => {
   const { data, isLoading, error, refetch } = useQuery(`stockInfo${companyId} ${queryKey}}`, () => getStockInfo(companyId), {
     enabled: true,
     refetchInterval: autoRefetch ? 60000 * 10 : false, // 정각 혹은 30분에 맞춰서 10분 마다 데이터 리패칭
-    // onSuccess: () => {
-    //   console.log(new Date());
-    //   console.log(data);
-    // },
+
   });
 
   return { stockInfo: data, stockInfoLoading: isLoading, stockInfoError: error };

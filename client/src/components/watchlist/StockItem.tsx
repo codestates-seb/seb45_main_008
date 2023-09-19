@@ -37,7 +37,6 @@ const StockItem: React.FC<StockItemProps> = ({ company, onDelete  }) => {
   const handleDelete = () => {
     deleteMutation.mutate(company.companyId, {
       onSuccess: () => {
-        console.log("Delete successful!");  // 여기가 출력되는지 확인
         onDelete(company.companyId);  // 콜백 함수 호출
       }
     });

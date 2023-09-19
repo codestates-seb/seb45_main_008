@@ -27,11 +27,11 @@ const WatchList: React.FC<WatchListProps> = ({ currentListType, onChangeListType
   }, [starredData]);
 
   useEffect(() => {
-    console.log("Updated starredCompanyIds:", starredCompanyIds);  // 여기가 출력되는지 확인
+
   }, [starredCompanyIds]);
 
   const handleCompanyDelete = (deletedCompanyId: number) => {
-    console.log("Company ID to delete:", deletedCompanyId);  // 여기가 출력되는지 확인
+
     setStarredCompanyIds(prevState => prevState.filter(id => id !== deletedCompanyId));
   };
   return (
