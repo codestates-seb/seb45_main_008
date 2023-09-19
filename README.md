@@ -21,7 +21,7 @@ http://seb008stockholm.s3-website.ap-northeast-2.amazonaws.com/
 
 ### FE
 
-[![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1695090639262?alt=media&token=0912fb1f-716b-4563-bf1b-27c3fb2a6b24)](https://github.com/msdio/stackticon)
+[![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1695134306560?alt=media&token=13e75353-3e07-4228-85a7-261c00e1b47f)](https://github.com/msdio/stackticon)
 
 ## API 명세서
 http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui/index.html
