@@ -53,7 +53,7 @@ const StockOrderSection = () => {
 
   // fetching 데이터 loading, error 여부
   const isLoading = stockInfoLoading || stockPriceLoading || cashLoading || orderRecordLoading || holdingStockLoading || compnayListLoading;
-  const isError = stockInfoError || stockPriceError || cashError || orderRecordError || holdingStockError || companyListError;
+  const isError = stockInfoError || stockPriceError || orderRecordError || holdingStockError || companyListError;
 
   // 1) 데이터 로딩 중
   if (isLoading) {
@@ -83,6 +83,10 @@ const StockOrderSection = () => {
         </div>
       </Container>
     );
+  }
+
+  if (cashError) {
+    return <p>현금충전 필요</p>;
   }
 
   // 3) 데이터 받아오기 성공
