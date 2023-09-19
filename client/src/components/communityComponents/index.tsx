@@ -4,7 +4,8 @@ import Comments from "./Comments";
 import { DotIcon } from "./IconComponent/Icon";
 import axios from "axios";
 
-const serverUrl = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards";
+const serverUrl =
+  "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards";
 
 const TimeLineComponent = () => {
   const [boardData, setBoardData] = useState<BoardData[]>([]);
@@ -110,7 +111,9 @@ const TimeLineComponent = () => {
         // 삭제 성공 처리
         alert("삭제되었습니다");
         // 삭제한 게시물을 클라이언트 데이터에서도 제거
-        const updatedBoardData = boardData.filter((el) => el.boardId !== boardId); // boardId로 수정
+        const updatedBoardData = boardData.filter(
+          (el) => el.boardId !== boardId
+        ); // boardId로 수정
         setBoardData(updatedBoardData);
       } else {
         alert("삭제 되었습니다");
@@ -125,15 +128,26 @@ const TimeLineComponent = () => {
 
   const [expandedPosts, setExpandedPosts] = useState<number[]>([]);
   const toggleExpandPost = (boardId: number) => {
-    setExpandedPosts((prevExpandedPosts) => (prevExpandedPosts.includes(boardId) ? prevExpandedPosts.filter((id) => id !== boardId) : [...prevExpandedPosts, boardId]));
+    setExpandedPosts((prevExpandedPosts) =>
+      prevExpandedPosts.includes(boardId)
+        ? prevExpandedPosts.filter((id) => id !== boardId)
+        : [...prevExpandedPosts, boardId]
+    );
   };
 
   return (
     <TimeLine>
-      {openDropDown === false && <Button onClick={handleSetOpenDropDown}></Button>}
+      {openDropDown === false && (
+        <Button onClick={handleSetOpenDropDown}></Button>
+      )}
       {openDropDown === true && (
         <>
-          <DropdownInput type="text" placeholder="이곳에 작성해 주세요" value={inputValue} onChange={handleOnChange}></DropdownInput>
+          <DropdownInput
+            type="text"
+            placeholder="이곳에 작성해 주세요"
+            value={inputValue}
+            onChange={handleOnChange}
+          ></DropdownInput>
 
           <ButtonContainer>
             <SubmitButton onClick={handleClickSubmit}>Submit</SubmitButton>
@@ -144,7 +158,9 @@ const TimeLineComponent = () => {
       <DevideLine></DevideLine>
       <BoardArea dropDown={openDropDown}>
         {boardData.length === 0 ? (
-          <BoardTextAreaNoText>{timeLineText.notYetWriting}</BoardTextAreaNoText>
+          <BoardTextAreaNoText>
+            {timeLineText.notYetWriting}
+          </BoardTextAreaNoText>
         ) : (
           boardData
             .slice()
@@ -155,7 +171,11 @@ const TimeLineComponent = () => {
                   <div onClick={() => handleDotOpen(el.boardId)}>
                     <DotIcon />
                   </div>
-                  {dotMenuOpenMap[el.boardId] && <DeleteBoard onClick={() => handleDeleteClick(el.boardId)}>{timeLineText.delete}</DeleteBoard>}
+                  {dotMenuOpenMap[el.boardId] && (
+                    <DeleteBoard onClick={() => handleDeleteClick(el.boardId)}>
+                      {timeLineText.delete}
+                    </DeleteBoard>
+                  )}
                 </Delete>
                 <BoardText>
                   {el.member}
@@ -163,9 +183,15 @@ const TimeLineComponent = () => {
                     el.content
                   ) : (
                     <>
-                      {el.content.length > 50 ? el.content.substring(0, 50) + "..." : el.content}
+                      {el.content.length > 50
+                        ? el.content.substring(0, 50) + "..."
+                        : el.content}
                       <br />
-                      {el.content.length > 50 && <div onClick={() => toggleExpandPost(el.boardId)}>더 보기</div>}
+                      {el.content.length > 50 && (
+                        <div onClick={() => toggleExpandPost(el.boardId)}>
+                          더 보기
+                        </div>
+                      )}
                     </>
                   )}
                 </BoardText>
@@ -206,17 +232,6 @@ const DropdownInput = styled.input`
   border-radius: 5px; // 모서리 둥글게 처리
   &:focus {
     border: 1px solid#40797c;
-  }
-`;
-
-const DropDownClose = styled.div`
-  text-align: right;
-  cursor: pointer;
-  color: #40797c;
-  font-size: 30px; // x 아이콘 크기를 조절
-  margin-right: 10px;
-  &:hover {
-    color: #2d4f51;
   }
 `;
 
@@ -298,7 +313,8 @@ const CloseButton = styled(SubmitButton)``;
 //게시판 전체 영역
 const BoardArea = styled.div<{ dropDown: boolean }>`
   text-align: center;
-  height: ${(props) => (props.dropDown ? "calc(100vh - 290px)" : "calc(100vh - 200px)")};
+  height: ${(props) =>
+    props.dropDown ? "calc(100vh - 290px)" : "calc(100vh - 200px)"};
   margin-top: 25px;
   width: 100%;
   overflow-y: auto; // 스크롤 설정
