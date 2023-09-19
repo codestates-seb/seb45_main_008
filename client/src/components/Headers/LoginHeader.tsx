@@ -151,8 +151,8 @@ const ProfileButton = styled.button`
   justify-content: center;
   align-items: center;
 
-  border-radius: 50%;
-  margin-right: 0.75rem;
+  border-radius: 0.25rem;
+  margin-right: 0.65rem;
   margin-top: 0.1rem;
 
   background-color: #274949;

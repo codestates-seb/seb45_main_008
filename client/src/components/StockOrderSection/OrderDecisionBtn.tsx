@@ -108,4 +108,10 @@ const OrderBtn = styled.button<OrderTypeProps>`
   transition: background-color 0.5s;
   color: #ffffff;
   font-weight: 400;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => (props.ordertype ? "#034baf" : "#c20d09")};
+    transition: background-color 0.5s ease;
+  }
 `;

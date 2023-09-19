@@ -154,17 +154,15 @@ const MainPage = () => {
     const refreshToken = urlParams.get("refresh_token");
 
     if (accessToken && refreshToken) {
-        localStorage.setItem("accessToken", `Bearer ${accessToken}`);
-        localStorage.setItem("refreshToken", refreshToken);
-        dispatch(setLoginState());
-        // Remove access_token and refresh_token from the URL
-        urlParams.delete("access_token");
-        urlParams.delete("refresh_token");
-        window.history.replaceState({}, "", "?" + urlParams.toString());
+      localStorage.setItem("accessToken", `Bearer ${accessToken}`);
+      localStorage.setItem("refreshToken", refreshToken);
+      dispatch(setLoginState());
+      // Remove access_token and refresh_token from the URL
+      urlParams.delete("access_token");
+      urlParams.delete("refresh_token");
+      window.history.replaceState({}, "", "?" + urlParams.toString());
 
-        window.location.reload();
-
-
+      window.location.reload();
     }
   }, [dispatch]);
 
@@ -175,20 +173,18 @@ const MainPage = () => {
       {isLogin == 1 ? <LoginHeader onProfileClick={openProfileModal} /> : <LogoutHeader onLoginClick={openOAuthModal} />}
       <Main>
         <CompareChartSection />
-        {!expandScreen.left && (
-          <LeftSection>
-            {selectedMenu === "전체종목" ? (
-              <EntireList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
-            ) : selectedMenu === "관심종목" ? (
-              <WatchList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
-            ) : selectedMenu === "보유종목" ? (
-              <HoldingList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
-            ) : null}
-          </LeftSection>
-        )}
+        <LeftSection leftExpand={expandScreen.left}>
+          {selectedMenu === "전체종목" ? (
+            <EntireList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+          ) : selectedMenu === "관심종목" ? (
+            <WatchList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+          ) : selectedMenu === "보유종목" ? (
+            <HoldingList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+          ) : null}
+        </LeftSection>
         <CentralChart />
         <StockOrderSection />
-        {!expandScreen.right && <TabContainerPage></TabContainerPage>}
+        <TabContainerPage></TabContainerPage>
       </Main>
       {isOAuthModalOpen && (
         <OAuthLoginModal
@@ -248,7 +244,8 @@ const Main = styled.main`
   flex-direction: row;
 `;
 
-const LeftSection = styled.section`
+const LeftSection = styled.section<{ leftExpand: boolean }>`
+  display: ${(props) => props.leftExpand && "none"};
   min-width: 248px;
   height: 100%;
   border-right: 1px solid black;
