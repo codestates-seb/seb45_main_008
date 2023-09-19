@@ -23,6 +23,12 @@
 ## API 명세서
 http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui/index.html
 
+## USER Flow
+https://drive.google.com/file/d/1ej4sYQusG8g3uFPHRILq7Khd8m1evz4X/view?usp=sharing
+
+## 화면 정의서
+https://docs.google.com/presentation/d/1yyUBoyX8Yo7ZQxZXg2CFiZDh6W0j4_jSM8UTPLbnvy8/edit?usp=sharing
+
 ## Github Rule
 
 ### Commit Convention
