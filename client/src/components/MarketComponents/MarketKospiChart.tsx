@@ -11,7 +11,6 @@ const MarketkospiChart = () => {
   useEffect(() => {
     if (data) {
       setKospiData(data);
-      console.log(kospiData, "kospi");
     }
   }, [data]);
 
@@ -70,9 +69,7 @@ const MarketkospiChart = () => {
               itemStyle: {
                 color: function (params: { data: number[] }) {
                   // 주식 상승이면 빨간색, 하락이면 파란색 반환
-                  return params.data[1] >= params.data[0]
-                    ? "#f87369"
-                    : "#5a99f8";
+                  return params.data[1] >= params.data[0] ? "#f87369" : "#5a99f8";
                 },
               },
               areaStyle: {
@@ -88,26 +85,20 @@ const MarketkospiChart = () => {
                 ]),
               },
 
-              data: kospiData.map(
-                (item: KospiProps, index: number, array: KospiProps[]) => {
-                  const currentPrice = parseFloat(item.bstp_nmix_oprc);
-                  const previousPrice =
-                    index > 0
-                      ? parseFloat(array[index - 1].bstp_nmix_oprc)
-                      : currentPrice;
+              data: kospiData.map((item: KospiProps, index: number, array: KospiProps[]) => {
+                const currentPrice = parseFloat(item.bstp_nmix_oprc);
+                const previousPrice = index > 0 ? parseFloat(array[index - 1].bstp_nmix_oprc) : currentPrice;
 
-                  // 현재 가격과 이전 가격을 비교하여 색상 설정
-                  const color =
-                    currentPrice > previousPrice ? "#f87369" : "#5a99f8";
+                // 현재 가격과 이전 가격을 비교하여 색상 설정
+                const color = currentPrice > previousPrice ? "#f87369" : "#5a99f8";
 
-                  return {
-                    value: currentPrice,
-                    itemStyle: {
-                      color: color,
-                    },
-                  };
-                }
-              ),
+                return {
+                  value: currentPrice,
+                  itemStyle: {
+                    color: color,
+                  },
+                };
+              }),
             },
           ],
           grid: {

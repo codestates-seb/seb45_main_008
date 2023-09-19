@@ -71,7 +71,7 @@ const EntireList: React.FC<EntireListProps> = ({ currentListType, onChangeListTy
       </Header2Container>
       {/* <Divider /> */}
       <StockList>
-        {isLoading ? <div>Loading...</div> : isError ? <div>Error fetching data</div> : companiesList.map((company) => <StockItem key={company.companyId} company={company} setShowChangePrice={setShowChangePrice} showChangePrice={showChangePrice} />)}
+        {isLoading ? <div></div> : isError ? <div>Error fetching data</div> : companiesList.map((company) => <StockItem key={company.companyId} company={company} setShowChangePrice={setShowChangePrice} showChangePrice={showChangePrice} />)}
       </StockList>
     </WatchListContainer>
   );
