@@ -196,10 +196,7 @@ const TimeLineComponent = () => {
                     </>
                   )}
                 </BoardText>
-                <Comments
-                  boardId={el.boardId}
-                  commentId={el.comments.commentId}
-                ></Comments>
+                <Comments boardId={el.boardId}></Comments>
               </BoardTextArea>
             ))
         )}
@@ -217,6 +214,7 @@ interface BoardData {
   comments: string;
   member: string;
   createdAt: string; // 작성 시각
+  commentId: number;
 }
 const timeLineText = {
   close: "닫기",
@@ -275,20 +273,6 @@ const Button = styled.button`
 `;
 
 //버튼 과 글영역 구분
-const DevideLine2 = styled.div`
-  margin-bottom: 10px;
-  position: relative;
-  margin-bottom: 30px;
-  &:after {
-    position: absolute;
-    top: 5px;
-    content: "";
-    border-bottom: 1px solid#e1e1e1;
-    display: block;
-    width: 100%;
-    height: 5px;
-  }
-`;
 
 const DevideLine = styled.div`
   margin-bottom: 10px;
@@ -353,15 +337,6 @@ const BoardTextAreaNoText = styled.div`
   ::-webkit-scrollbar {
     display: none;
   }
-`;
-
-const BoardContainer = styled.div`
-  border-radius: 5px;
-  overflow: hidden; // 내부의 둥근 모서리가 잘리지 않도록
-  background-color: white; // 배경색 지정
-  border: 1px solid lightslategray;
-
-  margin: 10px;
 `;
 
 const BoardTextArea = styled.div`

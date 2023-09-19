@@ -142,7 +142,7 @@ const Comments = ({ boardId }: { boardId: number }) => {
               <CommentDate>{getTimeAgoString(el.createdAt)}</CommentDate>
             </div>
             <CommentTextDiv>{el.content}</CommentTextDiv>
-            <CommentDeleteButton onClick={() => handleDeleteComment(el.id)}>
+            <CommentDeleteButton onClick={() => handleDeleteComment()}>
               삭제
             </CommentDeleteButton>
           </CommentsDiv>

@@ -19,7 +19,16 @@ import KG from "../../asset/logos/KG케미칼.png";
 import LGelec from "../../asset/logos/LG전자.svg";
 import LGchem from "../../asset/logos/LG화학.svg";
 import posco from "../../asset/logos/POSCO홀딩스.svg";
-
+interface StockInfo {
+  korName: string;
+  companyId: string;
+  stockInfResponseDto: {
+    stck_prpr: string;
+    prdy_ctrt: string;
+    acml_vol: string;
+  };
+  code: string;
+}
 const MarketServerUrl =
   "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/companies";
 
@@ -312,10 +321,7 @@ const StockInfoContainer = styled.div`
     display: none;
   }
 `;
-const CurrentPrice = styled.div`
-  width: 33.3%;
-  font-size: 15px;
-`;
+
 const StockListInfo = styled.div`
   display: flex;
   flex-direction: row;
