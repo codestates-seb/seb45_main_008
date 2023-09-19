@@ -200,9 +200,14 @@ const CommentInput = styled.input`
 
 const CommentInputSubmit = styled.button`
   outline: none;
-  border: 1px solid black;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.7);
+  border-right: 1px solid rgba(0, 0, 0, 0.7);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+
   background-color: white;
-  color: black;
+  color: #939393;
   padding: 10px 15px;
   border-radius: 5px;
   margin-left: 10px;
@@ -210,7 +215,12 @@ const CommentInputSubmit = styled.button`
   transition: background-color 0.3s;
 
   &:hover {
+    color: #333;
     background-color: #f2f2f2;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(0, 0, 0, 0);
+    border-left: 1px solid rgba(0, 0, 0, 0);
   }
 `;
 const CommentDeleteButton = styled.div`
