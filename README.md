@@ -6,6 +6,9 @@
 |----------------------------------------------------------------------------------------------------------------------------|-----------|--------------------------------------------|--------------------------------------------|----------------------------------------------|----------------------------------------------|---------------|
 | [@yjy8501](https://github.com/yjy8501)                                                                             | [@rkddnr05](https://github.com/rkddnr05) | [@IncheonLee](https://github.com/IncheonLee) | [@ChoHD](https://github.com/ChoHD) | [@sirloinbh](https://github.com/shimdokite) | [@novice1993](https://github.com/novice1993) |[@sinjw ](https://github.com/sinjw)|
 
+### 배포 주소
+http://seb008stockholm.s3-website.ap-northeast-2.amazonaws.com/
+
 ### Tools
 
  [![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1695089957938?alt=media&token=b049edc2-83f9-4d29-b205-9f5f9b3492f1)](https://github.com/msdio/stackticon)
