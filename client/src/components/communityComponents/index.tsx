@@ -209,16 +209,16 @@ const DropdownInput = styled.input`
   }
 `;
 
-const DropDownClose = styled.div`
-  text-align: right;
-  cursor: pointer;
-  color: #40797c;
-  font-size: 30px; // x 아이콘 크기를 조절
-  margin-right: 10px;
-  &:hover {
-    color: #2d4f51;
-  }
-`;
+// const DropDownClose = styled.div`
+//   text-align: right;
+//   cursor: pointer;
+//   color: #40797c;
+//   font-size: 30px; // x 아이콘 크기를 조절
+//   margin-right: 10px;
+//   &:hover {
+//     color: #2d4f51;
+//   }
+// `;
 
 //글작성을위해 클릭시 드롭다운 열어주는 버튼
 

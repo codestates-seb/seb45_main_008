@@ -23,7 +23,7 @@ const CompareChartBtn = () => {
     <Container>
       <div className="compareButtonContainer">
         <Icon src={IconImg} />
-        <div className="compareButton" onMouseOver={handleOnCompareList}>
+        <div className="compareButton" onMouseOver={handleOnCompareList} onMouseLeave={handleOffCompareList}>
           {buttonText}
         </div>
       </div>
@@ -88,7 +88,7 @@ const CompareContainer = styled.div`
 const StockList = styled.div`
   position: absolute;
   right: 0;
-  top: 24px;
+  top: 20px;
 
   display: flex;
   flex-direction: column;
