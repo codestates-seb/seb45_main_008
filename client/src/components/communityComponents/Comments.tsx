@@ -64,10 +64,10 @@ const Comments = ({ boardId }: { boardId: number }) => {
     }
   };
 
-  const handleDeleteComment = async () => {
+  const handleDeleteComment = async (commentId: number) => {
     try {
       const response = await axios.delete(
-        `http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}/comments`,
+        `http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}/comments/${commentId}`,
         {
           headers: {
             Authorization: accessToken,
@@ -79,7 +79,7 @@ const Comments = ({ boardId }: { boardId: number }) => {
         alert("댓글이 삭제되었습니다");
 
         const updatedCommentData = commentData.filter(
-          (el: CommentContent) => el.id !== el.commentId
+          (el: CommentContent) => el.id !== commentId
         );
         setCommentData(updatedCommentData);
       } else {
@@ -142,7 +142,7 @@ const Comments = ({ boardId }: { boardId: number }) => {
               <CommentDate>{getTimeAgoString(el.createdAt)}</CommentDate>
             </div>
             <CommentTextDiv>{el.content}</CommentTextDiv>
-            <CommentDeleteButton onClick={() => handleDeleteComment()}>
+            <CommentDeleteButton onClick={() => handleDeleteComment(el.id)}>
               삭제
             </CommentDeleteButton>
           </CommentsDiv>

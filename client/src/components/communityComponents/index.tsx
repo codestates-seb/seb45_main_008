@@ -312,7 +312,6 @@ const SubmitButton = styled.button`
 //게시판 전체 영역
 const BoardArea = styled.div`
   text-align: center;
-
   height: calc(100vh - 194px);
   margin-top: 25px;
   width: 100%;
