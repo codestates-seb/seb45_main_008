@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/config";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 
 const PortFolioChart = () => {
   const companyId = useSelector((state: RootState) => state.companyId);
@@ -496,13 +496,18 @@ const PortFolioChart = () => {
   // lentRatio: "19.87" + "%",
   // assetRatio: "80.13" + "%",
   //}
-  const matchingCompany = InfoDatas.companyInfo.find(
-    (el: any) => el.companysId === companyId
-  );
+  type MatchingCompany = CompanyInfo | undefined;
 
-  const a = matchingCompany.company.companyAsset.assetRatio;
-  const b = matchingCompany.company.companyAsset.lentRatio;
-  console.log(a);
+  const matchingCompany: MatchingCompany = InfoDatas.companyInfo.find(
+    (el: CompanyInfo) => el.companysId === companyId
+  );
+  let a: string = "";
+  let b: string = "";
+  if (matchingCompany) {
+    a = matchingCompany.company.companyAsset.assetRatio;
+    b = matchingCompany.company.companyAsset.lentRatio;
+    console.log(a);
+  }
 
   return (
     <InfoChart>
@@ -573,3 +578,37 @@ const AssetRatio = styled.div`
   color: white;
   background-color: rgba(255, 0, 0, 0.75);
 `;
+type CompanySkill = {
+  sk1: string;
+  sk2: string;
+  sk3: string;
+  sk4: string;
+  sk5: string;
+  sk6: string;
+};
+
+type CompanyAsset = {
+  total: string;
+  lentRatio: string;
+  assetRatio: string;
+};
+
+type CompanyInfo = {
+  companysId: number;
+  company: {
+    companyName: string;
+    companyKospi: string;
+    companyImageUrl: string;
+    companySkill: CompanySkill;
+    companyValue: string;
+    companyRank: string;
+    companyStock: string;
+    compnayIndustrial: string;
+    companyIndustDetail: string;
+    companyExample: string;
+    companyExample2: string;
+    companyExample3: string;
+    companyExample4: string;
+    companyAsset: CompanyAsset;
+  };
+};
