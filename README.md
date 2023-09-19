@@ -17,7 +17,7 @@ http://seb008stockholm.s3-website.ap-northeast-2.amazonaws.com/
 
 ### BE
 
-[![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1695091856085?alt=media&token=0205801d-72b7-4113-a0b2-941d791be50e)](https://github.com/msdio/stackticon)
+[![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1695133984245?alt=media&token=fef31d2b-813d-41ba-a173-eae6e8c6f19b)](https://github.com/msdio/stackticon)
 
 ### FE
 
