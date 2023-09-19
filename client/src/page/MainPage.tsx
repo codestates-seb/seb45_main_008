@@ -46,7 +46,7 @@ const MainPage = () => {
   const dispatch = useDispatch();
 
   const isLogin = useSelector((state: RootState) => state.login);
-  console.log(isLogin);
+
 
   // 🔴 페이지 로드 시 로컬 스토리지의 토큰을 기반으로 로그인 상태를 확인합니다.
   useEffect(() => {
