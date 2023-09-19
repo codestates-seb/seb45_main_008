@@ -39,6 +39,11 @@ const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         createCashMutation.mutate(initialAmount, {
             onSuccess: () => {
                 window.location.reload();
+            },
+            onError: (error) => {
+                // 에러 처리
+                const err = error as Error;
+                setErrorMessage(err?.message || "현금 생성에 실패했습니다.");
             }
         });
     };
@@ -52,6 +57,11 @@ const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
                     dispatch(setMoney(numericCashAmount));
                     dispatch(setCashId(cashId));
                     window.location.reload(); 
+                },
+                onError: (error) => {
+                    // 에러 처리
+                    const err = error as Error;
+                    setErrorMessage(err?.message || "현금 재생성에 실패했습니다.");
                 }
             });
         } else {
@@ -93,7 +103,7 @@ return (
                         placeholder={cashCreationPlaceholder}
                         onKeyDown={(event) => handleEnterPress(event, handleCreateCash)}
                     />
-                    {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+
                     <CreateCashButton onClick={handleCreateCash}>{createCashButtonText}</CreateCashButton>
                 </div>
             )}
@@ -111,7 +121,7 @@ return (
                         placeholder={cashInputPlaceholder}
                         onKeyDown={(event) => handleEnterPress(event, handleCashReset)}
                     />
-                    {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+
                     <ReceiveButton onClick={handleCashReset}>{resetButtonText}</ReceiveButton>
                 </div>
             )}
@@ -119,6 +129,7 @@ return (
             <div>
                 <Content style={{ display: 'inline-block', margin: '20px' }}>
                     현금 보유량: {holdingsAmount}원
+                    {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
                 </Content>
             </div>
         </ModalContainer>
