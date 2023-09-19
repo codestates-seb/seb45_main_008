@@ -21,6 +21,8 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
   const [name, setName] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  // 요청 중인지 확인하는 상태 변수 추가
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch();
 
     // 각 입력 필드에 대한 ref를 생성합니다.
@@ -51,7 +53,6 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
   // 일반적인 오류 메시지 상태 추가
   const [generalError, setGeneralError] = useState("");
 
-
   const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>, target?: "confirmPassword" | "name" | "confirmButton") => {
 
 
@@ -67,6 +68,12 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
   };
 
   const handleConfirmClick = async () => {
+
+    if (isSubmitting) {
+      // 이미 요청 중이라면 추가 요청을 방지
+      return;
+    }
+    setIsSubmitting(true);  // 요청 시작 전에 상태를 '요청 중'으로 설정
     //비밀번호 유효성 에러 메시지
     if (!isValidPassword(password)) {
       setPasswordError(strings.passwordError);
@@ -82,7 +89,6 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
     } else {
       setConfirmPasswordError("");
     }
-
     try {
       const response = await axios.post(
         "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members",
@@ -113,7 +119,10 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
       } else {
         console.error("Error sending data");
       }
+      // 요청 완료 후 상태를 '요청 중 아님'으로 설정
+      setIsSubmitting(false);
     } catch (error) {
+      setIsSubmitting(false);  // 예외 발생 시 상태를 '요청 중 아님'으로 설정
       if (axios.isAxiosError(error)) {
         console.error("Error during data submission:", error);
         if (error.response) {
@@ -139,7 +148,7 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
         {confirmPasswordError && <ErrorMessage>{confirmPasswordError}</ErrorMessage>}
 
         <Label>{strings.nicknameLabelText}</Label>
-        <Input type="text" ref={nameRef} placeholder="닉네임을 입력해주세요" value={name} onChange={handleNameChange} onKeyDown={(event) => handleEnterPress(event, "confirmButton")}/>
+        <Input type="text" ref={nameRef} placeholder="이름을 입력해주세요" value={name} onChange={handleNameChange} onKeyDown={(event) => handleEnterPress(event, "confirmButton")}/>
 
         {generalError && <ErrorMessage>{generalError}</ErrorMessage>}
 

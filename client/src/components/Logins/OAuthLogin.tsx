@@ -1,12 +1,10 @@
 
-import React, { useEffect } from "react";
+import React from "react";
 import styled from "styled-components";
 import GoogleLoginButton from "./GoogleLoginButton";
 import KakaoLoginButton from "./KakaoLoginButton";
-import { useSelector } from "react-redux";
-import { RootState } from "../../store/config";
 
-const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick, onEmailSignupClick, onLoginSuccess }) => {
+const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick, onEmailSignupClick }) => {
   const titleText = "로그인";
   const orText = "또는";
   const emailLoginText = "이메일로 로그인";
@@ -15,17 +13,6 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
   //소셜로그인 주소
   const GOOGLE_BACKEND_URL = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google";
   const KAKAO_BACKEND_URL = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/kakao";
-
-  //로그인 전역변수 불러오기
-  const loginState = useSelector((state: RootState) => state.login);
-
-  // 이미 로그인상태라면 모달창 닫기
-  useEffect(() => {
-    if (loginState === 1) {
-      onLoginSuccess();
-      onClose();
-    }
-  }, [loginState, onClose]);
 
   return (
     <ModalBackground>
@@ -52,9 +39,8 @@ interface LoginModalProps {
   onClose: () => void;
   onEmailLoginClick: () => void;
   onEmailSignupClick: () => void;
-  onLoginSuccess: () => void;
-  onWatchListClick: () => void;
-  onHoldingsClick: () => void;
+  onWatchListClick?: () => void;  // '?'를 사용하여 선택적으로 만듭니다.
+  onHoldingsClick?: () => void;   // '?'를 사용하여 선택적으로 만듭니다.
 }
 
 // 모달창 띄웠을 때 배경 스타일

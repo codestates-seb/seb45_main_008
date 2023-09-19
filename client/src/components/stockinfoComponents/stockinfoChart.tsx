@@ -1,6 +1,6 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/config";
-import styled, { keyframes } from "styled-components";
+import styled from "styled-components";
 
 const PortFolioChart = () => {
   const companyId = useSelector((state: RootState) => state.companyId);
@@ -555,7 +555,7 @@ const Ratio = styled.div`
   margin-top: 20px;
   width: 360px;
   display: flex;
-  borer: 1px solid#333;
+  border: 1px solid#333;
   text-align: center;
 `;
 

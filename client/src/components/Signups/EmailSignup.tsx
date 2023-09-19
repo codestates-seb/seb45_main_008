@@ -11,6 +11,7 @@ const strings = {
   emailLabelText: "이메일",
   requestVerificationText: "이메일 인증요청",
   invalidEmailText: "유효하지 않은 이메일입니다",
+  emailSend : "이메일이 전송되었습니다"
 };
 
 const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestVerification }) => {
@@ -18,6 +19,7 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
   const [email, setEmail] = useState("");
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [emailSent, setEmailSent] = useState(false);
 
   // 이메일 입력값 변경 핸들러
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,6 +61,7 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
       if (response.status === 200) {
         dispatch(setEmailForVerification(email));
         onRequestVerification(email);
+        setEmailSent(true);  // 이 부분 추가
       } else if (response.status === 400) {
         setErrorMessage(response.data.message);
       } else if (response.status === 500) {
@@ -85,6 +88,7 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
         <Title>{strings.titleText}</Title>
         <Label>{strings.emailLabelText}</Label>
         <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} onKeyDown={handleKeyPress} />
+        {emailSent && <SuccessMessage>{strings.emailSend}</SuccessMessage>}
         {isInvalidEmail && <ErrorMessage>{strings.invalidEmailText}</ErrorMessage>}
         <SignupButton onClick={handleVerificationRequest}>{strings.requestVerificationText}</SignupButton>
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
@@ -185,4 +189,9 @@ const SignupButton = styled.button`
   &:hover {
     background-color: rgba(47, 79, 79, 0.8);
   }
+`;
+const SuccessMessage = styled.p`
+  color: #e22926;  // 빨간색
+  margin-top: 5px;
+  font-size: 0.8rem;
 `;
