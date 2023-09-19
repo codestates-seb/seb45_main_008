@@ -27,7 +27,7 @@ const valueText: string = "거래대금";
 // styled-component 수정 및 미디어 쿼리 적용
 const StockOverview = () => {
   const companyId = useSelector((state: StateProps) => state.companyId);
-  const { stockInfo, stockInfoLoading, stockInfoError } = useGetStockInfo(companyId);
+  const { stockInfo } = useGetStockInfo(companyId);
 
   const corpName = stockInfo?.korName;
 
@@ -54,13 +54,13 @@ const StockOverview = () => {
     return null; // 혹은 다른 적절한 렌더링을 반환
   }
 
-  if (stockInfoLoading) {
-    return <p>로딩 중 입니다</p>;
-  }
+  // if (stockInfoLoading) {
+  //   return <></>;
+  // }
 
-  if (stockInfoError) {
-    return <p>에러 발생</p>;
-  }
+  // if (stockInfoError) {
+  //   return <p>에러 발생</p>;
+  // }
 
   const stockCode = stockInfo.code;
   const stockPrice = parseInt(stockInfo.stockInfResponseDto.stck_prpr, 10).toLocaleString();

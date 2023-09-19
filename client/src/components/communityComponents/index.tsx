@@ -154,7 +154,7 @@ const TimeLineComponent = () => {
 
           <ButtonContainer>
             <SubmitButton onClick={handleClickSubmit}>Submit</SubmitButton>
-            <CloseButton onClick={handleSetOpenDropDown}>Cancle</CloseButton>
+            <CloseButton onClick={handleSetOpenDropDown}>Cancel</CloseButton>
           </ButtonContainer>
         </>
       )}

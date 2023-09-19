@@ -59,7 +59,7 @@ const StockOrderSection: React.FC<StockOrderSectionProps> = (props) => {
 
   // 1) 데이터 로딩 중
   if (isLoading) {
-    return <Container orderSet={stockOrderSet}>로딩 중</Container>;
+    return <Container orderSet={stockOrderSet}></Container>;
   }
 
   // 주식주문 창 닫기
@@ -149,7 +149,7 @@ const StockOrderSection: React.FC<StockOrderSectionProps> = (props) => {
           <WaitOrderIndicator />
         </div>
       ) : (
-          <LoginRequestIndicator openOAuthModal={props.openOAuthModal} /> //props전달
+        <LoginRequestIndicator openOAuthModal={props.openOAuthModal} /> //props전달
       )}
     </Container>
   );
@@ -159,9 +159,8 @@ export default StockOrderSection;
 
 interface StockOrderSectionProps {
   openOAuthModal: () => void;
-  openProfileModal: () => void;  // Add this line
+  openProfileModal: () => void; // Add this line
 }
-
 
 // 미로그인 시 -> 로그인 요청 화면
 //props 전달
@@ -169,7 +168,9 @@ const LoginRequestIndicator: React.FC<LoginRequestIndicatorProps> = ({ openOAuth
   return (
     <LoginRequestContainer>
       <div className="Notification">{loginRequiredText}</div>
-      <button className="LoginButton" onClick={openOAuthModal}>{loginBtnText}</button>
+      <button className="LoginButton" onClick={openOAuthModal}>
+        {loginBtnText}
+      </button>
     </LoginRequestContainer>
   );
 };
@@ -183,7 +184,9 @@ const MoneyReqireIndicator: React.FC<MoneyReqireIndicatorProps> = ({ openProfile
   return (
     <MoneyRequireContainer>
       <div className="Notification">{moneyRequireText}</div>
-      <button className="LoginButton" onClick={openProfileModal}>{moenyRequireBtnText}</button>
+      <button className="LoginButton" onClick={openProfileModal}>
+        {moenyRequireBtnText}
+      </button>
     </MoneyRequireContainer>
   );
 };
@@ -285,7 +288,7 @@ const LoginRequestContainer = styled.div`
     background-color: #2f4f4f;
     border: none;
     border-radius: 0.3rem;
-    cursor: pointer;  
+    cursor: pointer;
   }
 `;
 
