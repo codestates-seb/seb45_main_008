@@ -8,4 +8,5 @@ export interface StateProps {
   stockOrderVolume: number;
   decisionWindow: boolean;
   login: number;
+  compareChart: number;
 }
