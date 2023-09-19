@@ -6,8 +6,14 @@ const LoginConfirmationModal: React.FC<LoginConfirmationProps> = ({ onClose }) =
   const messageText = "로그인이 성공적으로 완료되었습니다!";
   const confirmText = "확인";
 
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter') {
+      onClose();
+    }
+  };
+
   return (
-    <ModalBackground>
+    <ModalBackground onKeyDown={handleKeyDown} tabIndex={0}>
       <ModalContainer>
         <Message>{messageText}</Message>
         <Logo src={StockHolmLogo} alt="StockHolm Logo" />

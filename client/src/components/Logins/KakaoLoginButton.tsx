@@ -1,18 +1,14 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useDispatch } from 'react-redux';
-import { setLoginState } from '../../reducer/member/loginSlice';  
 import kakaoLogo from '../../asset/images/KakaoLogo.svg'; 
 
 const KakaoLoginButton: React.FC<Props> = ({ backendURL }) => {
-  const dispatch = useDispatch();
 
   const buttonText = "카카오로 로그인";
 
   // 버튼 클릭시 로그인 페이지로 리다이렉트
   const handleLoginClick = () => {
     window.location.href = `${backendURL}`;
-    dispatch(setLoginState());  // 로그인 상태를 변경합니다.
   };
 
   return (

@@ -27,6 +27,17 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) =
     setPassword(event.target.value);
   };
 
+  const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>, target?: "password" | "loginButton") => {
+
+    if (event.key === 'Enter') {
+      if (target === "password") {
+        (document.querySelector('input[type="password"]') as HTMLInputElement).focus();
+      } else if (target === "loginButton") {
+        handleLoginClick();
+      }
+    }
+  };
+
   const handleLoginClick = async () => {
     try {
       const response = await axios.post("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members/login", { email, password }, { validateStatus: (status) => status >= 200 && status < 600 });
@@ -59,9 +70,9 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) =
         <CloseButton onClick={onClose}>&times;</CloseButton>
         <Title>{titleText}</Title>
         <Label>{emailLabelText}</Label>
-        <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} />
+        <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} onKeyDown={(event) => handleEnterPress(event, "password")}/>
         <Label>{passwordLabelText}</Label>
-        <Input type="password" placeholder="비밀번호를 입력하세요" value={password} onChange={handlePasswordChange} />
+        <Input type="password" placeholder="비밀번호를 입력하세요" value={password} onChange={handlePasswordChange} onKeyDown={(event) => handleEnterPress(event, "loginButton")}/>
         {generalError && <ErrorMessage>{generalError}</ErrorMessage>}
         <RightAlignedButton>{findPasswordText}</RightAlignedButton>
         <LoginButton onClick={handleLoginClick}>{loginButtonText}</LoginButton>
