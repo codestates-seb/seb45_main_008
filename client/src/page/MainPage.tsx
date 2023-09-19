@@ -46,7 +46,6 @@ const MainPage = () => {
   const dispatch = useDispatch();
 
   const isLogin = useSelector((state: RootState) => state.login);
-  console.log(isLogin);
 
   // 🔴 페이지 로드 시 로컬 스토리지의 토큰을 기반으로 로그인 상태를 확인합니다.
   useEffect(() => {
@@ -81,6 +80,10 @@ const MainPage = () => {
   const closeEmailSignupModal = useCallback(() => {
     setEmailSignupModalOpen(false);
   }, []);
+  const openEmailSignupFromLogin = useCallback(() => {
+    closeEmailLoginModal();
+    openEmailSignupModal();
+  }, [closeEmailLoginModal, openEmailSignupModal]);
 
   const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] = useState(false);
 
@@ -120,7 +123,6 @@ const MainPage = () => {
     setGuideModalOpen(false);
     openOAuthModal();
   }, [openOAuthModal]);
-
 
   //프로필 모달 열고닫는 매커니즘
   const openProfileModal = useCallback(() => {
@@ -176,26 +178,21 @@ const MainPage = () => {
           {selectedMenu === "전체종목" ? (
             <EntireList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
           ) : selectedMenu === "관심종목" ? (
-            <WatchList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+            <WatchList currentListType={selectedMenu} onChangeListType={handleMenuChange} openOAuthModal={openOAuthModal} />
           ) : selectedMenu === "보유종목" ? (
-            <HoldingList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+            <HoldingList currentListType={selectedMenu} onChangeListType={handleMenuChange} openOAuthModal={openOAuthModal} />
           ) : null}
         </LeftSection>
         <CentralChart />
-        <StockOrderSection />
+        {/* props전달 */}
+        <StockOrderSection openOAuthModal={openOAuthModal} openProfileModal={openProfileModal} />
         <TabContainerPage></TabContainerPage>
       </Main>
       {isOAuthModalOpen && (
-        <OAuthLoginModal
-          onClose={closeOAuthModal}
-          onEmailLoginClick={openEmailLoginModal}
-          onEmailSignupClick={openEmailSignupModal}
-          onWatchListClick={() => handleMenuChange("관심종목")}
-          onHoldingsClick={() => handleMenuChange("보유종목")}
-        />
+        <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} onEmailSignupClick={openEmailSignupModal} onWatchListClick={() => handleMenuChange("관심종목")} onHoldingsClick={() => handleMenuChange("보유종목")} />
       )}
 
-      {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} />}
+      {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} onSignup={openEmailSignupFromLogin} />}
       {isLoginConfirmationModalOpen && <LoginConfirmationModal onClose={handleLoginConfirmationClose} />}
 
       {isEmailSignupModalOpen && <EmailSignupModal onClose={closeEmailSignupModal} onRequestVerification={openEmailVerificationModal} />}
@@ -218,7 +215,6 @@ const MainPage = () => {
       {isGuideModalOpen && <GuideModal onClose={closeGuideModal} />}
       {isProfileModalOpen && <ProfileModal onClose={() => setProfileModalOpen(false)} />}
     </Container>
-
   );
 };
 

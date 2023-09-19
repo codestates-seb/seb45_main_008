@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Comments from "./Comments";
 import { DotIcon } from "./IconComponent/Icon";
+import { toast } from "react-toastify";
 import axios from "axios";
 
-const serverUrl =
-  "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards";
+const serverUrl = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards";
 
 const TimeLineComponent = () => {
   const [boardData, setBoardData] = useState<BoardData[]>([]);
@@ -27,11 +27,8 @@ const TimeLineComponent = () => {
     const currentTime: Date = new Date();
     const createdAtTime: Date = new Date(createdAt);
 
-    const timeDifferenceInMilliseconds: number =
-      currentTime.getTime() - createdAtTime.getTime();
-    const timeDifferenceInSeconds = Math.floor(
-      timeDifferenceInMilliseconds / 1000
-    );
+    const timeDifferenceInMilliseconds: number = currentTime.getTime() - createdAtTime.getTime();
+    const timeDifferenceInSeconds = Math.floor(timeDifferenceInMilliseconds / 1000);
 
     if (timeDifferenceInSeconds < 60) {
       return "방금 전";
@@ -78,19 +75,27 @@ const TimeLineComponent = () => {
           },
         });
         if (response.status === 201) {
-          alert("작성 되었습니다");
+          toast.success("작성 되었습니다", {
+            autoClose: 1000,
+          });
           setinputValue(""); // 입력 필드 초기화
 
           fetchBoardDataFromServer();
         } else {
-          alert("작성실패");
+          toast.error("작성실패", {
+            autoClose: 1000,
+          });
         }
       } catch (error) {
         console.log("데이터 추가 중 오류 발생:", error);
-        alert("작성실패");
+        toast.error("작성실패", {
+          autoClose: 1000,
+        });
       }
     } else {
-      alert("내용이 없습니다");
+      toast.info("내용이 없습니다", {
+        autoClose: 1000,
+      });
     }
   };
 
@@ -117,45 +122,35 @@ const TimeLineComponent = () => {
       }); // URL에 boardId 추가
       if (response.status === 200) {
         // 삭제 성공 처리
-        alert("삭제되었습니다");
+
         // 삭제한 게시물을 클라이언트 데이터에서도 제거
-        const updatedBoardData = boardData.filter(
-          (el) => el.boardId !== boardId
-        ); // boardId로 수정
+        const updatedBoardData = boardData.filter((el) => el.boardId !== boardId); // boardId로 수정
         setBoardData(updatedBoardData);
       } else {
-        alert("삭제 되었습니다");
+        toast.success("삭제 되었습니다", {
+          autoClose: 1000,
+        });
         window.location.href = "/community";
       }
     } catch (error) {
       console.error("작성자만 삭제 할 수 있습니다:", error);
-      alert("작성자만 삭제 할 수 있습니다");
-      console.log(boardData);
+      toast.info("작성자만 삭제할 수 있습니다", {
+        autoClose: 1000,
+      });
     }
   };
 
   const [expandedPosts, setExpandedPosts] = useState<number[]>([]);
   const toggleExpandPost = (boardId: number) => {
-    setExpandedPosts((prevExpandedPosts) =>
-      prevExpandedPosts.includes(boardId)
-        ? prevExpandedPosts.filter((id) => id !== boardId)
-        : [...prevExpandedPosts, boardId]
-    );
+    setExpandedPosts((prevExpandedPosts) => (prevExpandedPosts.includes(boardId) ? prevExpandedPosts.filter((id) => id !== boardId) : [...prevExpandedPosts, boardId]));
   };
 
   return (
     <TimeLine>
-      {openDropDown === false && (
-        <Button onClick={handleSetOpenDropDown}></Button>
-      )}
+      {openDropDown === false && <Button onClick={handleSetOpenDropDown}></Button>}
       {openDropDown === true && (
         <>
-          <DropdownInput
-            type="text"
-            placeholder="이곳에 작성해 주세요"
-            value={inputValue}
-            onChange={handleOnChange}
-          ></DropdownInput>
+          <DropdownInput type="text" placeholder="이곳에 작성해 주세요" value={inputValue} onChange={handleOnChange}></DropdownInput>
 
           <ButtonContainer>
             <SubmitButton onClick={handleClickSubmit}>Submit</SubmitButton>
@@ -166,9 +161,7 @@ const TimeLineComponent = () => {
       <DevideLine></DevideLine>
       <BoardArea dropDown={openDropDown}>
         {boardData.length === 0 ? (
-          <BoardTextAreaNoText>
-            {timeLineText.notYetWriting}
-          </BoardTextAreaNoText>
+          <BoardTextAreaNoText>{timeLineText.notYetWriting}</BoardTextAreaNoText>
         ) : (
           boardData
             .slice()
@@ -179,11 +172,7 @@ const TimeLineComponent = () => {
                   <div onClick={() => handleDotOpen(el.boardId)}>
                     <DotIcon />
                   </div>
-                  {dotMenuOpenMap[el.boardId] && (
-                    <DeleteBoard onClick={() => handleDeleteClick(el.boardId)}>
-                      {timeLineText.delete}
-                    </DeleteBoard>
-                  )}
+                  {dotMenuOpenMap[el.boardId] && <DeleteBoard onClick={() => handleDeleteClick(el.boardId)}>{timeLineText.delete}</DeleteBoard>}
                 </Delete>
                 <BoardText>
                   <MemberInfo>
@@ -195,15 +184,9 @@ const TimeLineComponent = () => {
                     el.content
                   ) : (
                     <>
-                      {el.content.length > 50
-                        ? el.content.substring(0, 50) + "..."
-                        : el.content}
+                      {el.content.length > 50 ? el.content.substring(0, 50) + "..." : el.content}
                       <br />
-                      {el.content.length > 50 && (
-                        <div onClick={() => toggleExpandPost(el.boardId)}>
-                          더 보기
-                        </div>
-                      )}
+                      {el.content.length > 50 && <div onClick={() => toggleExpandPost(el.boardId)}>더 보기</div>}
                     </>
                   )}
                 </BoardText>
@@ -337,8 +320,7 @@ const CloseButton = styled(SubmitButton)``;
 //게시판 전체 영역
 const BoardArea = styled.div<{ dropDown: boolean }>`
   text-align: center;
-  height: ${(props) =>
-    props.dropDown ? "calc(100vh - 290px)" : "calc(100vh - 200px)"};
+  height: ${(props) => (props.dropDown ? "calc(100vh - 290px)" : "calc(100vh - 200px)")};
   margin-top: 25px;
   width: 100%;
   overflow-y: auto; // 스크롤 설정

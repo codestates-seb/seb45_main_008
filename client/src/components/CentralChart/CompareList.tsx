@@ -27,7 +27,7 @@ interface OwnProps {
 
 const Contianer = styled.div`
   &:hover {
-    color: black;
+    color: #19488a;
     transition: color 0.3s ease;
     cursor: pointer;
   }

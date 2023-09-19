@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { toast } from "react-toastify";
 import axios from "axios";
 import { ProFileImage } from "./IconComponent/Icon.tsx";
 const Comments = ({ boardId }: { boardId: number }) => {
@@ -56,9 +57,15 @@ const Comments = ({ boardId }: { boardId: number }) => {
           setCommentsValue("");
           fetchCommentsFromServer();
         } else {
+          toast.error("댓글 작성 실패", {
+            autoClose: 1000,
+          });
           console.log("댓글 작성 실패:", response.data);
         }
       } catch (error) {
+        toast.error("댓글 작성 실패", {
+          autoClose: 1000,
+        });
         console.error("댓글 작성 중 오류 발생:", error);
       }
     }
@@ -77,14 +84,20 @@ const Comments = ({ boardId }: { boardId: number }) => {
       );
       if (response.status === 200) {
         // 삭제 성공 처리
-        alert("댓글이 삭제되었습니다");
+        toast.success("댓글이 삭제 되었습니다", {
+          autoClose: 1000,
+        });
       } else {
-        alert("삭제되었습니다");
-        window.location.href = "/community";
+        toast.success("댓글이 삭제 되었습니다", {
+          autoClose: 1000,
+        });
       }
     } catch (error) {
-      console.error("작성자만 삭제 할 수 있습니다:", error);
-      alert("작성자만 삭제 할 수 있습니다");
+      console.error("댓글 삭제 중 오류 발생:", error);
+      toast.error("작성자만 삭제 할 수 있습니다", {
+        autoClose: 1000,
+      });
+      // alert("댓글 삭제 실패");
     }
   };
 

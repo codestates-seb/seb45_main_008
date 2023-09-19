@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { changeCompanyId } from "../../reducer/CompanyId-Reducer";
 import useGetCompanyList from "../../hooks/useGetCompanyList";
 
+
 const stockSearch = "종목 검색";
 const search = "검색";
 const noExistCompany = "noExistCompany";
@@ -20,13 +21,22 @@ const StockSearchComponent: React.FC = () => {
 
   const handleSearchCompany = () => {
     let searchResult: string = noExistCompany;
+    let foundCompanyId: number | null = null;
 
     companyList.forEach((company: CompanyProps) => {
       if (company.korName === searchWord) {
         searchResult = existCompany;
         dispatch(changeCompanyId(company.companyId));
+        foundCompanyId = company.companyId;  // companyId 저장
       }
     });
+    if (searchResult === existCompany && foundCompanyId !== null) {
+      dispatch(changeCompanyId(foundCompanyId));
+    } else {
+      dispatch(changeCompanyId(-1));
+    }
+
+
 
     if (searchResult === noExistCompany) {
       dispatch(changeCompanyId(-1));

@@ -16,6 +16,8 @@ const errorMessage: string = "정보를 불러올 수 없습니다";
 const errorButtonText: string = "닫기";
 const loginRequiredText: string = "로그인이 필요한 서비스입니다";
 const loginBtnText: string = "StockHolm 로그인";
+const moneyRequireText: string = "현금 충전이 필요한 서비스입니다";
+const moenyRequireBtnText: string = "현금 충전하러 가기";
 const upperbarTitle: string = "주식주문";
 const marketType: string = "코스피";
 
@@ -38,7 +40,7 @@ import LGelec from "../../asset/logos/LG전자.svg";
 import LGchem from "../../asset/logos/LG화학.svg";
 import posco from "../../asset/logos/POSCO홀딩스.svg";
 
-const StockOrderSection = () => {
+const StockOrderSection: React.FC<StockOrderSectionProps> = (props) => {
   const dispatch = useDispatch();
   const isLogin = useSelector((state: StateProps) => state.login);
   const companyId = useSelector((state: StateProps) => state.companyId);
@@ -53,7 +55,7 @@ const StockOrderSection = () => {
 
   // fetching 데이터 loading, error 여부
   const isLoading = stockInfoLoading || stockPriceLoading || cashLoading || orderRecordLoading || holdingStockLoading || compnayListLoading;
-  const isError = stockInfoError || stockPriceError || cashError || orderRecordError || holdingStockError || companyListError;
+  const isError = stockInfoError || stockPriceError || orderRecordError || holdingStockError || companyListError;
 
   // 1) 데이터 로딩 중
   if (isLoading) {
@@ -81,6 +83,20 @@ const StockOrderSection = () => {
             {errorButtonText}
           </button>
         </div>
+      </Container>
+    );
+  }
+
+  if (cashError) {
+    return (
+      <Container orderSet={stockOrderSet}>
+        <UpperBar>
+          <h2 className="Title">{upperbarTitle}</h2>
+          <button className="CloseButton" onClick={handleStockOrderClose}>
+            &#10005;
+          </button>
+        </UpperBar>
+        <MoneyReqireIndicator openProfileModal={props.openProfileModal} />
       </Container>
     );
   }
@@ -133,7 +149,7 @@ const StockOrderSection = () => {
           <WaitOrderIndicator />
         </div>
       ) : (
-        <LoginRequestIndicator />
+          <LoginRequestIndicator openOAuthModal={props.openOAuthModal} /> //props전달
       )}
     </Container>
   );
@@ -141,15 +157,40 @@ const StockOrderSection = () => {
 
 export default StockOrderSection;
 
+interface StockOrderSectionProps {
+  openOAuthModal: () => void;
+  openProfileModal: () => void;  // Add this line
+}
+
+
 // 미로그인 시 -> 로그인 요청 화면
-const LoginRequestIndicator = () => {
+//props 전달
+const LoginRequestIndicator: React.FC<LoginRequestIndicatorProps> = ({ openOAuthModal }) => {
   return (
     <LoginRequestContainer>
       <div className="Notification">{loginRequiredText}</div>
-      <button className="LoginButton">{loginBtnText}</button>
+      <button className="LoginButton" onClick={openOAuthModal}>{loginBtnText}</button>
     </LoginRequestContainer>
   );
 };
+interface LoginRequestIndicatorProps {
+  openOAuthModal: () => void;
+}
+
+// 현금 충전요청 화면
+//props 전달
+const MoneyReqireIndicator: React.FC<MoneyReqireIndicatorProps> = ({ openProfileModal }) => {
+  return (
+    <MoneyRequireContainer>
+      <div className="Notification">{moneyRequireText}</div>
+      <button className="LoginButton" onClick={openProfileModal}>{moenyRequireBtnText}</button>
+    </MoneyRequireContainer>
+  );
+};
+
+interface MoneyReqireIndicatorProps {
+  openProfileModal: () => void;
+}
 
 // component 생성
 const Container = styled.aside<{ orderSet: boolean }>`
@@ -244,8 +285,11 @@ const LoginRequestContainer = styled.div`
     background-color: #2f4f4f;
     border: none;
     border-radius: 0.3rem;
+    cursor: pointer;  
   }
 `;
+
+const MoneyRequireContainer = styled(LoginRequestContainer)``;
 
 const StockName = styled.section`
   width: 100%;

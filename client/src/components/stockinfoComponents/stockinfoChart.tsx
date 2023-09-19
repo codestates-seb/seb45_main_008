@@ -12,8 +12,7 @@ const PortFolioChart = () => {
         company: {
           companyName: "삼성전자",
           companyKospi: "코스피 005930",
-          companyImageUrl:
-            "https://file.alphasquare.co.kr/media/images/stock_logo/kr/005930.png",
+          companyImageUrl: "https://file.alphasquare.co.kr/media/images/stock_logo/kr/005930.png",
           companySkill: {
             sk1: "스마트홈",
             sk2: "차세대이동통신",
@@ -27,14 +26,10 @@ const PortFolioChart = () => {
           companyStock: "5,969,782,550주",
           compnayIndustrial: "하드웨어/IT장비",
           companyIndustDetail: "반도체/반도체장비",
-          companyExample:
-            "삼성전자는 1969년 설립된 기업으로 반도체, 전자 제품 제조·판매업을 영위하고 있다.",
-          companyExample2:
-            "주요 종속기업은 삼성전자로지텍, 삼성전자서비스, 삼성디스플레이, 스테코, 삼성메디슨 등이 있다.",
-          companyExample3:
-            "주요 매출은 스마트폰, 네트워크시스템, 컴퓨터 등을 생산하는 IM부문에서 발생하고 있으며 반도체, CE 부문이 뒤를 잇고 있다.",
-          companyExample4:
-            "TV, 스마트폰, 반도체 및 디스플레이 패널 부문 등에서 글로벌 우위의 경쟁력을 확보하고 있으며, 메타버스와 로보틱스 시장으로 진출하기 위해 M&A를 계획하고 있다.",
+          companyExample: "삼성전자는 1969년 설립된 기업으로 반도체, 전자 제품 제조·판매업을 영위하고 있다.",
+          companyExample2: "주요 종속기업은 삼성전자로지텍, 삼성전자서비스, 삼성디스플레이, 스테코, 삼성메디슨 등이 있다.",
+          companyExample3: "주요 매출은 스마트폰, 네트워크시스템, 컴퓨터 등을 생산하는 IM부문에서 발생하고 있으며 반도체, CE 부문이 뒤를 잇고 있다.",
+          companyExample4: "TV, 스마트폰, 반도체 및 디스플레이 패널 부문 등에서 글로벌 우위의 경쟁력을 확보하고 있으며, 메타버스와 로보틱스 시장으로 진출하기 위해 M&A를 계획하고 있다.",
           companyAsset: {
             total: "자산총계" + "4,480,005.60" + "억",
             lentRatio: "19.87" + "%",
@@ -47,8 +42,7 @@ const PortFolioChart = () => {
         company: {
           companyName: "POSCO홀딩스",
           companyKospi: "코스피 005490",
-          companyImageUrl:
-            "https://cphoto.asiae.co.kr/listimglink/1/2022101910022873851_1666141348.png",
+          companyImageUrl: "https://cphoto.asiae.co.kr/listimglink/1/2022101910022873851_1666141348.png",
           companySkill: {
             sk1: "2차전지",
             sk2: "풍력",
@@ -62,14 +56,10 @@ const PortFolioChart = () => {
           companyStock: "84,571,230주",
           compnayIndustrial: "소재",
           companyIndustDetail: "철강",
-          companyExample:
-            "POSCO홀딩스는 1968년 설립된 기업으로 철강재 제조·판매업을 영위하고 있다.",
-          companyExample2:
-            "주요 종속기업은 포스코경영연구원, 포스코리튬솔루션, 포스코알텍, 포스코터미날 등이 있다.",
-          companyExample3:
-            "주요 매출은 철강 생산·판매에서 발생하고 있으며 무역, E&C 부문이 뒤를 잇고 있다.",
-          companyExample4:
-            "기존의 철강 사업과 더불어 2차전지, 스마트 공장 건설 등 친환경 분야로 사업을 확장하고 있다.",
+          companyExample: "POSCO홀딩스는 1968년 설립된 기업으로 철강재 제조·판매업을 영위하고 있다.",
+          companyExample2: "주요 종속기업은 포스코경영연구원, 포스코리튬솔루션, 포스코알텍, 포스코터미날 등이 있다.",
+          companyExample3: "주요 매출은 철강 생산·판매에서 발생하고 있으며 무역, E&C 부문이 뒤를 잇고 있다.",
+          companyExample4: "기존의 철강 사업과 더불어 2차전지, 스마트 공장 건설 등 친환경 분야로 사업을 확장하고 있다.",
           companyAsset: {
             total: "자산총계" + "1,030,787.50" + "억",
             lentRatio: "58.09" + "%",
@@ -82,8 +72,7 @@ const PortFolioChart = () => {
         company: {
           companyName: "셀트리온",
           companyKospi: "코스피 068270",
-          companyImageUrl:
-            "https://cdn.bosa.co.kr/news/photo/201808/2088723_134084_77.jpg",
+          companyImageUrl: "https://cdn.bosa.co.kr/news/photo/201808/2088723_134084_77.jpg",
           companySkill: {
             sk1: "바이오시밀러",
             sk2: "결핵",
@@ -97,12 +86,9 @@ const PortFolioChart = () => {
           companyStock: "146,402,770주",
           compnayIndustrial: "헬스케어",
           companyIndustDetail: "제약/건강기능식품",
-          companyExample:
-            "주요 종속기업은 셀트리온제약, Celltrion USA, Celltrion Asia Pacific PTE가 있다.",
-          companyExample2:
-            "주요 매출은 바이오의약품, 케미컬의약품 부문에서 발생하고 있다.",
-          companyExample3:
-            "당사는 상업화 완료한 바이오시밀러 제품 외에도 시장성 및 성장성 있는 다양한 후속 바이오시밀러 제품 개발에도 매진하고 있다.",
+          companyExample: "주요 종속기업은 셀트리온제약, Celltrion USA, Celltrion Asia Pacific PTE가 있다.",
+          companyExample2: "주요 매출은 바이오의약품, 케미컬의약품 부문에서 발생하고 있다.",
+          companyExample3: "당사는 상업화 완료한 바이오시밀러 제품 외에도 시장성 및 성장성 있는 다양한 후속 바이오시밀러 제품 개발에도 매진하고 있다.",
           companyExample4: "",
           companyAsset: {
             total: "자산총계" + "62,878.85" + "억",
@@ -116,8 +102,7 @@ const PortFolioChart = () => {
         company: {
           companyName: "에코프로",
           companyKospi: "코스닥 086520",
-          companyImageUrl:
-            "https://cdn.bizwatch.co.kr/news/photo/2023/04/24/345e448dbdb6e28b6984f96331304a98.jpg",
+          companyImageUrl: "https://cdn.bizwatch.co.kr/news/photo/2023/04/24/345e448dbdb6e28b6984f96331304a98.jpg",
           companySkill: {
             sk1: "전기차",
             sk2: "2차전지",
@@ -131,12 +116,9 @@ const PortFolioChart = () => {
           companyStock: "26,627,668주",
           compnayIndustrial: "기타",
           companyIndustDetail: "지주회사/복합기업",
-          companyExample:
-            "에코프로는 1998년 10월 설립된 기업으로 지주 사업을 영위하고 있다.",
-          companyExample2:
-            "주요 종속기업은 (주)에코프로에이치엔, (주)에코프로비엠, (주)에코프로이엠 등이 있다.",
-          companyExample3:
-            "주요 매출은 종속사를 통한 전지 재료 사업 부문에서 발생하고 있다.",
+          companyExample: "에코프로는 1998년 10월 설립된 기업으로 지주 사업을 영위하고 있다.",
+          companyExample2: "주요 종속기업은 (주)에코프로에이치엔, (주)에코프로비엠, (주)에코프로이엠 등이 있다.",
+          companyExample3: "주요 매출은 종속사를 통한 전지 재료 사업 부문에서 발생하고 있다.",
           companyExample4: "",
 
           companyAsset: {
@@ -151,8 +133,7 @@ const PortFolioChart = () => {
         company: {
           companyName: "에코프로비엠",
           companyKospi: "코스닥 247540",
-          companyImageUrl:
-            "https://cdn.bizwatch.co.kr/news/photo/2023/04/24/345e448dbdb6e28b6984f96331304a98.jpg",
+          companyImageUrl: "https://cdn.bizwatch.co.kr/news/photo/2023/04/24/345e448dbdb6e28b6984f96331304a98.jpg",
           companySkill: {
             sk1: "전기차",
             sk2: "2차전지",
@@ -166,13 +147,10 @@ const PortFolioChart = () => {
           companyStock: "97,801,344주",
           compnayIndustrial: "건설/인프라",
           companyIndustDetail: "전기장비",
-          companyExample:
-            "에코프로비엠는 리튬이온 이차전지의 양극소재용 양극활물질을 전문적으로 제조하고 있는 기업이다.",
+          companyExample: "에코프로비엠는 리튬이온 이차전지의 양극소재용 양극활물질을 전문적으로 제조하고 있는 기업이다.",
           companyExample2: "주요 종속기업은 ㈜에코프로이엠이 있다.",
-          companyExample3:
-            "주요 매출은 양극활물질 및 전구체 품목 판매에서 발생하고 있다.",
-          companyExample4:
-            "당사는 소형전지부터 전기자동차용 배터리를 대표하는 중대형전지 시장까지 전체 이차전지 핵심소재 시장을 선도하고 있으며, 니켈 함량 80% 이상인 하이니켈계 NCA 및 NCM 양극재 개발, 양산등 국산화에 성공하였다.",
+          companyExample3: "주요 매출은 양극활물질 및 전구체 품목 판매에서 발생하고 있다.",
+          companyExample4: "당사는 소형전지부터 전기자동차용 배터리를 대표하는 중대형전지 시장까지 전체 이차전지 핵심소재 시장을 선도하고 있으며, 니켈 함량 80% 이상인 하이니켈계 NCA 및 NCM 양극재 개발, 양산등 국산화에 성공하였다.",
           companyAsset: {
             total: "자산총계" + "42,682.14" + "억",
             lentRatio: "39.13" + "%",
@@ -185,8 +163,7 @@ const PortFolioChart = () => {
         company: {
           companyName: "디와이",
           companyKospi: "코스피 013570",
-          companyImageUrl:
-            "https://file.alphasquare.co.kr/media/images/stock_logo/kr/013570.png",
+          companyImageUrl: "https://file.alphasquare.co.kr/media/images/stock_logo/kr/013570.png",
           companySkill: {
             sk1: "수소차",
             sk2: "자율주행",
@@ -200,12 +177,9 @@ const PortFolioChart = () => {
           companyStock: "26,319,633주",
           compnayIndustrial: "건설/인프라",
           companyIndustDetail: "기계",
-          companyExample:
-            "디와이는 1978년 설립된 기업으로 디와이 그룹의 지주회사이다.",
-          companyExample2:
-            "주요 종속기업은 디와이오토, 디와이이노베이트, DY AMERICA INC 등이 있다.",
-          companyExample3:
-            "주요 매출은 크레인 부문에서 발생하고 있으며 골프카 판매, 세차기 판매 등이 뒤를 잇고 있다.",
+          companyExample: "디와이는 1978년 설립된 기업으로 디와이 그룹의 지주회사이다.",
+          companyExample2: "주요 종속기업은 디와이오토, 디와이이노베이트, DY AMERICA INC 등이 있다.",
+          companyExample3: "주요 매출은 크레인 부문에서 발생하고 있으며 골프카 판매, 세차기 판매 등이 뒤를 잇고 있다.",
           companyExample4: "",
           companyAsset: {
             total: "자산총계" + "9,167.66" + "억",
@@ -219,8 +193,7 @@ const PortFolioChart = () => {
         company: {
           companyName: "쿠쿠홀딩스",
           companyKospi: "코스피 192400",
-          companyImageUrl:
-            "https://file.alphasquare.co.kr/media/images/stock_logo/kr/192400.png",
+          companyImageUrl: "https://file.alphasquare.co.kr/media/images/stock_logo/kr/192400.png",
           companySkill: {
             sk1: "지주사",
             sk2: "렌탈",
@@ -234,13 +207,10 @@ const PortFolioChart = () => {
           companyStock: "35,562,185주",
           compnayIndustrial: "생활가전/가구",
           companyIndustDetail: "가정용기기",
-          companyExample:
-            "쿠쿠홀딩스는 1978년 11월 설립된 기업으로 지주사업을 영위하고 있다.",
+          companyExample: "쿠쿠홀딩스는 1978년 11월 설립된 기업으로 지주사업을 영위하고 있다.",
           companyExample2: "주요 종속기업은 쿠쿠전자 주식회사가 있다.",
-          companyExample3:
-            "주요 매출은 종속사를 통한 가전사업 부문에서 발생하고 있다.",
-          companyExample4:
-            "주요 종속회사인 쿠쿠전자(주)는 가전 제품을 생산·판매하며 전기밥솥을 주력으로 IH레인지, 멀티쿠커 등의 조리용 주방가전제품, 가습기, 에어워셔 등의 생활가전제품을 생산·판매하고 있다.",
+          companyExample3: "주요 매출은 종속사를 통한 가전사업 부문에서 발생하고 있다.",
+          companyExample4: "주요 종속회사인 쿠쿠전자(주)는 가전 제품을 생산·판매하며 전기밥솥을 주력으로 IH레인지, 멀티쿠커 등의 조리용 주방가전제품, 가습기, 에어워셔 등의 생활가전제품을 생산·판매하고 있다.",
           companyAsset: {
             total: "자산총계" + "11,629.08" + "억",
             lentRatio: "13.03" + "%",
@@ -268,10 +238,8 @@ const PortFolioChart = () => {
           companyStock: "476,767,137주",
           compnayIndustrial: "금융",
           companyIndustDetail: "은행",
-          companyExample:
-            "카카오뱅크는 2016년에 설립된 기업으로 인터넷 전문은행 사업을 영위하고 있다.",
-          companyExample2:
-            "주요 매출은 이자수익에서 대부분 발생하고 있으며, 수수료, 유가증권 평가 및 처분이익이 뒤를 잇고 있다.",
+          companyExample: "카카오뱅크는 2016년에 설립된 기업으로 인터넷 전문은행 사업을 영위하고 있다.",
+          companyExample2: "주요 매출은 이자수익에서 대부분 발생하고 있으며, 수수료, 유가증권 평가 및 처분이익이 뒤를 잇고 있다.",
           companyExample3:
             "당사는 인터넷전문은행으로서 기본적인 여수신 상품을 포함한 은행업 상품 및 서비스를 제공하는 한편, 모바일 앱 기반의 디지털 플랫폼 사업자로서 금융업 뿐 아니라 비금융업 전반에 걸친 여러 파트너사들과 제휴하여 고객들에게 다각적인 서비스를 제공하고 있다.",
           companyExample4: "",
@@ -287,8 +255,7 @@ const PortFolioChart = () => {
         company: {
           companyName: "한세엠케이",
           companyKospi: "코스피 069640",
-          companyImageUrl:
-            "https://file.alphasquare.co.kr/media/images/stock_logo/kr/069640.png",
+          companyImageUrl: "https://file.alphasquare.co.kr/media/images/stock_logo/kr/069640.png",
           companySkill: {
             sk1: "최재형",
             sk2: "패션/의류",
@@ -302,12 +269,9 @@ const PortFolioChart = () => {
           companyStock: "30,106,502주",
           compnayIndustrial: "생활용품/잡화",
           companyIndustDetail: "의류/패션잡화",
-          companyExample:
-            "주요 종속기업은 의류판매업을 영위하고 있는 중국 기업 상해상무유한공사가 있다.",
-          companyExample2:
-            "주요 매출은 백화점에서의 제품, 자회사, 지점의 제품 판매에서 발생하고 있다.",
-          companyExample3:
-            "당사는 캐주얼, 여성복, 남성복, 유아동복, 스포츠, 골프 등 복종별로 구분되는 전체 의류패션시장 중에서 시장 성장률이 높고 상대적으로 경기변동에 민감하지 않은 캐주얼시장과 골프웨어를 주요 목표시장으로 하고 있다.",
+          companyExample: "주요 종속기업은 의류판매업을 영위하고 있는 중국 기업 상해상무유한공사가 있다.",
+          companyExample2: "주요 매출은 백화점에서의 제품, 자회사, 지점의 제품 판매에서 발생하고 있다.",
+          companyExample3: "당사는 캐주얼, 여성복, 남성복, 유아동복, 스포츠, 골프 등 복종별로 구분되는 전체 의류패션시장 중에서 시장 성장률이 높고 상대적으로 경기변동에 민감하지 않은 캐주얼시장과 골프웨어를 주요 목표시장으로 하고 있다.",
           companyExample4: "",
           companyAsset: {
             total: "자산총계" + "2,655.05" + "억",
@@ -321,8 +285,7 @@ const PortFolioChart = () => {
         company: {
           companyName: "KG케미",
           companyKospi: "코스피 001390",
-          companyImageUrl:
-            "https://file.alphasquare.co.kr/media/images/stock_logo/kr/001390.png",
+          companyImageUrl: "https://file.alphasquare.co.kr/media/images/stock_logo/kr/001390.png",
           companySkill: {
             sk1: "2차전지",
             sk2: "2차전지-소재부품",
@@ -336,14 +299,10 @@ const PortFolioChart = () => {
           companyStock: "68,469,040주",
           compnayIndustrial: "소재",
           companyIndustDetail: "화학",
-          companyExample:
-            "KG케미칼은 1954년 설립된 기업으로 화학, 에너지, 기타 유기화학물질 제조업을 영위하고 있다.",
-          companyExample2:
-            "주요 종속기업은 이데일리, KG동부제철, KG스틸, KG에듀원 등이 있다.",
-          companyExample3:
-            "주요 매출은 철강 사업 부문에서 발생하고 있으며, 전자결제, 프랜차이즈 수익 등이 뒤를 잇고 있다.",
-          companyExample4:
-            "화학, 에너지, 전자결제, 미디어, 금융, 요식업, 교육사업, 기타 등 다양한 산업 분야에서 경영활동을 지속하고 있으며, 종속기업간 시너지 효과를 극대화 하고 있다.",
+          companyExample: "KG케미칼은 1954년 설립된 기업으로 화학, 에너지, 기타 유기화학물질 제조업을 영위하고 있다.",
+          companyExample2: "주요 종속기업은 이데일리, KG동부제철, KG스틸, KG에듀원 등이 있다.",
+          companyExample3: "주요 매출은 철강 사업 부문에서 발생하고 있으며, 전자결제, 프랜차이즈 수익 등이 뒤를 잇고 있다.",
+          companyExample4: "화학, 에너지, 전자결제, 미디어, 금융, 요식업, 교육사업, 기타 등 다양한 산업 분야에서 경영활동을 지속하고 있으며, 종속기업간 시너지 효과를 극대화 하고 있다.",
           companyAsset: {
             total: "자산총계" + "73,639.35" + "억",
             lentRatio: "53.29" + "%",
@@ -356,8 +315,7 @@ const PortFolioChart = () => {
         company: {
           companyName: "LG화학",
           companyKospi: "코스피 051910",
-          companyImageUrl:
-            "https://file.alphasquare.co.kr/media/images/stock_logo/kr/051910.png",
+          companyImageUrl: "https://file.alphasquare.co.kr/media/images/stock_logo/kr/051910.png",
           companySkill: {
             sk1: "전기차",
             sk2: "2차전지",
@@ -371,13 +329,10 @@ const PortFolioChart = () => {
           companyStock: "70,592,343주",
           compnayIndustrial: "소재",
           companyIndustDetail: "화학",
-          companyExample:
-            "LG화학은 2001년 4월 설립된 기업으로 석유화학사업, 첨단소재사업, 에너지솔루션사업, 생명과학사업 등을 영위하고 있다.",
-          companyExample2:
-            "주요 종속기업은 주식회사 에너지솔루션, ㈜팜한농 등이 있으며 이외에도 다수의 국내외 종속사를 보유하고 있다.",
+          companyExample: "LG화학은 2001년 4월 설립된 기업으로 석유화학사업, 첨단소재사업, 에너지솔루션사업, 생명과학사업 등을 영위하고 있다.",
+          companyExample2: "주요 종속기업은 주식회사 에너지솔루션, ㈜팜한농 등이 있으며 이외에도 다수의 국내외 종속사를 보유하고 있다.",
           companyExample3: "주요 매출은 석유화학 사업 부문에서 발생하고 있다.",
-          companyExample4:
-            "지속적인 고부가 제품 비중 확대를 통해 차별화된 제품 경쟁력을 강화하고, 친환경 소재 사업으로서 재생 플라스틱인 PCR 제품 및 바이오 기반 제품의 매출 확대뿐만 아니라 생분해성 플라스틱인 PBAT, PLA 사업화를 추진하고 있다.",
+          companyExample4: "지속적인 고부가 제품 비중 확대를 통해 차별화된 제품 경쟁력을 강화하고, 친환경 소재 사업으로서 재생 플라스틱인 PCR 제품 및 바이오 기반 제품의 매출 확대뿐만 아니라 생분해성 플라스틱인 PBAT, PLA 사업화를 추진하고 있다.",
           companyAsset: {
             total: "자산총계" + "725,010" + "억",
             lentRatio: "45.37" + "%",
@@ -390,8 +345,7 @@ const PortFolioChart = () => {
         company: {
           companyName: "현대차",
           companyKospi: "코스피 005380",
-          companyImageUrl:
-            "https://file.alphasquare.co.kr/media/images/stock_logo/kr/005380.png",
+          companyImageUrl: "https://file.alphasquare.co.kr/media/images/stock_logo/kr/005380.png",
           companySkill: {
             sk1: "수소차",
             sk2: "자율주행",
@@ -405,14 +359,10 @@ const PortFolioChart = () => {
           companyStock: "211,531,506주",
           compnayIndustrial: "자동차",
           companyIndustDetail: "자동차",
-          companyExample:
-            "현대차는 1967년 설립된 기업으로 완성차 판매업을 영위하고 있다.",
-          companyExample2:
-            "주요 종속기업은 전북현대모터스에프씨, 현대케피코, 현대캐피탈, 현대카드 등이 있다.",
-          companyExample3:
-            "주요 매출은 완성차 판매에서 발생하고 있으며 금융 부문이 뒤를 잇고 있다.",
-          companyExample4:
-            "스마트 모빌리티 솔루션 기업으로의 성공적인 전환을 위하여 모빌리티서비스사업 기반 구축, 수소 생태계 이니셔티브 확보 등 전략 방향을 수립하여 추진하고 있다.",
+          companyExample: "현대차는 1967년 설립된 기업으로 완성차 판매업을 영위하고 있다.",
+          companyExample2: "주요 종속기업은 전북현대모터스에프씨, 현대케피코, 현대캐피탈, 현대카드 등이 있다.",
+          companyExample3: "주요 매출은 완성차 판매에서 발생하고 있으며 금융 부문이 뒤를 잇고 있다.",
+          companyExample4: "스마트 모빌리티 솔루션 기업으로의 성공적인 전환을 위하여 모빌리티서비스사업 기반 구축, 수소 생태계 이니셔티브 확보 등 전략 방향을 수립하여 추진하고 있다.",
           companyAsset: {
             total: "자산총계" + "4,480,005.60" + "억",
             lentRatio: "19.87" + "%",
@@ -425,8 +375,7 @@ const PortFolioChart = () => {
         company: {
           companyName: "LG전자",
           companyKospi: "코스피 107400",
-          companyImageUrl:
-            "https://file.alphasquare.co.kr/media/images/stock_logo/kr/005380.png",
+          companyImageUrl: "https://file.alphasquare.co.kr/media/images/stock_logo/kr/005380.png",
           companySkill: {
             sk1: "스마트홈",
             sk2: "차세대이동통신",
@@ -440,12 +389,9 @@ const PortFolioChart = () => {
           companyStock: "163,647,814주",
           compnayIndustrial: "생활가전/가구",
           companyIndustDetail: "전자제품",
-          companyExample:
-            "LG전자는 LG전자㈜의 전자 및 정보통신 사업부문을 인적분할하여 설립된 기업이다.",
-          companyExample2:
-            "주요 종속기업은 엘지이노텍㈜, ㈜하이프라자, 엘지마그나 이파워트레인㈜가 있다.",
-          companyExample3:
-            "주요 매출은 HA사업부, HE사업부, 이노텍, BS사업부 등의 제품 및 상품 판매에서 발생하고 있다.",
+          companyExample: "LG전자는 LG전자㈜의 전자 및 정보통신 사업부문을 인적분할하여 설립된 기업이다.",
+          companyExample2: "주요 종속기업은 엘지이노텍㈜, ㈜하이프라자, 엘지마그나 이파워트레인㈜가 있다.",
+          companyExample3: "주요 매출은 HA사업부, HE사업부, 이노텍, BS사업부 등의 제품 및 상품 판매에서 발생하고 있다.",
           companyExample4: "",
           companyAsset: {
             total: "자산총계" + "581,604.46" + "억",
@@ -459,8 +405,7 @@ const PortFolioChart = () => {
         company: {
           companyName: "기아",
           companyKospi: "코스피 000270",
-          companyImageUrl:
-            "https://file.alphasquare.co.kr/media/images/stock_logo/kr/000270.png",
+          companyImageUrl: "https://file.alphasquare.co.kr/media/images/stock_logo/kr/000270.png",
           companySkill: {
             sk1: "방위산업",
             sk2: "수소차",
@@ -474,12 +419,9 @@ const PortFolioChart = () => {
           companyStock: "402,044,203주",
           compnayIndustrial: "자동차",
           companyIndustDetail: "자동차",
-          companyExample:
-            "기아는 1944년 설립한 완성차 생산 업체로 1999년 현대자동차에 인수되었다.",
-          companyExample2:
-            "국내는 물론 독일, 미국, 캐나다, 영국 등 해외에도 완성차 및 부품 생산공장을 보유하고 있다.",
-          companyExample3:
-            "전체 판매 비중에서 40%는 국내, 60%는 해외에서 판매되고 있으며, 매출액 제고를 위해 SUV, 승합차, 전기차 모델 등의 신차를 출시하고 있다.",
+          companyExample: "기아는 1944년 설립한 완성차 생산 업체로 1999년 현대자동차에 인수되었다.",
+          companyExample2: "국내는 물론 독일, 미국, 캐나다, 영국 등 해외에도 완성차 및 부품 생산공장을 보유하고 있다.",
+          companyExample3: "전체 판매 비중에서 40%는 국내, 60%는 해외에서 판매되고 있으며, 매출액 제고를 위해 SUV, 승합차, 전기차 모델 등의 신차를 출시하고 있다.",
           companyExample4: "",
           companyAsset: {
             total: "자산총계" + "783,970.10" + "억",
@@ -498,15 +440,12 @@ const PortFolioChart = () => {
   //}
   type MatchingCompany = CompanyInfo | undefined;
 
-  const matchingCompany: MatchingCompany = InfoDatas.companyInfo.find(
-    (el: CompanyInfo) => el.companysId === companyId
-  );
+  const matchingCompany: MatchingCompany = InfoDatas.companyInfo.find((el: CompanyInfo) => el.companysId === companyId);
   let a: string = "";
   let b: string = "";
   if (matchingCompany) {
     a = matchingCompany.company.companyAsset.assetRatio;
     b = matchingCompany.company.companyAsset.lentRatio;
-    console.log(a);
   }
 
   return (

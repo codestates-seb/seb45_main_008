@@ -11,8 +11,8 @@ const ExpandScreenBtn = (props: OwnProps) => {
   const leftExpandState = expandState.left;
   const rightExpandState = expandState.right;
 
-  const expandLeft: string = leftExpandState ? "축소" : "확장";
-  const expandRight: string = rightExpandState ? "축소" : "확장";
+  const expandLeft: string = leftExpandState ? ">" : "<";
+  const expandRight: string = rightExpandState ? "<" : ">";
 
   const dispatch = useDispatch();
   const [leftBtnHover, setLetfBtnHover] = useState(false);
@@ -64,7 +64,7 @@ export default ExpandScreenBtn;
 // type 정의
 interface OwnProps {
   direction: string;
-  buttonHover: boolean;
+  buttonHover?: boolean; //build error 해결을 위해 ?를 붙였습니다
 }
 
 // component 생성
@@ -86,7 +86,7 @@ const Button = styled.div<OwnProps>`
   }
 
   .text {
-    font-size: ${(props) => (props.buttonHover ? "15px" : "1px")};
+    font-size: ${(props) => (props.buttonHover ? "30px" : "1px")};
     color: ${(props) => (props.buttonHover ? "black" : "#dce9fc")};
     transition: color 1s ease, font-size 1s ease;
   }

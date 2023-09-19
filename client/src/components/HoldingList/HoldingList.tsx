@@ -5,6 +5,9 @@ import StockItem from "./StockItem";
 import useGetStockHolds from "../../hooks/useGetStockholds";
 import { StockItemProps } from "./StockItem";
 import useCompanyData from "../../hooks/useCompanyData";
+import LoginRequestIndicator from "./LoginRequestIndicator";
+import { RootState } from "../../store/config";
+import { useSelector } from "react-redux";
 
 // 🔴
 const evalutationProfitText = "평가 수익금";
@@ -20,9 +23,19 @@ const HoldingList: React.FC<WatchListProps> = ({ currentListType, onChangeListTy
   // 모든 stockReturn의 합을 계산합니다.
   let totalEvaluationProfit = 0;
 
-  if (stockHolds) {
+  if (Array.isArray(stockHolds) && stockHolds.length > 0) {
     totalEvaluationProfit = stockHolds.reduce((sum: number, stockHold: StockItemProps["stockData"]) => sum + stockHold.stockReturn, 0);
   }
+
+  // if (stockHolds) {
+  //   totalEvaluationProfit = stockHolds.reduce((sum: number, stockHold: StockItemProps["stockData"]) => sum + stockHold.stockReturn, 0);
+  // }
+  const isLogin = useSelector((state: RootState) => state.login); // 로그인 상태 가져오기
+
+  // OAuth 모달을 열기 위한 함수
+  const openOAuthModal = () => {
+    // OAuth 로그인 모달을 열기 위한 로직
+  };
 
   return (
     <WatchListContainer>
@@ -40,11 +53,15 @@ const HoldingList: React.FC<WatchListProps> = ({ currentListType, onChangeListTy
       </Header2Container>
       {/* <Divider /> */}
       <StockList>
-        {isLoading || isCompanyDataLoading ? (
-          <div>Loading...</div>
+        {isLogin === 0 ? (
+          <LoginRequestIndicator openOAuthModal={openOAuthModal} />
+        ) : isLoading || isCompanyDataLoading ? (
+          <div></div>
         ) : isError || isCompanyDataError ? (
           <div>Error fetching data</div>
         ) : (
+          Array.isArray(stockHolds) &&
+          stockHolds.length > 0 && // 여기에 조건을 추가합니다
           stockHolds.map((stockHold: StockItemProps["stockData"]) => {
             const matchedCompany = companyData ? companyData.find((company) => company.companyId === stockHold.companyId) : undefined;
 
@@ -61,6 +78,7 @@ export default HoldingList;
 type WatchListProps = {
   currentListType: "전체종목" | "관심종목" | "보유종목";
   onChangeListType: (type: "전체종목" | "관심종목" | "보유종목") => void;
+  openOAuthModal: () => void;
 };
 
 const WatchListContainer = styled.div`

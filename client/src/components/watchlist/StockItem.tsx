@@ -22,7 +22,7 @@ import LGchem from '../../asset/logos/LG화학.svg';
 import posco from '../../asset/logos/POSCO홀딩스.svg';
 
 
-const StockItem: React.FC<StockItemProps> = ({ company }) => {
+const StockItem: React.FC<StockItemProps> = ({ company, onDelete  }) => {
   const [showChangePrice, setShowChangePrice] = useState(false);  
   const isPositiveChange = parseFloat(company.stockChangeRate) > 0;
   // 🔴 색깔 통일 (그냥 깔끔하게)
@@ -37,12 +37,12 @@ const StockItem: React.FC<StockItemProps> = ({ company }) => {
   const handleDelete = () => {
     deleteMutation.mutate(company.companyId, {
       onSuccess: () => {
-        // 성공적으로 삭제되면 컴포넌트를 리렌더링 (상위 컴포넌트에서 상태 변경을 통해 구현해야 할 수도 있음)
-        // 여기서는 간단하게 window.location.reload()를 사용하겠습니다.
-        window.location.reload();
+        console.log("Delete successful!");  // 여기가 출력되는지 확인
+        onDelete(company.companyId);  // 콜백 함수 호출
       }
     });
   };
+
 
   const dispatch = useDispatch();
 
@@ -112,6 +112,7 @@ type NewCompanyData = {
 
 type StockItemProps = {
   company: NewCompanyData;
+  onDelete: (deletedCompanyId: number) => void;
 };
 
 const StockItemWrapper = styled.div`
