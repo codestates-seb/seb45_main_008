@@ -36,6 +36,7 @@ const Comments = ({ boardId }: { boardId: number }) => {
     if (commentsValue) {
       const newCommentData = {
         content: commentsValue,
+        commentId: 0,
         member: "test3", // 변경 가능
         createdAt: new Date().toISOString(),
         modifiedAt: new Date().toISOString(),
@@ -63,32 +64,32 @@ const Comments = ({ boardId }: { boardId: number }) => {
     }
   };
 
-  // const handleDeleteComment = async () => {
-  //   try {
-  //     const response = await axios.delete(
-  //       `http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}/comments`,
-  //       {
-  //         headers: {
-  //           Authorization: accessToken,
-  //         },
-  //       }
-  //     );
-  //     if (response.status === 200) {
-  //       // 삭제 성공 처리
-  //       alert("댓글이 삭제되었습니다");
-  //
-  //       const updatedCommentData = commentData.filter(
-  //         (el: CommentContent) => el.id !== commentId
-  //       );
-  //       setCommentData(updatedCommentData);
-  //     } else {
-  //       alert("댓글 삭제 실패");
-  //     }
-  //   } catch (error) {
-  //     console.error("댓글 삭제 중 오류 발생:", error);
-  //     alert("댓글 삭제 실패");
-  //   }
-  // };
+  const handleDeleteComment = async () => {
+    try {
+      const response = await axios.delete(
+        `http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}/comments`,
+        {
+          headers: {
+            Authorization: accessToken,
+          },
+        }
+      );
+      if (response.status === 200) {
+        // 삭제 성공 처리
+        alert("댓글이 삭제되었습니다");
+
+        const updatedCommentData = commentData.filter(
+          (el: CommentContent) => el.id !== el.commentId
+        );
+        setCommentData(updatedCommentData);
+      } else {
+        alert("댓글 삭제 실패");
+      }
+    } catch (error) {
+      console.error("댓글 삭제 중 오류 발생:", error);
+      alert("댓글 삭제 실패");
+    }
+  };
 
   const [visibleComments, setVisibleComments] = useState(1);
   const [close, setClose] = useState(true);
@@ -97,10 +98,11 @@ const Comments = ({ boardId }: { boardId: number }) => {
     setVisibleComments(close ? 1 : commentData.length);
   };
   const getTimeAgoString = (createdAt: string): string => {
-    const currentTime = new Date();
-    const createdAtTime = new Date(createdAt);
+    const currentTime: Date = new Date();
+    const createdAtTime: Date = new Date(createdAt);
 
-    const timeDifferenceInMilliseconds = currentTime - createdAtTime;
+    const timeDifferenceInMilliseconds: number =
+      currentTime.getTime() - createdAtTime.getTime();
     const timeDifferenceInSeconds = Math.floor(
       timeDifferenceInMilliseconds / 1000
     );
@@ -140,9 +142,9 @@ const Comments = ({ boardId }: { boardId: number }) => {
               <CommentDate>{getTimeAgoString(el.createdAt)}</CommentDate>
             </div>
             <CommentTextDiv>{el.content}</CommentTextDiv>
-            {/* <CommentDeleteButton onClick={() => handleDeleteComment(el.id)}>
+            <CommentDeleteButton onClick={() => handleDeleteComment(el.id)}>
               삭제
-            </CommentDeleteButton> */}
+            </CommentDeleteButton>
           </CommentsDiv>
         ))}
       </div>
@@ -159,6 +161,7 @@ interface CommentContent {
   createdAt: string;
   currentTime: number;
   createdAtTime: number;
+  commentId: number;
 }
 const CommentText = {
   write: "작성",

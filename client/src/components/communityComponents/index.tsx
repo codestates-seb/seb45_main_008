@@ -24,20 +24,20 @@ const TimeLineComponent = () => {
     }
   };
   // 작성 시각을 원하는 형식으로 변환하는 유틸리티 함수
-  const formatDate = (isoString: string): string => {
-    const date = new Date(isoString);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
+  // const formatDate = (isoString: string): string => {
+  //   const date = new Date(isoString);
+  //   const year = date.getFullYear();
+  //   const month = date.getMonth() + 1;
+  //   const day = date.getDate();
+  //   const hours = date.getHours();
+  //   const minutes = date.getMinutes();
 
-    const formattedHours = hours > 12 ? hours - 12 : hours;
-    const ampm = hours >= 12 ? "오후" : "오전";
-    const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
+  //   const formattedHours = hours > 12 ? hours - 12 : hours;
+  //   const ampm = hours >= 12 ? "오후" : "오전";
+  //   const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
 
-    return `${year}년 ${month}월 ${day}일 ${ampm} ${formattedHours}:${formattedMinutes}`;
-  };
+  //   return `${year}년 ${month}월 ${day}일 ${ampm} ${formattedHours}:${formattedMinutes}`;
+  // };
 
   //드롭다운 버튼 텍스트 작성창 열기
   const [openDropDown, setOpenDropDown] = useState(false);

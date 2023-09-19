@@ -12,6 +12,17 @@ const MemberInfoModal: React.FC<MemberInfoModalProps> = ({ onClose }) => {
   const emailText = "이메일: ";
   const createdAtText = "회원 가입 일시: ";
 
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0'); // 월은 0부터 시작하므로 1을 더해줍니다.
+    const day = String(date.getDate()).padStart(2, '0');
+    const hours = String(date.getHours()).padStart(2, '0');
+    const minutes = String(date.getMinutes()).padStart(2, '0');
+
+    return `${year}-${month}-${day} ${hours}:${minutes}`;
+}
+
   return (
       <ModalBackground>
           <ModalContainer>
@@ -21,7 +32,7 @@ const MemberInfoModal: React.FC<MemberInfoModalProps> = ({ onClose }) => {
                   <div>
                       <Content>{nameText}{memberInfo.name}</Content>
                       <Content>{emailText}{memberInfo.email}</Content>
-                      <Content>{createdAtText}{memberInfo.createdAt}</Content>
+                      <Content>{createdAtText}{formatDate(memberInfo.createdAt)}</Content>
                   </div>
               ) : (
                   <Content>Data not available</Content>
@@ -31,12 +42,12 @@ const MemberInfoModal: React.FC<MemberInfoModalProps> = ({ onClose }) => {
   );
 };
 
+export default MemberInfoModal;
+
+
 interface MemberInfoModalProps {
     onClose: () => void;
 }
-
-
-
 // Styled Components Definitions:
 
 const ModalBackground = styled.div`
@@ -89,4 +100,3 @@ const Content = styled.p`
     text-align: center;  // 텍스트 중앙 정렬
 `;
 
-export default MemberInfoModal;

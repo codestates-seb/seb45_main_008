@@ -29,11 +29,7 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin }) =
 
   const handleLoginClick = async () => {
     try {
-      const response = await axios.post(
-        "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members/login", 
-        { email, password },
-        { validateStatus: (status) => status >= 200 && status < 600 }
-      );
+      const response = await axios.post("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members/login", { email, password }, { validateStatus: (status) => status >= 200 && status < 600 });
 
       if (response.status === 200) {
         const accessToken = response.headers["authorization"];
@@ -91,6 +87,7 @@ const ModalBackground = styled.div`
   justify-content: center;
   align-items: center;
   position: fixed;
+  z-index: 150;
   top: 0;
   left: 0;
   width: 100%;
@@ -99,7 +96,7 @@ const ModalBackground = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  z-index:4000;
+  z-index: 100;
   position: relative;
   background-color: white;
   padding: 20px;
@@ -158,10 +155,10 @@ const LoginButton = styled.button`
   border: none;
   border-radius: 5px;
   cursor: pointer;
-  
+
   //호버 시 밝게
   &:hover {
-    background-color: rgba(47, 79, 79, 0.8); 
+    background-color: rgba(47, 79, 79, 0.8);
   }
 `;
 

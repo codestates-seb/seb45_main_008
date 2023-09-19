@@ -1,26 +1,26 @@
-import React from 'react';
-import styled from 'styled-components';
-import StockHolmLogo from '../../asset/images/StockHolmLogo.png';
+import React from "react";
+import styled from "styled-components";
+import StockHolmLogo from "../../asset/images/StockHolmLogo.png";
 
 const LoginConfirmationModal: React.FC<LoginConfirmationProps> = ({ onClose }) => {
-    const messageText = "로그인이 성공적으로 완료되었습니다!";
-    const confirmText = "확인"
+  const messageText = "로그인이 성공적으로 완료되었습니다!";
+  const confirmText = "확인";
 
-    return (
-      <ModalBackground>
-        <ModalContainer>
-          <Message>{messageText}</Message>
-          <Logo src={StockHolmLogo} alt="StockHolm Logo" />
-          <ConfirmButton onClick={onClose}>{confirmText}</ConfirmButton>
-        </ModalContainer>
-      </ModalBackground>
-    );
+  return (
+    <ModalBackground>
+      <ModalContainer>
+        <Message>{messageText}</Message>
+        <Logo src={StockHolmLogo} alt="StockHolm Logo" />
+        <ConfirmButton onClick={onClose}>{confirmText}</ConfirmButton>
+      </ModalContainer>
+    </ModalBackground>
+  );
 };
 
 export default LoginConfirmationModal;
 
 interface LoginConfirmationProps {
-    onClose: () => void;
+  onClose: () => void;
 }
 
 // ... Styled Components for ModalBackground, ModalContainer, Message, ConfirmButton ...
@@ -29,6 +29,7 @@ const ModalBackground = styled.div`
   justify-content: center;
   align-items: center;
   position: fixed;
+  z-index: 100;
   top: 0;
   left: 0;
   width: 100%;
@@ -37,7 +38,7 @@ const ModalBackground = styled.div`
 `;
 
 const ModalContainer = styled.div`
-  z-index:4000;
+  z-index: 100;
   position: relative;
   background-color: white;
   padding: 20px;
@@ -74,6 +75,6 @@ const ConfirmButton = styled.button`
 
   //호버 시 밝게
   &:hover {
-    background-color: rgba(47, 79, 79, 0.8); 
+    background-color: rgba(47, 79, 79, 0.8);
   }
 `;
