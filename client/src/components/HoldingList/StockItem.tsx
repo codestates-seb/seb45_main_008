@@ -11,20 +11,20 @@ import usePostStar from "../../hooks/stars/usePoststars";
 import useDeleteStar from "../../hooks/stars/useDeletestars";
 import useGetStar from "../../hooks/stars/useGetstars";
 
-import kia from '../../asset/logos/기아.svg';
-import dy from '../../asset/logos/디와이.jpeg';
-import logosamsung from '../../asset/logos/삼성전자.svg';
-import celltrion from '../../asset/logos/셀트리온.svg';
-import ecopro from '../../asset/logos/에코프로.jpeg';
-import ecoproBM from '../../asset/logos/에코프로비엠.svg';
-import kakaoBank from '../../asset/logos/카카오뱅크.svg';
-import kuckoo from '../../asset/logos/쿠쿠홀딩스.jpeg';
-import hanse from '../../asset/logos/한세엠케이.jpeg';
-import hyundai from '../../asset/logos/현대차.svg';
-import KG from '../../asset/logos/KG케미칼.png';
-import LGelec from '../../asset/logos/LG전자.svg';
-import LGchem from '../../asset/logos/LG화학.svg';
-import posco from '../../asset/logos/POSCO홀딩스.svg';
+import kia from "../../asset/logos/기아.svg";
+import dy from "../../asset/logos/디와이.jpeg";
+import logosamsung from "../../asset/logos/삼성전자.svg";
+import celltrion from "../../asset/logos/셀트리온.svg";
+import ecopro from "../../asset/logos/에코프로.jpeg";
+import ecoproBM from "../../asset/logos/에코프로비엠.svg";
+import kakaoBank from "../../asset/logos/카카오뱅크.svg";
+import kuckoo from "../../asset/logos/쿠쿠홀딩스.jpeg";
+import hanse from "../../asset/logos/한세엠케이.jpeg";
+import hyundai from "../../asset/logos/현대차.svg";
+import KG from "../../asset/logos/KG케미칼.png";
+import LGelec from "../../asset/logos/LG전자.svg";
+import LGchem from "../../asset/logos/LG화학.svg";
+import posco from "../../asset/logos/POSCO홀딩스.svg";
 
 export type StockItemProps = {
   stockData: {
@@ -62,6 +62,7 @@ const StockItem: React.FC<StockItemProps> = ({ companyData, stockData }) => {
 
   // Format percentage to two decimal places
   const formattedPercentage = parseFloat(percentage.toFixed(2));
+
 
     // 이미 import된 로고들을 바탕으로 logos 객체 생성
   const logos: { [key: string]: string } = {
@@ -113,8 +114,9 @@ const StockItem: React.FC<StockItemProps> = ({ companyData, stockData }) => {
     setIsFavorited(!isFavorited);
   };
 
+
   return (
-    <>
+    <EntireContainer>
       <ItemContainer
         onClick={handleItemClick}
         onMouseEnter={() => {
@@ -148,24 +150,29 @@ const StockItem: React.FC<StockItemProps> = ({ companyData, stockData }) => {
           <DetailTitle>보유</DetailTitle>
         </DetailSection01>
         <DetailSection02>
-          <ColoredDetailData priceChangeAmount={priceChangeAmount}>
-            {stockReturn.toLocaleString()} 원
-          </ColoredDetailData>
+          <ColoredDetailData priceChangeAmount={priceChangeAmount}>{stockReturn.toLocaleString()} 원</ColoredDetailData>
           <DetailData>{totalPrice.toLocaleString()} 원</DetailData>
         </DetailSection02>
         <DetailSection03>
-          <ColoredDetailData priceChangeAmount={priceChangeAmount}>
-            {formattedPercentage}%
-          </ColoredDetailData>
+          <ColoredDetailData priceChangeAmount={priceChangeAmount}>{formattedPercentage}%</ColoredDetailData>
           <DetailTitle>{totalStocksHeld}주</DetailTitle>
         </DetailSection03>
       </StockDetails>
       {/* <ThickDivider /> */}
-    </>
+    </EntireContainer>
   );
 };
 
 export default StockItem;
+
+const EntireContainer = styled.div`
+  &:hover {
+    background-color: #d9e6ff;
+    transition: background-color 0.5s ease;
+
+    cursor: pointer;
+  }
+`;
 
 const ItemContainer = styled.div`
   display: flex;
@@ -321,5 +328,5 @@ const DetailData = styled.span`
 
 const ColoredDetailData = styled.span<{ priceChangeAmount: number }>`
   color: ${(props) => (props.priceChangeAmount > 0 ? "#e22926" : "#2679ed")};
-  font-size: 14px; 
+  font-size: 14px;
 `;

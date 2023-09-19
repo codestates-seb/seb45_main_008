@@ -56,4 +56,10 @@ const Button = styled.div<OwnProps>`
 
   padding-top: 2px;
   border-radius: 0.2rem;
+  cursor: pointer;
+
+  &:hover {
+    background-color: ${(props) => (props.type === "buying" ? "#f7c2bd" : "#b1cdf7")};
+    transition: background-color 0.5s ease;
+  }
 `;

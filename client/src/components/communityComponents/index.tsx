@@ -235,8 +235,6 @@ const DropdownInput = styled.input`
   }
 `;
 
-//글작성을위해 클릭시 드롭다운 열어주는 버튼
-
 const Button = styled.button`
   background-color: white;
   color: darkslategray;
@@ -259,8 +257,6 @@ const Button = styled.button`
     width: 100%;
   }
 `;
-
-//버튼 과 글영역 구분
 
 const DevideLine = styled.div`
   margin-bottom: 10px;

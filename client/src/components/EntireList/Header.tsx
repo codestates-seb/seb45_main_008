@@ -106,7 +106,7 @@ const MenuItem = styled.button`
   }
 `;
 const MenuItem1 = styled(MenuItem)`
-  border-left: 4px solid darkslategray;
+  border-left: 4px solid #4479c2;
 `;
 
 export default Header;
