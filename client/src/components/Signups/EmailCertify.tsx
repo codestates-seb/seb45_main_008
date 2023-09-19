@@ -22,6 +22,13 @@ const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({ onClose
   const [showAgreementError, setShowAgreementError] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
 
+  // 엔터키를 눌렀을 때의 핸들러
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleNextStepClick();
+    }
+  };
+
   //이메일 입력
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
@@ -83,9 +90,9 @@ const EmailVerificationModal: React.FC<EmailVerificationModalProps> = ({ onClose
         <CloseButton onClick={onClose}>&times;</CloseButton>
         <Title>{strings.titleText}</Title>
         <Label>{strings.emailLabelText}</Label>
-        <Input type="email" value={email} onChange={handleEmailChange} />
+        <Input type="email" value={email} onChange={handleEmailChange} onKeyDown={handleKeyPress}/>
         <Label>{strings.codeLabelText}</Label>
-        <Input type="text" placeholder={strings.codeHintText} value={verificationCode} onChange={handleVerificationCodeChange} />
+        <Input type="text" placeholder={strings.codeHintText} value={verificationCode} onChange={handleVerificationCodeChange} onKeyDown={handleKeyPress}/>
         <HintText>{strings.codeHintText}</HintText>
         <TermsCheckbox>
           <input type="checkbox" id="terms" onChange={handleAgreementChange} />

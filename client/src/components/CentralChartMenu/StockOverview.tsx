@@ -169,7 +169,7 @@ const TransactionVolume = styled.div`
   white-space: nowrap;
   min-width: min-content;
   font-size: 14px;
-  color: #2f4f4f;
+  color: #4e4d4d;
 
   & span {
     color: #999999;

@@ -7,9 +7,16 @@ const STRINGS = {
   CASH_GUIDE: "프로필 버튼 - 현금 탭을 으로 이동하면 현금을 충전할 수 있습니다.",
 };
 
+
 const GuideModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
+    if (event.key === 'Enter') {
+      onClose();
+    }
+  };
+  
   return (
-    <ModalBackground>
+    <ModalBackground onKeyDown={handleKeyDown} tabIndex={0}>
       <ModalContainer>
         <CloseButton onClick={onClose}>&times;</CloseButton>
         <Title>{STRINGS.GUIDE_TITLE}</Title>

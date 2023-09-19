@@ -1,6 +1,6 @@
 // client/src/components/Signups/Password.tsx
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
 import { setMemberInfo } from "../../reducer/member/memberInfoSlice";
@@ -9,9 +9,9 @@ const strings = {
   titleText: "비밀번호 설정",
   passwordLabelText: "비밀번호",
   confirmPasswordLabelText: "비밀번호 확인",
-  nicknameLabelText: "닉네임",
+  nicknameLabelText: "이름",
   confirmButtonText: "확인",
-  passwordError: "비밀번호는 8~16자, 대문자, 소문자, 숫자, 특수문자를 포함해야 합니다.",
+  passwordError: "비밀번호는 8~16자, 문자, 숫자, 특수문자를 포함해야 합니다.",
   passwordMismatch: "비밀번호와 비밀번호 확인이 일치하지 않습니다.",
 };
 
@@ -21,8 +21,14 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
   const [name, setName] = useState("");
   const [passwordError, setPasswordError] = useState("");
   const [confirmPasswordError, setConfirmPasswordError] = useState("");
+  // 요청 중인지 확인하는 상태 변수 추가
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const dispatch = useDispatch();
 
+    // 각 입력 필드에 대한 ref를 생성합니다.
+    const passwordRef = useRef<HTMLInputElement>(null);
+    const confirmPasswordRef = useRef<HTMLInputElement>(null);
+    const nameRef = useRef<HTMLInputElement>(null);
   //비밀번호 입력창
   const handlePasswordChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setPassword(e.target.value);
@@ -40,14 +46,34 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
 
   //비밀번호 유효성 검사
   const isValidPassword = (password: string) => {
-    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,16}$/;
+    const passwordRegex = /^(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,16}$/;
     return passwordRegex.test(password);
   };
 
   // 일반적인 오류 메시지 상태 추가
   const [generalError, setGeneralError] = useState("");
 
+  const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>, target?: "confirmPassword" | "name" | "confirmButton") => {
+
+
+    if (event.key === 'Enter') {
+      if (target === "confirmPassword") {
+        confirmPasswordRef.current?.focus();
+      } else if (target === "name") {
+        nameRef.current?.focus();
+      } else if (target === "confirmButton") {
+        handleConfirmClick();
+      }
+    }
+  };
+
   const handleConfirmClick = async () => {
+
+    if (isSubmitting) {
+      // 이미 요청 중이라면 추가 요청을 방지
+      return;
+    }
+    setIsSubmitting(true);  // 요청 시작 전에 상태를 '요청 중'으로 설정
     //비밀번호 유효성 에러 메시지
     if (!isValidPassword(password)) {
       setPasswordError(strings.passwordError);
@@ -63,7 +89,6 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
     } else {
       setConfirmPasswordError("");
     }
-
     try {
       const response = await axios.post(
         "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members",
@@ -94,7 +119,10 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
       } else {
         console.error("Error sending data");
       }
+      // 요청 완료 후 상태를 '요청 중 아님'으로 설정
+      setIsSubmitting(false);
     } catch (error) {
+      setIsSubmitting(false);  // 예외 발생 시 상태를 '요청 중 아님'으로 설정
       if (axios.isAxiosError(error)) {
         console.error("Error during data submission:", error);
         if (error.response) {
@@ -112,15 +140,15 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
         <CloseButton onClick={onClose}>&times;</CloseButton>
         <Title>{strings.titleText}</Title>
         <Label>{strings.passwordLabelText}</Label>
-        <Input type="password" placeholder="8~16자리 비밀번호를 입력해주세요" value={password} onChange={handlePasswordChange} />
+        <Input type="password" ref={passwordRef} placeholder="8~16자리 비밀번호를 입력해주세요" value={password} onChange={handlePasswordChange} onKeyDown={(event) => handleEnterPress(event, "confirmPassword")}/>
         {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
 
         <Label>{strings.confirmPasswordLabelText}</Label>
-        <Input type="password" placeholder="비밀번호를 다시 입력해주세요" value={confirmPassword} onChange={handleConfirmPasswordChange} />
+        <Input type="password" ref={confirmPasswordRef} placeholder="비밀번호를 다시 입력해주세요" value={confirmPassword} onChange={handleConfirmPasswordChange} onKeyDown={(event) => handleEnterPress(event, "name")}/>
         {confirmPasswordError && <ErrorMessage>{confirmPasswordError}</ErrorMessage>}
 
         <Label>{strings.nicknameLabelText}</Label>
-        <Input type="text" placeholder="닉네임을 입력해주세요" value={name} onChange={handleNameChange} />
+        <Input type="text" ref={nameRef} placeholder="이름을 입력해주세요" value={name} onChange={handleNameChange} onKeyDown={(event) => handleEnterPress(event, "confirmButton")}/>
 
         {generalError && <ErrorMessage>{generalError}</ErrorMessage>}
 

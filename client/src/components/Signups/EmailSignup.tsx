@@ -11,6 +11,7 @@ const strings = {
   emailLabelText: "이메일",
   requestVerificationText: "이메일 인증요청",
   invalidEmailText: "유효하지 않은 이메일입니다",
+  emailSend : "이메일이 전송되었습니다"
 };
 
 const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestVerification }) => {
@@ -18,6 +19,7 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
   const [email, setEmail] = useState("");
   const [isInvalidEmail, setIsInvalidEmail] = useState(false);
   const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [emailSent, setEmailSent] = useState(false);
 
   // 이메일 입력값 변경 핸들러
   const handleEmailChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -30,13 +32,20 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
     return email.includes("@") && email.includes(".com");
   };
 
+  // 이메일 입력창에서 엔터키를 눌렀을 때의 핸들러
+  const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      handleVerificationRequest();
+    }
+  };
+
   // 이메일 인증 요청 핸들러
   const handleVerificationRequest = async () => {
     if (!validateEmail(email)) {
       setIsInvalidEmail(true);
       return;
     }
-
+  
     try {
       const response = await axios.post(
         "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/email/send",
@@ -52,6 +61,7 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
       if (response.status === 200) {
         dispatch(setEmailForVerification(email));
         onRequestVerification(email);
+        setEmailSent(true);  // 이 부분 추가
       } else if (response.status === 400) {
         setErrorMessage(response.data.message);
       } else if (response.status === 500) {
@@ -77,7 +87,8 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
         <CloseButton onClick={onClose}>×</CloseButton>
         <Title>{strings.titleText}</Title>
         <Label>{strings.emailLabelText}</Label>
-        <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} />
+        <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} onKeyDown={handleKeyPress} />
+        {emailSent && <SuccessMessage>{strings.emailSend}</SuccessMessage>}
         {isInvalidEmail && <ErrorMessage>{strings.invalidEmailText}</ErrorMessage>}
         <SignupButton onClick={handleVerificationRequest}>{strings.requestVerificationText}</SignupButton>
         {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
@@ -178,4 +189,9 @@ const SignupButton = styled.button`
   &:hover {
     background-color: rgba(47, 79, 79, 0.8);
   }
+`;
+const SuccessMessage = styled.p`
+  color: #e22926;  // 빨간색
+  margin-top: 5px;
+  font-size: 0.8rem;
 `;

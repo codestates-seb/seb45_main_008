@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
+import { toast } from "react-toastify";
 import { changeCompanyId } from "../../reducer/CompanyId-Reducer";
 import useGetCompanyList from "../../hooks/useGetCompanyList";
 
@@ -8,6 +9,12 @@ const stockSearch = "종목 검색";
 const search = "검색";
 const noExistCompany = "noExistCompany";
 const existCompany = "existCompany";
+
+const toastStyle = {
+  fontSize: "15px",
+  fontWeight: 350,
+  color: "black",
+};
 
 const StockSearchComponent: React.FC = () => {
   const dispatch = useDispatch();
@@ -21,15 +28,24 @@ const StockSearchComponent: React.FC = () => {
   const handleSearchCompany = () => {
     let searchResult: string = noExistCompany;
 
+    if (searchWord === "") {
+      return;
+    }
+
     companyList.forEach((company: CompanyProps) => {
       if (company.korName === searchWord) {
-        searchResult = existCompany ;
+        searchResult = existCompany;
         dispatch(changeCompanyId(company.companyId));
       }
     });
 
     if (searchResult === noExistCompany) {
-      dispatch(changeCompanyId(-1));
+      toast.error("존재하지 않는 종목입니다", {
+        style: toastStyle,
+        position: "top-right",
+        autoClose: 1500,
+      });
+      return;
     }
   };
 
@@ -42,12 +58,7 @@ const StockSearchComponent: React.FC = () => {
 
   return (
     <SearchContainer>
-      <StyledSearchInput 
-        value={searchWord}
-        onChange={handleChangeSearchWord} 
-        onKeyDown={handlePressEnterToSearch} 
-        placeholder={stockSearch}
-      />
+      <StyledSearchInput value={searchWord} onChange={handleChangeSearchWord} onKeyDown={handlePressEnterToSearch} placeholder={stockSearch} />
       <StyledSearchButton onClick={handleSearchCompany}>{search}</StyledSearchButton>
     </SearchContainer>
   );
@@ -56,20 +67,19 @@ const StockSearchComponent: React.FC = () => {
 export default StockSearchComponent;
 
 interface CompanyProps {
-    companyId: number;
-    code: string;
-    korName: string;
-    stockAsBiResponseDto: null;
-    stockInfResponseDto: null;
-  }
-  
+  companyId: number;
+  code: string;
+  korName: string;
+  stockAsBiResponseDto: null;
+  stockInfResponseDto: null;
+}
 
 // 스타일 정의
 
 const SearchContainer = styled.div`
   display: flex;
   align-items: center;
-  flex-grow: 0.7;  // 여기에 추가
+  flex-grow: 0.7; // 여기에 추가
 `;
 
 const StyledSearchInput = styled.input.attrs({

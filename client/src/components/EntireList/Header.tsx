@@ -76,6 +76,7 @@ const HeaderText = styled.span`
 `;
 
 const SlideMenu = styled.div`
+  z-index:30;
   position: absolute;
   top: 100%;
   left: 0;
@@ -105,7 +106,7 @@ const MenuItem = styled.button`
   }
 `;
 const MenuItem1 = styled(MenuItem)`
-  border-left: 4px solid darkslategray;
+  border-left: 4px solid #4479c2;
 `;
 
 export default Header;

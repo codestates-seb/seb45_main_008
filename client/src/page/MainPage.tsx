@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
+// import { BrowserRouter as Router, Route, Routes  } from "react-router-dom";
 import styled from "styled-components";
 
 import LogoutHeader from "../components/Headers/LogoutHeader";
@@ -24,6 +25,7 @@ import CompareChartSection from "../components/CompareChartSection/Index";
 import StockOrderSection from "../components/StockOrderSection/Index";
 
 import ProfileModal from "../components/Profile/profileModal";
+// import CashModal from "../components/Profile/cashModal";
 import { StateProps } from "../models/stateProps";
 import { TabContainerPage } from "./TabPages/TabContainerPage";
 import { RootState } from "../store/config";
@@ -119,9 +121,6 @@ const MainPage = () => {
     openOAuthModal();
   }, [openOAuthModal]);
 
-  const handleOAuthLoginSuccess = useCallback(() => {
-    setLoginConfirmationModalOpen(true); // 로그인 확인 모달 열기
-  }, []);
 
   //프로필 모달 열고닫는 매커니즘
   const openProfileModal = useCallback(() => {
@@ -154,17 +153,15 @@ const MainPage = () => {
     const refreshToken = urlParams.get("refresh_token");
 
     if (accessToken && refreshToken) {
-        localStorage.setItem("accessToken", `Bearer ${accessToken}`);
-        localStorage.setItem("refreshToken", refreshToken);
-        dispatch(setLoginState());
-        // Remove access_token and refresh_token from the URL
-        urlParams.delete("access_token");
-        urlParams.delete("refresh_token");
-        window.history.replaceState({}, "", "?" + urlParams.toString());
+      localStorage.setItem("accessToken", `Bearer ${accessToken}`);
+      localStorage.setItem("refreshToken", refreshToken);
+      dispatch(setLoginState());
+      // Remove access_token and refresh_token from the URL
+      urlParams.delete("access_token");
+      urlParams.delete("refresh_token");
+      window.history.replaceState({}, "", "?" + urlParams.toString());
 
-        window.location.reload();
-
-
+      window.location.reload();
     }
   }, [dispatch]);
 
@@ -175,27 +172,24 @@ const MainPage = () => {
       {isLogin == 1 ? <LoginHeader onProfileClick={openProfileModal} /> : <LogoutHeader onLoginClick={openOAuthModal} />}
       <Main>
         <CompareChartSection />
-        {!expandScreen.left && (
-          <LeftSection>
-            {selectedMenu === "전체종목" ? (
-              <EntireList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
-            ) : selectedMenu === "관심종목" ? (
-              <WatchList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
-            ) : selectedMenu === "보유종목" ? (
-              <HoldingList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
-            ) : null}
-          </LeftSection>
-        )}
+        <LeftSection leftExpand={expandScreen.left}>
+          {selectedMenu === "전체종목" ? (
+            <EntireList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+          ) : selectedMenu === "관심종목" ? (
+            <WatchList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+          ) : selectedMenu === "보유종목" ? (
+            <HoldingList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+          ) : null}
+        </LeftSection>
         <CentralChart />
         <StockOrderSection />
-        {!expandScreen.right && <TabContainerPage></TabContainerPage>}
+        <TabContainerPage></TabContainerPage>
       </Main>
       {isOAuthModalOpen && (
         <OAuthLoginModal
           onClose={closeOAuthModal}
           onEmailLoginClick={openEmailLoginModal}
           onEmailSignupClick={openEmailSignupModal}
-          onLoginSuccess={handleOAuthLoginSuccess} // 추가된 부분
           onWatchListClick={() => handleMenuChange("관심종목")}
           onHoldingsClick={() => handleMenuChange("보유종목")}
         />
@@ -224,6 +218,7 @@ const MainPage = () => {
       {isGuideModalOpen && <GuideModal onClose={closeGuideModal} />}
       {isProfileModalOpen && <ProfileModal onClose={() => setProfileModalOpen(false)} />}
     </Container>
+
   );
 };
 
@@ -248,7 +243,8 @@ const Main = styled.main`
   flex-direction: row;
 `;
 
-const LeftSection = styled.section`
+const LeftSection = styled.section<{ leftExpand: boolean }>`
+  display: ${(props) => props.leftExpand && "none"};
   min-width: 248px;
   height: 100%;
   border-right: 1px solid black;
