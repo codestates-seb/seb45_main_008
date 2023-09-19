@@ -184,8 +184,11 @@ const CommentArea = styled.div`
   width: 350px;
   padding-top: 10px;
   padding-bottom: 10px;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
-  border-right: 1px solid rgba(0, 0, 0, 0.1);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(0, 0, 0, 0.03);
+  border-left: 1px solid rgba(0, 0, 0, 0.03);
+  margin-bottom: 5px;
 `;
 const CommentInput = styled.input`
   border: none;
@@ -242,6 +245,16 @@ const CommentContainer = styled.div`
   text-align: left;
   padding: 0px;
   border-radius: 5px;
+  position: relative;
+  padding-top: 20px;
+  &:before {
+    content: "";
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    position: absolute;
+    height: 10px;
+    width: 80%;
+    top: -10px;
+  }
 `;
 
 const CommentsDiv = styled.div`
@@ -265,12 +278,12 @@ const CommentCount = styled.div`
 const CommentAuthor = styled.span`
   font-weight: bold;
   margin-right: 10px;
+  font-size: 13px;
 `;
 
 const CommentDate = styled.span`
   color: #888;
-  font-size: 12px;
-  margin-bottom: 5px;
+  font-size: 11px;
 `;
 
 const CommentTextDiv = styled.div`

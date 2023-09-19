@@ -365,21 +365,25 @@ const BoardTextAreaNoText = styled.div`
 `;
 
 const BoardTextArea = styled.div`
-  box-shadow: 1px 0px 7px 0px rgba(0, 0, 0, 0.3);
   width: 98%;
-  border: 1px solid#f3f3f3;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(0, 0, 0, 0.4);
+  border-left: 1px solid rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.6);
   margin: 0 auto;
   padding-bottom: 10px;
   padding-top: 10px;
   color: #333;
+  margin-bottom: 5px;
 `;
 const BoardText = styled.div`
   margin-top: 10px;
-  margin-left: 25px;
+  margin-left: 55px;
   max-width: 300px;
   min-height: 100px;
   height: 150px;
   max-height: 250px;
+
   text-align: left; // 왼쪽 정렬
 
   .memberName {
