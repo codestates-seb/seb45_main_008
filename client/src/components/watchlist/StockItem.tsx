@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import logo from '../../asset/images/StockHolmImage.png';
 import deleteIcon from '../../asset/icon/delete_icon.png';
 import useDeleteStar from '../../hooks/stars/useDeletestars';
+import { useDispatch } from 'react-redux';
+import { changeCompanyId } from "../../reducer/CompanyId-Reducer";
 
 import kia from '../../asset/logos/기아.svg';
 import dy from '../../asset/logos/디와이.jpeg';
@@ -42,6 +44,12 @@ const StockItem: React.FC<StockItemProps> = ({ company }) => {
     });
   };
 
+  const dispatch = useDispatch();
+
+  const handleItemClick = () => {
+    dispatch(changeCompanyId(company.companyId));
+  };
+
     // 🔴 회계 단위 추가
     const price = parseInt(company.stockPrice).toLocaleString();
     const changeAmout = parseInt(company.stockChangeAmount).toLocaleString();
@@ -69,6 +77,7 @@ const StockItem: React.FC<StockItemProps> = ({ company }) => {
 
   return (
     <StockItemWrapper 
+      onClick={handleItemClick}
       onMouseEnter={() => { setShowChangePrice(true); setIsHovered(true); }}
       onMouseLeave={() => { setShowChangePrice(false); setIsHovered(false); }}
     >

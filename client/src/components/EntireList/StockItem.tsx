@@ -1,5 +1,9 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+
+import { useDispatch } from 'react-redux'; 
+import { changeCompanyId } from "../../reducer/CompanyId-Reducer";
+
 import logo from "../../asset/images/StockHolmImage.png";
 import star_icon from "../../asset/icon/star_icon.png"
 import star_filled_icon from "../../asset/icon/star_filled_icon.png"
@@ -74,7 +78,11 @@ const StockItem: React.FC<StockItemProps> = ({ company }) => {
     setIsFavorited(!isFavorited);
   };
 
+  const dispatch = useDispatch();
 
+  const handleItemClick = () => {
+    dispatch(changeCompanyId(company.companyId));
+  };
 
   // 🔴 회계 단위 추가
   const price = parseInt(company.stockPrice).toLocaleString();
@@ -83,6 +91,7 @@ const StockItem: React.FC<StockItemProps> = ({ company }) => {
 
   return (
     <StockItemWrapper
+      onClick={handleItemClick} // 👈 클릭 이벤트 핸들러 추가
       onMouseEnter={() => {
         setShowChangePrice(true);
         setIsHovering(true);

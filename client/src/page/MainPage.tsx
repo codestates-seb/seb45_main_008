@@ -1,6 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { BrowserRouter as Router, Route, Routes  } from "react-router-dom";
+// import { BrowserRouter as Router, Route, Routes  } from "react-router-dom";
 import styled from "styled-components";
 
 import LogoutHeader from "../components/Headers/LogoutHeader";
@@ -25,7 +25,7 @@ import CompareChartSection from "../components/CompareChartSection/Index";
 import StockOrderSection from "../components/StockOrderSection/Index";
 
 import ProfileModal from "../components/Profile/profileModal";
-import CashModal from "../components/Profile/cashModal";
+// import CashModal from "../components/Profile/cashModal";
 import { StateProps } from "../models/stateProps";
 import { TabContainerPage } from "./TabPages/TabContainerPage";
 import { RootState } from "../store/config";
@@ -221,25 +221,8 @@ const MainPage = () => {
       )}
       {isGuideModalOpen && <GuideModal onClose={closeGuideModal} />}
       {isProfileModalOpen && <ProfileModal onClose={() => setProfileModalOpen(false)} />}
-      <Router>
-        <Routes>
-        <Route path="/membercash" element={<CashModal onClose={() => { /* 닫기 동작을 여기에 정의 */ }} />} />
-        <Route 
-          path="/OAuthLogin" 
-          element={
-            <OAuthLoginModal 
-              onClose={() => {}} 
-              onEmailLoginClick={() => {}} 
-              onEmailSignupClick={() => {}} 
-              onWatchListClick={() => {}} 
-              onHoldingsClick={() => {}} 
-        />
-  } 
-/>
-        {/* ... 다른 라우팅 경로 ... */}
-        </Routes>
-      </Router>
     </Container>
+
   );
 };
 

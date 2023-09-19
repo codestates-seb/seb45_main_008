@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 import logo from "../../asset/images/StockHolmImage.png";
+import { useDispatch } from 'react-redux';
+import { changeCompanyId } from "../../reducer/CompanyId-Reducer";
 
 import star_icon from "../../asset/icon/star_icon.png"
 import star_filled_icon from "../../asset/icon/star_filled_icon.png"
@@ -93,6 +95,14 @@ const StockItem: React.FC<StockItemProps> = ({ companyData, stockData }) => {
   const postMutation = usePostStar();
   const deleteMutation = useDeleteStar();
 
+  const dispatch = useDispatch();
+
+  const handleItemClick = () => {
+    dispatch(changeCompanyId(stockData.companyId));
+  };
+
+  
+
   const toggleFavorite = () => {
     // 현재 isFavorited 상태에 따라 요청을 결정합니다.
     if (isFavorited) {
@@ -106,6 +116,7 @@ const StockItem: React.FC<StockItemProps> = ({ companyData, stockData }) => {
   return (
     <>
       <ItemContainer
+        onClick={handleItemClick}
         onMouseEnter={() => {
           setShowChangePrice(true);
           setIsHovering(true);
