@@ -3,11 +3,11 @@ import styled from "styled-components";
 import Comments from "./Comments";
 import { DotIcon } from "./IconComponent/Icon";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
-const serverUrl = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards";
+
+const serverUrl =
+  "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards";
 
 const TimeLineComponent = () => {
-  const navigate = useNavigate();
   const [boardData, setBoardData] = useState<BoardData[]>([]);
 
   useEffect(() => {
@@ -17,27 +17,27 @@ const TimeLineComponent = () => {
   const fetchBoardDataFromServer = async () => {
     try {
       const response = await axios.get(serverUrl);
-      const boardData = response.data;
-      setBoardData(boardData);
+      const boardDatas = response.data;
+      setBoardData(boardDatas);
     } catch (error) {
       console.error("데이터 가져오기 중 오류 발생:", error);
     }
   };
   // 작성 시각을 원하는 형식으로 변환하는 유틸리티 함수
-  const formatDate = (isoString: string): string => {
-    const date = new Date(isoString);
-    const year = date.getFullYear();
-    const month = date.getMonth() + 1;
-    const day = date.getDate();
-    const hours = date.getHours();
-    const minutes = date.getMinutes();
+  // const formatDate = (isoString: string): string => {
+  //   const date = new Date(isoString);
+  //   const year = date.getFullYear();
+  //   const month = date.getMonth() + 1;
+  //   const day = date.getDate();
+  //   const hours = date.getHours();
+  //   const minutes = date.getMinutes();
 
-    const formattedHours = hours > 12 ? hours - 12 : hours;
-    const ampm = hours >= 12 ? "오후" : "오전";
-    const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
+  //   const formattedHours = hours > 12 ? hours - 12 : hours;
+  //   const ampm = hours >= 12 ? "오후" : "오전";
+  //   const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
 
-    return `${year}년 ${month}월 ${day}일 ${ampm} ${formattedHours}:${formattedMinutes}`;
-  };
+  //   return `${year}년 ${month}월 ${day}일 ${ampm} ${formattedHours}:${formattedMinutes}`;
+  // };
 
   //드롭다운 버튼 텍스트 작성창 열기
   const [openDropDown, setOpenDropDown] = useState(false);
@@ -51,7 +51,6 @@ const TimeLineComponent = () => {
   //작성된 텍스트를 밸류에 저장
   const handleOnChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setinputValue(e.target.value);
-    console.log(inputValue);
   };
 
   // 서브밋 버튼 클릭
@@ -59,23 +58,21 @@ const TimeLineComponent = () => {
   const handleClickSubmit = async () => {
     if (inputValue.length !== 0) {
       const newBoardData = {
-        id: new Date().getTime(),
+        title: "TestBoard",
         content: inputValue,
         comments: "",
-        boardId: 0,
       };
 
       try {
         const response = await axios.post(serverUrl, newBoardData, {
           headers: {
-            Authorization: accessToken, // 토큰을 헤더에 추가
+            Authorization: accessToken,
           },
         });
         if (response.status === 201) {
-          // 서버에 성공적으로 데이터를 업로드한 경우
-          alert("작성완료");
+          alert("작성 되었습니다");
           setinputValue(""); // 입력 필드 초기화
-          // 서버에서 업데이트된 게시물 목록을 다시 가져오기
+
           fetchBoardDataFromServer();
         } else {
           alert("작성실패");
@@ -86,8 +83,6 @@ const TimeLineComponent = () => {
       }
     } else {
       alert("내용이 없습니다");
-
-      navigate("/community");
     }
   };
 
@@ -102,6 +97,7 @@ const TimeLineComponent = () => {
       [id]: !prevState[id], // 해당 게시물의 상태를 토글
     }));
   };
+  //  const [dotMenuOpenMap, setDotMenuOpenMap] = useState<{[key: number]: boolean;}>({});
 
   const handleDeleteClick = async (boardId: number) => {
     // boardId로 수정
@@ -115,61 +111,93 @@ const TimeLineComponent = () => {
         // 삭제 성공 처리
         alert("삭제되었습니다");
         // 삭제한 게시물을 클라이언트 데이터에서도 제거
-        const updatedBoardData = boardData.filter((el) => el.boardId !== boardId); // boardId로 수정
+        const updatedBoardData = boardData.filter(
+          (el) => el.boardId !== boardId
+        ); // boardId로 수정
         setBoardData(updatedBoardData);
       } else {
-        alert("삭제 실패");
+        alert("삭제 되었습니다");
+        window.location.href = "http://localhost:5173/community";
       }
     } catch (error) {
       console.error("데이터 삭제 중 오류 발생:", error);
-      alert("삭제 실패");
+      alert("삭제 되었습니다");
       console.log(boardData);
     }
   };
-  //유저 아이디 랜덤 설정
 
-  //boardData업데이트될때 마다 로컬스토리지 데이터 저장
-  // useEffect(() => {
-  //   localStorage.setItem("boardData", JSON.stringify(boardData));
-  // }, [boardData]);
+  const [expandedPosts, setExpandedPosts] = useState<number[]>([]);
+  const toggleExpandPost = (boardId: number) => {
+    setExpandedPosts((prevExpandedPosts) =>
+      prevExpandedPosts.includes(boardId)
+        ? prevExpandedPosts.filter((id) => id !== boardId)
+        : [...prevExpandedPosts, boardId]
+    );
+  };
 
   return (
     <TimeLine>
-      {openDropDown === false && <Button onClick={handleSetOpenDropDown}></Button>}
+      {openDropDown === false && (
+        <Button onClick={handleSetOpenDropDown}></Button>
+      )}
 
       {openDropDown === true && (
         <>
-          <DropDownClose onClick={handleSetOpenDropDown}>×</DropDownClose>
-          <DropdownInput type="text" placeholder="이곳에 작성해 주세요" value={inputValue} onChange={handleOnChange}></DropdownInput>
+          <DropDownClose onClick={handleSetOpenDropDown}>
+            <p>{timeLineText.close}</p>
+          </DropDownClose>
+          <DropdownInput
+            type="text"
+            placeholder="이곳에 작성해 주세요"
+            value={inputValue}
+            onChange={handleOnChange}
+          ></DropdownInput>
+
           <SubmitButton onClick={handleClickSubmit}>Submit</SubmitButton>
         </>
       )}
       <DevideLine></DevideLine>
-      <BoardArea className="scroll">
+      <BoardArea>
         {boardData.length === 0 ? (
-          <BoardTextAreaNoText>{timeLineText.notYetWriting}</BoardTextAreaNoText>
+          <BoardTextAreaNoText>
+            {timeLineText.notYetWriting}
+          </BoardTextAreaNoText>
         ) : (
           boardData
             .slice()
             .reverse()
             .map((el: BoardData) => (
-              <BoardContainer>
-                <BoardTextArea>
-                  <Delete>
-                    <div onClick={() => handleDotOpen(el.boardId)}>
-                      <DotIcon />
-                    </div>
-                    {dotMenuOpenMap[el.boardId] && <DeleteBoard onClick={() => handleDeleteClick(el.boardId)}>{timeLineText.delete}</DeleteBoard>}
-                  </Delete>
-                  <BoardText>
-                    <div className="memberName">{el.member}</div>
-                    <div className="createdAt">{formatDate(el.createdAt)}</div>
-                    <div className="content">{el.content}</div>
-                  </BoardText>
-                  <DevideLine2 />
-                  <Comments boardId={el.boardId}></Comments>
-                </BoardTextArea>
-              </BoardContainer>
+              <BoardTextArea key={el.boardId}>
+                <Delete>
+                  <div onClick={() => handleDotOpen(el.boardId)}>
+                    <DotIcon />
+                  </div>
+                  {dotMenuOpenMap[el.boardId] && (
+                    <DeleteBoard onClick={() => handleDeleteClick(el.boardId)}>
+                      {timeLineText.delete}
+                    </DeleteBoard>
+                  )}
+                </Delete>
+                <BoardText>
+                  {el.member}
+                  {expandedPosts.includes(el.boardId) ? (
+                    el.content
+                  ) : (
+                    <>
+                      {el.content.length > 50
+                        ? el.content.substring(0, 50) + "..."
+                        : el.content}
+                      <br />
+                      {el.content.length > 50 && (
+                        <div onClick={() => toggleExpandPost(el.boardId)}>
+                          더 보기
+                        </div>
+                      )}
+                    </>
+                  )}
+                </BoardText>
+                <Comments boardId={el.boardId}></Comments>
+              </BoardTextArea>
             ))
         )}
       </BoardArea>
@@ -186,6 +214,7 @@ interface BoardData {
   comments: string;
   member: string;
   createdAt: string; // 작성 시각
+  commentId: number;
 }
 const timeLineText = {
   close: "닫기",
@@ -244,20 +273,6 @@ const Button = styled.button`
 `;
 
 //버튼 과 글영역 구분
-const DevideLine2 = styled.div`
-  margin-bottom: 10px;
-  position: relative;
-  margin-bottom: 30px;
-  &:after {
-    position: absolute;
-    top: 5px;
-    content: "";
-    border-bottom: 1px solid#e1e1e1;
-    display: block;
-    width: 100%;
-    height: 5px;
-  }
-`;
 
 const DevideLine = styled.div`
   margin-bottom: 10px;
@@ -297,7 +312,7 @@ const SubmitButton = styled.button`
 //게시판 전체 영역
 const BoardArea = styled.div`
   text-align: center;
-  /* max-height: 700px; */
+
   height: calc(100vh - 194px);
   margin-top: 25px;
   width: 100%;
@@ -310,6 +325,7 @@ const BoardArea = styled.div`
 //게시글 스타일
 const BoardTextAreaNoText = styled.div`
   width: 80%;
+
   padding-bottom: 10px;
   border-radius: 20px 20px;
   border: 1px solid#40797c;
@@ -323,17 +339,11 @@ const BoardTextAreaNoText = styled.div`
   }
 `;
 
-const BoardContainer = styled.div`
-  border-radius: 5px;
-  overflow: hidden; // 내부의 둥근 모서리가 잘리지 않도록
-  background-color: white; // 배경색 지정
-  border: 1px solid lightslategray;
-
-  margin: 10px;
-`;
-
 const BoardTextArea = styled.div`
-  width: 100%;
+  box-shadow: 1px 0px 7px 0px rgba(0, 0, 0, 0.3);
+  width: 98%;
+  border: 1px solid#f3f3f3;
+  margin: 0 auto;
   padding-bottom: 10px;
   padding-top: 10px;
   color: #333;
@@ -341,7 +351,10 @@ const BoardTextArea = styled.div`
 const BoardText = styled.div`
   margin-top: 10px;
   margin-left: 25px;
+  max-width: 300px;
   min-height: 100px;
+  height: 150px;
+  max-height: 250px;
   text-align: left; // 왼쪽 정렬
 
   .memberName {
