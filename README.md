@@ -20,7 +20,7 @@
 
 [![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1695090639262?alt=media&token=0912fb1f-716b-4563-bf1b-27c3fb2a6b24)](https://github.com/msdio/stackticon)
 
-## 화면 정의서
+## API 명세서
 http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui/index.html
 
 ## Github Rule
