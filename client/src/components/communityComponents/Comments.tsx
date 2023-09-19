@@ -13,9 +13,7 @@ const Comments = ({ boardId }: { boardId: number }) => {
 
   const fetchCommentsFromServer = async () => {
     try {
-      const response = await axios.get(
-        `http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}`
-      );
+      const response = await axios.get(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}`);
 
       // 게시판 데이터에서 댓글 부분을 추출합니다.
       const comments = response.data.comments || [];
@@ -43,15 +41,11 @@ const Comments = ({ boardId }: { boardId: number }) => {
       };
 
       try {
-        const response = await axios.post(
-          `http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}/comments`,
-          newCommentData,
-          {
-            headers: {
-              Authorization: accessToken,
-            },
-          }
-        );
+        const response = await axios.post(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}/comments`, newCommentData, {
+          headers: {
+            Authorization: accessToken,
+          },
+        });
         if (response.status === 201) {
           setCommentsValue("");
           fetchCommentsFromServer();
@@ -66,21 +60,16 @@ const Comments = ({ boardId }: { boardId: number }) => {
 
   const handleDeleteComment = async () => {
     try {
-      const response = await axios.delete(
-        `http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}/comments`,
-        {
-          headers: {
-            Authorization: accessToken,
-          },
-        }
-      );
+      const response = await axios.delete(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}/comments`, {
+        headers: {
+          Authorization: accessToken,
+        },
+      });
       if (response.status === 200) {
         // 삭제 성공 처리
         alert("댓글이 삭제되었습니다");
 
-        const updatedCommentData = commentData.filter(
-          (el: CommentContent) => el.id !== el.commentId
-        );
+        const updatedCommentData = commentData.filter((el: CommentContent) => el.id !== el.commentId);
         setCommentData(updatedCommentData);
       } else {
         alert("댓글 삭제 실패");
@@ -101,11 +90,8 @@ const Comments = ({ boardId }: { boardId: number }) => {
     const currentTime: Date = new Date();
     const createdAtTime: Date = new Date(createdAt);
 
-    const timeDifferenceInMilliseconds: number =
-      currentTime.getTime() - createdAtTime.getTime();
-    const timeDifferenceInSeconds = Math.floor(
-      timeDifferenceInMilliseconds / 1000
-    );
+    const timeDifferenceInMilliseconds: number = currentTime.getTime() - createdAtTime.getTime();
+    const timeDifferenceInSeconds = Math.floor(timeDifferenceInMilliseconds / 1000);
 
     if (timeDifferenceInSeconds < 60) {
       return "방금 전";
@@ -124,14 +110,8 @@ const Comments = ({ boardId }: { boardId: number }) => {
   return (
     <CommentContainer>
       <div>
-        <CommentInput
-          type="text"
-          value={commentsValue}
-          onChange={handleOnChange}
-        />
-        <CommentInputSubmit onClick={handleClickSubmit}>
-          {CommentText.write}
-        </CommentInputSubmit>
+        <CommentInput type="text" value={commentsValue} onChange={handleOnChange} />
+        <CommentInputSubmit onClick={handleClickSubmit}>{CommentText.write}</CommentInputSubmit>
         <CommentCount onClick={handleShowMoreComments}>
           {CommentText.replyCount} {commentData.length} {CommentText.replyText}
         </CommentCount>
@@ -142,9 +122,7 @@ const Comments = ({ boardId }: { boardId: number }) => {
               <CommentDate>{getTimeAgoString(el.createdAt)}</CommentDate>
             </div>
             <CommentTextDiv>{el.content}</CommentTextDiv>
-            <CommentDeleteButton onClick={() => handleDeleteComment()}>
-              삭제
-            </CommentDeleteButton>
+            <CommentDeleteButton onClick={() => handleDeleteComment()}>삭제</CommentDeleteButton>
           </CommentsDiv>
         ))}
       </div>
