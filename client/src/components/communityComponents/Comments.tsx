@@ -78,11 +78,6 @@ const Comments = ({ boardId }: { boardId: number }) => {
       if (response.status === 200) {
         // 삭제 성공 처리
         alert("댓글이 삭제되었습니다");
-
-        // const updatedCommentData = commentData.filter(
-        //   (el: CommentContent) => el.commentId !== commentId
-        // );
-        // setCommentData(updatedCommentData);
       } else {
         alert("삭제되었습니다");
         window.location.href = "/community";

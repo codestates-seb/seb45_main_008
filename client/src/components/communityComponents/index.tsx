@@ -382,6 +382,7 @@ const BoardText = styled.div`
   max-width: 300px;
   min-height: 100px;
   height: 150px;
+
   max-height: 250px;
 
   text-align: left; // 왼쪽 정렬
