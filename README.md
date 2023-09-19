@@ -6,16 +6,15 @@
 |----------------------------------------------------------------------------------------------------------------------------|-----------|--------------------------------------------|--------------------------------------------|----------------------------------------------|----------------------------------------------|---------------|
 | [@yjy8501](https://github.com/yjy8501)                                                                             | [@rkddnr05](https://github.com/rkddnr05) | [@IncheonLee](https://github.com/IncheonLee) | [@ChoHD](https://github.com/ChoHD) | [@sirloinbh](https://github.com/shimdokite) | [@novice1993](https://github.com/novice1993) |[@sinjw ](https://github.com/sinjw)|
 
-### Tools
+## Tools
 
  [![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1695089957938?alt=media&token=b049edc2-83f9-4d29-b205-9f5f9b3492f1)](https://github.com/msdio/stackticon)
  
-### 기술 스택
+## 기술 스택
 
 ### BE
 
-[![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1695090351374?alt=media&token=0b3e298a-ba2d-4fd0-bc73-086ab9a9d161)](https://github.com/msdio/stackticon)
-
+[![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1695091856085?alt=media&token=0205801d-72b7-4113-a0b2-941d791be50e)](https://github.com/msdio/stackticon)
 ### FE
 
 [![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1695090639262?alt=media&token=0912fb1f-716b-4563-bf1b-27c3fb2a6b24)](https://github.com/msdio/stackticon)
