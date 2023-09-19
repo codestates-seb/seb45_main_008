@@ -19,7 +19,7 @@ public class StockHold extends Auditable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long stockHoldId;
 
-    @ManyToOne(cascade = CascadeType.ALL)
+    @ManyToOne
     @JoinColumn(name = "MEMBER_ID")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;

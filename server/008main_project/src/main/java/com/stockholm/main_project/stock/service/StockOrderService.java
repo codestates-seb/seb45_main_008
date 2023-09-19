@@ -1,5 +1,7 @@
 package com.stockholm.main_project.stock.service;
 
+import java.lang.management.ManagementFactory;
+
 import com.stockholm.main_project.cash.entity.Cash;
 import com.stockholm.main_project.cash.service.CashService;
 import com.stockholm.main_project.exception.BusinessLogicException;
@@ -16,6 +18,7 @@ import com.stockholm.main_project.stock.mapper.StockMapper;
 import com.stockholm.main_project.stock.repository.StockHoldRepository;
 import com.stockholm.main_project.stock.repository.StockOrderRepository;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -35,8 +38,9 @@ public class StockOrderService {
     private final CashService cashService;
     private final StockMapper stockMapper;
     private final LongPollingController longPollingController;
+    private final SimpMessagingTemplate messagingTemplate;
 
-    public StockOrderService(StockAsBiService stockAsBiService, CompanyService companyService, StockOrderRepository stockOrderRepository, MemberRepository memberRepository, StockHoldService stockHoldService, StockHoldRepository stockHoldRepository, CashService cashService, StockMapper stockMapper, LongPollingController longPollingController) {
+    public StockOrderService(StockAsBiService stockAsBiService, CompanyService companyService, StockOrderRepository stockOrderRepository, MemberRepository memberRepository, StockHoldService stockHoldService, StockHoldRepository stockHoldRepository, CashService cashService, StockMapper stockMapper, LongPollingController longPollingController, SimpMessagingTemplate messagingTemplate) {
         this.stockAsBiService = stockAsBiService;
         this.companyService = companyService;
         this.stockOrderRepository = stockOrderRepository;
@@ -46,6 +50,7 @@ public class StockOrderService {
         this.cashService = cashService;
         this.stockMapper = stockMapper;
         this.longPollingController = longPollingController;
+        this.messagingTemplate = messagingTemplate;
     }
 
     // 멤버, 회사 id, 가격
@@ -168,7 +173,10 @@ public class StockOrderService {
                 }
             }
         }
-        longPollingController.notifyDataUpdated(updateBuyStockOrders, updateSellStockOrders);
+        long activeThreadCount = ManagementFactory.getThreadMXBean().getThreadCount();
+        System.out.println("현재 활성 스레드 수: " + activeThreadCount);
+        sendStockOrder(updateBuyStockOrders, updateSellStockOrders);
+        //longPollingController.notifyDataUpdated(updateBuyStockOrders, updateSellStockOrders);
    }
 
 
@@ -411,5 +419,37 @@ public class StockOrderService {
             }
 
         }
+    }
+    // 클라언트에 알림 보냄
+    public void sendStockOrder(List<StockOrder> updateBuyStockOrders, List<StockOrder> updateSellStockOrders) {
+        Map<Long, List<StockOrder>> buyStockOrdersByMemberId = updateBuyStockOrders.stream()
+                .collect(Collectors.groupingBy(stockOrder -> stockOrder.getMember().getMemberId()));
+        Map<Long, List<StockOrder>> sellStockOrdersByMemberId = updateSellStockOrders.stream()
+                .collect(Collectors.groupingBy(stockOrder -> stockOrder.getMember().getMemberId()));
+
+        buyStockOrdersByMemberId.forEach((memberId, orders) -> {
+            System.out.println("Member ID: " + memberId);
+            orders.forEach(order -> {
+                String destination = "/sub/" + memberId;
+                StockOrder stockOrder = order;
+                StockOrderResponseDto stockOrderResponseDto = stockMapper.stockOrderToStockOrderResponseDto(stockOrder);
+
+                messagingTemplate.convertAndSend(destination, stockOrderResponseDto);
+
+            });
+        });
+
+        sellStockOrdersByMemberId.forEach((memberId, orders) -> {
+            System.out.println("Member ID: " + memberId);
+            orders.forEach(order -> {
+                String destination = "/sub/" + memberId;
+                System.out.println(destination);
+                StockOrder stockOrder = order;
+                StockOrderResponseDto stockOrderResponseDto = stockMapper.stockOrderToStockOrderResponseDto(stockOrder);
+
+                messagingTemplate.convertAndSend(destination, stockOrderResponseDto);
+
+            });
+        });
     }
 }

@@ -67,6 +67,9 @@ spring:
       max-file-size: 10MB
       max-request-size: 10MB
 
+  jmx:
+    enabled: true
+
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
@@ -108,3 +111,4 @@ jwt:
   key: ${JWT_SECRET_KEY}
   access-token-expiration-minutes: 40
   refresh-token-expiration-minutes: 420
+
