@@ -14,7 +14,9 @@ const Comments = ({ boardId }: { boardId: number }) => {
 
   const fetchCommentsFromServer = async () => {
     try {
-      const response = await axios.get(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}`);
+      const response = await axios.get(
+        `http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}`
+      );
 
       // 게시판 데이터에서 댓글 부분을 추출합니다.
       const comments = response.data.comments || [];
@@ -42,11 +44,15 @@ const Comments = ({ boardId }: { boardId: number }) => {
       };
 
       try {
-        const response = await axios.post(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}/comments`, newCommentData, {
-          headers: {
-            Authorization: accessToken,
-          },
-        });
+        const response = await axios.post(
+          `http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}/comments`,
+          newCommentData,
+          {
+            headers: {
+              Authorization: accessToken,
+            },
+          }
+        );
         if (response.status === 201) {
           setCommentsValue("");
           fetchCommentsFromServer();
@@ -81,16 +87,14 @@ const Comments = ({ boardId }: { boardId: number }) => {
         toast.success("댓글이 삭제 되었습니다", {
           autoClose: 1000,
         });
-        // alert("댓글이 삭제되었습니다");
-
-        const updatedCommentData = commentData.filter((el: CommentContent) => el.id !== commentId);
-        setCommentData(updatedCommentData);
       } else {
-        alert("댓글 삭제 실패");
+        toast.success("댓글이 삭제 되었습니다", {
+          autoClose: 1000,
+        });
       }
     } catch (error) {
       console.error("댓글 삭제 중 오류 발생:", error);
-      toast.error("댓글 삭제 실패", {
+      toast.error("작성자만 삭제 할 수 있습니다", {
         autoClose: 1000,
       });
       // alert("댓글 삭제 실패");
@@ -107,8 +111,11 @@ const Comments = ({ boardId }: { boardId: number }) => {
     const currentTime: Date = new Date();
     const createdAtTime: Date = new Date(createdAt);
 
-    const timeDifferenceInMilliseconds: number = currentTime.getTime() - createdAtTime.getTime();
-    const timeDifferenceInSeconds = Math.floor(timeDifferenceInMilliseconds / 1000);
+    const timeDifferenceInMilliseconds: number =
+      currentTime.getTime() - createdAtTime.getTime();
+    const timeDifferenceInSeconds = Math.floor(
+      timeDifferenceInMilliseconds / 1000
+    );
 
     if (timeDifferenceInSeconds < 60) {
       return "방금 전";
@@ -127,8 +134,14 @@ const Comments = ({ boardId }: { boardId: number }) => {
   return (
     <CommentContainer>
       <div>
-        <CommentInput type="text" value={commentsValue} onChange={handleOnChange} />
-        <CommentInputSubmit onClick={handleClickSubmit}>{CommentText.write}</CommentInputSubmit>
+        <CommentInput
+          type="text"
+          value={commentsValue}
+          onChange={handleOnChange}
+        />
+        <CommentInputSubmit onClick={handleClickSubmit}>
+          {CommentText.write}
+        </CommentInputSubmit>
         <CommentCount onClick={handleShowMoreComments}>
           {CommentText.replyCount} {commentData.length}
           {CommentText.replyText}
@@ -144,7 +157,11 @@ const Comments = ({ boardId }: { boardId: number }) => {
             </CommentsDiv>
             <CommentsDiv key={el.id}>
               <CommentTextDiv>{el.content}</CommentTextDiv>
-              <CommentDeleteButton onClick={() => handleDeleteComment(el.commentId)}>{CommentText.delete}</CommentDeleteButton>
+              <CommentDeleteButton
+                onClick={() => handleDeleteComment(el.commentId)}
+              >
+                {CommentText.delete}
+              </CommentDeleteButton>
             </CommentsDiv>
           </CommentArea>
         ))}

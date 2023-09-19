@@ -645,7 +645,7 @@ const DetailStockText = {
   detailIndust: "세부산업군",
 };
 const StockInfoContainer = styled.div`
-  max-height: 500px;
+  max-height: 400px;
 `;
 const DevideLine = styled.div`
   width: 90%;
@@ -653,7 +653,9 @@ const DevideLine = styled.div`
   margin-top: 30px;
   border-bottom: 1px solid#c3c3c3;
 `;
-const StockInfo = styled.div``;
+const StockInfo = styled.div`
+  max-height: 400px;
+`;
 
 const StockHeader = styled.div`
   display: flex;
@@ -663,7 +665,6 @@ const StockName = styled.ul`
   display: flex;
   flex-direction: column;
   font-size: 15px;
-
   margin-left: -30px;
   margin-top: 10px;
   li:nth-child(1) {

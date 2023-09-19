@@ -481,7 +481,9 @@ const PortFolioChart = () => {
 
 export default PortFolioChart;
 
-const InfoChart = styled.div``;
+const InfoChart = styled.div`
+  max-height: 400px;
+`;
 const ChartText = {
   LentRatio: "부채비중",
   AssetRatio: "자본비중",
@@ -499,7 +501,7 @@ const Ratio = styled.div`
   margin-top: 20px;
   width: 360px;
   display: flex;
-  border: 1px solid#333;
+
   text-align: center;
 `;
 
