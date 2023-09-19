@@ -18,6 +18,8 @@ const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
     const resetButtonText = "현금 재생성";
     // const refreshButtonText ="새로고침";
 
+    const [errorMessage, setErrorMessage] = useState<string | null>(null); // 에러 메시지 상태 변수 추가
+
     const dispatch = useDispatch();
 
     // useGetCash 훅을 사용하여 현금 보유량 가져오기
@@ -57,6 +59,15 @@ const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
         }
     };
 
+    const validateCashInput = (inputValue: string) => {
+        const numericValue = parseInt(inputValue.replace(/,/g, ''), 10);
+        if (isNaN(numericValue) || numericValue < 1000000 || numericValue > 500000000) {
+            setErrorMessage("100만에서 5억 사이의 수를 입력하세요");
+        } else {
+            setErrorMessage(null);
+        }
+    };
+
     const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>, action: () => void) => {
         if (event.key === 'Enter') {
             action();
@@ -75,10 +86,14 @@ return (
                     <CashCreationInput
                         type="string"
                         value={initialAmount}
-                        onChange={e => setInitialAmount(e.target.value)}
+                        onChange={e => {
+                            setInitialAmount(e.target.value);
+                            validateCashInput(e.target.value);  // 입력 값 변경 시 유효성 검사
+                        }}
                         placeholder={cashCreationPlaceholder}
                         onKeyDown={(event) => handleEnterPress(event, handleCreateCash)}
                     />
+                    {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
                     <CreateCashButton onClick={handleCreateCash}>{createCashButtonText}</CreateCashButton>
                 </div>
             )}
@@ -89,10 +104,14 @@ return (
                     <CashInput
                         type="string"
                         value={cashInput}
-                        onChange={e => setCashInput(e.target.value)}
+                        onChange={e => {
+                            setCashInput(e.target.value);
+                            validateCashInput(e.target.value);  // 입력 값 변경 시 유효성 검사
+                        }}
                         placeholder={cashInputPlaceholder}
                         onKeyDown={(event) => handleEnterPress(event, handleCashReset)}
                     />
+                    {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
                     <ReceiveButton onClick={handleCashReset}>{resetButtonText}</ReceiveButton>
                 </div>
             )}
@@ -192,4 +211,11 @@ const Content = styled.p`
     line-height: 1.5;
     color: #555;  // 색상 변경
     text-align: center;  // 텍스트 중앙 정렬
+`;
+
+// 에러 메시지 스타일링
+const ErrorMessage = styled.div`
+    color: red;
+    font-size: 0.8rem;
+    margin-top: 5px;
 `;

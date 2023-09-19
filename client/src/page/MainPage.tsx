@@ -179,13 +179,14 @@ const MainPage = () => {
           {selectedMenu === "전체종목" ? (
             <EntireList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
           ) : selectedMenu === "관심종목" ? (
-            <WatchList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+            <WatchList currentListType={selectedMenu} onChangeListType={handleMenuChange} openOAuthModal={openOAuthModal}/>
           ) : selectedMenu === "보유종목" ? (
-            <HoldingList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
+              <HoldingList currentListType={selectedMenu} onChangeListType={handleMenuChange} openOAuthModal={openOAuthModal} />
           ) : null}
         </LeftSection>
         <CentralChart />
-        <StockOrderSection />
+        {/* props전달 */}
+        <StockOrderSection openOAuthModal={openOAuthModal} openProfileModal={openProfileModal} />
         <TabContainerPage></TabContainerPage>
       </Main>
       {isOAuthModalOpen && (
