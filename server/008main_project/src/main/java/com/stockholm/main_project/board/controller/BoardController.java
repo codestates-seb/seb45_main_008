@@ -36,16 +36,13 @@ public class BoardController {
 
 
     private final BoardService boardService;
-    private final MemberService memberService;
 
     private final BoardMapper mapper;
     private final CommentService commentService;
 
-    public BoardController(BoardService boardService, MemberService memberService, BoardMapper mapper, CommentService commentService) {
+    public BoardController(BoardService boardService, BoardMapper mapper, CommentService commentService) {
         this.boardService = boardService;
-        this.memberService = memberService;
         this.mapper = mapper;
-
         this.commentService = commentService;
     }
 
