@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import axios from "axios";
-
+import { ProFileImage } from "./IconComponent/Icon.tsx";
 const Comments = ({ boardId }: { boardId: number }) => {
   const [commentData, setCommentData] = useState([]);
   const [commentsValue, setCommentsValue] = useState("");
@@ -68,6 +68,7 @@ const Comments = ({ boardId }: { boardId: number }) => {
     try {
       const response = await axios.delete(
         `http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards/${boardId}/comments/${commentId}`,
+
         {
           headers: {
             Authorization: accessToken,
@@ -78,16 +79,17 @@ const Comments = ({ boardId }: { boardId: number }) => {
         // 삭제 성공 처리
         alert("댓글이 삭제되었습니다");
 
-        const updatedCommentData = commentData.filter(
-          (el: CommentContent) => el.id !== commentId
-        );
-        setCommentData(updatedCommentData);
+        // const updatedCommentData = commentData.filter(
+        //   (el: CommentContent) => el.commentId !== commentId
+        // );
+        // setCommentData(updatedCommentData);
       } else {
-        alert("댓글 삭제 실패");
+        alert("삭제되었습니다");
+        window.location.href = "/community";
       }
     } catch (error) {
-      console.error("댓글 삭제 중 오류 발생:", error);
-      alert("댓글 삭제 실패");
+      console.error("작성자만 삭제 할 수 있습니다:", error);
+      alert("작성자만 삭제 할 수 있습니다");
     }
   };
 
@@ -133,19 +135,27 @@ const Comments = ({ boardId }: { boardId: number }) => {
           {CommentText.write}
         </CommentInputSubmit>
         <CommentCount onClick={handleShowMoreComments}>
-          {CommentText.replyCount} {commentData.length} {CommentText.replyText}
+          {CommentText.replyCount} {commentData.length}
+          {CommentText.replyText}
         </CommentCount>
         {commentData.slice(0, visibleComments).map((el: CommentContent) => (
-          <CommentsDiv key={el.id}>
-            <div>
-              &#187; <CommentAuthor>{el.member}</CommentAuthor>
-              <CommentDate>{getTimeAgoString(el.createdAt)}</CommentDate>
-            </div>
-            <CommentTextDiv>{el.content}</CommentTextDiv>
-            <CommentDeleteButton onClick={() => handleDeleteComment(el.id)}>
-              삭제
-            </CommentDeleteButton>
-          </CommentsDiv>
+          <CommentArea>
+            <CommentsDiv key={el.id}>
+              <div>
+                <ProFileImage />
+                <CommentAuthor>{el.member}</CommentAuthor>
+                <CommentDate>{getTimeAgoString(el.createdAt)}</CommentDate>
+              </div>
+            </CommentsDiv>
+            <CommentsDiv key={el.id}>
+              <CommentTextDiv>{el.content}</CommentTextDiv>
+              <CommentDeleteButton
+                onClick={() => handleDeleteComment(el.commentId)}
+              >
+                {CommentText.delete}
+              </CommentDeleteButton>
+            </CommentsDiv>
+          </CommentArea>
         ))}
       </div>
     </CommentContainer>
@@ -168,8 +178,18 @@ const CommentText = {
   replyCount: "댓글",
   replyText: "개 모두보기",
   replyHide: "개 숨기기",
+  delete: "삭제",
 };
-
+const CommentArea = styled.div`
+  width: 350px;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.2);
+  border-right: 1px solid rgba(0, 0, 0, 0.2);
+  border-top: 1px solid rgba(0, 0, 0, 0.03);
+  border-left: 1px solid rgba(0, 0, 0, 0.03);
+  margin-bottom: 5px;
+`;
 const CommentInput = styled.input`
   border: none;
   outline: none;
@@ -183,9 +203,14 @@ const CommentInput = styled.input`
 
 const CommentInputSubmit = styled.button`
   outline: none;
-  border: 1px solid black;
+  border: none;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.7);
+  border-right: 1px solid rgba(0, 0, 0, 0.7);
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-left: 1px solid rgba(0, 0, 0, 0.1);
+
   background-color: white;
-  color: black;
+  color: #939393;
   padding: 10px 15px;
   border-radius: 5px;
   margin-left: 10px;
@@ -193,16 +218,43 @@ const CommentInputSubmit = styled.button`
   transition: background-color 0.3s;
 
   &:hover {
+    color: #333;
     background-color: #f2f2f2;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    border-right: 1px solid rgba(0, 0, 0, 0.1);
+    border-top: 1px solid rgba(0, 0, 0, 0);
+    border-left: 1px solid rgba(0, 0, 0, 0);
   }
 `;
-const CommentDeleteButton = styled.div``;
+const CommentDeleteButton = styled.div`
+  font-size: 12px;
+  margin-top: -20px;
+  cursor: pointer;
+  color: #939393;
+  font-weight: bold;
+  width: 20%;
+  text-align: right;
+
+  &:hover {
+    color: #333;
+  }
+`;
 const CommentContainer = styled.div`
   display: flex;
   justify-content: space-around;
   text-align: left;
   padding: 0px;
   border-radius: 5px;
+  position: relative;
+  padding-top: 20px;
+  &:before {
+    content: "";
+    border-top: 1px solid rgba(0, 0, 0, 0.1);
+    position: absolute;
+    height: 10px;
+    width: 80%;
+    top: -10px;
+  }
 `;
 
 const CommentsDiv = styled.div`
@@ -212,6 +264,8 @@ const CommentsDiv = styled.div`
   padding: 0px 10px;
   border-radius: 5px;
   margin-bottom: 5px;
+  display: flex;
+  flex-direction: row;
 `;
 
 const CommentCount = styled.div`
@@ -224,14 +278,16 @@ const CommentCount = styled.div`
 const CommentAuthor = styled.span`
   font-weight: bold;
   margin-right: 10px;
+  font-size: 13px;
 `;
 
 const CommentDate = styled.span`
   color: #888;
-  font-size: 12px;
-  margin-bottom: 5px;
+  font-size: 11px;
 `;
 
 const CommentTextDiv = styled.div`
-  margin-top: 5px;
+  margin-top: 0px;
+  margin-left: 50px;
+  width: 80%;
 `;
