@@ -26,55 +26,55 @@ public class StockScheduler {
         this.stockOrderService = stockOrderService;
     }
 
-//    @Scheduled(cron = "0 30 9-15 * * MON-FRI")
-//    public void myScheduledStockAsBiMethod() throws InterruptedException {
-//        // 이 메소드는 매주 월요일부터 금요일까지 9:30부터 15:30까지 30분 간격으로 실행됩니다.
-//        // 원하는 작업을 여기에 추가하세요.
-//        LocalDateTime start = LocalDateTime.now();
-//        stockAsBiService.updateStockAsBi();
-//        stockOrderService.checkOrder();
-//        LocalDateTime end = LocalDateTime.now();
-//        Duration duration = Duration.between(start, end);
-//        System.out.println(duration.getSeconds());
-//
-//    }
-//
-//    @Scheduled(cron = "0 0 10-15 * * MON-FRI")
-//    public void myScheduledStockAsBiMethod2() throws InterruptedException {
-//        // 이 메소드는 매주 월요일부터 금요일까지 9:30부터 15:30까지 30분 간격으로 실행됩니다.
-//        // 원하는 작업을 여기에 추가하세요.
-//        LocalDateTime start = LocalDateTime.now();
-//        stockAsBiService.updateStockAsBi();
-//        stockOrderService.checkOrder();
-//        LocalDateTime end = LocalDateTime.now();
-//        Duration duration = Duration.between(start, end);
-//        System.out.println(duration.getSeconds());
-//
-//    }
-//
-//    @Scheduled(cron = "0 30 9-15 * * MON-FRI")
-//    public void myScheduledStockMinMethod() throws InterruptedException {
-//        // 이 메소드는 매주 월요일부터 금요일까지 9:30부터 15:30까지 30분 간격으로 실행됩니다.
-//        // 원하는 작업을 여기에 추가하세요.
-//        LocalDateTime start = LocalDateTime.now();
-//        stockMinService.updateStockMin();
-//        LocalDateTime end = LocalDateTime.now();
-//        Duration duration = Duration.between(start, end);
-//        System.out.println(duration.getSeconds());
-//
-//    }
-//
-//    @Scheduled(cron = "0 0 10-15 * * MON-FRI")
-//    public void myScheduledStockMinMethod2() throws InterruptedException {
-//        // 이 메소드는 매주 월요일부터 금요일까지 9:30부터 15:30까지 30분 간격으로 실행됩니다.
-//        // 원하는 작업을 여기에 추가하세요.
-//        LocalDateTime start = LocalDateTime.now();
-//        stockMinService.updateStockMin();
-//        LocalDateTime end = LocalDateTime.now();
-//        Duration duration = Duration.between(start, end);
-//        System.out.println(duration.getSeconds());
-//
-//    }
+    @Scheduled(cron = "0 30 9-15 * * MON-FRI")
+    public void myScheduledStockAsBiMethod() throws InterruptedException {
+        // 이 메소드는 매주 월요일부터 금요일까지 9:30부터 15:30까지 30분 간격으로 실행됩니다.
+        // 원하는 작업을 여기에 추가하세요.
+        LocalDateTime start = LocalDateTime.now();
+        stockAsBiService.updateStockAsBi();
+        stockOrderService.checkOrder();
+        LocalDateTime end = LocalDateTime.now();
+        Duration duration = Duration.between(start, end);
+        System.out.println(duration.getSeconds());
+
+    }
+
+    @Scheduled(cron = "0 0 10-15 * * MON-FRI")
+    public void myScheduledStockAsBiMethod2() throws InterruptedException {
+        // 이 메소드는 매주 월요일부터 금요일까지 9:30부터 15:30까지 30분 간격으로 실행됩니다.
+        // 원하는 작업을 여기에 추가하세요.
+        LocalDateTime start = LocalDateTime.now();
+        stockAsBiService.updateStockAsBi();
+        stockOrderService.checkOrder();
+        LocalDateTime end = LocalDateTime.now();
+        Duration duration = Duration.between(start, end);
+        System.out.println(duration.getSeconds());
+
+    }
+
+    @Scheduled(cron = "0 30 9-15 * * MON-FRI")
+    public void myScheduledStockMinMethod() throws InterruptedException {
+        // 이 메소드는 매주 월요일부터 금요일까지 9:30부터 15:30까지 30분 간격으로 실행됩니다.
+        // 원하는 작업을 여기에 추가하세요.
+        LocalDateTime start = LocalDateTime.now();
+        stockMinService.updateStockMin();
+        LocalDateTime end = LocalDateTime.now();
+        Duration duration = Duration.between(start, end);
+        System.out.println(duration.getSeconds());
+
+    }
+
+    @Scheduled(cron = "0 0 10-15 * * MON-FRI")
+    public void myScheduledStockMinMethod2() throws InterruptedException {
+        // 이 메소드는 매주 월요일부터 금요일까지 9:30부터 15:30까지 30분 간격으로 실행됩니다.
+        // 원하는 작업을 여기에 추가하세요.
+        LocalDateTime start = LocalDateTime.now();
+        stockMinService.updateStockMin();
+        LocalDateTime end = LocalDateTime.now();
+        Duration duration = Duration.between(start, end);
+        System.out.println(duration.getSeconds());
+
+    }
 
 //    @Scheduled(fixedRate = 100000000)
 //    public void run() throws InterruptedException {
