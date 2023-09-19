@@ -181,10 +181,11 @@ const CommentText = {
   delete: "삭제",
 };
 const CommentArea = styled.div`
-  box-shadow: 0px 0px 3px 0px rgba(0, 0, 0, 0.2);
   width: 350px;
   padding-top: 10px;
   padding-bottom: 10px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(0, 0, 0, 0.1);
 `;
 const CommentInput = styled.input`
   border: none;
