@@ -64,7 +64,7 @@ const Comments = ({ boardId }: { boardId: number }) => {
         }
       } catch (error) {
         toast.error("댓글 작성 실패", {
-          autoClose: 1001,
+          autoClose: 1000,
         });
         console.error("댓글 작성 중 오류 발생:", error);
       }
