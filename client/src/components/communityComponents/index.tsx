@@ -140,12 +140,8 @@ const TimeLineComponent = () => {
       {openDropDown === false && (
         <Button onClick={handleSetOpenDropDown}></Button>
       )}
-
       {openDropDown === true && (
         <>
-          <DropDownClose onClick={handleSetOpenDropDown}>
-            <p>{timeLineText.close}</p>
-          </DropDownClose>
           <DropdownInput
             type="text"
             placeholder="이곳에 작성해 주세요"
@@ -153,11 +149,14 @@ const TimeLineComponent = () => {
             onChange={handleOnChange}
           ></DropdownInput>
 
-          <SubmitButton onClick={handleClickSubmit}>Submit</SubmitButton>
+          <ButtonContainer>
+            <SubmitButton onClick={handleClickSubmit}>Submit</SubmitButton>
+            <CloseButton onClick={handleSetOpenDropDown}>Cancle</CloseButton>
+          </ButtonContainer>
         </>
       )}
       <DevideLine></DevideLine>
-      <BoardArea>
+      <BoardArea dropDown={openDropDown}>
         {boardData.length === 0 ? (
           <BoardTextAreaNoText>
             {timeLineText.notYetWriting}
@@ -236,17 +235,6 @@ const DropdownInput = styled.input`
   }
 `;
 
-const DropDownClose = styled.div`
-  text-align: right;
-  cursor: pointer;
-  color: #40797c;
-  font-size: 30px; // x 아이콘 크기를 조절
-  margin-right: 10px;
-  &:hover {
-    color: #2d4f51;
-  }
-`;
-
 //글작성을위해 클릭시 드롭다운 열어주는 버튼
 
 const Button = styled.button`
@@ -290,15 +278,26 @@ const DevideLine = styled.div`
 `;
 //글 업로드 버튼 및 게시글 영역
 
+const ButtonContainer = styled.div`
+  padding-top: 12px;
+  padding-left: 10px;
+  padding-right: 10px;
+
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+`;
+
 const SubmitButton = styled.button`
   display: block;
-  width: 60px;
-  height: 30px;
+  width: 43.8%;
+  height: 33px;
   color: #fff;
   border: none;
   background-color: #40797c;
   cursor: pointer;
-  border-radius: 10px;
+  border-radius: 0.3rem;
   margin: 5px auto;
   &:hover {
     background-color: #2d4f51;
@@ -309,11 +308,13 @@ const SubmitButton = styled.button`
   }
 `;
 
-//게시판 전체 영역
-const BoardArea = styled.div`
-  text-align: center;
+const CloseButton = styled(SubmitButton)``;
 
-  height: calc(100vh - 194px);
+//게시판 전체 영역
+const BoardArea = styled.div<{ dropDown: boolean }>`
+  text-align: center;
+  height: ${(props) =>
+    props.dropDown ? "calc(100vh - 290px)" : "calc(100vh - 200px)"};
   margin-top: 25px;
   width: 100%;
   overflow-y: auto; // 스크롤 설정
