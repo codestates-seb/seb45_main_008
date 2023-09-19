@@ -14,10 +14,14 @@ const WaitOrderIndicator = () => {
 
   useEffect(() => {
     if (waitOrderSuccessData) {
-      toast.info(`대기주문이 체결되었습니다`, {
-        style: toastStyle,
-        position: "bottom-left",
-      });
+      console.log(waitOrderSuccessData);
+
+      if (waitOrderSuccessData[0].length !== 0 && waitOrderSuccessData[1].length !== 0) {
+        toast.info(`대기주문이 체결되었습니다`, {
+          style: toastStyle,
+          position: "bottom-left",
+        });
+      }
     }
   }, [waitOrderSuccessData]);
 
