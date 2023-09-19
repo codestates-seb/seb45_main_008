@@ -2,10 +2,10 @@ import { useState, useEffect } from "react";
 import styled from "styled-components";
 import Comments from "./Comments";
 import { DotIcon } from "./IconComponent/Icon";
+import { toast } from "react-toastify";
 import axios from "axios";
 
-const serverUrl =
-  "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards";
+const serverUrl = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards";
 
 const TimeLineComponent = () => {
   const [boardData, setBoardData] = useState<BoardData[]>([]);
@@ -23,21 +23,29 @@ const TimeLineComponent = () => {
       console.error("데이터 가져오기 중 오류 발생:", error);
     }
   };
-  // 작성 시각을 원하는 형식으로 변환하는 유틸리티 함수
-  // const formatDate = (isoString: string): string => {
-  //   const date = new Date(isoString);
-  //   const year = date.getFullYear();
-  //   const month = date.getMonth() + 1;
-  //   const day = date.getDate();
-  //   const hours = date.getHours();
-  //   const minutes = date.getMinutes();
+  const getTimeAgoString = (createdAt: string): string => {
+    const currentTime: Date = new Date();
+    const createdAtTime: Date = new Date(createdAt);
 
-  //   const formattedHours = hours > 12 ? hours - 12 : hours;
-  //   const ampm = hours >= 12 ? "오후" : "오전";
-  //   const formattedMinutes = minutes < 10 ? "0" + minutes : minutes;
+    const timeDifferenceInMilliseconds: number =
+      currentTime.getTime() - createdAtTime.getTime();
+    const timeDifferenceInSeconds = Math.floor(
+      timeDifferenceInMilliseconds / 1000
+    );
 
-  //   return `${year}년 ${month}월 ${day}일 ${ampm} ${formattedHours}:${formattedMinutes}`;
-  // };
+    if (timeDifferenceInSeconds < 60) {
+      return "방금 전";
+    } else if (timeDifferenceInSeconds < 3600) {
+      const minutesAgo = Math.floor(timeDifferenceInSeconds / 60);
+      return `${minutesAgo}분 전`;
+    } else if (timeDifferenceInSeconds < 86400) {
+      const hoursAgo = Math.floor(timeDifferenceInSeconds / 3600);
+      return `${hoursAgo}시간 전`;
+    } else {
+      const daysAgo = Math.floor(timeDifferenceInSeconds / 86400);
+      return `${daysAgo}일 전`;
+    }
+  };
 
   //드롭다운 버튼 텍스트 작성창 열기
   const [openDropDown, setOpenDropDown] = useState(false);
@@ -70,19 +78,27 @@ const TimeLineComponent = () => {
           },
         });
         if (response.status === 201) {
-          alert("작성 되었습니다");
+          toast.success("작성 되었습니다", {
+            autoClose: 1000,
+          });
           setinputValue(""); // 입력 필드 초기화
 
           fetchBoardDataFromServer();
         } else {
-          alert("작성실패");
+          toast.error("작성실패", {
+            autoClose: 1000,
+          });
         }
       } catch (error) {
         console.log("데이터 추가 중 오류 발생:", error);
-        alert("작성실패");
+        toast.error("작성실패", {
+          autoClose: 1000,
+        });
       }
     } else {
-      alert("내용이 없습니다");
+      toast.info("내용이 없습니다", {
+        autoClose: 1000,
+      });
     }
   };
 
@@ -111,43 +127,30 @@ const TimeLineComponent = () => {
         // 삭제 성공 처리
         alert("삭제되었습니다");
         // 삭제한 게시물을 클라이언트 데이터에서도 제거
-        const updatedBoardData = boardData.filter(
-          (el) => el.boardId !== boardId
-        ); // boardId로 수정
+        const updatedBoardData = boardData.filter((el) => el.boardId !== boardId); // boardId로 수정
         setBoardData(updatedBoardData);
       } else {
         alert("삭제 되었습니다");
-        window.location.href = "http://localhost:5173/community";
+        window.location.href = "/community";
       }
     } catch (error) {
-      console.error("데이터 삭제 중 오류 발생:", error);
-      alert("삭제 되었습니다");
+      console.error("작성자만 삭제 할 수 있습니다:", error);
+      alert("작성자만 삭제 할 수 있습니다");
       console.log(boardData);
     }
   };
 
   const [expandedPosts, setExpandedPosts] = useState<number[]>([]);
   const toggleExpandPost = (boardId: number) => {
-    setExpandedPosts((prevExpandedPosts) =>
-      prevExpandedPosts.includes(boardId)
-        ? prevExpandedPosts.filter((id) => id !== boardId)
-        : [...prevExpandedPosts, boardId]
-    );
+    setExpandedPosts((prevExpandedPosts) => (prevExpandedPosts.includes(boardId) ? prevExpandedPosts.filter((id) => id !== boardId) : [...prevExpandedPosts, boardId]));
   };
 
   return (
     <TimeLine>
-      {openDropDown === false && (
-        <Button onClick={handleSetOpenDropDown}></Button>
-      )}
+      {openDropDown === false && <Button onClick={handleSetOpenDropDown}></Button>}
       {openDropDown === true && (
         <>
-          <DropdownInput
-            type="text"
-            placeholder="이곳에 작성해 주세요"
-            value={inputValue}
-            onChange={handleOnChange}
-          ></DropdownInput>
+          <DropdownInput type="text" placeholder="이곳에 작성해 주세요" value={inputValue} onChange={handleOnChange}></DropdownInput>
 
           <ButtonContainer>
             <SubmitButton onClick={handleClickSubmit}>Submit</SubmitButton>
@@ -158,9 +161,7 @@ const TimeLineComponent = () => {
       <DevideLine></DevideLine>
       <BoardArea dropDown={openDropDown}>
         {boardData.length === 0 ? (
-          <BoardTextAreaNoText>
-            {timeLineText.notYetWriting}
-          </BoardTextAreaNoText>
+          <BoardTextAreaNoText>{timeLineText.notYetWriting}</BoardTextAreaNoText>
         ) : (
           boardData
             .slice()
@@ -171,27 +172,21 @@ const TimeLineComponent = () => {
                   <div onClick={() => handleDotOpen(el.boardId)}>
                     <DotIcon />
                   </div>
-                  {dotMenuOpenMap[el.boardId] && (
-                    <DeleteBoard onClick={() => handleDeleteClick(el.boardId)}>
-                      {timeLineText.delete}
-                    </DeleteBoard>
-                  )}
+                  {dotMenuOpenMap[el.boardId] && <DeleteBoard onClick={() => handleDeleteClick(el.boardId)}>{timeLineText.delete}</DeleteBoard>}
                 </Delete>
                 <BoardText>
-                  {el.member}
+                  <MemberInfo>
+                    <MemberName>{el.member}</MemberName>
+                    <div>{getTimeAgoString(el.createdAt)}</div>
+                  </MemberInfo>
+
                   {expandedPosts.includes(el.boardId) ? (
                     el.content
                   ) : (
                     <>
-                      {el.content.length > 50
-                        ? el.content.substring(0, 50) + "..."
-                        : el.content}
+                      {el.content.length > 50 ? el.content.substring(0, 50) + "..." : el.content}
                       <br />
-                      {el.content.length > 50 && (
-                        <div onClick={() => toggleExpandPost(el.boardId)}>
-                          더 보기
-                        </div>
-                      )}
+                      {el.content.length > 50 && <div onClick={() => toggleExpandPost(el.boardId)}>더 보기</div>}
                     </>
                   )}
                 </BoardText>
@@ -221,7 +216,23 @@ const timeLineText = {
   delete: "삭제하기",
 };
 
-//드롭다운 글작성 스타일 및 닫기버튼 스타일
+//드롭다운 글작성 스타일 및 닫기버튼 스타일.
+const MemberInfo = styled.div`
+  display: flex;
+  :nth-child(1) {
+    width: 80%;
+  }
+  :nth-child(2) {
+    font-size: 12px;
+    margin-top: 1px;
+    margin-left: 10px;
+
+    color: rgba(0, 0, 0, 0.7);
+  }
+`;
+const MemberName = styled.div`
+  margin-bottom: 15px;
+`;
 const DropdownInput = styled.input`
   text-align: center;
   border: 0.1px solid#40797c;
@@ -238,7 +249,7 @@ const DropdownInput = styled.input`
 const Button = styled.button`
   background-color: white;
   color: darkslategray;
-  border: 1px solid darkslategray;
+  border: 1px solid rgba(0, 0, 0, 0.5);
 
   width: 300px;
   height: 30px;
@@ -309,8 +320,7 @@ const CloseButton = styled(SubmitButton)``;
 //게시판 전체 영역
 const BoardArea = styled.div<{ dropDown: boolean }>`
   text-align: center;
-  height: ${(props) =>
-    props.dropDown ? "calc(100vh - 290px)" : "calc(100vh - 200px)"};
+  height: ${(props) => (props.dropDown ? "calc(100vh - 290px)" : "calc(100vh - 200px)")};
   margin-top: 25px;
   width: 100%;
   overflow-y: auto; // 스크롤 설정
@@ -337,21 +347,25 @@ const BoardTextAreaNoText = styled.div`
 `;
 
 const BoardTextArea = styled.div`
-  box-shadow: 1px 0px 7px 0px rgba(0, 0, 0, 0.3);
   width: 98%;
-  border: 1px solid#f3f3f3;
+  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-right: 1px solid rgba(0, 0, 0, 0.4);
+  border-left: 1px solid rgba(0, 0, 0, 0.03);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.6);
   margin: 0 auto;
   padding-bottom: 10px;
   padding-top: 10px;
   color: #333;
+  margin-bottom: 5px;
 `;
 const BoardText = styled.div`
   margin-top: 10px;
-  margin-left: 25px;
+  margin-left: 55px;
   max-width: 300px;
   min-height: 100px;
   height: 150px;
   max-height: 250px;
+
   text-align: left; // 왼쪽 정렬
 
   .memberName {

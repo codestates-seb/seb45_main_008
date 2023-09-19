@@ -3,18 +3,17 @@ import styled from "styled-components";
 
 const STRINGS = {
   GUIDE_TITLE: "StockHolm 가이드",
-  LOGIN_GUIDE: "로그인을 하면 다양한 기능을 활용할 수 있습니다.",
-  CASH_GUIDE: "프로필 버튼 - 현금 탭을 으로 이동하면 현금을 충전할 수 있습니다.",
+  LOGIN_GUIDE: "☑️ 로그인을 하면 다양한 기능을 활용할 수 있습니다",
+  CASH_GUIDE: "☑️ 현금은 프로필 현금 충천 탭에서 충전할 수 있습니다",
 };
-
 
 const GuideModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       onClose();
     }
   };
-  
+
   return (
     <ModalBackground onKeyDown={handleKeyDown} tabIndex={0}>
       <ModalContainer>
@@ -59,7 +58,7 @@ const ModalContainer = styled.div`
 const Title = styled.h2`
   margin-bottom: 20px;
   font-size: 1.6rem;
-  font-weight: 400;
+  font-weight: 550;
 `;
 
 const CloseButton = styled.button`
@@ -74,9 +73,10 @@ const CloseButton = styled.button`
 `;
 
 const Content = styled.p`
-  margin: 15px 0; // 간격 조정
-  font-size: 1.1rem; // 폰트 크기 증가
-  line-height: 1.5;
+  margin: 15px; // 간격 조정
+  font-size: 0.95rem; // 폰트 크기 증가
+  font-weight: 500;
+  line-height: 70%;
   color: #555; // 색상 변경
   text-align: center; // 텍스트 중앙 정렬
 `;

@@ -16,6 +16,8 @@ const errorMessage: string = "정보를 불러올 수 없습니다";
 const errorButtonText: string = "닫기";
 const loginRequiredText: string = "로그인이 필요한 서비스입니다";
 const loginBtnText: string = "StockHolm 로그인";
+const moneyRequireText: string = "현금 충전이 필요한 서비스입니다";
+const moenyRequireBtnText: string = "현금 충전하러 가기";
 const upperbarTitle: string = "주식주문";
 const marketType: string = "코스피";
 
@@ -53,7 +55,7 @@ const StockOrderSection = () => {
 
   // fetching 데이터 loading, error 여부
   const isLoading = stockInfoLoading || stockPriceLoading || cashLoading || orderRecordLoading || holdingStockLoading || compnayListLoading;
-  const isError = stockInfoError || stockPriceError || cashError || orderRecordError || holdingStockError || companyListError;
+  const isError = stockInfoError || stockPriceError || orderRecordError || holdingStockError || companyListError;
 
   // 1) 데이터 로딩 중
   if (isLoading) {
@@ -81,6 +83,20 @@ const StockOrderSection = () => {
             {errorButtonText}
           </button>
         </div>
+      </Container>
+    );
+  }
+
+  if (cashError) {
+    return (
+      <Container orderSet={stockOrderSet}>
+        <UpperBar>
+          <h2 className="Title">{upperbarTitle}</h2>
+          <button className="CloseButton" onClick={handleStockOrderClose}>
+            &#10005;
+          </button>
+        </UpperBar>
+        <MoneyReqireIndicator />
       </Container>
     );
   }
@@ -148,6 +164,16 @@ const LoginRequestIndicator = () => {
       <div className="Notification">{loginRequiredText}</div>
       <button className="LoginButton">{loginBtnText}</button>
     </LoginRequestContainer>
+  );
+};
+
+// 현금 충전요청 화면
+const MoneyReqireIndicator = () => {
+  return (
+    <MoneyRequireContainer>
+      <div className="Notification">{moneyRequireText}</div>
+      <button className="LoginButton">{moenyRequireBtnText}</button>
+    </MoneyRequireContainer>
   );
 };
 
@@ -246,6 +272,8 @@ const LoginRequestContainer = styled.div`
     border-radius: 0.3rem;
   }
 `;
+
+const MoneyRequireContainer = styled(LoginRequestContainer)``;
 
 const StockName = styled.section`
   width: 100%;
