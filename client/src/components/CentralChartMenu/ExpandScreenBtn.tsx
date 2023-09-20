@@ -69,7 +69,8 @@ interface OwnProps {
 
 // component 생성
 const Button = styled.div<OwnProps>`
-  width: ${(props) => (props.buttonHover ? "46px" : "8px")};
+  width: ${(props) => (props.buttonHover ? "46px" : "6px")};
+  /* width: 46px; */
   height: 100%;
   display: flex;
   justify-content: center;
