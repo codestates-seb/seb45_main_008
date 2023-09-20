@@ -19,6 +19,8 @@ const WatchList: React.FC<WatchListProps> = ({ currentListType, onChangeListType
   const { data: starredData } = useGetStars();
 
   const [starredCompanyIds, setStarredCompanyIds] = useState<number[]>([]);
+
+
   useEffect(() => {
     if (starredData) {
       
