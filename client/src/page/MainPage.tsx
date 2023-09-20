@@ -20,7 +20,7 @@ import CentralChart from "../components/CentralChart/Index";
 
 import EntireList from "../components/EntireList/EntireList";
 import HoldingList from "../components/HoldingList/HoldingList";
-import WatchList from "../components/WatchList/WatchList"; // Assuming you have a Holdings component
+import WatchList from "../components/watchlist/WatchList"; // Assuming you have a Holdings component
 import CompareChartSection from "../components/CompareChartSection/Index";
 import StockOrderSection from "../components/StockOrderSection/Index";
 

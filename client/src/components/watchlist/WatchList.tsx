@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
-import StockSearchComponent from "./StockSearchComponent";
-import Header from "./Header";
-import StockItem from "./StockItem";
+import StockSearchComponent from "./StockSearchComponent.tsx";
+import Header from "./Header.tsx";
+import StockItem from "./StockItem.tsx";
 import useCompanyData from "../../hooks/useCompanyData";
 import useGetStars from "../../hooks/stars/useGetstars.ts"; // useGetStars 훅의 경로를 지정해주세요.
 import { useSelector } from "react-redux";
