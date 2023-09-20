@@ -123,7 +123,7 @@ public class StockOrderService {
             // 보유 주식 설정
             StockHold stockHold = stockHoldService.findStockHold(companyId, member.getMemberId());
             stockHold.setStockCount(stockHold.getStockCount() - stockCount);
-            stockHold.setReserveStockCount(stockCount);
+            stockHold.setReserveStockCount(stockHold.getReserveStockCount() + stockCount);
 
         }
         StockOrder stockOrder = new StockOrder();
