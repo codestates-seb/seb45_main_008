@@ -61,6 +61,14 @@ const TimeLineComponent = () => {
   // 서브밋 버튼 클릭
   const accessToken = localStorage.getItem("accessToken");
   const handleClickSubmit = async () => {
+
+      // 로그인 토큰 확인
+    if (!accessToken) {
+      toast.error("로그인이 필요한 서비스입니다", {
+        autoClose: 1000,
+      });
+      return;
+    }
     if (inputValue.length !== 0) {
       const newBoardData = {
         title: "TestBoard",
