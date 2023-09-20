@@ -33,7 +33,7 @@ export default useGetWaitOrderSuccessInfo;
 
 const getWaitOrderSuccessInfo = async () => {
   console.log("미체결 주문 처리대기 실행");
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = sessionStorage.getItem("accessToken");
   const options = {
     headers: {
       Authorization: `${accessToken}`,

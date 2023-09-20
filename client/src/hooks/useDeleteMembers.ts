@@ -7,7 +7,7 @@ export function useDeleteMember() {
     const dispatch = useDispatch();
 
     return useMutation(async () => {
-        const accessToken = localStorage.getItem('accessToken');
+        const accessToken = sessionStorage.getItem('accessToken');
         const response = await axios.delete(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members`, {
             headers: {
                 Authorization: `${accessToken}`
@@ -30,7 +30,7 @@ export function useDeleteMember() {
     }, {
         onSuccess: () => {
             // 토큰 삭제
-            localStorage.removeItem('accessToken');
+            sessionStorage.removeItem('accessToken');
             
             // 로그아웃 상태로 변경
             dispatch(setLogoutState());

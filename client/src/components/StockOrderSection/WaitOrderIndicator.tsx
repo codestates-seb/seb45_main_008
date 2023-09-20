@@ -43,8 +43,8 @@ const WaitOrderIndicator = () => {
       };
 
       stompClient.connect(headers, () => {
-        console.log("Connected with headers:", headers);
-        console.log("Connected to the WebSocket server");
+        // console.log("Connected with headers:", headers);
+        // console.log("Connected to the WebSocket server");
 
         stompClient.subscribe(`/sub/${memberId}`, async (data) => {
           const responseData = JSON.parse(data.body);

@@ -1,7 +1,7 @@
 import { useMutation } from 'react-query';
 
 const postStarData = async (companyId: number) => {
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = sessionStorage.getItem('accessToken');
   const res = await fetch(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/stars/?companyId=${companyId}`, {
     method: 'POST',
     headers: { 

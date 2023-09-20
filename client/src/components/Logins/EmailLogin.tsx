@@ -1,10 +1,12 @@
 import axios from "axios";
 import styled from "styled-components";
 import React, { useState } from "react";
+import { toast } from "react-toastify";
 import { setLoginState } from "../../reducer/member/loginSlice";
+import { setLogoutState } from "../../reducer/member/loginSlice";
 import { useDispatch } from "react-redux";
 
-const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onSignup  }) => {
+const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onSignup }) => {
   const titleText = "이메일로 로그인";
   const emailLabelText = "이메일";
   const passwordLabelText = "비밀번호";
@@ -32,8 +34,7 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onS
   };
 
   const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>, target?: "password" | "loginButton") => {
-
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       if (target === "password") {
         (document.querySelector('input[type="password"]') as HTMLInputElement).focus();
       } else if (target === "loginButton") {
@@ -42,6 +43,7 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onS
     }
   };
 
+  // 🔴 자옹 로그아웃 테스트
   const handleLoginClick = async () => {
     try {
       const response = await axios.post("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members/login", { email, password }, { validateStatus: (status) => status >= 200 && status < 600 });
@@ -51,10 +53,56 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onS
         const refreshToken = response.headers["refresh"];
 
         dispatch(setLoginState());
-        if (accessToken) localStorage.setItem("accessToken", accessToken);
-        if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
+        if (accessToken) sessionStorage.setItem("accessToken", accessToken);
+        if (refreshToken) sessionStorage.setItem("refreshToken", refreshToken);
 
-        onLogin();
+        const toastStyle = {
+          fontSize: "15px",
+          fontWeight: 350,
+          color: "black",
+        };
+
+        // 로그인 유지시긴 알림
+        toast.warning("로그인 상태는 30분 동안 지속됩니다", {
+          style: toastStyle,
+          position: "top-center",
+        });
+
+        // 로그아웃 알림 1차 설정 + 이때 시간 저장
+        const settingTime01 = 1000 * 7; // 10초
+        const settingTime02 = 1000 * 7; // 10초
+        const logoutAlarmTime01 = Date.now(); // 소환한 시간
+        sessionStorage.setItem("logoutAlarmTime01", `${logoutAlarmTime01}`); // 세션 스토리지에 저장
+
+        setTimeout(() => {
+          // 첫번째 알람 실행되었으므로 -> 첫번째 시간기록 삭제
+          sessionStorage.removeItem("logoutAlarmTime01");
+
+          toast.warning("1분 뒤 로그아웃 처리됩니다", {
+            style: toastStyle,
+            position: "top-center",
+          });
+
+          // 2차 알람 및 로그아웃 처리 + 토큰 삭제
+          const logoutAlarmTime02 = Date.now();
+          sessionStorage.setItem("logoutAlarmTime02", `${logoutAlarmTime02}`);
+
+          setTimeout(() => {
+            // 두번째 알람 실행되었으므로 -> 두번째 시간기록 삭제
+            sessionStorage.removeItem("logoutAlarmTime02");
+
+            dispatch(setLogoutState());
+            sessionStorage.removeItem("accessToken");
+            sessionStorage.removeItem("refreshToken");
+
+            toast.warning("로그아웃 처리되었습니다", {
+              style: toastStyle,
+              position: "top-center",
+            });
+          }, settingTime02);
+        }, settingTime01);
+
+        // onLogin();
         onClose();
       } else {
         setGeneralError(response.data.message || JSON.stringify(response.data));
@@ -74,14 +122,14 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onS
         <CloseButton onClick={onClose}>&times;</CloseButton>
         <Title>{titleText}</Title>
         <Label>{emailLabelText}</Label>
-        <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} onKeyDown={(event) => handleEnterPress(event, "password")}/>
+        <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} onKeyDown={(event) => handleEnterPress(event, "password")} />
         <Label>{passwordLabelText}</Label>
-        <Input type="password" placeholder="비밀번호를 입력하세요" value={password} onChange={handlePasswordChange} onKeyDown={(event) => handleEnterPress(event, "loginButton")}/>
+        <Input type="password" placeholder="비밀번호를 입력하세요" value={password} onChange={handlePasswordChange} onKeyDown={(event) => handleEnterPress(event, "loginButton")} />
         {generalError && <ErrorMessage>{generalError}</ErrorMessage>}
         <RightAlignedButton onClick={handleFindPasswordClick}>{findPasswordText}</RightAlignedButton>
         <LoginButton onClick={handleLoginClick}>{loginButtonText}</LoginButton>
         <BottomText>
-        {noAccountText} <RegisterButton onClick={onSignup}>{registerButtonText}</RegisterButton>
+          {noAccountText} <RegisterButton onClick={onSignup}>{registerButtonText}</RegisterButton>
         </BottomText>
       </ModalContainer>
     </ModalBackground>

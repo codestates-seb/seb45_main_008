@@ -27,7 +27,7 @@ const useTradeStock = () => {
 export default useTradeStock;
 
 const postOrderRequest = async (orderType: boolean, companyId: number, price: number, volume: number) => {
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = sessionStorage.getItem("accessToken");
 
   const options = {
     headers: {

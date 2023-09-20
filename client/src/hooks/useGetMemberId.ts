@@ -17,7 +17,8 @@ const useGetMemberId = () => {
 export default useGetMemberId;
 
 const getMemberId = async () => {
-  const accessToken = localStorage.getItem("accessToken");
+  const accessToken = sessionStorage.getItem("accessToken");
+
   const options = {
     headers: {
       Authorization: `${accessToken}`,

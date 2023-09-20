@@ -1,3 +1,6 @@
+import { toast } from "react-toastify";
+import { setLogoutState } from "../reducer/member/loginSlice";
+
 import { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 // import { BrowserRouter as Router, Route, Routes  } from "react-router-dom";
@@ -44,17 +47,7 @@ const MainPage = () => {
   const [isProfileModalOpen, setProfileModalOpen] = useState(false); //프로필 모달 보이기/숨기기
 
   const dispatch = useDispatch();
-
   const isLogin = useSelector((state: RootState) => state.login);
-
-
-  // 🔴 페이지 로드 시 로컬 스토리지의 토큰을 기반으로 로그인 상태를 확인합니다.
-  useEffect(() => {
-    const acessToken = localStorage.getItem("accessToken");
-    if (acessToken !== null) {
-      dispatch(setLoginState());
-    }
-  }, [dispatch]);
 
   const openOAuthModal = useCallback(() => {
     setOAuthModalOpen(true);
@@ -150,14 +143,91 @@ const MainPage = () => {
     setSelectedMenu(menu);
   };
 
+  // 🔴🔴 페이지 로드 시 로컬 스토리지의 토큰을 기반으로 로그인 상태를 확인합니다.
+  useEffect(() => {
+    const acessToken = sessionStorage.getItem("accessToken");
+    if (acessToken !== null) {
+      dispatch(setLoginState());
+
+      // 토스트 알람 스타일
+      const toastStyle = {
+        fontSize: "15px",
+        fontWeight: 350,
+        color: "black",
+      };
+
+      // 1) 현재시간
+      const currentTime = Date.now();
+      const settingTime01 = 1000 * 7; // 10초
+      const settingTime02 = 1000 * 7; // 10초
+
+      // 2) 첫번째 알람 타이머가 아직 있다면
+      const logoutAlarmTime01 = sessionStorage.getItem("logoutAlarmTime01");
+      if (logoutAlarmTime01 !== null) {
+        // 3) 비동기 설정 시간 - 새로고침 전까지 지나간 시간
+        const timeGone = currentTime - parseInt(logoutAlarmTime01);
+        const remainTime = settingTime01 - timeGone;
+
+        setTimeout(() => {
+          // 첫번째 알람 실행되었으므로 -> 첫번째 시간기록 삭제
+          sessionStorage.removeItem("logoutAlarmTime01");
+
+          toast.warning("1분 뒤 로그아웃 처리됩니다", {
+            style: toastStyle,
+            position: "top-center",
+          });
+
+          // 2차 알람 및 로그아웃 처리 + 토큰 삭제
+          const logoutAlarmTime02 = Date.now();
+          sessionStorage.setItem("logoutAlarmTime02", `${logoutAlarmTime02}`);
+
+          setTimeout(() => {
+            // 두번째 알람 실행되었으므로 -> 두번째 시간기록 삭제
+            sessionStorage.removeItem("logoutAlarmTime02");
+
+            dispatch(setLogoutState());
+            sessionStorage.removeItem("accessToken");
+            sessionStorage.removeItem("refreshToken");
+
+            toast.warning("로그아웃 처리되었습니다", {
+              style: toastStyle,
+              position: "top-center",
+            });
+          }, 7000);
+        }, remainTime);
+
+        // 3) 두번째 알람 타이머가 아직 있다면
+        const logoutAlarmTime02 = sessionStorage.getItem("logoutAlarmTime02");
+        if (logoutAlarmTime02 !== null) {
+          const timeGone = currentTime - parseInt(logoutAlarmTime02);
+          const remainTime = settingTime02 - timeGone;
+
+          setTimeout(() => {
+            // 두번째 알람 실행되었으므로 -> 두번째 시간기록 삭제
+            sessionStorage.removeItem("logoutAlarmTime02");
+
+            dispatch(setLogoutState());
+            sessionStorage.removeItem("accessToken");
+            sessionStorage.removeItem("refreshToken");
+
+            toast.warning("로그아웃 처리되었습니다", {
+              style: toastStyle,
+              position: "top-center",
+            });
+          }, remainTime);
+        }
+      }
+    }
+  }, []);
+
   useEffect(() => {
     const urlParams = new URLSearchParams(window.location.search);
     const accessToken = urlParams.get("access_token");
     const refreshToken = urlParams.get("refresh_token");
 
     if (accessToken && refreshToken) {
-      localStorage.setItem("accessToken", `Bearer ${accessToken}`);
-      localStorage.setItem("refreshToken", refreshToken);
+      sessionStorage.setItem("accessToken", `Bearer ${accessToken}`);
+      sessionStorage.setItem("refreshToken", refreshToken);
       dispatch(setLoginState());
       // Remove access_token and refresh_token from the URL
       urlParams.delete("access_token");
@@ -166,7 +236,7 @@ const MainPage = () => {
 
       window.location.reload();
     }
-  }, [dispatch]);
+  }, []);
 
   const [isGuideModalOpen, setGuideModalOpen] = useState(false);
 
