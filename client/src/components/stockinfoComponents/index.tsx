@@ -531,7 +531,7 @@ const DetailStockInformation: React.FC = () => {
                 <li>{matchingCompany.company.companySkill.sk5}</li>
                 <li>{matchingCompany.company.companySkill.sk6}</li>
                 <More onClick={handleOpenMoreView}>
-                  {DetailStockText.moreView}
+                  {moreView ? DetailStockText.lessView : DetailStockText.moreView}
                 </More>
               </StockSkills>
             ) : (
@@ -540,7 +540,7 @@ const DetailStockInformation: React.FC = () => {
                 <li>{matchingCompany.company.companySkill.sk2}</li>
 
                 <More onClick={handleOpenMoreView}>
-                  {DetailStockText.moreView}
+                  {moreView ? DetailStockText.lessView : DetailStockText.moreView}
                 </More>
               </StockSkills>
             )}
@@ -592,8 +592,7 @@ const DetailStockInformation: React.FC = () => {
                 <li>{matchingCompany.company.companyExample3}</li>
                 <li>{matchingCompany.company.companyExample4}</li>
                 <MoreView2 onClick={handleOpenMoreView2}>
-                  {" "}
-                  <span>{DetailStockText.moreView}</span>
+                  <span>{moreView2 ? DetailStockText.lessView : DetailStockText.moreView}</span>
                 </MoreView2>
               </ul>
             ) : (
@@ -603,7 +602,7 @@ const DetailStockInformation: React.FC = () => {
                 </li>
                 <li>{matchingCompany.company.companyExample}</li>
                 <MoreView2 onClick={handleOpenMoreView2}>
-                  <span>{DetailStockText.moreView}</span>
+                  <span>{moreView2 ? DetailStockText.lessView : DetailStockText.moreView}</span>
                 </MoreView2>
               </ul>
             )}
@@ -643,9 +642,14 @@ const DetailStockText = {
   stock: "주식수",
   indust: "산업군",
   detailIndust: "세부산업군",
+  lessView: "간략히",
 };
 const StockInfoContainer = styled.div`
-  max-height: 400px;
+  height: calc(100vh - 114px);
+  overflow: scroll;
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 const DevideLine = styled.div`
   width: 90%;
