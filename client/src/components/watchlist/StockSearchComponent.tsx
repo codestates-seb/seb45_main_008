@@ -4,7 +4,6 @@ import styled from "styled-components";
 import { changeCompanyId } from "../../reducer/CompanyId-Reducer";
 import useGetCompanyList from "../../hooks/useGetCompanyList";
 
-
 const stockSearch = "종목 검색";
 const search = "검색";
 const noExistCompany = "noExistCompany";
@@ -21,22 +20,60 @@ const StockSearchComponent: React.FC = () => {
 
   const handleSearchCompany = () => {
     let searchResult: string = noExistCompany;
-    let foundCompanyId: number | null = null;
-
-    companyList.forEach((company: CompanyProps) => {
-      if (company.korName === searchWord) {
-        searchResult = existCompany;
-        dispatch(changeCompanyId(company.companyId));
-        foundCompanyId = company.companyId;  // companyId 저장
-      }
-    });
-    if (searchResult === existCompany && foundCompanyId !== null) {
-      dispatch(changeCompanyId(foundCompanyId));
-    } else {
-      dispatch(changeCompanyId(-1));
+  
+    if (searchWord === "") {
+      return;
     }
 
+    const translateToKorean = (word: string) => {
+      const translations: { [key: string]: string } = {
+        samsung: "삼성전자",
+        eco: "에코프로",
+        ecopro: "에코프로",
+        ecoprobm:"에코프로비엠",
+        ecoprob:"에코프로비엠",
+        posco:"POSCO홀딩스",
+        kia: "기아",
+        hyundai: "현대차",
+        hyundaicar:"현대차",
+        dy: "디와이",
+        kuckoo: "쿠쿠홀딩스",
+        kuckooholdings:"쿠쿠홀딩스",
+        hansemk:"한세엠케이",
+        hanse: "한세엠케이",
+        lgchemical:"LG화학",
+        lgelectronic:"LG화학",
+        lgchem: "LG화학",
+        lgelec: "LG전자",
+        celltrion:"셀트리온",
+        cell: "셀트리온",
+        kakaobank:"카카오뱅크",
+        kakao: "카카오뱅크",
+        // 추가적인 회사 이름을 여기에 추가할 수 있습니다.
+      };
+      return translations[word.toLowerCase()] || word;
+    };
 
+    const translateToEnglish = (word: string) => {
+      const translations: { [key: string]: string } = {
+        엘지화학: "LG화학",
+        엘지전자: "LG전자",
+        엘지: "LG",
+        포스코: "POSCO",
+        케이지: "KG",
+      };
+      return translations[word] || word;
+    };
+
+    let translatedWord = translateToKorean(searchWord);
+    translatedWord = translateToEnglish(translatedWord);
+
+    companyList.forEach((company: CompanyProps) => {
+      if (company.korName.includes(translatedWord)) {
+        searchResult = existCompany;
+        dispatch(changeCompanyId(company.companyId));
+      }
+    });
 
     if (searchResult === noExistCompany) {
       dispatch(changeCompanyId(-1));
