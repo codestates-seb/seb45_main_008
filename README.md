@@ -35,6 +35,10 @@ https://docs.google.com/presentation/d/1yyUBoyX8Yo7ZQxZXg2CFiZDh6W0j4_jSM8UTPLbn
 ## 요구 사항 정의서
 https://docs.google.com/spreadsheets/d/1SYxtZdxv-H4Cm4O124we4IPbjh4eNBDV/edit#gid=1436212772
 
+## ERD
+![화면 캡처 2023-09-20 000142](https://github.com/codestates-seb/seb45_main_008/assets/130031798/0d52cc8e-2eac-47a5-baec-1d19d98c9d08)
+
+
 ## Github Rule
 
 ### Commit Convention
