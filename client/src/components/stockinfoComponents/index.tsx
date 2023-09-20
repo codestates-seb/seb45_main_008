@@ -665,7 +665,7 @@ const StockName = styled.ul`
   display: flex;
   flex-direction: column;
   font-size: 15px;
-  margin-left: -30px;
+  margin-left: -20px;
   margin-top: 10px;
   li:nth-child(1) {
     font-size: 18px;
@@ -728,7 +728,7 @@ const StockSkills = styled.ul`
 const StockImg = styled.img`
   width: 45px;
   height: 45px;
-  margin-left: 10px;
+  margin-left: 40px;
   border-radius: 50%;
   box-shadow: 0px 0px 8px 1px rgba(0, 0, 0, 0.3);
 `;
@@ -790,5 +790,4 @@ ul {
     font-size: 16px;
     color: #333;
   }
-
-`;
+}`;

@@ -548,6 +548,7 @@ const RatioText = styled.div`
   display: flex;
   margin-left: 20px;
   margin-top: 20px;
+  margin-right: 40px;
   justify-content: space-between;
   font-size: 15px;
   color: #5f5f5f;
@@ -555,7 +556,7 @@ const RatioText = styled.div`
 const Ratio = styled.div`
   margin-left: 20px;
   margin-top: 20px;
-  width: 360px;
+  width: 340px;
   display: flex;
 
   text-align: center;
@@ -566,14 +567,15 @@ const LentRatio = styled.div`
   padding-top: 14px;
   font-size: 13px;
   color: white;
-  background-color: rgba(0, 0, 255, 0.75);
+  background-color: #5a99f8;
+  margin-right: 40px;
 `;
 const AssetRatio = styled.div`
   height: 50px;
   padding-top: 14px;
   font-size: 13px;
   color: white;
-  background-color: rgba(255, 0, 0, 0.75);
+  background-color: #f87369;
 `;
 type CompanySkill = {
   sk1: string;
