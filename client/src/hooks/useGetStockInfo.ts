@@ -56,9 +56,12 @@ const useGetStockInfo = (companyId: number) => {
 };
 
 const getStockInfo = async (companyId: number) => {
-  const res = await axios.get(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/companies/${companyId}`);
-  const stockInfo = res.data;
-  return stockInfo;
+  // 최초 마운트 시 비교차트 호출되지 않도록 설정
+  if (companyId !== null) {
+    const res = await axios.get(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/companies/${companyId}`);
+    const stockInfo = res.data;
+    return stockInfo;
+  }
 };
 
 export default useGetStockInfo;

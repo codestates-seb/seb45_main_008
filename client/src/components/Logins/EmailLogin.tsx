@@ -3,8 +3,10 @@ import styled from "styled-components";
 import React, { useState } from "react";
 import { setLoginState } from "../../reducer/member/loginSlice";
 import { useDispatch } from "react-redux";
+import setAutoLogoutAlarm from "../../utils/setAutoLogoutAlarm";
+import { secondAlarmTime, lastAlarmTime } from "../../utils/setAutoLogoutAlarm";
 
-const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onSignup  }) => {
+const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onSignup }) => {
   const titleText = "이메일로 로그인";
   const emailLabelText = "이메일";
   const passwordLabelText = "비밀번호";
@@ -32,8 +34,7 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onS
   };
 
   const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>, target?: "password" | "loginButton") => {
-
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       if (target === "password") {
         (document.querySelector('input[type="password"]') as HTMLInputElement).focus();
       } else if (target === "loginButton") {
@@ -42,6 +43,7 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onS
     }
   };
 
+  // 🔴 자동 로그아웃 관련 코드 -> 정리 필요
   const handleLoginClick = async () => {
     try {
       const response = await axios.post("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members/login", { email, password }, { validateStatus: (status) => status >= 200 && status < 600 });
@@ -50,11 +52,12 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onS
         const accessToken = response.headers["authorization"];
         const refreshToken = response.headers["refresh"];
 
+        if (accessToken) sessionStorage.setItem("accessToken", accessToken);
+        if (refreshToken) sessionStorage.setItem("refreshToken", refreshToken);
         dispatch(setLoginState());
-        if (accessToken) localStorage.setItem("accessToken", accessToken);
-        if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
 
-        onLogin();
+        setAutoLogoutAlarm(dispatch, "first", secondAlarmTime, lastAlarmTime);
+
         onClose();
       } else {
         setGeneralError(response.data.message || JSON.stringify(response.data));
@@ -67,6 +70,7 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onS
       }
     }
   };
+  // 🔴 자동 로그아웃 관련 코드 -> 정리 필요
 
   return (
     <ModalBackground>
@@ -74,14 +78,14 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onS
         <CloseButton onClick={onClose}>&times;</CloseButton>
         <Title>{titleText}</Title>
         <Label>{emailLabelText}</Label>
-        <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} onKeyDown={(event) => handleEnterPress(event, "password")}/>
+        <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} onKeyDown={(event) => handleEnterPress(event, "password")} />
         <Label>{passwordLabelText}</Label>
-        <Input type="password" placeholder="비밀번호를 입력하세요" value={password} onChange={handlePasswordChange} onKeyDown={(event) => handleEnterPress(event, "loginButton")}/>
+        <Input type="password" placeholder="비밀번호를 입력하세요" value={password} onChange={handlePasswordChange} onKeyDown={(event) => handleEnterPress(event, "loginButton")} />
         {generalError && <ErrorMessage>{generalError}</ErrorMessage>}
         <RightAlignedButton onClick={handleFindPasswordClick}>{findPasswordText}</RightAlignedButton>
         <LoginButton onClick={handleLoginClick}>{loginButtonText}</LoginButton>
         <BottomText>
-        {noAccountText} <RegisterButton onClick={onSignup}>{registerButtonText}</RegisterButton>
+          {noAccountText} <RegisterButton onClick={onSignup}>{registerButtonText}</RegisterButton>
         </BottomText>
       </ModalContainer>
     </ModalBackground>
@@ -93,7 +97,6 @@ export default EmailLoginModal;
 // 컴포넌트 props 타입 정의
 interface EmailLoginModalProps {
   onClose: () => void;
-  onLogin: () => void;
   onSignup: () => void;
 }
 

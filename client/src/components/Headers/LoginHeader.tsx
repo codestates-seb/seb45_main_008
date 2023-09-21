@@ -41,14 +41,16 @@ const LoginHeader: React.FC<LoginHeaderProps> = () => {
 
   // 로고 클릭 처리 함수
   const handleLogoClick = () => {
-    window.location.reload()
+    window.location.reload();
   };
 
   // 로그아웃 클릭 처리 함수
   const handleLogout = () => {
     dispatch(setLogoutState()); // 전역변수에서 로그아웃 상태로 설정
-    localStorage.removeItem("accessToken"); // 엑세스 토큰 제거
-    localStorage.removeItem("refreshToken"); // 리프레시 토큰 제거
+    sessionStorage.removeItem("accessToken"); // 엑세스 토큰 제거
+    sessionStorage.removeItem("refreshToken"); // 리프레시 토큰 제거
+    sessionStorage.removeItem("logoutAlarmTime01");
+    sessionStorage.removeItem("logoutAlarmTime02");
 
     // 페이지를 새로고침합니다.
     window.location.reload();

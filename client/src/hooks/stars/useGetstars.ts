@@ -1,4 +1,4 @@
-import { useQuery } from 'react-query';
+import { useQuery } from "react-query";
 
 type StockAsBiResponseDto = {
   stockAsBiId: number;
@@ -34,24 +34,30 @@ type StarDataItem = {
 
 type StarData = StarDataItem[];
 
-const fetchStarData = async (): Promise<StarData> => {
-  const accessToken = localStorage.getItem('accessToken');
-  const res = await fetch('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/stars', {
-    headers: {
-      'Authorization': `${accessToken}`
-    }
-  });
-  
-  if (!res.ok) {
-    const data = await res.json();
-    throw new Error(data.message || 'Something went wrong');
-  }
+// : Promise<StarData>
 
-  return res.json();
+const fetchStarData = async () => {
+  const accessToken = sessionStorage.getItem("accessToken");
+
+  // 로그인 상태에만 관심목록 데이터 호출하도록 설정
+  if (accessToken !== null) {
+    const res = await fetch("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/stars", {
+      headers: {
+        Authorization: `${accessToken}`,
+      },
+    });
+
+    if (!res.ok) {
+      const data = await res.json();
+      throw new Error(data.message || "Something went wrong");
+    }
+
+    return res.json();
+  }
 };
 
 const useGetStar = () => {
-  return useQuery<StarData, Error>('starData', fetchStarData);
+  return useQuery<StarData, Error>("starData", fetchStarData);
 };
 
 export default useGetStar;

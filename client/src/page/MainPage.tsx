@@ -32,6 +32,8 @@ import { RootState } from "../store/config";
 
 // 🔴 로그아웃 관련 action 함수
 import { setLoginState } from "../reducer/member/loginSlice";
+import setAutoLogoutAlarm from "../utils/setAutoLogoutAlarm";
+import { secondAlarmTime, lastAlarmTime } from "../utils/setAutoLogoutAlarm";
 
 const MainPage = () => {
   const expandScreen = useSelector((state: StateProps) => state.expandScreen);
@@ -44,17 +46,7 @@ const MainPage = () => {
   const [isProfileModalOpen, setProfileModalOpen] = useState(false); //프로필 모달 보이기/숨기기
 
   const dispatch = useDispatch();
-
   const isLogin = useSelector((state: RootState) => state.login);
-
-
-  // 🔴 페이지 로드 시 로컬 스토리지의 토큰을 기반으로 로그인 상태를 확인합니다.
-  useEffect(() => {
-    const acessToken = localStorage.getItem("accessToken");
-    if (acessToken !== null) {
-      dispatch(setLoginState());
-    }
-  }, [dispatch]);
 
   const openOAuthModal = useCallback(() => {
     setOAuthModalOpen(true);
@@ -132,12 +124,6 @@ const MainPage = () => {
 
   const [isLoginConfirmationModalOpen, setLoginConfirmationModalOpen] = useState(false);
 
-  const handleLogin = () => {
-    closeEmailLoginModal();
-    setLoginConfirmationModalOpen(true);
-    dispatch(setLoginState());
-  };
-
   const handleLoginConfirmationClose = () => {
     setLoginConfirmationModalOpen(false);
   };
@@ -150,23 +136,71 @@ const MainPage = () => {
     setSelectedMenu(menu);
   };
 
+  // 🔴 자동 로그아웃 관련 코드 -> 정리 필요
   useEffect(() => {
+    const acessToken = sessionStorage.getItem("accessToken");
+    if (acessToken !== null) {
+      dispatch(setLoginState());
+
+      const currentTime = Date.now();
+
+      // 로그인 알람 설정한 시간 (세선 스토리지에 저장 되어있음)
+      const autoLogoutSecondAlarm = sessionStorage.getItem("autoLogoutSecondAlarm");
+      const autoLogoutLastAlarm = sessionStorage.getItem("autoLogoutLastAlarm");
+
+      if (autoLogoutSecondAlarm !== null) {
+        // 3) 비동기 설정 시간 - 새로고침 전까지 지나간 시간
+        const timeGone = currentTime - parseInt(autoLogoutSecondAlarm);
+        const remainTime = secondAlarmTime - timeGone;
+        setAutoLogoutAlarm(dispatch, "second", remainTime, lastAlarmTime);
+      }
+
+      // 3) 첫번째 타이머 실행 후 -> 두번째 타이머 설정했는데 새로고침 시
+      if (autoLogoutLastAlarm !== null) {
+        const timeGone = currentTime - parseInt(autoLogoutLastAlarm);
+        const remainTime = lastAlarmTime - timeGone;
+        setAutoLogoutAlarm(dispatch, "last", remainTime);
+      }
+    }
+  }, []);
+
+  // Oauth 로그인 관련 코드
+  useEffect(() => {
+    // MainPage로 돌아왔을 때 url에 prameter가 있다면 -> url을 따서
     const urlParams = new URLSearchParams(window.location.search);
     const accessToken = urlParams.get("access_token");
     const refreshToken = urlParams.get("refresh_token");
 
+    const currentTime = Date.now();
+    const autoLogoutSecondAlarm = sessionStorage.getItem("autoLogoutSecondAlarm");
+    const autoLogoutLastAlarm = sessionStorage.getItem("autoLogoutLastAlarm");
+
     if (accessToken && refreshToken) {
-      localStorage.setItem("accessToken", `Bearer ${accessToken}`);
-      localStorage.setItem("refreshToken", refreshToken);
+      sessionStorage.setItem("accessToken", `Bearer ${accessToken}`);
+      sessionStorage.setItem("refreshToken", refreshToken);
       dispatch(setLoginState());
-      // Remove access_token and refresh_token from the URL
+
       urlParams.delete("access_token");
       urlParams.delete("refresh_token");
       window.history.replaceState({}, "", "?" + urlParams.toString());
 
-      window.location.reload();
+      if (autoLogoutSecondAlarm === null) {
+        setAutoLogoutAlarm(dispatch, "first", secondAlarmTime, lastAlarmTime);
+      }
+
+      if (autoLogoutSecondAlarm !== null) {
+        const timeGone = currentTime - parseInt(autoLogoutSecondAlarm);
+        const remainTime = secondAlarmTime - timeGone;
+        setAutoLogoutAlarm(dispatch, "second", remainTime, lastAlarmTime);
+      }
+
+      if (autoLogoutLastAlarm !== null) {
+        const timeGone = currentTime - parseInt(autoLogoutLastAlarm);
+        const remainTime = lastAlarmTime - timeGone;
+        setAutoLogoutAlarm(dispatch, "last", remainTime);
+      }
     }
-  }, [dispatch]);
+  }, []);
 
   const [isGuideModalOpen, setGuideModalOpen] = useState(false);
 
@@ -193,7 +227,7 @@ const MainPage = () => {
         <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} onEmailSignupClick={openEmailSignupModal} onWatchListClick={() => handleMenuChange("관심종목")} onHoldingsClick={() => handleMenuChange("보유종목")} />
       )}
 
-      {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} onSignup={openEmailSignupFromLogin} />}
+      {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onSignup={openEmailSignupFromLogin} />}
       {isLoginConfirmationModalOpen && <LoginConfirmationModal onClose={handleLoginConfirmationClose} />}
 
       {isEmailSignupModalOpen && <EmailSignupModal onClose={closeEmailSignupModal} onRequestVerification={openEmailVerificationModal} />}

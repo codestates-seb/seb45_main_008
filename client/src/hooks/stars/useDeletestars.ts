@@ -2,7 +2,7 @@ import { useMutation } from 'react-query';
 
 // DELETE 요청을 수행하는 함수
 const deleteStarData = async (companyId: number) => {
-  const accessToken = localStorage.getItem('accessToken');
+  const accessToken = sessionStorage.getItem('accessToken');
   const response = await fetch(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/stars/?companyId=${companyId}`, {
       method: 'DELETE',
       headers: {
