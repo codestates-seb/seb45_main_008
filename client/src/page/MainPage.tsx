@@ -223,35 +223,35 @@ const MainPage = () => {
     const accessToken = urlParams.get("access_token");
     const refreshToken = urlParams.get("refresh_token");
 
+    // 🔴 자동 로그아웃 테스트
+    // 현재 시간, 알림 세팅 타임, 세션 스토리지에 저장된 타이머 시간
+    const currentTime = Date.now();
+    const settingTime01 = 1000 * 60 * 29; // 29분
+    const settingTime02 = 1000 * 60; // 1분
+    const logoutAlarmTime01 = sessionStorage.getItem("logoutAlarmTime01");
+    const logoutAlarmTime02 = sessionStorage.getItem("logoutAlarmTime02");
+
+    const toastStyle = {
+      fontSize: "15px",
+      fontWeight: 350,
+      color: "black",
+    };
+
     // 세션 스토리지에 저장 + 로그인 처리를 한다
     if (accessToken && refreshToken) {
       sessionStorage.setItem("accessToken", `Bearer ${accessToken}`);
       sessionStorage.setItem("refreshToken", refreshToken);
       dispatch(setLoginState());
 
-      // url에 있는 파라미터를 지운다
-      urlParams.delete("access_token");
-      urlParams.delete("refresh_token");
-      window.history.replaceState({}, "", "?" + urlParams.toString());
+      // // ✅ 1차 타이머도 설정되지 않았다면 -> 최초 설정 시
+      if (accessToken && refreshToken && logoutAlarmTime01 === null) {
+        // url에 있는 파라미터를 지운다
+        urlParams.delete("access_token");
+        urlParams.delete("refresh_token");
+        window.history.replaceState({}, "", "?" + urlParams.toString());
 
-      window.location.reload();
+        console.log("Oauth 테스트");
 
-      // 🔴 자동 로그아웃 테스트
-      // 현재 시간, 알림 세팅 타임, 세션 스토리지에 저장된 타이머 시간
-      const currentTime = Date.now();
-      const settingTime01 = 1000 * 60 * 29; // 29분
-      const settingTime02 = 1000 * 60; // 1분
-      const logoutAlarmTime01 = sessionStorage.getItem("logoutAlarmTime01");
-      const logoutAlarmTime02 = sessionStorage.getItem("logoutAlarmTime02");
-
-      const toastStyle = {
-        fontSize: "15px",
-        fontWeight: 350,
-        color: "black",
-      };
-
-      // ✅ 1차 타이머도 설정되지 않았다면 -> 최초 설정 시
-      if (logoutAlarmTime01 === null) {
         toast.warning("로그인 상태는 30분 동안 유지됩니다", {
           style: toastStyle,
           position: "top-center",
@@ -260,6 +260,7 @@ const MainPage = () => {
         // 1차 타이머 저장
         const logoutAlarmTime01 = Date.now(); // 1차 알람 호출한 시간
         sessionStorage.setItem("logoutAlarmTime01", `${logoutAlarmTime01}`); // 세션 스토리지에 저장
+        console.log("Oauth 테스트1");
 
         setTimeout(() => {
           // 첫번째 알람 실행되었으므로 -> 첫번째 시간기록 삭제
@@ -291,7 +292,7 @@ const MainPage = () => {
       }
 
       // ✅ 1차 타이머는 설정 됐는데 -> 새로고침 시
-      if (logoutAlarmTime01 !== null) {
+      if (accessToken && refreshToken && logoutAlarmTime01 !== null) {
         // 3) 비동기 설정 시간 - 새로고침 전까지 지나간 시간
         const timeGone = currentTime - parseInt(logoutAlarmTime01);
         const remainTime = settingTime01 - timeGone;
@@ -326,7 +327,7 @@ const MainPage = () => {
       }
 
       // ✅ 두번째 타이머 설정 됐는데 -> 새로고침 시
-      if (logoutAlarmTime02 !== null) {
+      if (accessToken && refreshToken && logoutAlarmTime02 !== null) {
         const timeGone = currentTime - parseInt(logoutAlarmTime02);
         const remainTime = settingTime02 - timeGone;
 
