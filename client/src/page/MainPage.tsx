@@ -1,6 +1,3 @@
-import { toast } from "react-toastify";
-import { setLogoutState } from "../reducer/member/loginSlice";
-
 import { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 // import { BrowserRouter as Router, Route, Routes  } from "react-router-dom";
@@ -35,6 +32,8 @@ import { RootState } from "../store/config";
 
 // 🔴 로그아웃 관련 action 함수
 import { setLoginState } from "../reducer/member/loginSlice";
+import setAutoLogoutAlarm from "../utils/setAutoLogoutAlarm";
+import { secondAlarmTime, lastAlarmTime } from "../utils/setAutoLogoutAlarm";
 
 const MainPage = () => {
   const expandScreen = useSelector((state: StateProps) => state.expandScreen);
@@ -143,75 +142,24 @@ const MainPage = () => {
     if (acessToken !== null) {
       dispatch(setLoginState());
 
-      // 토스트 알람 스타일
-      const toastStyle = {
-        fontSize: "15px",
-        fontWeight: 350,
-        color: "black",
-      };
-
-      // 1) 현재시간
       const currentTime = Date.now();
-      const settingTime01 = 1000 * 60 * 29; // 29분
-      const settingTime02 = 1000 * 60; // 1분
 
       // 로그인 알람 설정한 시간 (세선 스토리지에 저장 되어있음)
-      const logoutAlarmTime01 = sessionStorage.getItem("logoutAlarmTime01");
-      const logoutAlarmTime02 = sessionStorage.getItem("logoutAlarmTime02");
+      const autoLogoutSecondAlarm = sessionStorage.getItem("autoLogoutSecondAlarm");
+      const autoLogoutLastAlarm = sessionStorage.getItem("autoLogoutLastAlarm");
 
-      // 2) 첫번째 알람 타이머가 아직 있다면
-      if (logoutAlarmTime01 !== null) {
+      if (autoLogoutSecondAlarm !== null) {
         // 3) 비동기 설정 시간 - 새로고침 전까지 지나간 시간
-        const timeGone = currentTime - parseInt(logoutAlarmTime01);
-        const remainTime = settingTime01 - timeGone;
-
-        setTimeout(() => {
-          // 첫번째 알람 실행되었으므로 -> 첫번째 시간기록 삭제
-          sessionStorage.removeItem("logoutAlarmTime01");
-
-          toast.warning("1분 뒤 로그아웃 처리됩니다", {
-            style: toastStyle,
-            position: "top-center",
-          });
-
-          // 2차 알람 세팅
-          const logoutAlarmTime02 = Date.now();
-          sessionStorage.setItem("logoutAlarmTime02", `${logoutAlarmTime02}`);
-
-          setTimeout(() => {
-            // 두번째 알람 실행되었으므로 -> 두번째 시간기록 삭제
-            sessionStorage.removeItem("logoutAlarmTime02");
-
-            dispatch(setLogoutState());
-            sessionStorage.removeItem("accessToken");
-            sessionStorage.removeItem("refreshToken");
-
-            toast.warning("로그아웃 처리되었습니다", {
-              style: toastStyle,
-              position: "top-center",
-            });
-          }, settingTime02);
-        }, remainTime);
+        const timeGone = currentTime - parseInt(autoLogoutSecondAlarm);
+        const remainTime = secondAlarmTime - timeGone;
+        setAutoLogoutAlarm(dispatch, "second", remainTime, lastAlarmTime);
       }
 
       // 3) 첫번째 타이머 실행 후 -> 두번째 타이머 설정했는데 새로고침 시
-      if (logoutAlarmTime02 !== null) {
-        const timeGone = currentTime - parseInt(logoutAlarmTime02);
-        const remainTime = settingTime02 - timeGone;
-
-        setTimeout(() => {
-          // 두번째 알람 실행되었으므로 -> 두번째 시간기록 삭제
-          sessionStorage.removeItem("logoutAlarmTime02");
-
-          dispatch(setLogoutState());
-          sessionStorage.removeItem("accessToken");
-          sessionStorage.removeItem("refreshToken");
-
-          toast.warning("로그아웃 처리되었습니다", {
-            style: toastStyle,
-            position: "top-center",
-          });
-        }, remainTime);
+      if (autoLogoutLastAlarm !== null) {
+        const timeGone = currentTime - parseInt(autoLogoutLastAlarm);
+        const remainTime = lastAlarmTime - timeGone;
+        setAutoLogoutAlarm(dispatch, "last", remainTime);
       }
     }
   }, []);
@@ -223,131 +171,36 @@ const MainPage = () => {
     const accessToken = urlParams.get("access_token");
     const refreshToken = urlParams.get("refresh_token");
 
-    // 🔴 자동 로그아웃 테스트
-    // 현재 시간, 알림 세팅 타임, 세션 스토리지에 저장된 타이머 시간
     const currentTime = Date.now();
-    const settingTime01 = 1000 * 60 * 29; // 29분
-    const settingTime02 = 1000 * 60; // 1분
-    const logoutAlarmTime01 = sessionStorage.getItem("logoutAlarmTime01");
-    const logoutAlarmTime02 = sessionStorage.getItem("logoutAlarmTime02");
+    const autoLogoutSecondAlarm = sessionStorage.getItem("autoLogoutSecondAlarm");
+    const autoLogoutLastAlarm = sessionStorage.getItem("autoLogoutLastAlarm");
 
-    const toastStyle = {
-      fontSize: "15px",
-      fontWeight: 350,
-      color: "black",
-    };
-
-    // 세션 스토리지에 저장 + 로그인 처리를 한다
     if (accessToken && refreshToken) {
       sessionStorage.setItem("accessToken", `Bearer ${accessToken}`);
       sessionStorage.setItem("refreshToken", refreshToken);
       dispatch(setLoginState());
 
-      // // ✅ 1차 타이머도 설정되지 않았다면 -> 최초 설정 시
-      if (accessToken && refreshToken && logoutAlarmTime01 === null) {
-        // url에 있는 파라미터를 지운다
-        urlParams.delete("access_token");
-        urlParams.delete("refresh_token");
-        window.history.replaceState({}, "", "?" + urlParams.toString());
+      urlParams.delete("access_token");
+      urlParams.delete("refresh_token");
+      window.history.replaceState({}, "", "?" + urlParams.toString());
 
-        console.log("Oauth 테스트");
-
-        toast.warning("로그인 상태는 30분 동안 유지됩니다", {
-          style: toastStyle,
-          position: "top-center",
-        });
-
-        // 1차 타이머 저장
-        const logoutAlarmTime01 = Date.now(); // 1차 알람 호출한 시간
-        sessionStorage.setItem("logoutAlarmTime01", `${logoutAlarmTime01}`); // 세션 스토리지에 저장
-        console.log("Oauth 테스트1");
-
-        setTimeout(() => {
-          // 첫번째 알람 실행되었으므로 -> 첫번째 시간기록 삭제
-          sessionStorage.removeItem("logoutAlarmTime01");
-
-          toast.warning("1분 뒤 로그아웃 처리됩니다", {
-            style: toastStyle,
-            position: "top-center",
-          });
-
-          // 2차 알람 및 로그아웃 처리 + 토큰 삭제
-          const logoutAlarmTime02 = Date.now(); // 2차 알람 호출한 시간
-          sessionStorage.setItem("logoutAlarmTime02", `${logoutAlarmTime02}`);
-
-          setTimeout(() => {
-            // 두번째 알람 실행되었으므로 -> 두번째 시간기록 삭제
-            sessionStorage.removeItem("logoutAlarmTime02");
-
-            dispatch(setLogoutState());
-            sessionStorage.removeItem("accessToken");
-            sessionStorage.removeItem("refreshToken");
-
-            toast.warning("로그아웃 처리되었습니다", {
-              style: toastStyle,
-              position: "top-center",
-            });
-          }, settingTime02);
-        }, settingTime01);
+      if (autoLogoutSecondAlarm === null) {
+        setAutoLogoutAlarm(dispatch, "first", secondAlarmTime, lastAlarmTime);
       }
 
-      // ✅ 1차 타이머는 설정 됐는데 -> 새로고침 시
-      if (accessToken && refreshToken && logoutAlarmTime01 !== null) {
-        // 3) 비동기 설정 시간 - 새로고침 전까지 지나간 시간
-        const timeGone = currentTime - parseInt(logoutAlarmTime01);
-        const remainTime = settingTime01 - timeGone;
-
-        setTimeout(() => {
-          // 첫번째 알람 실행되었으므로 -> 첫번째 시간기록 삭제
-          sessionStorage.removeItem("logoutAlarmTime01");
-
-          toast.warning("1분 뒤 로그아웃 처리됩니다", {
-            style: toastStyle,
-            position: "top-center",
-          });
-
-          // 2차 알람설정
-          const logoutAlarmTime02 = Date.now();
-          sessionStorage.setItem("logoutAlarmTime02", `${logoutAlarmTime02}`);
-
-          setTimeout(() => {
-            // 두번째 알람 실행되었으므로 -> 두번째 시간기록 삭제
-            sessionStorage.removeItem("logoutAlarmTime02");
-
-            dispatch(setLogoutState());
-            sessionStorage.removeItem("accessToken");
-            sessionStorage.removeItem("refreshToken");
-
-            toast.warning("로그아웃 처리되었습니다", {
-              style: toastStyle,
-              position: "top-center",
-            });
-          }, settingTime02);
-        }, remainTime);
+      if (autoLogoutSecondAlarm !== null) {
+        const timeGone = currentTime - parseInt(autoLogoutSecondAlarm);
+        const remainTime = secondAlarmTime - timeGone;
+        setAutoLogoutAlarm(dispatch, "second", remainTime, lastAlarmTime);
       }
 
-      // ✅ 두번째 타이머 설정 됐는데 -> 새로고침 시
-      if (accessToken && refreshToken && logoutAlarmTime02 !== null) {
-        const timeGone = currentTime - parseInt(logoutAlarmTime02);
-        const remainTime = settingTime02 - timeGone;
-
-        setTimeout(() => {
-          // 두번째 알람 실행되었으므로 -> 두번째 시간기록 삭제
-          sessionStorage.removeItem("logoutAlarmTime02");
-
-          dispatch(setLogoutState());
-          sessionStorage.removeItem("accessToken");
-          sessionStorage.removeItem("refreshToken");
-
-          toast.warning("로그아웃 처리되었습니다", {
-            style: toastStyle,
-            position: "top-center",
-          });
-        }, remainTime);
+      if (autoLogoutLastAlarm !== null) {
+        const timeGone = currentTime - parseInt(autoLogoutLastAlarm);
+        const remainTime = lastAlarmTime - timeGone;
+        setAutoLogoutAlarm(dispatch, "last", remainTime);
       }
     }
   }, []);
-  // 🔴 자동 로그아웃 관련 코드 -> 정리 필요
 
   const [isGuideModalOpen, setGuideModalOpen] = useState(false);
 

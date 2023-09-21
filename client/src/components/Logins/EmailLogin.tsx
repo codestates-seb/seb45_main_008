@@ -1,10 +1,10 @@
 import axios from "axios";
 import styled from "styled-components";
 import React, { useState } from "react";
-import { toast } from "react-toastify";
 import { setLoginState } from "../../reducer/member/loginSlice";
-import { setLogoutState } from "../../reducer/member/loginSlice";
 import { useDispatch } from "react-redux";
+import setAutoLogoutAlarm from "../../utils/setAutoLogoutAlarm";
+import { secondAlarmTime, lastAlarmTime } from "../../utils/setAutoLogoutAlarm";
 
 const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onSignup }) => {
   const titleText = "이메일로 로그인";
@@ -56,51 +56,7 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onSignup }) 
         if (refreshToken) sessionStorage.setItem("refreshToken", refreshToken);
         dispatch(setLoginState());
 
-        const toastStyle = {
-          fontSize: "15px",
-          fontWeight: 350,
-          color: "black",
-        };
-
-        // 로그인 유지시긴 알림
-        toast.warning("로그인 상태는 30분 동안 유지됩니다", {
-          style: toastStyle,
-          position: "top-center",
-        });
-
-        // 로그아웃 알림 1차 설정 + 이때 시간 저장
-        const settingTime01 = 1000 * 60 * 29; // 29분
-        const settingTime02 = 1000 * 60; // 1분
-        const logoutAlarmTime01 = Date.now(); // 1차 알람 호출한 시간
-        sessionStorage.setItem("logoutAlarmTime01", `${logoutAlarmTime01}`); // 세션 스토리지에 저장
-
-        setTimeout(() => {
-          // 첫번째 알람 실행되었으므로 -> 첫번째 시간기록 삭제
-          sessionStorage.removeItem("logoutAlarmTime01");
-
-          toast.warning("1분 뒤 로그아웃 처리됩니다", {
-            style: toastStyle,
-            position: "top-center",
-          });
-
-          // 2차 알람 및 로그아웃 처리 + 토큰 삭제
-          const logoutAlarmTime02 = Date.now(); // 2차 알람 호출한 시간
-          sessionStorage.setItem("logoutAlarmTime02", `${logoutAlarmTime02}`);
-
-          setTimeout(() => {
-            // 두번째 알람 실행되었으므로 -> 두번째 시간기록 삭제
-            sessionStorage.removeItem("logoutAlarmTime02");
-
-            dispatch(setLogoutState());
-            sessionStorage.removeItem("accessToken");
-            sessionStorage.removeItem("refreshToken");
-
-            toast.warning("로그아웃 처리되었습니다", {
-              style: toastStyle,
-              position: "top-center",
-            });
-          }, settingTime02);
-        }, settingTime01);
+        setAutoLogoutAlarm(dispatch, "first", secondAlarmTime, lastAlarmTime);
 
         onClose();
       } else {
