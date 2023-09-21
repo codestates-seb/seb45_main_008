@@ -125,12 +125,6 @@ const MainPage = () => {
 
   const [isLoginConfirmationModalOpen, setLoginConfirmationModalOpen] = useState(false);
 
-  const handleLogin = () => {
-    closeEmailLoginModal();
-    setLoginConfirmationModalOpen(true);
-    dispatch(setLoginState());
-  };
-
   const handleLoginConfirmationClose = () => {
     setLoginConfirmationModalOpen(false);
   };
@@ -143,7 +137,7 @@ const MainPage = () => {
     setSelectedMenu(menu);
   };
 
-  // 🔴🔴 페이지 로드 시 로컬 스토리지의 토큰을 기반으로 로그인 상태를 확인합니다.
+  // 🔴 자동 로그아웃 관련 코드 -> 정리 필요
   useEffect(() => {
     const acessToken = sessionStorage.getItem("accessToken");
     if (acessToken !== null) {
@@ -158,11 +152,14 @@ const MainPage = () => {
 
       // 1) 현재시간
       const currentTime = Date.now();
-      const settingTime01 = 1000 * 7; // 10초
-      const settingTime02 = 1000 * 7; // 10초
+      const settingTime01 = 1000 * 60 * 29; // 29분
+      const settingTime02 = 1000 * 60; // 1분
+
+      // 로그인 알람 설정한 시간 (세선 스토리지에 저장 되어있음)
+      const logoutAlarmTime01 = sessionStorage.getItem("logoutAlarmTime01");
+      const logoutAlarmTime02 = sessionStorage.getItem("logoutAlarmTime02");
 
       // 2) 첫번째 알람 타이머가 아직 있다면
-      const logoutAlarmTime01 = sessionStorage.getItem("logoutAlarmTime01");
       if (logoutAlarmTime01 !== null) {
         // 3) 비동기 설정 시간 - 새로고침 전까지 지나간 시간
         const timeGone = currentTime - parseInt(logoutAlarmTime01);
@@ -177,7 +174,7 @@ const MainPage = () => {
             position: "top-center",
           });
 
-          // 2차 알람 및 로그아웃 처리 + 토큰 삭제
+          // 2차 알람 세팅
           const logoutAlarmTime02 = Date.now();
           sessionStorage.setItem("logoutAlarmTime02", `${logoutAlarmTime02}`);
 
@@ -193,14 +190,89 @@ const MainPage = () => {
               style: toastStyle,
               position: "top-center",
             });
-          }, 7000);
+          }, settingTime02);
         }, remainTime);
+      }
 
-        // 3) 두번째 알람 타이머가 아직 있다면
-        const logoutAlarmTime02 = sessionStorage.getItem("logoutAlarmTime02");
-        if (logoutAlarmTime02 !== null) {
-          const timeGone = currentTime - parseInt(logoutAlarmTime02);
-          const remainTime = settingTime02 - timeGone;
+      // 3) 첫번째 타이머 실행 후 -> 두번째 타이머 설정했는데 새로고침 시
+      if (logoutAlarmTime02 !== null) {
+        const timeGone = currentTime - parseInt(logoutAlarmTime02);
+        const remainTime = settingTime02 - timeGone;
+
+        setTimeout(() => {
+          // 두번째 알람 실행되었으므로 -> 두번째 시간기록 삭제
+          sessionStorage.removeItem("logoutAlarmTime02");
+
+          dispatch(setLogoutState());
+          sessionStorage.removeItem("accessToken");
+          sessionStorage.removeItem("refreshToken");
+
+          toast.warning("로그아웃 처리되었습니다", {
+            style: toastStyle,
+            position: "top-center",
+          });
+        }, remainTime);
+      }
+    }
+  }, []);
+
+  // Oauth 로그인 관련 코드
+  useEffect(() => {
+    // MainPage로 돌아왔을 때 url에 prameter가 있다면 -> url을 따서
+    const urlParams = new URLSearchParams(window.location.search);
+    const accessToken = urlParams.get("access_token");
+    const refreshToken = urlParams.get("refresh_token");
+
+    // 세션 스토리지에 저장 + 로그인 처리를 한다
+    if (accessToken && refreshToken) {
+      sessionStorage.setItem("accessToken", `Bearer ${accessToken}`);
+      sessionStorage.setItem("refreshToken", refreshToken);
+      dispatch(setLoginState());
+
+      // url에 있는 파라미터를 지운다
+      urlParams.delete("access_token");
+      urlParams.delete("refresh_token");
+      window.history.replaceState({}, "", "?" + urlParams.toString());
+
+      window.location.reload();
+
+      // 🔴 자동 로그아웃 테스트
+      // 현재 시간, 알림 세팅 타임, 세션 스토리지에 저장된 타이머 시간
+      const currentTime = Date.now();
+      const settingTime01 = 1000 * 60 * 29; // 29분
+      const settingTime02 = 1000 * 60; // 1분
+      const logoutAlarmTime01 = sessionStorage.getItem("logoutAlarmTime01");
+      const logoutAlarmTime02 = sessionStorage.getItem("logoutAlarmTime02");
+
+      const toastStyle = {
+        fontSize: "15px",
+        fontWeight: 350,
+        color: "black",
+      };
+
+      // ✅ 1차 타이머도 설정되지 않았다면 -> 최초 설정 시
+      if (logoutAlarmTime01 === null) {
+        toast.warning("로그인 상태는 30분 동안 유지됩니다", {
+          style: toastStyle,
+          position: "top-center",
+        });
+
+        // 1차 타이머 저장
+        const logoutAlarmTime01 = Date.now(); // 1차 알람 호출한 시간
+        sessionStorage.setItem("logoutAlarmTime01", `${logoutAlarmTime01}`); // 세션 스토리지에 저장
+
+        setTimeout(() => {
+          // 첫번째 알람 실행되었으므로 -> 첫번째 시간기록 삭제
+          sessionStorage.removeItem("logoutAlarmTime01");
+
+          toast.warning("1분 뒤 로그아웃 처리됩니다", {
+            style: toastStyle,
+            position: "top-center",
+          });
+
+          // 2차 알람 및 로그아웃 처리 + 토큰 삭제
+          const logoutAlarmTime02 = Date.now(); // 2차 알람 호출한 시간
+          sessionStorage.setItem("logoutAlarmTime02", `${logoutAlarmTime02}`);
 
           setTimeout(() => {
             // 두번째 알람 실행되었으므로 -> 두번째 시간기록 삭제
@@ -214,29 +286,67 @@ const MainPage = () => {
               style: toastStyle,
               position: "top-center",
             });
-          }, remainTime);
-        }
+          }, settingTime02);
+        }, settingTime01);
+      }
+
+      // ✅ 1차 타이머는 설정 됐는데 -> 새로고침 시
+      if (logoutAlarmTime01 !== null) {
+        // 3) 비동기 설정 시간 - 새로고침 전까지 지나간 시간
+        const timeGone = currentTime - parseInt(logoutAlarmTime01);
+        const remainTime = settingTime01 - timeGone;
+
+        setTimeout(() => {
+          // 첫번째 알람 실행되었으므로 -> 첫번째 시간기록 삭제
+          sessionStorage.removeItem("logoutAlarmTime01");
+
+          toast.warning("1분 뒤 로그아웃 처리됩니다", {
+            style: toastStyle,
+            position: "top-center",
+          });
+
+          // 2차 알람설정
+          const logoutAlarmTime02 = Date.now();
+          sessionStorage.setItem("logoutAlarmTime02", `${logoutAlarmTime02}`);
+
+          setTimeout(() => {
+            // 두번째 알람 실행되었으므로 -> 두번째 시간기록 삭제
+            sessionStorage.removeItem("logoutAlarmTime02");
+
+            dispatch(setLogoutState());
+            sessionStorage.removeItem("accessToken");
+            sessionStorage.removeItem("refreshToken");
+
+            toast.warning("로그아웃 처리되었습니다", {
+              style: toastStyle,
+              position: "top-center",
+            });
+          }, settingTime02);
+        }, remainTime);
+      }
+
+      // ✅ 두번째 타이머 설정 됐는데 -> 새로고침 시
+      if (logoutAlarmTime02 !== null) {
+        const timeGone = currentTime - parseInt(logoutAlarmTime02);
+        const remainTime = settingTime02 - timeGone;
+
+        setTimeout(() => {
+          // 두번째 알람 실행되었으므로 -> 두번째 시간기록 삭제
+          sessionStorage.removeItem("logoutAlarmTime02");
+
+          dispatch(setLogoutState());
+          sessionStorage.removeItem("accessToken");
+          sessionStorage.removeItem("refreshToken");
+
+          toast.warning("로그아웃 처리되었습니다", {
+            style: toastStyle,
+            position: "top-center",
+          });
+        }, remainTime);
       }
     }
   }, []);
-
-  useEffect(() => {
-    const urlParams = new URLSearchParams(window.location.search);
-    const accessToken = urlParams.get("access_token");
-    const refreshToken = urlParams.get("refresh_token");
-
-    if (accessToken && refreshToken) {
-      sessionStorage.setItem("accessToken", `Bearer ${accessToken}`);
-      sessionStorage.setItem("refreshToken", refreshToken);
-      dispatch(setLoginState());
-      // Remove access_token and refresh_token from the URL
-      urlParams.delete("access_token");
-      urlParams.delete("refresh_token");
-      window.history.replaceState({}, "", "?" + urlParams.toString());
-
-      window.location.reload();
-    }
-  }, []);
+  // 🔴 자동 로그아웃 관련 코드 -> 정리 필요
 
   const [isGuideModalOpen, setGuideModalOpen] = useState(false);
 
@@ -263,7 +373,7 @@ const MainPage = () => {
         <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} onEmailSignupClick={openEmailSignupModal} onWatchListClick={() => handleMenuChange("관심종목")} onHoldingsClick={() => handleMenuChange("보유종목")} />
       )}
 
-      {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onLogin={handleLogin} onSignup={openEmailSignupFromLogin} />}
+      {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onSignup={openEmailSignupFromLogin} />}
       {isLoginConfirmationModalOpen && <LoginConfirmationModal onClose={handleLoginConfirmationClose} />}
 
       {isEmailSignupModalOpen && <EmailSignupModal onClose={closeEmailSignupModal} onRequestVerification={openEmailVerificationModal} />}

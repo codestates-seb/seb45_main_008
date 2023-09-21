@@ -6,7 +6,7 @@ import { setLoginState } from "../../reducer/member/loginSlice";
 import { setLogoutState } from "../../reducer/member/loginSlice";
 import { useDispatch } from "react-redux";
 
-const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onSignup }) => {
+const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onSignup }) => {
   const titleText = "이메일로 로그인";
   const emailLabelText = "이메일";
   const passwordLabelText = "비밀번호";
@@ -43,7 +43,7 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onS
     }
   };
 
-  // 🔴 자옹 로그아웃 테스트
+  // 🔴 자동 로그아웃 관련 코드 -> 정리 필요
   const handleLoginClick = async () => {
     try {
       const response = await axios.post("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members/login", { email, password }, { validateStatus: (status) => status >= 200 && status < 600 });
@@ -52,9 +52,9 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onS
         const accessToken = response.headers["authorization"];
         const refreshToken = response.headers["refresh"];
 
-        dispatch(setLoginState());
         if (accessToken) sessionStorage.setItem("accessToken", accessToken);
         if (refreshToken) sessionStorage.setItem("refreshToken", refreshToken);
+        dispatch(setLoginState());
 
         const toastStyle = {
           fontSize: "15px",
@@ -63,15 +63,15 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onS
         };
 
         // 로그인 유지시긴 알림
-        toast.warning("로그인 상태는 30분 동안 지속됩니다", {
+        toast.warning("로그인 상태는 30분 동안 유지됩니다", {
           style: toastStyle,
           position: "top-center",
         });
 
         // 로그아웃 알림 1차 설정 + 이때 시간 저장
-        const settingTime01 = 1000 * 7; // 10초
-        const settingTime02 = 1000 * 7; // 10초
-        const logoutAlarmTime01 = Date.now(); // 소환한 시간
+        const settingTime01 = 1000 * 60 * 29; // 29분
+        const settingTime02 = 1000 * 60; // 1분
+        const logoutAlarmTime01 = Date.now(); // 1차 알람 호출한 시간
         sessionStorage.setItem("logoutAlarmTime01", `${logoutAlarmTime01}`); // 세션 스토리지에 저장
 
         setTimeout(() => {
@@ -84,7 +84,7 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onS
           });
 
           // 2차 알람 및 로그아웃 처리 + 토큰 삭제
-          const logoutAlarmTime02 = Date.now();
+          const logoutAlarmTime02 = Date.now(); // 2차 알람 호출한 시간
           sessionStorage.setItem("logoutAlarmTime02", `${logoutAlarmTime02}`);
 
           setTimeout(() => {
@@ -102,7 +102,6 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onS
           }, settingTime02);
         }, settingTime01);
 
-        // onLogin();
         onClose();
       } else {
         setGeneralError(response.data.message || JSON.stringify(response.data));
@@ -115,6 +114,7 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onLogin, onS
       }
     }
   };
+  // 🔴 자동 로그아웃 관련 코드 -> 정리 필요
 
   return (
     <ModalBackground>
@@ -141,7 +141,6 @@ export default EmailLoginModal;
 // 컴포넌트 props 타입 정의
 interface EmailLoginModalProps {
   onClose: () => void;
-  onLogin: () => void;
   onSignup: () => void;
 }
 
