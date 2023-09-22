@@ -11,8 +11,24 @@ import {
   InfoImages,
   CommunityImages,
 } from "../../components/communityComponents/IconComponent/Icon";
+import { useLocation } from "react-router-dom";
 export const TabContainerPage = () => {
-  const [activeTab, setActiveTab] = useState(1);
+  const location = useLocation();
+  const initialTab = getInitialTab(location.pathname);
+
+  const [activeTab, setActiveTab] = useState(initialTab);
+
+  // 초기 탭 번호를 반환하는 함수
+  function getInitialTab(pathname:string) {
+    switch (pathname) {
+      case "/stockitems":
+        return 2;
+      case "/community":
+        return 3;
+      default:
+        return 1;
+    }
+  }
   const handleClickActiveTab = (number: number) => {
     setActiveTab(number);
   };
