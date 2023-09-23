@@ -1,12 +1,12 @@
 import React, { useState } from "react";
 import styled from "styled-components";
 
-import { useDispatch } from 'react-redux'; 
+import { useDispatch } from "react-redux";
 import { changeCompanyId } from "../../reducer/CompanyId-Reducer";
 
 import logo from "../../asset/images/StockHolmImage.png";
-import star_icon from "../../asset/icon/star_icon.png"
-import star_filled_icon from "../../asset/icon/star_filled_icon.png"
+import star_icon from "../../asset/icon/star_icon.png";
+import star_filled_icon from "../../asset/icon/star_filled_icon.png";
 
 import usePostStar from "../../hooks/stars/usePoststars";
 import useDeleteStar from "../../hooks/stars/useDeletestars";
@@ -59,7 +59,7 @@ const StockItem: React.FC<StockItemProps> = ({ company }) => {
   const [showChangePrice, setShowChangePrice] = useState(false); // 상태를 여기로 이동
   const [isHovering, setIsHovering] = useState(false); // 마우스 호버 상태
   const { data: starredData } = useGetStar();
-  const starredCompanyIds = starredData?.map(item => item.companyResponseDto.companyId) || [];
+  const starredCompanyIds = starredData?.map((item) => item.companyResponseDto.companyId) || [];
 
   // 해당 companyId가 이미 존재하는지 확인하고, isFavorited의 초기값을 설정합니다.
   const [isFavorited, setIsFavorited] = useState(starredCompanyIds.includes(company.companyId));
@@ -68,8 +68,9 @@ const StockItem: React.FC<StockItemProps> = ({ company }) => {
   const postMutation = usePostStar();
   const deleteMutation = useDeleteStar();
 
-  const toggleFavorite = () => {
-    // 현재 isFavorited 상태에 따라 요청을 결정합니다.
+  const toggleFavorite: React.MouseEventHandler<HTMLDivElement> = (e) => {
+    e.stopPropagation();
+
     if (isFavorited) {
       deleteMutation.mutate(company.companyId);
     } else {
@@ -189,7 +190,6 @@ const FavoriteStarFilled = styled(FavoriteStar)<{ opacity: number }>`
   background-size: contain; // 👈 이 부분도 추가
 `;
 
-
 // 🔴 font 사이즈
 const StockInfo = styled.div`
   height: 100%;
@@ -236,7 +236,5 @@ const StockChange = styled.span<{ change: string }>`
 
   font-size: 13px;
 `;
-
-
 
 export default StockItem;
