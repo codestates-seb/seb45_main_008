@@ -2,65 +2,19 @@ import { useSelector } from "react-redux";
 import { styled } from "styled-components";
 import useGetStockInfo from "../../hooks/useGetStockInfo";
 import { StateProps } from "../../models/stateProps";
-
-// dummyData
-import dummyLogo from "../../asset/CentralSectionMenu-dummyImg.png";
-import kia from "../../asset/logos/기아.svg";
-import dy from "../../asset/logos/디와이.jpeg";
-import logosamsung from "../../asset/logos/삼성전자.svg";
-import celltrion from "../../asset/logos/셀트리온.svg";
-import ecopro from "../../asset/logos/에코프로.jpeg";
-import ecoproBM from "../../asset/logos/에코프로비엠.svg";
-import kakaoBank from "../../asset/logos/카카오뱅크.svg";
-import kuckoo from "../../asset/logos/쿠쿠홀딩스.jpeg";
-import hanse from "../../asset/logos/한세엠케이.jpeg";
-import hyundai from "../../asset/logos/현대차.svg";
-import KG from "../../asset/logos/KG케미칼.png";
-import LGelec from "../../asset/logos/LG전자.svg";
-import LGchem from "../../asset/logos/LG화학.svg";
-import posco from "../../asset/logos/POSCO홀딩스.svg";
+import { dummyLogo } from "../../dummy/dummyLogo";
 
 const marketType: string = "코스피";
 const volumeText: string = "거래량";
 const valueText: string = "거래대금";
 
-// styled-component 수정 및 미디어 쿼리 적용
 const StockOverview = () => {
   const companyId = useSelector((state: StateProps) => state.companyId);
   const { stockInfo } = useGetStockInfo(companyId);
 
-  const corpName = stockInfo?.korName;
+  const corpName = stockInfo.korName;
 
-  // 이미 import된 로고들을 바탕으로 logos 객체 생성
-  const logos: LogoPaths = {
-    삼성전자: logosamsung,
-    POSCO홀딩스: posco,
-    셀트리온: celltrion,
-    에코프로: ecopro,
-    에코프로비엠: ecoproBM,
-    디와이: dy,
-    쿠쿠홀딩스: kuckoo,
-    카카오뱅크: kakaoBank,
-    한세엠케이: hanse,
-    KG케미칼: KG,
-    LG화학: LGchem,
-    현대차: hyundai,
-    LG전자: LGelec,
-    기아: kia,
-  };
-  // 그리고 나서, 이 `logos` 객체를 사용하여 기업명에 따라 적절한 로고를 선택할 수 있습니다.
-  const companyLogo = corpName ? logos[corpName] || dummyLogo : dummyLogo;
-  if (!corpName) {
-    return null; // 혹은 다른 적절한 렌더링을 반환
-  }
-
-  // if (stockInfoLoading) {
-  //   return <></>;
-  // }
-
-  // if (stockInfoError) {
-  //   return <p>에러 발생</p>;
-  // }
+  const companyLogo = corpName && dummyLogo[companyId];
 
   const stockCode = stockInfo.code;
   const stockPrice = parseInt(stockInfo.stockInfResponseDto.stck_prpr, 10).toLocaleString();
@@ -99,11 +53,6 @@ const StockOverview = () => {
 };
 
 export default StockOverview;
-
-//객체 변수타입 설정
-type LogoPaths = {
-  [key: string]: string;
-};
 
 // component 생성
 const Container = styled.div<{ priceChangeRate: number }>`
