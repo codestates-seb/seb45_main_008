@@ -3,8 +3,7 @@ import { useSelector, useDispatch } from "react-redux";
 // import { BrowserRouter as Router, Route, Routes  } from "react-router-dom";
 import styled from "styled-components";
 
-import LogoutHeader from "../components/Headers/LogoutHeader";
-import LoginHeader from "../components/Headers/LoginHeader";
+import Header from "../components/Headers/Index";
 
 import OAuthLoginModal from "../components/Logins/OAuthLogin";
 import EmailLoginModal from "../components/Logins/EmailLogin";
@@ -28,7 +27,6 @@ import ProfileModal from "../components/Profile/profileModal";
 // import CashModal from "../components/Profile/cashModal";
 import { StateProps } from "../models/stateProps";
 import { TabContainerPage } from "./TabPages/TabContainerPage";
-import { RootState } from "../store/config";
 
 // 🔴 로그아웃 관련 action 함수
 import { setLoginState } from "../reducer/member/loginSlice";
@@ -46,7 +44,6 @@ const MainPage = () => {
   const [isProfileModalOpen, setProfileModalOpen] = useState(false); //프로필 모달 보이기/숨기기
 
   const dispatch = useDispatch();
-  const isLogin = useSelector((state: RootState) => state.login);
 
   const openOAuthModal = useCallback(() => {
     setOAuthModalOpen(true);
@@ -206,7 +203,7 @@ const MainPage = () => {
 
   return (
     <Container>
-      {isLogin == 1 ? <LoginHeader onProfileClick={openProfileModal} /> : <LogoutHeader onLoginClick={openOAuthModal} />}
+      <Header/>
       <Main>
         <CompareChartSection />
         <LeftSection leftExpand={expandScreen.left}>
