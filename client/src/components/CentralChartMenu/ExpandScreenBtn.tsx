@@ -64,13 +64,12 @@ export default ExpandScreenBtn;
 // type 정의
 interface OwnProps {
   direction: string;
-  buttonHover?: boolean; //build error 해결을 위해 ?를 붙였습니다
+  buttonHover?: boolean;
 }
 
 // component 생성
 const Button = styled.div<OwnProps>`
   width: ${(props) => (props.buttonHover ? "46px" : "6px")};
-  /* width: 46px; */
   height: 100%;
   display: flex;
   justify-content: center;

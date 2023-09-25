@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { styled } from "styled-components";
 import useGetCompanyList from "../../hooks/useGetCompanyList";
-import CancelConfirm from "./CancleConfirm";
+import CancelConfirm from "./CancelConfirm";
 import { dummyLogo } from "../../dummy/dummyLogo";
 
 const priceUnit: string = "원";
@@ -21,7 +21,7 @@ const OrderedStock = (props: OrderdStockProps) => {
 
   const corp = companyList.filter((corp: CompanyProps) => corp.companyId === companyId);
   const corpName = corp[0].korName;
-  const companyLogo = dummyLogo[companyId];
+  const companyLogo = dummyLogo[companyId - 1];
 
   const handleSetOrderCancle = () => {
     setOrderCancle(!orderCancle);

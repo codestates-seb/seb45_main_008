@@ -1,35 +1,19 @@
+import { useSelector } from "react-redux/es/hooks/useSelector";
 import { useState } from "react";
 import { styled } from "styled-components";
 import { toast } from "react-toastify";
+import { StateProps } from "../../models/stateProps";
 import useDeleteStockOrder from "../../hooks/useDeleteStockOrder";
-
-// dummyLogo
-import dummyImg from "../../asset/CentralSectionMenu-dummyImg.png";
-
-//기업로고 import
-import kia from "../../asset/logos/기아.svg";
-import dy from "../../asset/logos/디와이.jpeg";
-import logosamsung from "../../asset/logos/삼성전자.svg";
-import celltrion from "../../asset/logos/셀트리온.svg";
-import ecopro from "../../asset/logos/에코프로.jpeg";
-import ecoproBM from "../../asset/logos/에코프로비엠.svg";
-import kakaoBank from "../../asset/logos/카카오뱅크.svg";
-import kuckoo from "../../asset/logos/쿠쿠홀딩스.jpeg";
-import hanse from "../../asset/logos/한세엠케이.jpeg";
-import hyundai from "../../asset/logos/현대차.svg";
-import KG from "../../asset/logos/KG케미칼.png";
-import LGelec from "../../asset/logos/LG전자.svg";
-import LGchem from "../../asset/logos/LG화학.svg";
-import posco from "../../asset/logos/POSCO홀딩스.svg";
+import { dummyLogo } from "../../dummy/dummyLogo";
 
 const priceUnit: string = "원";
 const volumeUnit: string = "주";
 
-// 주문 취소 확인창
 const CancelConfirm = (props: CancelConfirmProps) => {
   const { corpName, orderType, orderPrice, orderVolume, orderId, setCancle } = props;
 
   const [cancleVolume, setCancleVolume] = useState(0);
+  const companyId = useSelector((state: StateProps) => state.companyId);
   const deleteOrder = useDeleteStockOrder();
 
   const orderCancleText: string = "취소";
@@ -54,28 +38,8 @@ const CancelConfirm = (props: CancelConfirmProps) => {
     }
   };
 
-  // 이미 import된 로고들을 바탕으로 logos 객체 생성
-  const logos: { [key: string]: string } = {
-    삼성전자: logosamsung,
-    POSCO홀딩스: posco,
-    셀트리온: celltrion,
-    에코프로: ecopro,
-    에코프로비엠: ecoproBM,
-    디와이: dy,
-    쿠쿠홀딩스: kuckoo,
-    카카오뱅크: kakaoBank,
-    한세엠케이: hanse,
-    KG케미칼: KG,
-    LG화학: LGchem,
-    현대차: hyundai,
-    LG전자: LGelec,
-    기아: kia,
-  };
+  const companyLogo = dummyLogo[companyId - 1];
 
-  // 그리고 나서, 이 `logos` 객체를 사용하여 기업명에 따라 적절한 로고를 선택할 수 있습니다.
-  const companyLogo = logos[corpName] || dummyImg; // 기본 로고를 대체로 사용
-
-  // 거래량 직접 기입 시
   const handleWriteCancleVolume = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputValue = event.target.value;
     const numberInputValue = parseInt(inputValue, 10);
@@ -126,24 +90,23 @@ const CancelConfirm = (props: CancelConfirmProps) => {
       </ToastMessage>,
       {
         position: toast.POSITION.BOTTOM_LEFT,
-        // autoClose: 2000,
         hideProgressBar: true,
       }
     );
 
-    setCancle(); // 모달 창 닫기
+    setCancle();
   };
 
   return (
     <Container orderType={orderType}>
-      <div className="Container">
-        <img className="CorpLogo" src={dummyImg} />
-        <div className="OrderOverview">
-          <span className="CorpName">{corpName}</span>
-          <span className="OrderType">{orderType}</span>
+      <div className="container">
+        <img className="corpLogo" src={companyLogo} />
+        <div className="orderOverview">
+          <span className="corpName">{corpName}</span>
+          <span className="orderType">{orderType}</span>
           <span className="orderCancel">{orderCancleText}</span>
         </div>
-        <div className="OrderContent">
+        <div className="orderContent">
           <div className="priceContent">
             <span className="text">{orderPriceText}</span>
             <span>
@@ -162,11 +125,11 @@ const CancelConfirm = (props: CancelConfirmProps) => {
             <VolumeSettingBox>
               <VolumeController defaultValue={cancleVolume} value={cancleVolume} onChange={handleWriteCancleVolume} />
               <UnitContent>{volumeUnit}</UnitContent>
-              <div className="DirectionContainer">
-                <button className="VolumeUp" onClick={() => handleChangeCancleVolume("Up")}>
+              <div className="directionContainer">
+                <button className="volumeUp" onClick={() => handleChangeCancleVolume("Up")}>
                   &#8896;
                 </button>
-                <button className="VolumeDown" onClick={() => handleChangeCancleVolume("Down")}>
+                <button className="volumeDown" onClick={() => handleChangeCancleVolume("Down")}>
                   &#8897;
                 </button>
               </div>
@@ -178,7 +141,7 @@ const CancelConfirm = (props: CancelConfirmProps) => {
               {totalPrice} {priceUnit}
             </span>
           </div>
-          <div className="ButtonContainer">
+          <div className="buttonContainer">
             <button className="cancel" onClick={setCancle}>
               {closeButtonText}
             </button>
@@ -218,7 +181,7 @@ const Container = styled.div<{ orderType: string }>`
   justify-content: center;
   align-items: center;
 
-  .Container {
+  .container {
     display: flex;
     flex-direction: column;
     justify-content: center;
@@ -233,13 +196,13 @@ const Container = styled.div<{ orderType: string }>`
     padding-left: 20px;
     padding-right: 20px;
 
-    .CorpLogo {
+    .corpLogo {
       width: 40px;
       height: 40px;
       border-radius: 50%;
     }
 
-    .OrderOverview {
+    .orderOverview {
       display: flex;
       flex-direction: row;
       justify-content: center;
@@ -250,12 +213,12 @@ const Container = styled.div<{ orderType: string }>`
       padding-top: 18px;
       padding-bottom: 28px;
 
-      .OrderType {
+      .orderType {
         color: ${(props) => (props.orderType === "매도" ? "#4479c2" : "#cc3c3a")};
       }
     }
 
-    .OrderContent {
+    .orderContent {
       width: 100%;
       font-size: 15px;
 
@@ -303,7 +266,7 @@ const Container = styled.div<{ orderType: string }>`
       }
     }
 
-    .ButtonContainer {
+    .buttonContainer {
       width: 100%;
       display: flex;
       flex-direction: row;
@@ -336,7 +299,7 @@ const VolumeSettingBox = styled.div`
   display: flex;
   flex-direction: row;
 
-  .DirectionContainer {
+  .directionContainer {
     display: flex;
     flex-direction: column;
 
@@ -350,12 +313,12 @@ const VolumeSettingBox = styled.div`
       border: 1px solid darkgray;
       border-radius: 0%;
 
-      &.VolumeUp {
+      &.volumeUp {
         border-bottom: none;
         border-radius: 0 0.2rem 0 0;
       }
 
-      &.VolumeDown {
+      &.volumeDown {
         border-radius: 0 0 0.2rem 0;
       }
     }

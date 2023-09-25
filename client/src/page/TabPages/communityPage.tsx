@@ -1,6 +1,6 @@
 //import { TabNavArea } from "./TabNavArea";
 
-import TimeLineComponent from "../../components/communityComponents/index";
+import TimeLineComponent from "../../components/CommunityComponents/index";
 import styled from "styled-components";
 export const Community = () => {
   // const [submitButton, setSubmitButton] = useState("");

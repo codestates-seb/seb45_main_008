@@ -14,7 +14,7 @@ const StockOverview = () => {
 
   const corpName = stockInfo.korName;
 
-  const companyLogo = corpName && dummyLogo[companyId];
+  const companyLogo = corpName && dummyLogo[companyId - 1];
 
   const stockCode = stockInfo.code;
   const stockPrice = parseInt(stockInfo.stockInfResponseDto.stck_prpr, 10).toLocaleString();

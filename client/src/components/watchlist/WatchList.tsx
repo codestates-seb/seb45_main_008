@@ -3,7 +3,7 @@ import styled from "styled-components";
 import StockSearchComponent from "./StockSearchComponent.tsx";
 import Header from "./Header.tsx";
 import StockItem from "./StockItem.tsx";
-import useCompanyData from "../../hooks/useCompanyData";
+import useCompanyData from "../../hooks/useCompanyData.ts";
 import useGetStars from "../../hooks/stars/useGetstars.ts"; // useGetStars 훅의 경로를 지정해주세요.
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/config.ts";

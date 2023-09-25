@@ -8,6 +8,7 @@ import useGetHoldingStock from "../../hooks/useGetHoldingStock";
 import useGetCompanyList from "../../hooks/useGetCompanyList";
 import { stockOrderClose } from "../../reducer/StockOrderSet-Reducer";
 import { StateProps } from "../../models/stateProps";
+import { dummyLogo } from "../../dummy/dummyLogo";
 import StockOrder from "./StockOrder";
 import OrderResult from "./OrderResult";
 import WaitOrderIndicator from "./WaitOrderIndicator";
@@ -20,25 +21,6 @@ const moneyRequireText: string = "현금 충전이 필요한 서비스입니다"
 const moenyRequireBtnText: string = "현금 충전하러 가기";
 const upperbarTitle: string = "주식주문";
 const marketType: string = "코스피";
-
-// dummyData
-import dummyLogo from "../../asset/CentralSectionMenu-dummyImg.png";
-
-//import company logo
-import kia from "../../asset/logos/기아.svg";
-import dy from "../../asset/logos/디와이.jpeg";
-import logosamsung from "../../asset/logos/삼성전자.svg";
-import celltrion from "../../asset/logos/셀트리온.svg";
-import ecopro from "../../asset/logos/에코프로.jpeg";
-import ecoproBM from "../../asset/logos/에코프로비엠.svg";
-import kakaoBank from "../../asset/logos/카카오뱅크.svg";
-import kuckoo from "../../asset/logos/쿠쿠홀딩스.jpeg";
-import hanse from "../../asset/logos/한세엠케이.jpeg";
-import hyundai from "../../asset/logos/현대차.svg";
-import KG from "../../asset/logos/KG케미칼.png";
-import LGelec from "../../asset/logos/LG전자.svg";
-import LGchem from "../../asset/logos/LG화학.svg";
-import posco from "../../asset/logos/POSCO홀딩스.svg";
 
 const StockOrderSection: React.FC<StockOrderSectionProps> = (props) => {
   const dispatch = useDispatch();
@@ -72,14 +54,14 @@ const StockOrderSection: React.FC<StockOrderSectionProps> = (props) => {
     return (
       <Container orderSet={stockOrderSet}>
         <UpperBar>
-          <h2 className="Title">{upperbarTitle}</h2>
-          <button className="CloseButton" onClick={handleStockOrderClose}>
+          <h2 className="title">{upperbarTitle}</h2>
+          <button className="closeButton" onClick={handleStockOrderClose}>
             &#10005;
           </button>
         </UpperBar>
-        <div className="ErrorContainer">
-          <div className="ErrorMessage">{errorMessage}</div>
-          <button className="ErrorCloseButton" onClick={handleStockOrderClose}>
+        <div className="errorContainer">
+          <div className="errorMessage">{errorMessage}</div>
+          <button className="errorCloseButton" onClick={handleStockOrderClose}>
             {errorButtonText}
           </button>
         </div>
@@ -91,8 +73,8 @@ const StockOrderSection: React.FC<StockOrderSectionProps> = (props) => {
     return (
       <Container orderSet={stockOrderSet}>
         <UpperBar>
-          <h2 className="Title">{upperbarTitle}</h2>
-          <button className="CloseButton" onClick={handleStockOrderClose}>
+          <h2 className="title">{upperbarTitle}</h2>
+          <button className="closeButton" onClick={handleStockOrderClose}>
             &#10005;
           </button>
         </UpperBar>
@@ -104,42 +86,23 @@ const StockOrderSection: React.FC<StockOrderSectionProps> = (props) => {
   // 3) 데이터 받아오기 성공
   const corpName = stockInfo.korName;
   const stockCode = stockInfo.code;
-
-  // 이미 import된 로고들을 바탕으로 logos 객체 생성
-  const logos: { [key: string]: string } = {
-    삼성전자: logosamsung,
-    POSCO홀딩스: posco,
-    셀트리온: celltrion,
-    에코프로: ecopro,
-    에코프로비엠: ecoproBM,
-    디와이: dy,
-    쿠쿠홀딩스: kuckoo,
-    카카오뱅크: kakaoBank,
-    한세엠케이: hanse,
-    KG케미칼: KG,
-    LG화학: LGchem,
-    현대차: hyundai,
-    LG전자: LGelec,
-    기아: kia,
-  };
-  // 그리고 나서, 이 `logos` 객체를 사용하여 기업명에 따라 적절한 로고를 선택할 수 있습니다.
-  const companyLogo = logos[corpName] || dummyLogo; // 기본 로고를 대체로 사용
+  const companyLogo = dummyLogo[companyId - 1];
 
   return (
     <Container orderSet={stockOrderSet}>
       <UpperBar>
-        <h2 className="Title">{upperbarTitle}</h2>
-        <button className="CloseButton" onClick={handleStockOrderClose}>
+        <h2 className="title">{upperbarTitle}</h2>
+        <button className="closeButton" onClick={handleStockOrderClose}>
           &#10005;
         </button>
       </UpperBar>
       {isLogin === 1 ? (
         <div className="mainContent">
           <StockName>
-            <img className="CorpLogo" src={companyLogo} alt="stock logo" />
-            <div className="NameContainer">
-              <div className="CorpName">{corpName}</div>
-              <div className="StockCode">
+            <img className="corpLogo" src={companyLogo} alt="stock logo" />
+            <div className="nameContainer">
+              <div className="corpName">{corpName}</div>
+              <div className="stockCode">
                 {stockCode} {marketType}
               </div>
             </div>
@@ -163,12 +126,11 @@ interface StockOrderSectionProps {
 }
 
 // 미로그인 시 -> 로그인 요청 화면
-//props 전달
 const LoginRequestIndicator: React.FC<LoginRequestIndicatorProps> = ({ openOAuthModal }) => {
   return (
     <LoginRequestContainer>
-      <div className="Notification">{loginRequiredText}</div>
-      <button className="LoginButton" onClick={openOAuthModal}>
+      <div className="notification">{loginRequiredText}</div>
+      <button className="loginButton" onClick={openOAuthModal}>
         {loginBtnText}
       </button>
     </LoginRequestContainer>
@@ -179,12 +141,11 @@ interface LoginRequestIndicatorProps {
 }
 
 // 현금 충전요청 화면
-//props 전달
 const MoneyReqireIndicator: React.FC<MoneyReqireIndicatorProps> = ({ openProfileModal }) => {
   return (
     <MoneyRequireContainer>
-      <div className="Notification">{moneyRequireText}</div>
-      <button className="LoginButton" onClick={openProfileModal}>
+      <div className="notification">{moneyRequireText}</div>
+      <button className="loginButton" onClick={openProfileModal}>
         {moenyRequireBtnText}
       </button>
     </MoneyRequireContainer>
@@ -213,7 +174,7 @@ const Container = styled.aside<{ orderSet: boolean }>`
     height: 100%;
   }
 
-  .ErrorContainer {
+  .errorContainer {
     width: 100%;
     height: 80%;
     display: flex;
@@ -222,12 +183,12 @@ const Container = styled.aside<{ orderSet: boolean }>`
     align-items: center;
     gap: 12px;
 
-    .ErrorMessage {
+    .errorMessage {
       font-size: 20px;
       color: #999999;
     }
 
-    .ErrorCloseButton {
+    .errorCloseButton {
       width: 35%;
       height: 32px;
       color: white;
@@ -248,13 +209,13 @@ const UpperBar = styled.div`
   min-height: 44px;
   border-bottom: 1px solid black;
 
-  .Title {
+  .title {
     font-size: 17px;
     font-weight: 450;
     color: #1c1c1c;
   }
 
-  .CloseButton {
+  .closeButton {
     position: absolute;
     right: 10px;
     width: 28px;
@@ -275,11 +236,11 @@ const LoginRequestContainer = styled.div`
   align-items: center;
   gap: 8px;
 
-  .Notification {
+  .notification {
     color: #999999;
   }
 
-  .LoginButton {
+  .loginButton {
     width: 170px;
     height: 32px;
     font-size: 15px;
@@ -305,25 +266,25 @@ const StockName = styled.section`
   padding-left: 16px;
   gap: 9px;
 
-  .CorpLogo {
+  .corpLogo {
     width: 28px;
     height: 28px;
     border-radius: 50%;
   }
 
-  .NameContainer {
+  .nameContainer {
     height: 40px;
     display: flex;
     flex-direction: column;
   }
 
-  .CorpName {
+  .corpName {
     font-size: 16px;
     font-weight: 500;
     color: #1c1c1c;
   }
 
-  .StockCode {
+  .stockCode {
     font-size: 14px;
     color: #999999;
   }
