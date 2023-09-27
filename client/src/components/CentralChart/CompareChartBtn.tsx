@@ -1,7 +1,6 @@
 import { useState } from "react";
 import { styled } from "styled-components";
 import useCompanyData from "../../hooks/useCompanyData";
-
 import CompareList from "./CompareList";
 import IconImg from "../../asset/CentralSectionMenu-compareChart.png";
 

@@ -10,6 +10,7 @@ import memberInfoReducer from "../reducer/member/memberInfoSlice";
 import { stockOrderVolumeReducer } from "../reducer/StockOrderVolume-Reducer";
 import { setDecisionWindowReducer } from "../reducer/SetDecisionWindow-Reducer";
 import { compareChartReducer } from "../reducer/CompareChart-Reducer";
+import { leftStockListReducer } from "../reducer/LeftStockList-Reducer";
 
 const store = configureStore({
   reducer: {
@@ -24,6 +25,7 @@ const store = configureStore({
     stockOrderVolume: stockOrderVolumeReducer,
     decisionWindow: setDecisionWindowReducer,
     compareChart: compareChartReducer,
+    leftStockListType: leftStockListReducer,
   },
 });
 

@@ -12,8 +12,8 @@ import { setLogoutState } from "../reducer/member/loginSlice";
 - 해당 함수는 총 4개의 인자를 가집니다
   1) 로그인 전역상태 변경에 필요한 dispatch
   2) 알람 설정 개수 (first일 경우 3개 다, second일 경우 2개, last일 경우 마지막 1개만 설정)
-  3) 1차 알림 설정 시간 (설정한 시간만큼 지난 후 1차 알림 발생)
-  4) 2차 알림 설정 시간 (상동)
+  3) 2차 알림 설정 시간 (설정한 시간만큼 지난 후 1차 알림 발생)
+  4) 3차 알림 설정 시간 (상동)
 */
 
 export const secondAlarmTime = 1000 * 60 * 29; // 29분

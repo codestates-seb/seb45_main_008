@@ -9,4 +9,5 @@ export interface StateProps {
   decisionWindow: boolean;
   login: number;
   compareChart: number;
+  leftStockListType: number;
 }

@@ -28,7 +28,6 @@ const PriceSetting = (props: OwnProps) => {
   const defaultPrice = existSellingPrice[0];
   const priceInterval = existSellingPrice[1] - existSellingPrice[0];
 
-  // 🔴 [TestCode] 거래가능 안내 메세지 테스트 -> 🟢 구현 성공하여 코드 정리할 예정
   const orderType = useSelector((state: StateProps) => state.stockOrderType);
   const [orderPossibility, setOrderPossibility] = useState(true);
 
@@ -59,8 +58,6 @@ const PriceSetting = (props: OwnProps) => {
   useEffect(() => {
     handleCheckTradePossibility();
   }, [orderPrice, orderType]);
-
-  // 🔴 [TestCode] 거래가능 안내 메세지 테스트 -> 🟢 구현 성공하여 코드 정리할 예정
 
   // 거래가 증가/감소
   const handlePlusOrderPrice = () => {

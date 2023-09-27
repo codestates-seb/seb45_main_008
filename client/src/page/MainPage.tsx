@@ -1,6 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
-// import { BrowserRouter as Router, Route, Routes  } from "react-router-dom";
 import styled from "styled-components";
 
 import LogoutHeader from "../components/Headers/LogoutHeader";
@@ -20,17 +19,14 @@ import CentralChart from "../components/CentralChart/Index";
 
 import EntireList from "../components/EntireList/EntireList";
 import HoldingList from "../components/HoldingList/HoldingList";
-import WatchList from "../components/watchlist/WatchList"; // Assuming you have a Holdings component
-import CompareChartSection from "../components/CompareChartSection/Index";
+import WatchList from "../components/Watchlist/WatchList";
 import StockOrderSection from "../components/StockOrderSection/Index";
 
-import ProfileModal from "../components/Profile/profileModal";
-// import CashModal from "../components/Profile/cashModal";
+import ProfileModal from "../components/Profile/ProfileModal";
 import { StateProps } from "../models/stateProps";
 import { TabContainerPage } from "./TabPages/TabContainerPage";
 import { RootState } from "../store/config";
 
-// 🔴 로그아웃 관련 action 함수
 import { setLoginState } from "../reducer/member/loginSlice";
 import setAutoLogoutAlarm from "../utils/setAutoLogoutAlarm";
 import { secondAlarmTime, lastAlarmTime } from "../utils/setAutoLogoutAlarm";
@@ -208,7 +204,6 @@ const MainPage = () => {
     <Container>
       {isLogin == 1 ? <LoginHeader onProfileClick={openProfileModal} /> : <LogoutHeader onLoginClick={openOAuthModal} />}
       <Main>
-        <CompareChartSection />
         <LeftSection leftExpand={expandScreen.left}>
           {selectedMenu === "전체종목" ? (
             <EntireList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
