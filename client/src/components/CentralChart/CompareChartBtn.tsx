@@ -2,7 +2,7 @@ import { useState } from "react";
 import { styled } from "styled-components";
 import useCompanyData from "../../hooks/useCompanyData";
 import CompareList from "./CompareList";
-import IconImg from "../../asset/CentralSectionMenu-compareChart.png";
+import IconImg from "../../asset/icon/CentralSectionMenu-compareChart.png";
 
 const buttonText: string = "비교종목";
 

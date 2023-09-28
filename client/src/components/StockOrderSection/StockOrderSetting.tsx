@@ -1,6 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import useGetStockInfo from "../../hooks/useGetStockInfo";
-import { orderTypeBuying, orderTypeSelling } from "../../reducer/StockOrderType-Reducer";
+import { orderTypeBuying, orderTypeSelling } from "../../reducer/stockOrderType-Reducer";
 import { styled } from "styled-components";
 import { StateProps } from "../../models/stateProps";
 import { OrderTypeProps } from "../../models/orderTypeProps";

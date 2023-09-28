@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { isHoliday } from "@hyunbinseo/holidays-kr";
-import { setStockOrderVolume } from "../../reducer/StockOrderVolume-Reducer";
-import { closeDecisionWindow } from "../../reducer/SetDecisionWindow-Reducer";
+import { setStockOrderVolume } from "../../reducer/stockOrderVolume-Reducer";
+import { closeDecisionWindow } from "../../reducer/setDecisionWindow-Reducer";
 import { styled } from "styled-components";
 import { toast } from "react-toastify";
 import { StateProps } from "../../models/stateProps";

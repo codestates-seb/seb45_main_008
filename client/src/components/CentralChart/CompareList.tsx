@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from "react-redux";
-import { setCompareStock } from "../../reducer/CompareChart-Reducer";
+import { setCompareStock } from "../../reducer/compareChart-Reducer";
 import { StateProps } from "../../models/stateProps";
 import { styled } from "styled-components";
 

@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import Menu_icon from "../../asset/images/menu.png";
+import Menu_icon from "../../asset/icon/menu.png";
 
 const ALL_LIST = "전체종목";
 const INTEREST_LIST = "관심종목";
@@ -76,7 +76,7 @@ const HeaderText = styled.span`
 `;
 
 const SlideMenu = styled.div`
-  z-index:30;
+  z-index: 30;
   position: absolute;
   top: 100%;
   left: 0;

@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
-import { changeCompanyId } from "../../reducer/CompanyId-Reducer";
+import { changeCompanyId } from "../../reducer/companyId-Reducer";
 import useGetCompanyList from "../../hooks/useGetCompanyList";
 
 const stockSearch = "종목 검색";
@@ -20,7 +20,7 @@ const StockSearchComponent: React.FC = () => {
 
   const handleSearchCompany = () => {
     let searchResult: string = noExistCompany;
-  
+
     if (searchWord === "") {
       return;
     }
@@ -30,24 +30,24 @@ const StockSearchComponent: React.FC = () => {
         samsung: "삼성전자",
         eco: "에코프로",
         ecopro: "에코프로",
-        ecoprobm:"에코프로비엠",
-        ecoprob:"에코프로비엠",
-        posco:"POSCO홀딩스",
+        ecoprobm: "에코프로비엠",
+        ecoprob: "에코프로비엠",
+        posco: "POSCO홀딩스",
         kia: "기아",
         hyundai: "현대차",
-        hyundaicar:"현대차",
+        hyundaicar: "현대차",
         dy: "디와이",
         kuckoo: "쿠쿠홀딩스",
-        kuckooholdings:"쿠쿠홀딩스",
-        hansemk:"한세엠케이",
+        kuckooholdings: "쿠쿠홀딩스",
+        hansemk: "한세엠케이",
         hanse: "한세엠케이",
-        lgchemical:"LG화학",
-        lgelectronic:"LG화학",
+        lgchemical: "LG화학",
+        lgelectronic: "LG화학",
         lgchem: "LG화학",
         lgelec: "LG전자",
-        celltrion:"셀트리온",
+        celltrion: "셀트리온",
         cell: "셀트리온",
-        kakaobank:"카카오뱅크",
+        kakaobank: "카카오뱅크",
         kakao: "카카오뱅크",
         // 추가적인 회사 이름을 여기에 추가할 수 있습니다.
       };
@@ -89,12 +89,7 @@ const StockSearchComponent: React.FC = () => {
 
   return (
     <SearchContainer>
-      <StyledSearchInput 
-        value={searchWord}
-        onChange={handleChangeSearchWord} 
-        onKeyDown={handlePressEnterToSearch} 
-        placeholder={stockSearch}
-      />
+      <StyledSearchInput value={searchWord} onChange={handleChangeSearchWord} onKeyDown={handlePressEnterToSearch} placeholder={stockSearch} />
       <StyledSearchButton onClick={handleSearchCompany}>{search}</StyledSearchButton>
     </SearchContainer>
   );
@@ -103,11 +98,11 @@ const StockSearchComponent: React.FC = () => {
 export default StockSearchComponent;
 
 interface CompanyProps {
-    companyId: number;
-    code: string;
-    korName: string;
-    stockAsBiResponseDto: null;
-    stockInfResponseDto: null;
+  companyId: number;
+  code: string;
+  korName: string;
+  stockAsBiResponseDto: null;
+  stockInfResponseDto: null;
 }
 
 // 스타일 정의
@@ -128,7 +123,7 @@ const StyledSearchInput = styled.input.attrs({
   border: 1px solid #ccc;
   border-radius: 5px;
   flex: 1;
-  margin-left:8px;
+  margin-left: 8px;
 `;
 
 const StyledSearchButton = styled.button`

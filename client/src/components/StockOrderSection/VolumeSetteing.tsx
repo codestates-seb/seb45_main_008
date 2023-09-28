@@ -5,7 +5,7 @@ import useGetCash from "../../hooks/useGetCash";
 import useGetHoldingStock from "../../hooks/useGetHoldingStock";
 import { StateProps } from "../../models/stateProps";
 import { HoldingStockProps } from "../../models/stockProps";
-import { setStockOrderVolume, plusStockOrderVolume, minusStockOrderVolume } from "../../reducer/StockOrderVolume-Reducer";
+import { setStockOrderVolume, plusStockOrderVolume, minusStockOrderVolume } from "../../reducer/stockOrderVolume-Reducer";
 
 const volumeSettingTitle: string = "수량";
 const maximumVolumeText01: string = "최대";

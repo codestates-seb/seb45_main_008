@@ -2,7 +2,7 @@ import styled from "styled-components";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/config";
-import PortFolioChart from "./stockinfoChart";
+import PortFolioChart from "./StockinfoChart";
 
 const DetailStockInformation: React.FC = () => {
   // Redux의 companyId 상태를 구독합니다.
