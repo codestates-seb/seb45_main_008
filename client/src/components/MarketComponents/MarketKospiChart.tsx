@@ -2,7 +2,8 @@ import * as echarts from "echarts";
 import { styled } from "styled-components";
 import { useState, useEffect } from "react";
 import { useQuery } from "react-query";
-import { getKospiData } from "../../hooks/useGetKospiChart.ts";
+import axios from "axios";
+
 const MarketkospiChart = () => {
   const [kospiData, setKospiData] = useState([]);
 
@@ -116,6 +117,14 @@ const MarketkospiChart = () => {
 };
 
 export default MarketkospiChart;
+
+const getKospiData = async () => {
+  const res = await axios.get("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/kospi");
+  const chartData = res.data.output2;
+  const kospiData = chartData.reverse();
+
+  return kospiData;
+};
 
 interface KospiProps {
   acml_tr_pbmn: string;

@@ -6,10 +6,10 @@ import useGetHoldingStock from "../../hooks/useGetHoldingStock";
 import { StateProps } from "../../models/stateProps";
 import { HoldingStockProps } from "../../models/stockProps";
 import { setStockOrderVolume, plusStockOrderVolume, minusStockOrderVolume } from "../../reducer/stockOrderVolume-Reducer";
+import { volumeUnit } from "../../constant/constant";
 
 const volumeSettingTitle: string = "수량";
 const maximumVolumeText01: string = "최대";
-const volumeUnit: string = "주";
 
 const volumPercentage01: number = 10;
 const volumPercentage02: number = 25;

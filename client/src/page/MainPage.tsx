@@ -2,7 +2,9 @@ import { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 
-import Header from "../components/Headers/Index";
+// import Header from "../components/Headers/Index";
+import LogoutHeader from "../components/Headers/LogoutHeader";
+import LoginHeader from "../components/Headers/LoginHeader";
 
 import OAuthLoginModal from "../components/Logins/OAuthLogin";
 import EmailLoginModal from "../components/Logins/EmailLogin";
@@ -38,6 +40,7 @@ const MainPage = () => {
   const [userEmail, setUserEmail] = useState("");
   const [isWelcomeModalOpen, setWelcomeModalOpen] = useState(false);
   const [isProfileModalOpen, setProfileModalOpen] = useState(false); //프로필 모달 보이기/숨기기
+  const isLogin = useSelector((state: StateProps) => state.login);
 
   const dispatch = useDispatch();
 
@@ -129,7 +132,6 @@ const MainPage = () => {
     setSelectedMenu(menu);
   };
 
-  // 🔴 자동 로그아웃 관련 코드 -> 정리 필요
   useEffect(() => {
     const acessToken = sessionStorage.getItem("accessToken");
     if (acessToken !== null) {
@@ -137,18 +139,15 @@ const MainPage = () => {
 
       const currentTime = Date.now();
 
-      // 로그인 알람 설정한 시간 (세선 스토리지에 저장 되어있음)
       const autoLogoutSecondAlarm = sessionStorage.getItem("autoLogoutSecondAlarm");
       const autoLogoutLastAlarm = sessionStorage.getItem("autoLogoutLastAlarm");
 
       if (autoLogoutSecondAlarm !== null) {
-        // 3) 비동기 설정 시간 - 새로고침 전까지 지나간 시간
         const timeGone = currentTime - parseInt(autoLogoutSecondAlarm);
         const remainTime = secondAlarmTime - timeGone;
         setAutoLogoutAlarm(dispatch, "second", remainTime, lastAlarmTime);
       }
 
-      // 3) 첫번째 타이머 실행 후 -> 두번째 타이머 설정했는데 새로고침 시
       if (autoLogoutLastAlarm !== null) {
         const timeGone = currentTime - parseInt(autoLogoutLastAlarm);
         const remainTime = lastAlarmTime - timeGone;
@@ -199,7 +198,8 @@ const MainPage = () => {
 
   return (
     <Container>
-      <Header/>
+      {/* <Header/> */}
+      {isLogin == 1 ? <LoginHeader onProfileClick={openProfileModal} /> : <LogoutHeader onLoginClick={openOAuthModal} />}
       <Main>
         <LeftSection leftExpand={expandScreen.left}>
           {selectedMenu === "전체종목" ? (

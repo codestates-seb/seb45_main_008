@@ -3,7 +3,6 @@ import { useSelector } from "react-redux";
 import axios from "axios";
 import { StateProps } from "../models/stateProps";
 
-// 🔴 API 수정 전으로 임시 파라미터 설정해놓음
 const url = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/cash";
 
 const useGetCash = () => {

@@ -5,9 +5,12 @@ import { toast } from "react-toastify";
 import { StateProps } from "../../models/stateProps";
 import useDeleteStockOrder from "../../hooks/useDeleteStockOrder";
 import { dummyLogo } from "../../dummy/dummyLogo";
+import { priceUnit, volumeUnit } from "../../constant/constant";
 
-const priceUnit: string = "원";
-const volumeUnit: string = "주";
+const directionType = {
+  Up: "Up",
+  Down: "Down",
+};
 
 const CancelConfirm = (props: CancelConfirmProps) => {
   const { corpName, orderType, orderPrice, orderVolume, orderId, setCancle } = props;
@@ -16,24 +19,22 @@ const CancelConfirm = (props: CancelConfirmProps) => {
   const companyId = useSelector((state: StateProps) => state.companyId);
   const deleteOrder = useDeleteStockOrder();
 
-  const orderCancleText: string = "취소";
+  const cancelText: string = "취소";
   const orderPriceText: string = "주문단가";
   const cancleVolumeText: string = "취소수량";
   const maximumCancleVolumeText01: string = "최대";
-  const maximumCancleVolumeText02: string = "주";
   const totalCancleAmountText: string = "총 취소금액";
   const closeButtonText: string = "닫기";
   const confirmButtonText: string = "확인";
-  const toastText01: string = "취소";
-  const toastText02: string = " 처리가 완료되었습니다";
+  const toastText: string = " 처리가 완료되었습니다";
   const price = orderPrice.toLocaleString();
   const totalPrice = (orderPrice * cancleVolume).toLocaleString();
 
   const handleChangeCancleVolume = (direction: string) => {
-    if (direction === "Up") {
+    if (direction === directionType.Up) {
       cancleVolume < orderVolume && setCancleVolume((previousState) => previousState + 1);
     }
-    if (direction === "Down") {
+    if (direction === directionType.Down) {
       0 < cancleVolume && setCancleVolume((previousState) => previousState - 1);
     }
   };
@@ -83,9 +84,9 @@ const CancelConfirm = (props: CancelConfirmProps) => {
         <div>
           <span className="orderType">
             ✓ {orderType}
-            {toastText01}
+            {cancelText}
           </span>
-          <span>{toastText02}</span>
+          <span>{toastText}</span>
         </div>
       </ToastMessage>,
       {
@@ -104,7 +105,7 @@ const CancelConfirm = (props: CancelConfirmProps) => {
         <div className="orderOverview">
           <span className="corpName">{corpName}</span>
           <span className="orderType">{orderType}</span>
-          <span className="orderCancel">{orderCancleText}</span>
+          <span className="orderCancel">{cancelText}</span>
         </div>
         <div className="orderContent">
           <div className="priceContent">
@@ -119,7 +120,7 @@ const CancelConfirm = (props: CancelConfirmProps) => {
               <span className="maximumCancleVolume">
                 {maximumCancleVolumeText01}
                 <span className="maximumVolumeNum"> {orderVolume} </span>
-                {maximumCancleVolumeText02}
+                {volumeUnit}
               </span>
             </div>
             <VolumeSettingBox>

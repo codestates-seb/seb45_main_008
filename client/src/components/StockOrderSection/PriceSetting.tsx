@@ -4,10 +4,9 @@ import { styled } from "styled-components";
 import { setStockOrderPrice, plusStockOrderPrice, minusStockOrderPrice } from "../../reducer/stockOrderPrice-Reducer";
 import { StateProps } from "../../models/stateProps";
 import { StockInfoProps } from "../../models/stockInfoProps";
+import { priceUnit } from "../../constant/constant";
 
 const priceSettingTitle: string = "가격";
-const unitText: string = "원";
-
 const noVolumeNotification: string = " [거래량 없음] 주문 시 대기 처리 됩니다";
 const existVolumeNotification: string = " [거래량 있음] 주문 시 체결 처리 됩니다";
 
@@ -16,50 +15,22 @@ const PriceSetting = (props: OwnProps) => {
 
   const dispatch = useDispatch();
   const orderPrice = useSelector((state: StateProps) => state.stockOrderPrice);
-
-  // 가격 조정 관련 타이머 상태
-  const [priceChangeTimer, setPriceChangeTimer] = useState<NodeJS.Timeout | null>(null);
-
-  // 초기 설정값 및 가격 변동폭 설정
-  const { askp1, askp2, askp3, askp4, askp5, askp6, askp7, askp8, askp9, askp10 } = stockInfo;
-  const sellingInfo = [askp1, askp2, askp3, askp4, askp5, askp6, askp7, askp8, askp9, askp10];
-  const sellingPrice = sellingInfo.map((price) => parseInt(price));
-  const existSellingPrice = sellingPrice.filter((price) => price !== 0); // price 0인 경우 제거
-  const defaultPrice = existSellingPrice[0];
-  const priceInterval = existSellingPrice[1] - existSellingPrice[0];
-
   const orderType = useSelector((state: StateProps) => state.stockOrderType);
   const [orderPossibility, setOrderPossibility] = useState(true);
+  const [priceChangeTimer, setPriceChangeTimer] = useState<NodeJS.Timeout | null>(null);
 
+  // 매도/매수호가 정리
+  const { askp1, askp2, askp3, askp4, askp5, askp6, askp7, askp8, askp9, askp10 } = stockInfo;
   const { bidp1, bidp2, bidp3, bidp4, bidp5, bidp6, bidp7, bidp8, bidp9, bidp10 } = stockInfo;
-  const buyingInfo = [bidp1, bidp2, bidp3, bidp4, bidp5, bidp6, bidp7, bidp8, bidp9, bidp10];
-  const buyingPrice = buyingInfo.map((price) => parseInt(price));
-  const existBuyingPrice = buyingPrice.filter((price) => price !== 0); // price 0인 경우 제거
+  const sellingPrice = [askp1, askp2, askp3, askp4, askp5, askp6, askp7, askp8, askp9, askp10].map((price) => parseInt(price));
+  const buyingPrice = [bidp1, bidp2, bidp3, bidp4, bidp5, bidp6, bidp7, bidp8, bidp9, bidp10].map((price) => parseInt(price));
+  const existSellingPrice = sellingPrice.filter((price) => price !== 0);
+  const existBuyingPrice = buyingPrice.filter((price) => price !== 0);
 
-  // 거래 가능여부 판별 함수
-  const handleCheckTradePossibility = () => {
-    if (orderType) {
-      // 매수 주문
-      if (orderPrice !== 0 && !existBuyingPrice.includes(orderPrice)) {
-        setOrderPossibility(false);
-      } else {
-        setOrderPossibility(true);
-      }
-    } else {
-      // 매도 주문
-      if (orderPrice !== 0 && !existSellingPrice.includes(orderPrice)) {
-        setOrderPossibility(false);
-      } else {
-        setOrderPossibility(true);
-      }
-    }
-  };
+  // 호가 간 가격 차
+  const priceInterval = existSellingPrice[1] - existSellingPrice[0];
 
-  useEffect(() => {
-    handleCheckTradePossibility();
-  }, [orderPrice, orderType]);
-
-  // 거래가 증가/감소
+  // 거래가 변경 시
   const handlePlusOrderPrice = () => {
     dispatch(plusStockOrderPrice(priceInterval));
   };
@@ -68,7 +39,6 @@ const PriceSetting = (props: OwnProps) => {
     dispatch(minusStockOrderPrice(priceInterval));
   };
 
-  // 위-아래 방향키 입력 시
   const handleInputArrowBtn = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.code === "ArrowUp") {
       handlePlusOrderPrice();
@@ -77,7 +47,6 @@ const PriceSetting = (props: OwnProps) => {
     }
   };
 
-  // 거래가 직접 기입 시
   const handleWriteOrderPrice = (event: React.ChangeEvent<HTMLInputElement>) => {
     const inputPrice = event.target.value;
     const numberInputPrice = parseInt(inputPrice, 10);
@@ -92,7 +61,7 @@ const PriceSetting = (props: OwnProps) => {
 
     // priceInterval로 나누어 떨어지지 않는 값을 기입 시 -> 0.8초 후에 나누어 떨어지는 값으로 변경
     if (priceChangeTimer !== null) {
-      clearTimeout(priceChangeTimer);
+      clearTimeout(priceChangeTimer); // 이전 입력으로 인한 비동기 작업 존재할 시 -> 제거
     }
 
     dispatch(setStockOrderPrice(numberInputPrice));
@@ -108,9 +77,33 @@ const PriceSetting = (props: OwnProps) => {
     }
   };
 
-  // 종목이 달리지면 -> 가격도 변경
+  // 거래 가능여부 판별 함수 (거래량 유무에 따라)
+  const handleCheckTradePossibility = () => {
+    if (orderType) {
+      // 매수
+      if (orderPrice !== 0 && !existBuyingPrice.includes(orderPrice)) {
+        setOrderPossibility(false);
+      } else {
+        setOrderPossibility(true);
+      }
+    }
+
+    if (!orderType) {
+      // 메도
+      if (orderPrice !== 0 && !existSellingPrice.includes(orderPrice)) {
+        setOrderPossibility(false);
+      } else {
+        setOrderPossibility(true);
+      }
+    }
+  };
+
   useEffect(() => {
-    dispatch(setStockOrderPrice(defaultPrice));
+    handleCheckTradePossibility();
+  }, [orderPrice, orderType]);
+
+  useEffect(() => {
+    dispatch(setStockOrderPrice(existSellingPrice[0]));
   }, [companyId]);
 
   return (
@@ -120,7 +113,7 @@ const PriceSetting = (props: OwnProps) => {
       </div>
       <div className="PriceSettingBox">
         <PriceController defaultValue={orderPrice} value={orderPrice} onChange={handleWriteOrderPrice} onKeyDown={handleInputArrowBtn} onFocus={handleCheckTradePossibility} />
-        <UnitContent>{unitText}</UnitContent>
+        <UnitContent>{priceUnit}</UnitContent>
         <div className="DirectionBox">
           <button className="PriceUp" onClick={handlePlusOrderPrice}>
             &#8896;

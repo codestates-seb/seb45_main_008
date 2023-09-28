@@ -7,8 +7,10 @@ const url = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080
 
 const useGetMemberId = () => {
   const login = useSelector((state: StateProps) => state.login);
+  const isLogin = login === 1;
+
   const { data, isLoading, isError } = useQuery("memberId", getMemberId, {
-    enabled: login === 1,
+    enabled: isLogin,
   });
 
   return { memberId: data, memberIdLoading: isLoading, memberIdError: isError };

@@ -43,7 +43,7 @@ const StockPrice = (props: StockPriceProps) => {
 
 export default StockPrice;
 
-// 전체 매도/도수 거래량 대비 개별가격 매도/매수 거래량 비율
+// 전체 거래량 대비 개별가격 거래량 비율
 const VolumePercentge = (props: { index: number; volume: number; upperPriceVolumeSum: number; lowerPriceVolumeSum: number }) => {
   const { index, volume, upperPriceVolumeSum, lowerPriceVolumeSum } = props;
   const [width, setWidth] = useState(0);

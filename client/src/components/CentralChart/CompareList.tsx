@@ -10,10 +10,9 @@ const CompareList = (props: OwnProps) => {
   const currentCompanyid = useSelector((state: StateProps) => state.companyId);
 
   const handleSelectCompareStock = () => {
-    if (currentCompanyid === compareCompanyId) {
-      return;
+    if (currentCompanyid !== compareCompanyId) {
+      dispatch(setCompareStock(compareCompanyId));
     }
-    dispatch(setCompareStock(compareCompanyId));
   };
 
   return <Contianer onClick={handleSelectCompareStock}>{corpName}</Contianer>;

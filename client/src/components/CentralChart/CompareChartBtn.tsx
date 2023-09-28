@@ -29,11 +29,8 @@ const CompareChartBtn = () => {
       {compare && (
         <CompareContainer onMouseOver={handleOnCompareList} onMouseLeave={handleOffCompareList}>
           <StockList>
-            {companyList?.map((company) => {
-              const corpName = company.korName;
-              const companyId = company.companyId;
-
-              return <CompareList corpName={corpName} compareCompanyId={companyId} />;
+            {companyList?.map(({ korName, companyId }) => {
+              return <CompareList corpName={korName} compareCompanyId={companyId} />;
             })}
           </StockList>
         </CompareContainer>

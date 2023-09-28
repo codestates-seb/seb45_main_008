@@ -19,9 +19,9 @@ import { setLogoutState } from "../reducer/member/loginSlice";
 export const secondAlarmTime = 1000 * 60 * 29; // 29분
 export const lastAlarmTime = 1000 * 60; // 1분
 
-const setAutoLogoutAlarm = (dispatch: any, alarmNum: "first" | "second" | "last", secondAlarmTime: number, lastAlarmTime?: number) => {
+const setAutoLogoutAlarm = (dispatch: any, alarmNum: string, secondAlarmTime: number, lastAlarmTime?: number) => {
   // 1~3차 알림 모두 설정
-  if (alarmNum === "first") {
+  if (alarmNum === alarmNumType.First) {
     toast.warning("로그인 상태는 30분 동안 유지됩니다", {
       style: toastStyle,
       position: "top-center",
@@ -61,7 +61,7 @@ const setAutoLogoutAlarm = (dispatch: any, alarmNum: "first" | "second" | "last"
   }
 
   // 2~3차 알림 설정
-  if (alarmNum === "second") {
+  if (alarmNum === alarmNumType.Second) {
     setTimeout(() => {
       // 2차 알림 셋팅 시간 제거
       sessionStorage.removeItem("autoLogoutSecondAlarm");
@@ -94,7 +94,7 @@ const setAutoLogoutAlarm = (dispatch: any, alarmNum: "first" | "second" | "last"
   }
 
   // 3차 알림만 설정
-  if (alarmNum === "last") {
+  if (alarmNum === alarmNumType.Last) {
     setTimeout(() => {
       // 3차 알림 셋팅 시간 제거
       sessionStorage.removeItem("autoLogoutLastAlarm");
@@ -112,6 +112,12 @@ const setAutoLogoutAlarm = (dispatch: any, alarmNum: "first" | "second" | "last"
 };
 
 export default setAutoLogoutAlarm;
+
+const alarmNumType = {
+  First: "first",
+  Second: "second",
+  Last: "last",
+};
 
 const toastStyle = {
   fontSize: "15px",

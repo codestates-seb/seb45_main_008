@@ -3,9 +3,8 @@ import { styled } from "styled-components";
 import useGetCompanyList from "../../hooks/useGetCompanyList";
 import CancelConfirm from "./CancelConfirm";
 import { dummyLogo } from "../../dummy/dummyLogo";
+import { priceUnit, volumeUnit } from "../../constant/constant";
 
-const priceUnit: string = "원";
-const volumeUnit: string = "주";
 const cancelButtonText: string = "주문취소";
 
 const OrderedStock = (props: OrderdStockProps) => {
