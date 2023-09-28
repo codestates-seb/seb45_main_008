@@ -1,7 +1,7 @@
 import { useDispatch } from "react-redux";
 import { styled } from "styled-components";
-import { stockOrderOpen } from "../../reducer/StockOrderSet-Reducer";
-import { orderTypeBuying, orderTypeSelling } from "../../reducer/StockOrderType-Reducer";
+import { stockOrderOpen } from "../../reducer/stockOrderSet-Reducer";
+import { orderTypeBuying, orderTypeSelling } from "../../reducer/stockOrderType-Reducer";
 
 const StockOrderBtn = (props: OwnProps) => {
   const { type } = props;

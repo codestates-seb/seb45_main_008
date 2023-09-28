@@ -2,8 +2,8 @@ import axios from "axios";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
 import { useDispatch } from "react-redux";
-import { changeCompanyId } from "../../reducer/CompanyId-Reducer";
-import logo from "../../asset/images/StockHolmImage.png";
+import { changeCompanyId } from "../../reducer/companyId-Reducer";
+import logo from "../../asset/icon/StockHolmImage.png";
 
 import kia from "../../asset/logos/기아.svg";
 import dy from "../../asset/logos/디와이.jpeg";
@@ -29,8 +29,7 @@ interface StockInfo {
   };
   code: string;
 }
-const MarketServerUrl =
-  "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/companies";
+const MarketServerUrl = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/companies";
 
 const MarketStockList: React.FC = () => {
   const [marketStockList, setMarketStockList] = useState<StockInfo[]>([]);
@@ -82,33 +81,21 @@ const MarketStockList: React.FC = () => {
 
   const SortPrice = () => {
     const sortedList = [...marketStockList];
-    sortedList.sort(
-      (a, b) =>
-        parseFloat(b.stockInfResponseDto.stck_prpr) -
-        parseFloat(a.stockInfResponseDto.stck_prpr)
-    );
+    sortedList.sort((a, b) => parseFloat(b.stockInfResponseDto.stck_prpr) - parseFloat(a.stockInfResponseDto.stck_prpr));
     setMarketStockList(sortedList);
     setSelectedSort("price");
   };
 
   const SortRate = () => {
     const sortedList = [...marketStockList];
-    sortedList.sort(
-      (a, b) =>
-        parseFloat(b.stockInfResponseDto.prdy_ctrt) -
-        parseFloat(a.stockInfResponseDto.prdy_ctrt)
-    );
+    sortedList.sort((a, b) => parseFloat(b.stockInfResponseDto.prdy_ctrt) - parseFloat(a.stockInfResponseDto.prdy_ctrt));
     setMarketStockList(sortedList);
     setSelectedSort("rate");
   };
 
   const SortTrade = () => {
     const sortedList = [...marketStockList];
-    sortedList.sort(
-      (a, b) =>
-        parseFloat(b.stockInfResponseDto.acml_vol) -
-        parseFloat(a.stockInfResponseDto.acml_vol)
-    );
+    sortedList.sort((a, b) => parseFloat(b.stockInfResponseDto.acml_vol) - parseFloat(a.stockInfResponseDto.acml_vol));
     setMarketStockList(sortedList);
     setSelectedSort("trade");
   };
@@ -121,19 +108,13 @@ const MarketStockList: React.FC = () => {
         <StockListDetail onClick={SortName} selected={selectedSort === "name"}>
           {MarketStockLists.stockName}
         </StockListDetail>
-        <StockListDetail
-          onClick={SortPrice}
-          selected={selectedSort === "price"}
-        >
+        <StockListDetail onClick={SortPrice} selected={selectedSort === "price"}>
           {MarketStockLists.stockPrice}
         </StockListDetail>
         <StockListDetail onClick={SortRate} selected={selectedSort === "rate"}>
           {MarketStockLists.stockRate}
         </StockListDetail>
-        <StockListDetail
-          onClick={SortTrade}
-          selected={selectedSort === "trade"}
-        >
+        <StockListDetail onClick={SortTrade} selected={selectedSort === "trade"}>
           {MarketStockLists.stockTrade}
         </StockListDetail>
       </StockListTitle>
@@ -151,9 +132,7 @@ const MarketStockList: React.FC = () => {
 
           return (
             <div key={index}>
-              <StockListInfo
-                onClick={() => dispatch(changeCompanyId(el.companyId))}
-              >
+              <StockListInfo onClick={() => dispatch(changeCompanyId(el.companyId))}>
                 {isLoading === true ? (
                   <div>{MarketStockLists.isLoading}</div>
                 ) : (
@@ -166,28 +145,11 @@ const MarketStockList: React.FC = () => {
                     </StockNameWrapper>
                     <StockDetailWrapper>
                       <StockDetail>
-                        <StockDetailItem key={el.stockInfResponseDto.stck_prpr}>
-                          {numberWithCommas(
-                            parseFloat(el.stockInfResponseDto.stck_prpr)
-                          )}
-                        </StockDetailItem>
-                        <StockDetailItem
-                          key={el.stockInfResponseDto.prdy_ctrt}
-                          variation={
-                            parseFloat(el.stockInfResponseDto.prdy_ctrt) > 0
-                              ? "positive"
-                              : parseFloat(el.stockInfResponseDto.prdy_ctrt) < 0
-                              ? "negative"
-                              : "neutral"
-                          }
-                        >
+                        <StockDetailItem key={el.stockInfResponseDto.stck_prpr}>{numberWithCommas(parseFloat(el.stockInfResponseDto.stck_prpr))}</StockDetailItem>
+                        <StockDetailItem key={el.stockInfResponseDto.prdy_ctrt} variation={parseFloat(el.stockInfResponseDto.prdy_ctrt) > 0 ? "positive" : parseFloat(el.stockInfResponseDto.prdy_ctrt) < 0 ? "negative" : "neutral"}>
                           {el.stockInfResponseDto.prdy_ctrt}
                         </StockDetailItem>
-                        <StockDetailItem key={el.stockInfResponseDto.acml_vol}>
-                          {numberWithCommas(
-                            parseFloat(el.stockInfResponseDto.acml_vol)
-                          )}
-                        </StockDetailItem>
+                        <StockDetailItem key={el.stockInfResponseDto.acml_vol}>{numberWithCommas(parseFloat(el.stockInfResponseDto.acml_vol))}</StockDetailItem>
                       </StockDetail>
                     </StockDetailWrapper>
                   </>

@@ -1,9 +1,8 @@
-import React from 'react';
-import styled from 'styled-components';
-import googleLogo from '../../asset/images/GoogleLogo.svg'; 
+import React from "react";
+import styled from "styled-components";
+import googleLogo from "../../asset/logos/GoogleLogo.svg";
 
 const GoogleLoginButton: React.FC<Props> = ({ backendURL }) => {
-
   const buttonText = "구글로 로그인";
 
   const handleLoginClick = () => {
@@ -16,7 +15,7 @@ const GoogleLoginButton: React.FC<Props> = ({ backendURL }) => {
       {buttonText}
     </GoogleButton>
   );
-}
+};
 
 export default GoogleLoginButton;
 
@@ -28,7 +27,7 @@ interface Props {
 const GoogleButton = styled.button`
   margin: 10px 0;
   padding: 10px 20px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border: 1px solid lightgray;
   border-radius: 5px;
   cursor: pointer;
@@ -37,9 +36,8 @@ const GoogleButton = styled.button`
   align-items: center;
   justify-content: center;
 
-
   &:hover {
-    background-color: #f2f2f2;  // Light gray color on hover
+    background-color: #f2f2f2; // Light gray color on hover
   }
 `;
 
@@ -49,5 +47,3 @@ const LogoImage = styled.img`
   width: 60px;
   height: auto;
 `;
-
-

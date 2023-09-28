@@ -1,6 +1,6 @@
 import React from "react";
 import styled from "styled-components";
-import StockHolmLogo from "../../asset/images/StockHolmLogo.png";
+import StockHolmLogo from "../../asset/logos/StockHolmLogo.png";
 
 import StockSearchComponent from "./StockSearchComponent";
 

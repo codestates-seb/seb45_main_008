@@ -1,13 +1,13 @@
 import React from "react";
 import styled from "styled-components";
-import StockHolmLogo from "../../asset/images/StockHolmLogo.png";
+import StockHolmLogo from "../../asset/logos/StockHolmLogo.png";
 
 const LoginConfirmationModal: React.FC<LoginConfirmationProps> = ({ onClose }) => {
   const messageText = "로그인이 성공적으로 완료되었습니다!";
   const confirmText = "확인";
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       onClose();
     }
   };

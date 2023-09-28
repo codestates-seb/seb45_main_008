@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import styled from 'styled-components';
-import MemberInfoModal from './memberInfoModal'; 
-import MemberWithdrawalModal from './memberWithdrawalModal';
-import CashModal from './cashModal'; 
+import MemberInfoModal from './MemberInfoModal'; 
+import MemberWithdrawalModal from './MemberWithdrawalModal';
+import CashModal from './CashModal'; 
 
 const ProfileModal: React.FC<ProfileModalProps> = ({ onClose }) => {
     const memberInfoText = "회원정보";

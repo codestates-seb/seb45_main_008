@@ -1,9 +1,8 @@
-import React from 'react';
-import styled from 'styled-components';
-import kakaoLogo from '../../asset/images/KakaoLogo.svg'; 
+import React from "react";
+import styled from "styled-components";
+import kakaoLogo from "../../asset/logos/KakaoLogo.svg";
 
 const KakaoLoginButton: React.FC<Props> = ({ backendURL }) => {
-
   const buttonText = "카카오로 로그인";
 
   // 버튼 클릭시 로그인 페이지로 리다이렉트
@@ -17,7 +16,7 @@ const KakaoLoginButton: React.FC<Props> = ({ backendURL }) => {
       {buttonText}
     </KakaoButton>
   );
-}
+};
 
 export default KakaoLoginButton;
 
@@ -30,7 +29,7 @@ interface Props {
 const KakaoButton = styled.button`
   margin: 10px 0;
   padding: 10px 20px;
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   border: 1px solid lightgray;
   border-radius: 5px;
   cursor: pointer;
@@ -40,7 +39,7 @@ const KakaoButton = styled.button`
   justify-content: center;
 
   &:hover {
-    background-color: #f2f2f2;  // 호버 시 밝은 회색 배경 적용
+    background-color: #f2f2f2; // 호버 시 밝은 회색 배경 적용
   }
 `;
 
@@ -50,5 +49,3 @@ const LogoImage = styled.img`
   width: 60px;
   height: auto;
 `;
-
-

@@ -2,9 +2,9 @@ import React, { useState } from "react";
 import styled from "styled-components";
 
 import { useDispatch } from "react-redux";
-import { changeCompanyId } from "../../reducer/CompanyId-Reducer";
+import { changeCompanyId } from "../../reducer/companyId-Reducer";
 
-import logo from "../../asset/images/StockHolmImage.png";
+import logo from "../../asset/icon/StockHolmImage.png";
 import star_icon from "../../asset/icon/star_icon.png";
 import star_filled_icon from "../../asset/icon/star_filled_icon.png";
 

@@ -1,6 +1,6 @@
 import styled from "styled-components";
 import React, { useState } from "react";
-import MarketSummary from "../../components/MarketComponents/index";
+import MarketSummary from "../../components/MarketComponents/Index";
 import MarketStockList from "../../components/MarketComponents/MarketStockList";
 
 interface Props {}

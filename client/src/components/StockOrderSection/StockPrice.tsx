@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
-import { setStockOrderPrice } from "../../reducer/StockOrderPrice-Reducer";
+import { setStockOrderPrice } from "../../reducer/stockOrderPrice-Reducer";
 import { StateProps } from "../../models/stateProps";
 
 const changeRateUnit = `%`;
