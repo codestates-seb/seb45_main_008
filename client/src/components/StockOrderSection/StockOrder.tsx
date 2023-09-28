@@ -7,6 +7,7 @@ import { toast } from "react-toastify";
 import { StateProps } from "../../models/stateProps";
 import useTradeStock from "../../hooks/useTradeStock";
 import { dummyLogo } from "../../dummy/dummyLogo";
+import { priceUnit, volumeUnit } from "../../constant/constant";
 
 import StockPriceList from "./StockPriceList";
 import StockOrderSetting from "./StockOrderSetting";
@@ -21,8 +22,6 @@ const orderFailureButtonText: string = "확인";
 const orderPriceText: string = "주문단가";
 const orderVolumeText: string = "주문수량";
 const totalOrderAmountText: string = "총 주문금액";
-const priceUnit: string = "원";
-const volumeUnit: string = "주";
 const cancelButtonText: string = "취소";
 const confirmButtonText: string = "확인";
 

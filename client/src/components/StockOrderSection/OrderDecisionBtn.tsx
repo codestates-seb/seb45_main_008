@@ -6,11 +6,10 @@ import { StateProps } from "../../models/stateProps";
 import { OrderTypeProps } from "../../models/orderTypeProps";
 import { setStockOrderVolume } from "../../reducer/stockOrderVolume-Reducer";
 import { openDecisionWindow } from "../../reducer/setDecisionWindow-Reducer";
+import { priceUnit } from "../../constant/constant";
 
-const availableMoneyText01: string = "최대";
-const availableMoneyText02: string = "원";
+const availableMoneyText: string = "최대";
 const totalAmountText: string = "주문총액";
-const totalAmountUnit: string = "원";
 
 const OrderDecisionBtn = () => {
   const { cashData } = useGetCash();
@@ -40,14 +39,14 @@ const OrderDecisionBtn = () => {
   return (
     <div className="container">
       <AvailableMoney orderType={orderType}>
-        <span>{availableMoneyText01}</span>
+        <span>{availableMoneyText}</span>
         <span className="availableMoney">{cash}</span>
-        <span>{availableMoneyText02}</span>
+        <span>{priceUnit}</span>
       </AvailableMoney>
       <TotalAmount>
         <div className="totalAmountText">{totalAmountText}</div>
         <div className="totalAmount">{totalOrderAmout.toLocaleString()}</div>
-        <div>{totalAmountUnit}</div>
+        <div>{priceUnit}</div>
       </TotalAmount>
       <OrderBtn ordertype={orderType} onClick={handleOpenDecisionWindow}>
         {orderBtnText}

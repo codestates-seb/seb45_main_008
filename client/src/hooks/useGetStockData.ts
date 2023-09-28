@@ -3,8 +3,9 @@ import { useState, useEffect } from "react";
 import { useQuery, useQueryClient } from "react-query";
 import axios from "axios";
 
+const url = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/companies/charts/";
+
 const useGetStockData = (companyId: number) => {
-  // 🟢 기존 로직
   const [autoRefetch, setAutoRefetch] = useState(false);
   const queryClient = useQueryClient();
 
@@ -16,21 +17,20 @@ const useGetStockData = (companyId: number) => {
 
   // 1) 주말, 공휴일 여부 체크
   const today = new Date();
-  const nonBusinessDay = isHoliday(today, { include: { saturday: true, sunday: true } }); // 토요일, 일요일, 공휴일 (임시 공휴일 포함)
+  const isBusinessDay = !isHoliday(today, { include: { saturday: true, sunday: true } }); // 토요일, 일요일, 공휴일 (임시 공휴일 포함)
 
-  // 🟢 2) 개장시간 여부 체크
+  // 2) 개장시간 여부 체크
   const currentHour = today.getHours();
   const currentMinute = today.getMinutes();
   const isBefore9AM = currentHour < 9;
   const isAfter330PM = currentHour > 15 || (currentHour === 15 && currentMinute >= 30);
-  const closingTime = isBefore9AM || isAfter330PM;
+  const marketOpenTime = !isBefore9AM || !isAfter330PM;
 
-  // 🟢 기존로직
-  const notRenwalTime = nonBusinessDay || closingTime;
+  const dataRenewalTime = isBusinessDay || marketOpenTime;
 
   // 개장 시간 이내일 경우, 현재 시각이 30분, 정각이 아닌 경우 남은 시간 계산하여 checkTime 함수 다시 실행
   useEffect(() => {
-    if (!notRenwalTime) {
+    if (dataRenewalTime) {
       if (minute === 0 || minute === 30) {
         setAutoRefetch(true);
       } else if (0 < minute && minute < 30) {
@@ -51,8 +51,9 @@ const useGetStockData = (companyId: number) => {
 
   const { data, isLoading, error, refetch } = useQuery(`chartData${companyId} ${queryKey}`, () => getChartData(companyId), {
     enabled: true,
-    refetchInterval: autoRefetch && !notRenwalTime ? 60000 * 30 : false, // 정각 혹은 30분에 맞춰서 30분 마다 데이터 리패칭
+    refetchInterval: autoRefetch && dataRenewalTime ? 60000 * 30 : false, // 정각 혹은 30분에 맞춰서 30분 마다 데이터 리패칭
     onSuccess: () => {
+      queryClient.invalidateQueries("stockInfo");
       queryClient.invalidateQueries("cash");
       queryClient.invalidateQueries("holdingStock");
       queryClient.invalidateQueries("orderRecord");
@@ -64,8 +65,7 @@ const useGetStockData = (companyId: number) => {
 
 export default useGetStockData;
 
-// 차트 데이터 받아오는 fetch 로직
 const getChartData = async (companyId: number) => {
-  const res = await axios.get(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/companies/charts/${companyId}`);
+  const res = await axios.get(`${url}${companyId}`);
   return res.data;
 };
