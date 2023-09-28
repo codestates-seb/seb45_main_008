@@ -2,8 +2,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 
-import LogoutHeader from "../components/Headers/LogoutHeader";
-import LoginHeader from "../components/Headers/LoginHeader";
+import Header from "../components/Headers/Index";
 
 import OAuthLoginModal from "../components/Logins/OAuthLogin";
 import EmailLoginModal from "../components/Logins/EmailLogin";
@@ -25,7 +24,6 @@ import StockOrderSection from "../components/StockOrderSection/Index";
 import ProfileModal from "../components/Profile/ProfileModal";
 import { StateProps } from "../models/stateProps";
 import { TabContainerPage } from "./TabPages/TabContainerPage";
-import { RootState } from "../store/config";
 
 import { setLoginState } from "../reducer/member/loginSlice";
 import setAutoLogoutAlarm from "../utils/setAutoLogoutAlarm";
@@ -42,7 +40,6 @@ const MainPage = () => {
   const [isProfileModalOpen, setProfileModalOpen] = useState(false); //프로필 모달 보이기/숨기기
 
   const dispatch = useDispatch();
-  const isLogin = useSelector((state: RootState) => state.login);
 
   const openOAuthModal = useCallback(() => {
     setOAuthModalOpen(true);
@@ -202,7 +199,7 @@ const MainPage = () => {
 
   return (
     <Container>
-      {isLogin == 1 ? <LoginHeader onProfileClick={openProfileModal} /> : <LogoutHeader onLoginClick={openOAuthModal} />}
+      <Header/>
       <Main>
         <LeftSection leftExpand={expandScreen.left}>
           {selectedMenu === "전체종목" ? (
