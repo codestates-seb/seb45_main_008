@@ -3,10 +3,10 @@ import { StateProps } from "../../models/stateProps";
 import MarketInfo from "./MarketInfoPage";
 import { Routes, Route, Link } from "react-router-dom";
 import styled from "styled-components";
-import DetailStockInformation from "../../components/StockinfoComponents/Index";
-import { Community } from "./CommunityPage";
+import DetailStockInformation from "../../components/stockinfoComponents/index";
+import { Community } from "./communityPage";
 import { useState } from "react";
-import { MarketImages, InfoImages, CommunityImages } from "../../components/CommunityComponents/IconComponent/Icon";
+import { MarketImages, InfoImages, CommunityImages } from "../../components/communityComponents/IconComponent/Icon";
 import { useLocation } from "react-router-dom";
 export const TabContainerPage = () => {
   const location = useLocation();

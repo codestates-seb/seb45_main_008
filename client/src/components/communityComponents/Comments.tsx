@@ -2,7 +2,8 @@ import React, { useState, useEffect } from "react";
 import styled from "styled-components";
 import { toast } from "react-toastify";
 import axios from "axios";
-import { ProFileImage } from "./IconComponent/Icon.tsx";
+import { ProFileImage } from "./IconComponent/Icon";
+
 const Comments = ({ boardId }: { boardId: number }) => {
   const [commentData, setCommentData] = useState([]);
   const [commentsValue, setCommentsValue] = useState("");
@@ -29,7 +30,7 @@ const Comments = ({ boardId }: { boardId: number }) => {
     setCommentsValue(e.target.value);
   };
 
-  const accessToken = sessionStorage.getItem("accessToken");
+  const accessToken = localStorage.getItem("accessToken");
 
   const handleClickSubmit = async () => {
     if (commentsValue) {

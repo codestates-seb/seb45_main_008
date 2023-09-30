@@ -10,7 +10,7 @@ const useGetStockHolds = () => {
 export default useGetStockHolds;
 
 const getStockHolds = async () => {
-  const accessToken = sessionStorage.getItem("accessToken");
+  const accessToken = localStorage.getItem("accessToken");
   const res = await axios.get("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/stock/stockholds", {
     headers: {
       Authorization: accessToken,

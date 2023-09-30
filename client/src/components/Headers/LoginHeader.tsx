@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import StockHolmLogo from "../../asset/logos/StockHolmLogo.png";
 // import SampleProfile from "../../asset/images/ProfileSample.png";
-import ProfileModal from "../Profile/ProfileModal";
-import StockSearchComponent from "./StockSearchComponent";
+import ProfileModal from "../Profile/profileModal";
+import StockSearchComponent from "./stockSearchComponent";
 import { setLogoutState } from "../../reducer/member/loginSlice";
 import { useDispatch } from "react-redux";
 import { useGetMemberInfo } from "../../hooks/useGetMemberInfo"; // import the hook
@@ -47,10 +47,10 @@ const LoginHeader: React.FC<LoginHeaderProps> = () => {
   // 로그아웃 클릭 처리 함수
   const handleLogout = () => {
     dispatch(setLogoutState()); // 전역변수에서 로그아웃 상태로 설정
-    sessionStorage.removeItem("accessToken"); // 엑세스 토큰 제거
-    sessionStorage.removeItem("refreshToken"); // 리프레시 토큰 제거
-    sessionStorage.removeItem("logoutAlarmTime01");
-    sessionStorage.removeItem("logoutAlarmTime02");
+    localStorage.removeItem("accessToken"); // 엑세스 토큰 제거
+    localStorage.removeItem("refreshToken"); // 리프레시 토큰 제거
+    localStorage.removeItem("autoLogoutSecondAlarm");
+    localStorage.removeItem("autoLogoutLastAlarm");
 
     // 페이지를 새로고침합니다.
     window.location.reload();

@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { isHoliday } from "@hyunbinseo/holidays-kr";
-import { setStockOrderVolume } from "../../reducer/stockOrderVolume-Reducer";
-import { closeDecisionWindow } from "../../reducer/setDecisionWindow-Reducer";
+import { setStockOrderVolume } from "../../reducer/StockOrderVolume-Reducer";
+import { closeDecisionWindow } from "../../reducer/SetDecisionWindow-Reducer";
 import { styled } from "styled-components";
 import { toast } from "react-toastify";
 import { StateProps } from "../../models/stateProps";
@@ -86,16 +86,17 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
 
   // 1) 주말, 공휴일 여부 체크
   const today = new Date();
-  const nonBusinessDay = isHoliday(today, { include: { saturday: true, sunday: true } }); // 토요일, 일요일, 공휴일 (임시 공휴일 포함)
+  const isBusinessDay = !isHoliday(today, { include: { saturday: true, sunday: true } }); // 토요일, 일요일, 공휴일 (임시 공휴일 포함)
 
   // 2) 개장시간 여부 체크
   const currentHour = today.getHours();
   const currentMinute = today.getMinutes();
   const isBefore9AM = currentHour < 9;
   const isAfter330PM = currentHour > 15 || (currentHour === 15 && currentMinute >= 30);
-  const closingTime = isBefore9AM || isAfter330PM;
+  const marketCloseTime = isBefore9AM || isAfter330PM;
 
-  const orderFailureCase01 = nonBusinessDay || closingTime;
+  // const orderFailureCase01 = false;
+  const orderFailureCase01 = !isBusinessDay || marketCloseTime;
   const orderFailureCase02 = orderPrice === 0 || orderVolume === 0;
 
   return (

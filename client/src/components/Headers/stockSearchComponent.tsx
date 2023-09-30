@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import styled from "styled-components";
 import { toast } from "react-toastify";
-import { changeCompanyId } from "../../reducer/companyId-Reducer";
+import { changeCompanyId } from "../../reducer/CompanyId-Reducer";
 import useGetCompanyList from "../../hooks/useGetCompanyList";
 
 const stockSearch = "종목 검색";

@@ -1,8 +1,7 @@
 import React from "react";
 import styled from "styled-components";
 import StockHolmLogo from "../../asset/logos/StockHolmLogo.png";
-
-import StockSearchComponent from "./StockSearchComponent";
+import StockSearchComponent from "./stockSearchComponent";
 
 const LogoutHeader: React.FC<LogoutHeaderProps> = ({ onLoginClick }) => {
   const loginText = "로그인"; // 로그인 버튼 텍스트

@@ -17,7 +17,7 @@ const useGetHoldingStock = () => {
 export default useGetHoldingStock;
 
 const getHoldingStock = async () => {
-  const accessToken = sessionStorage.getItem("accessToken");
+  const accessToken = localStorage.getItem("accessToken");
   const options = {
     headers: {
       Authorization: `${accessToken}`,

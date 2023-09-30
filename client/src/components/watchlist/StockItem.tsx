@@ -4,7 +4,7 @@ import logo from "../../asset/icon/StockHolmImage.png";
 import deleteIcon from "../../asset/icon/delete_icon.png";
 import useDeleteStar from "../../hooks/stars/useDeletestars";
 import { useDispatch } from "react-redux";
-import { changeCompanyId } from "../../reducer/companyId-Reducer";
+import { changeCompanyId } from "../../reducer/CompanyId-Reducer";
 
 import kia from "../../asset/logos/기아.svg";
 import dy from "../../asset/logos/디와이.jpeg";

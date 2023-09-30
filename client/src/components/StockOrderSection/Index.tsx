@@ -6,7 +6,7 @@ import useGetCash from "../../hooks/useGetCash";
 import useGetStockOrderRecord from "../../hooks/useGetStockOrderRecord";
 import useGetHoldingStock from "../../hooks/useGetHoldingStock";
 import useGetCompanyList from "../../hooks/useGetCompanyList";
-import { stockOrderClose } from "../../reducer/stockOrderSet-Reducer";
+import { stockOrderClose } from "../../reducer/StockOrderSet-Reducer";
 import { StateProps } from "../../models/stateProps";
 import { dummyLogo } from "../../dummy/dummyLogo";
 import StockOrder from "./StockOrder";

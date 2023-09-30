@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
-import { setStockOrderPrice, plusStockOrderPrice, minusStockOrderPrice } from "../../reducer/stockOrderPrice-Reducer";
+import { setStockOrderPrice, plusStockOrderPrice, minusStockOrderPrice } from "../../reducer/StockOrderPrice-Reducer";
 import { StateProps } from "../../models/stateProps";
 import { StockInfoProps } from "../../models/stockInfoProps";
 import { priceUnit } from "../../constant/constant";
