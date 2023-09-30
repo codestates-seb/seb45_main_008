@@ -2,8 +2,8 @@ import React, { useEffect, useState } from "react";
 import styled from "styled-components";
 import StockHolmLogo from "../../asset/logos/StockHolmLogo.png";
 // import SampleProfile from "../../asset/images/ProfileSample.png";
-import ProfileModal from "../Profile/ProfileModal";
-import StockSearchComponent from "./StockSearchComponent";
+import ProfileModal from "../Profile/profileModal";
+import StockSearchComponent from "./stockSearchComponent";
 import { setLogoutState } from "../../reducer/member/loginSlice";
 import { useDispatch } from "react-redux";
 import { useGetMemberInfo } from "../../hooks/useGetMemberInfo"; // import the hook

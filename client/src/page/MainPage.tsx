@@ -20,10 +20,10 @@ import CentralChart from "../components/CentralChart/Index";
 
 import EntireList from "../components/EntireList/EntireList";
 import HoldingList from "../components/HoldingList/HoldingList";
-import WatchList from "../components/Watchlist/WatchList";
+import WatchList from "../components/watchlist/WatchList";
 import StockOrderSection from "../components/StockOrderSection/Index";
 
-import ProfileModal from "../components/Profile/ProfileModal";
+import ProfileModal from "../components/Profile/profileModal";
 import { StateProps } from "../models/stateProps";
 import { TabContainerPage } from "./TabPages/TabContainerPage";
 

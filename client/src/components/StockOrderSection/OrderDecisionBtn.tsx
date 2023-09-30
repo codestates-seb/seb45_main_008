@@ -4,8 +4,8 @@ import { styled } from "styled-components";
 import useGetCash from "../../hooks/useGetCash";
 import { StateProps } from "../../models/stateProps";
 import { OrderTypeProps } from "../../models/orderTypeProps";
-import { setStockOrderVolume } from "../../reducer/stockOrderVolume-Reducer";
-import { openDecisionWindow } from "../../reducer/setDecisionWindow-Reducer";
+import { setStockOrderVolume } from "../../reducer/StockOrderVolume-Reducer";
+import { openDecisionWindow } from "../../reducer/SetDecisionWindow-Reducer";
 import { priceUnit } from "../../constant/constant";
 
 const availableMoneyText: string = "최대";

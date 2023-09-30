@@ -1,7 +1,7 @@
 import { useSelector, useDispatch } from "react-redux";
 import { isHoliday } from "@hyunbinseo/holidays-kr";
-import { setStockOrderVolume } from "../../reducer/stockOrderVolume-Reducer";
-import { closeDecisionWindow } from "../../reducer/setDecisionWindow-Reducer";
+import { setStockOrderVolume } from "../../reducer/StockOrderVolume-Reducer";
+import { closeDecisionWindow } from "../../reducer/SetDecisionWindow-Reducer";
 import { styled } from "styled-components";
 import { toast } from "react-toastify";
 import { StateProps } from "../../models/stateProps";
@@ -95,8 +95,8 @@ const StockOrder = ({ corpName }: { corpName: string }) => {
   const isAfter330PM = currentHour > 15 || (currentHour === 15 && currentMinute >= 30);
   const marketCloseTime = isBefore9AM || isAfter330PM;
 
-  const orderFailureCase01 = false;
-  // const orderFailureCase01 = !isBusinessDay || marketCloseTime;
+  // const orderFailureCase01 = false;
+  const orderFailureCase01 = !isBusinessDay || marketCloseTime;
   const orderFailureCase02 = orderPrice === 0 || orderVolume === 0;
 
   return (

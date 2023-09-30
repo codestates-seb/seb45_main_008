@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
-import { changeLeftScreen, changeRightScreen } from "../../reducer/expandScreen-Reducer";
+import { changeLeftScreen, changeRightScreen } from "../../reducer/ExpandScreen-Reducer";
 import { StateProps } from "../../models/stateProps";
 
 const ExpandScreenBtn = (props: OwnProps) => {

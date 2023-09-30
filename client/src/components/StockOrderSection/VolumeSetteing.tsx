@@ -5,7 +5,7 @@ import useGetCash from "../../hooks/useGetCash";
 import useGetHoldingStock from "../../hooks/useGetHoldingStock";
 import { StateProps } from "../../models/stateProps";
 import { HoldingStockProps } from "../../models/stockProps";
-import { setStockOrderVolume, plusStockOrderVolume, minusStockOrderVolume } from "../../reducer/stockOrderVolume-Reducer";
+import { setStockOrderVolume, plusStockOrderVolume, minusStockOrderVolume } from "../../reducer/StockOrderVolume-Reducer";
 import { volumeUnit } from "../../constant/constant";
 
 const volumeSettingTitle: string = "수량";

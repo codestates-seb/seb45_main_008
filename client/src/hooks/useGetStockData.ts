@@ -24,9 +24,9 @@ const useGetStockData = (companyId: number) => {
   const currentMinute = today.getMinutes();
   const isBefore9AM = currentHour < 9;
   const isAfter330PM = currentHour > 15 || (currentHour === 15 && currentMinute >= 30);
-  const marketOpenTime = !isBefore9AM || !isAfter330PM;
+  const marketCloseTime = isBefore9AM || isAfter330PM;
 
-  const dataRenewalTime = isBusinessDay || marketOpenTime;
+  const dataRenewalTime = isBusinessDay || !marketCloseTime;
 
   // 개장 시간 이내일 경우, 현재 시각이 30분, 정각이 아닌 경우 남은 시간 계산하여 checkTime 함수 다시 실행
   useEffect(() => {
