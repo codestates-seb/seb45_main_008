@@ -190,23 +190,23 @@ const MainPage = () => {
       if (autoLogoutSecondAlarm !== null) {
         if (currentTime >= parseInt(autoLogoutSecondAlarm) + secondAlarmTime + lastAlarmTime) {
           localStorage.removeItem("autoLogoutSecondAlarm");
+        } else {
+          const timeGone = currentTime - parseInt(autoLogoutSecondAlarm);
+          const remainTime = secondAlarmTime - timeGone;
+          dispatch(setLoginState()); // 로그인 처리
+          setAutoLogoutAlarm(dispatch, "second", remainTime, lastAlarmTime);
         }
-
-        const timeGone = currentTime - parseInt(autoLogoutSecondAlarm);
-        const remainTime = secondAlarmTime - timeGone;
-        dispatch(setLoginState()); // 로그인 처리
-        setAutoLogoutAlarm(dispatch, "second", remainTime, lastAlarmTime);
       }
 
       if (autoLogoutLastAlarm !== null) {
         if (currentTime >= parseInt(autoLogoutLastAlarm) + lastAlarmTime) {
           localStorage.removeItem("autoLogoutLastAlarm");
+        } else {
+          const timeGone = currentTime - parseInt(autoLogoutLastAlarm);
+          const remainTime = lastAlarmTime - timeGone;
+          dispatch(setLoginState()); // 로그인 처리
+          setAutoLogoutAlarm(dispatch, "last", remainTime);
         }
-
-        const timeGone = currentTime - parseInt(autoLogoutLastAlarm);
-        const remainTime = lastAlarmTime - timeGone;
-        dispatch(setLoginState()); // 로그인 처리
-        setAutoLogoutAlarm(dispatch, "last", remainTime);
       }
     }
   }, []);
