@@ -43,7 +43,6 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onSignup }) 
     }
   };
 
-  // 🔴 자동 로그아웃 관련 코드 -> 정리 필요
   const handleLoginClick = async () => {
     try {
       const response = await axios.post("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members/login", { email, password }, { validateStatus: (status) => status >= 200 && status < 600 });
@@ -52,8 +51,8 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onSignup }) 
         const accessToken = response.headers["authorization"];
         const refreshToken = response.headers["refresh"];
 
-        if (accessToken) sessionStorage.setItem("accessToken", accessToken);
-        if (refreshToken) sessionStorage.setItem("refreshToken", refreshToken);
+        if (accessToken) localStorage.setItem("accessToken", accessToken);
+        if (refreshToken) localStorage.setItem("refreshToken", refreshToken);
         dispatch(setLoginState());
 
         setAutoLogoutAlarm(dispatch, "first", secondAlarmTime, lastAlarmTime);
@@ -70,7 +69,6 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onSignup }) 
       }
     }
   };
-  // 🔴 자동 로그아웃 관련 코드 -> 정리 필요
 
   return (
     <ModalBackground>

@@ -26,7 +26,7 @@ const useGetCashId = () => {
 export default useGetCashId;
 
 const getCashData = async () => {
-    const accessToken = sessionStorage.getItem("accessToken");
+    const accessToken = localStorage.getItem("accessToken");
     const options = {
       headers: {
         Authorization: `${accessToken}`,

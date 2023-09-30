@@ -29,11 +29,11 @@ const setAutoLogoutAlarm = (dispatch: any, alarmNum: string, secondAlarmTime: nu
 
     // 2차 알림 셋팅 시간 기록
     const autoLogoutSecondAlarm = Date.now();
-    sessionStorage.setItem("autoLogoutSecondAlarm", `${autoLogoutSecondAlarm}`);
+    localStorage.setItem("autoLogoutSecondAlarm", `${autoLogoutSecondAlarm}`);
 
     setTimeout(() => {
       // 2차 알림 셋팅 시간 제거
-      sessionStorage.removeItem("autoLogoutSecondAlarm");
+      localStorage.removeItem("autoLogoutSecondAlarm");
 
       toast.warning("1분 뒤 로그아웃 처리됩니다", {
         style: toastStyle,
@@ -42,15 +42,15 @@ const setAutoLogoutAlarm = (dispatch: any, alarmNum: string, secondAlarmTime: nu
 
       // 3차 알림 셋팅 시간 기록
       const autoLogoutLastAlarm = Date.now();
-      sessionStorage.setItem("autoLogoutLastAlarm", `${autoLogoutLastAlarm}`);
+      localStorage.setItem("autoLogoutLastAlarm", `${autoLogoutLastAlarm}`);
 
       setTimeout(() => {
         // 3차 알림 셋팅 시간 제거
-        sessionStorage.removeItem("autoLogoutLastAlarm");
+        localStorage.removeItem("autoLogoutLastAlarm");
 
         dispatch(setLogoutState());
-        sessionStorage.removeItem("accessToken");
-        sessionStorage.removeItem("refreshToken");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
 
         toast.warning("로그아웃 처리되었습니다", {
           style: toastStyle,
@@ -64,7 +64,7 @@ const setAutoLogoutAlarm = (dispatch: any, alarmNum: string, secondAlarmTime: nu
   if (alarmNum === alarmNumType.Second) {
     setTimeout(() => {
       // 2차 알림 셋팅 시간 제거
-      sessionStorage.removeItem("autoLogoutSecondAlarm");
+      localStorage.removeItem("autoLogoutSecondAlarm");
 
       toast.warning("1분 뒤 로그아웃 처리됩니다", {
         style: toastStyle,
@@ -73,15 +73,15 @@ const setAutoLogoutAlarm = (dispatch: any, alarmNum: string, secondAlarmTime: nu
 
       // 3차 알림 셋팅 시간 기록
       const autoLogoutLastAlarm = Date.now();
-      sessionStorage.setItem("autoLogoutLastAlarm", `${autoLogoutLastAlarm}`);
+      localStorage.setItem("autoLogoutLastAlarm", `${autoLogoutLastAlarm}`);
 
       setTimeout(() => {
         // 3차 알림 셋팅 시간 제거
-        sessionStorage.removeItem("autoLogoutLastAlarm");
+        localStorage.removeItem("autoLogoutLastAlarm");
 
         dispatch(setLogoutState());
-        sessionStorage.removeItem("accessToken");
-        sessionStorage.removeItem("refreshToken");
+        localStorage.removeItem("accessToken");
+        localStorage.removeItem("refreshToken");
 
         toast.warning("로그아웃 처리되었습니다", {
           style: toastStyle,
@@ -97,11 +97,11 @@ const setAutoLogoutAlarm = (dispatch: any, alarmNum: string, secondAlarmTime: nu
   if (alarmNum === alarmNumType.Last) {
     setTimeout(() => {
       // 3차 알림 셋팅 시간 제거
-      sessionStorage.removeItem("autoLogoutLastAlarm");
+      localStorage.removeItem("autoLogoutLastAlarm");
 
       dispatch(setLogoutState());
-      sessionStorage.removeItem("accessToken");
-      sessionStorage.removeItem("refreshToken");
+      localStorage.removeItem("accessToken");
+      localStorage.removeItem("refreshToken");
 
       toast.warning("로그아웃 처리되었습니다", {
         style: toastStyle,

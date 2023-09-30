@@ -37,7 +37,7 @@ type StarData = StarDataItem[];
 // : Promise<StarData>
 
 const fetchStarData = async () => {
-  const accessToken = sessionStorage.getItem("accessToken");
+  const accessToken = localStorage.getItem("accessToken");
 
   // 로그인 상태에만 관심목록 데이터 호출하도록 설정
   if (accessToken !== null) {

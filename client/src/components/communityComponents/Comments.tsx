@@ -29,7 +29,7 @@ const Comments = ({ boardId }: { boardId: number }) => {
     setCommentsValue(e.target.value);
   };
 
-  const accessToken = sessionStorage.getItem("accessToken");
+  const accessToken = localStorage.getItem("accessToken");
 
   const handleClickSubmit = async () => {
     if (commentsValue) {
