@@ -2,7 +2,10 @@ import { useQuery } from "react-query";
 import axios from "axios";
 
 const useGetCompanyList = () => {
-  const { data, isLoading, error } = useQuery("companyList", getCompanyList, {});
+  const { data, isLoading, error } = useQuery("companyList", getCompanyList, {
+    staleTime: Infinity,
+    cacheTime: Infinity,
+  });
 
   return { companyList: data, compnayListLoading: isLoading, companyListError: error };
 };

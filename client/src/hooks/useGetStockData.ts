@@ -1,13 +1,12 @@
 import { isHoliday } from "@hyunbinseo/holidays-kr";
 import { useState, useEffect } from "react";
-import { useQuery, useQueryClient } from "react-query";
+import { useQuery } from "react-query";
 import axios from "axios";
 
 const url = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/companies/charts/";
 
 const useGetStockData = (companyId: number) => {
   const [autoRefetch, setAutoRefetch] = useState(false);
-  const queryClient = useQueryClient();
 
   // 1) 주말, 공휴일 여부 체크
   const today = new Date();
@@ -53,12 +52,6 @@ const useGetStockData = (companyId: number) => {
     staleTime: Infinity,
     cacheTime: Infinity,
     refetchInterval: autoRefetch && dataRenewalTime ? 60000 * 30 : false, // 정각 혹은 30분에 맞춰서 30분 마다 데이터 리패칭
-    onSuccess: () => {
-      queryClient.invalidateQueries("stockInfo");
-      queryClient.invalidateQueries("cash");
-      queryClient.invalidateQueries("holdingStock");
-      queryClient.invalidateQueries("orderRecord");
-    },
   });
 
   return { stockPrice: data, stockPriceLoading: isLoading, stockPriceError: error };
