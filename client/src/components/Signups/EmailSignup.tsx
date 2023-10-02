@@ -2,6 +2,7 @@
 import axios from "axios";
 import styled from "styled-components";
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { setEmailForVerification } from "../../reducer/member/memberInfoSlice";
 
@@ -11,7 +12,7 @@ const strings = {
   emailLabelText: "이메일",
   requestVerificationText: "이메일 인증요청",
   invalidEmailText: "유효하지 않은 이메일입니다",
-  emailSend : "이메일이 전송되었습니다"
+  emailSend: "이메일이 전송되었습니다",
 };
 
 const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestVerification }) => {
@@ -34,7 +35,7 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
 
   // 이메일 입력창에서 엔터키를 눌렀을 때의 핸들러
   const handleKeyPress = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter') {
+    if (event.key === "Enter") {
       handleVerificationRequest();
     }
   };
@@ -45,7 +46,7 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
       setIsInvalidEmail(true);
       return;
     }
-  
+
     try {
       const response = await axios.post(
         "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/email/send",
@@ -61,7 +62,7 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
       if (response.status === 200) {
         dispatch(setEmailForVerification(email));
         onRequestVerification(email);
-        setEmailSent(true);  // 이 부분 추가
+        setEmailSent(true); // 이 부분 추가
       } else if (response.status === 400) {
         setErrorMessage(response.data.message);
       } else if (response.status === 500) {
@@ -83,16 +84,18 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
 
   return (
     <ModalBackground>
-      <ModalContainer>
-        <CloseButton onClick={onClose}>×</CloseButton>
-        <Title>{strings.titleText}</Title>
-        <Label>{strings.emailLabelText}</Label>
-        <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} onKeyDown={handleKeyPress} />
-        {emailSent && <SuccessMessage>{strings.emailSend}</SuccessMessage>}
-        {isInvalidEmail && <ErrorMessage>{strings.invalidEmailText}</ErrorMessage>}
-        <SignupButton onClick={handleVerificationRequest}>{strings.requestVerificationText}</SignupButton>
-        {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-      </ModalContainer>
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
+        <ModalContainer>
+          <CloseButton onClick={onClose}>×</CloseButton>
+          <Title>{strings.titleText}</Title>
+          <Label>{strings.emailLabelText}</Label>
+          <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} onKeyDown={handleKeyPress} />
+          {emailSent && <SuccessMessage>{strings.emailSend}</SuccessMessage>}
+          {isInvalidEmail && <ErrorMessage>{strings.invalidEmailText}</ErrorMessage>}
+          <SignupButton onClick={handleVerificationRequest}>{strings.requestVerificationText}</SignupButton>
+          {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+        </ModalContainer>
+      </motion.div>
     </ModalBackground>
   );
 };
@@ -191,7 +194,7 @@ const SignupButton = styled.button`
   }
 `;
 const SuccessMessage = styled.p`
-  color: #e22926;  // 빨간색
+  color: #e22926; // 빨간색
   margin-top: 5px;
   font-size: 0.8rem;
 `;

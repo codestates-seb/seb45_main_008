@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
 const STRINGS = {
   GUIDE_TITLE: "StockHolm 가이드",
@@ -16,12 +17,14 @@ const GuideModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
   return (
     <ModalBackground onKeyDown={handleKeyDown} tabIndex={0}>
-      <ModalContainer>
-        <CloseButton onClick={onClose}>&times;</CloseButton>
-        <Title>{STRINGS.GUIDE_TITLE}</Title>
-        <Content>{STRINGS.LOGIN_GUIDE}</Content>
-        <Content>{STRINGS.CASH_GUIDE}</Content>
-      </ModalContainer>
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
+        <ModalContainer>
+          <CloseButton onClick={onClose}>&times;</CloseButton>
+          <Title>{STRINGS.GUIDE_TITLE}</Title>
+          <Content>{STRINGS.LOGIN_GUIDE}</Content>
+          <Content>{STRINGS.CASH_GUIDE}</Content>
+        </ModalContainer>
+      </motion.div>
     </ModalBackground>
   );
 };

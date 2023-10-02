@@ -1,8 +1,8 @@
-
 import React from "react";
 import styled from "styled-components";
 import GoogleLoginButton from "./GoogleLoginButton";
 import KakaoLoginButton from "./KakaoLoginButton";
+import { motion } from "framer-motion";
 
 const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick, onEmailSignupClick }) => {
   const titleText = "로그인";
@@ -16,17 +16,19 @@ const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick
 
   return (
     <ModalBackground>
-      <ModalContainer>
-        <CloseButton onClick={onClose}>&times;</CloseButton>
-        <Title>{titleText}</Title>
-        <GoogleLoginButton backendURL={GOOGLE_BACKEND_URL} />
-        <KakaoLoginButton backendURL={KAKAO_BACKEND_URL} />
-        <OrText>{orText}</OrText>
-        <EmailButtonsContainer>
-          <EmailButton onClick={onEmailLoginClick}>{emailLoginText}</EmailButton>
-          <EmailButton onClick={onEmailSignupClick}>{emailSignupText}</EmailButton>
-        </EmailButtonsContainer>
-      </ModalContainer>
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
+        <ModalContainer>
+          <CloseButton onClick={onClose}>&times;</CloseButton>
+          <Title>{titleText}</Title>
+          <GoogleLoginButton backendURL={GOOGLE_BACKEND_URL} />
+          <KakaoLoginButton backendURL={KAKAO_BACKEND_URL} />
+          <OrText>{orText}</OrText>
+          <EmailButtonsContainer>
+            <EmailButton onClick={onEmailLoginClick}>{emailLoginText}</EmailButton>
+            <EmailButton onClick={onEmailSignupClick}>{emailSignupText}</EmailButton>
+          </EmailButtonsContainer>
+        </ModalContainer>
+      </motion.div>
     </ModalBackground>
   );
 };
@@ -35,12 +37,11 @@ export default OAuthLoginModal;
 
 //변수 타입
 interface LoginModalProps {
-
   onClose: () => void;
   onEmailLoginClick: () => void;
   onEmailSignupClick: () => void;
-  onWatchListClick?: () => void;  // '?'를 사용하여 선택적으로 만듭니다.
-  onHoldingsClick?: () => void;   // '?'를 사용하여 선택적으로 만듭니다.
+  onWatchListClick?: () => void; // '?'를 사용하여 선택적으로 만듭니다.
+  onHoldingsClick?: () => void; // '?'를 사용하여 선택적으로 만듭니다.
 }
 
 // 모달창 띄웠을 때 배경 스타일

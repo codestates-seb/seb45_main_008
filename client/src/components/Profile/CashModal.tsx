@@ -1,141 +1,142 @@
-import React, { useState } from 'react';
-import styled from 'styled-components'; 
-import { useDispatch} from 'react-redux'; // <-- Import useSelector
-import { useCreateCash, useResetCash } from '../../hooks/useCash'; 
-import useGetCash from '../../hooks/useGetCash'; 
-import useGetCashId from '../../hooks/useGetCashId';
-import { setCashId, setMoney } from '../../reducer/cash/cashSlice';
-
-
+import React, { useState } from "react";
+import styled from "styled-components";
+import { motion } from "framer-motion";
+import { useDispatch } from "react-redux"; // <-- Import useSelector
+import { useCreateCash, useResetCash } from "../../hooks/useCash";
+import useGetCash from "../../hooks/useGetCash";
+import useGetCashId from "../../hooks/useGetCashId";
+import { setCashId, setMoney } from "../../reducer/cash/cashSlice";
 
 const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
+  // 상태 및 변수 초기화
+  const titleText = "현금생성/재생성";
+  const cashCreationPlaceholder = "1백만원~5억원 사이를 입력하세요";
+  const createCashButtonText = "현금 생성";
+  const cashInputPlaceholder = "1백만원~5억원 사이를 입력하세요";
+  const resetButtonText = "현금 재생성";
+  // const refreshButtonText ="새로고침";
 
-    // 상태 및 변수 초기화
-    const titleText = "현금생성/재생성";
-    const cashCreationPlaceholder = "1백만원~5억원 사이를 입력하세요";
-    const createCashButtonText = "현금 생성";
-    const cashInputPlaceholder = "1백만원~5억원 사이를 입력하세요";
-    const resetButtonText = "현금 재생성";
-    // const refreshButtonText ="새로고침";
+  const [errorMessage, setErrorMessage] = useState<string | null>(null); // 에러 메시지 상태 변수 추가
 
-    const [errorMessage, setErrorMessage] = useState<string | null>(null); // 에러 메시지 상태 변수 추가
+  const dispatch = useDispatch();
 
-    const dispatch = useDispatch();
+  // useGetCash 훅을 사용하여 현금 보유량 가져오기
+  const { cashData: holdingsAmount } = useGetCash(); // 👈 useGetCash 훅을 사용하여 현금 보유량 데이터를 가져옵니다.
 
-    // useGetCash 훅을 사용하여 현금 보유량 가져오기
-    const { cashData: holdingsAmount } = useGetCash(); // 👈 useGetCash 훅을 사용하여 현금 보유량 데이터를 가져옵니다.
+  // useGetCashId 훅을 사용하여 cashId 가져오기
+  const { cashData: cashId, cashError } = useGetCashId();
 
-    // useGetCashId 훅을 사용하여 cashId 가져오기
-    const { cashData: cashId, cashError } = useGetCashId();
+  const createCashMutation = useCreateCash();
+  const updateCashMutation = useResetCash();
 
-    const createCashMutation = useCreateCash();
-    const updateCashMutation = useResetCash();
+  const [cashInput, setCashInput] = useState<string>("0");
+  const [initialAmount, setInitialAmount] = useState<string>("0"); // 현금 생성을 위한 상태 변수
 
-    const [cashInput, setCashInput] = useState<string>('0');
-    const [initialAmount, setInitialAmount] = useState<string>('0'); // 현금 생성을 위한 상태 변수
+  // 현금 생성 및 cashId 전역 저장 함수
+  const handleCreateCash = () => {
+    createCashMutation.mutate(initialAmount, {
+      onSuccess: () => {
+        window.location.reload();
+      },
+      onError: (error) => {
+        // 에러 처리
+        const err = error as Error;
+        setErrorMessage(err?.message || "현금 생성에 실패했습니다.");
+      },
+    });
+  };
 
-    // 현금 생성 및 cashId 전역 저장 함수
-    const handleCreateCash = () => {
-        createCashMutation.mutate(initialAmount, {
-            onSuccess: () => {
-                window.location.reload();
-            },
-            onError: (error) => {
-                // 에러 처리
-                const err = error as Error;
-                setErrorMessage(err?.message || "현금 생성에 실패했습니다.");
-            }
-        });
-    };
-
-    // 입력한 금액으로 현금 리셋 함수
-    const handleCashReset = () => {
-        if (cashId) {
-            const numericCashAmount = cashInput;
-            updateCashMutation.mutate({ money: numericCashAmount }, {
-                onSuccess: () => {
-                    dispatch(setMoney(numericCashAmount));
-                    dispatch(setCashId(cashId));
-                    window.location.reload(); 
-                },
-                onError: (error) => {
-                    // 에러 처리
-                    const err = error as Error;
-                    setErrorMessage(err?.message || "현금 재생성에 실패했습니다.");
-                }
-            });
-        } else {
-            console.error("cashId is null or not a valid number.");
+  // 입력한 금액으로 현금 리셋 함수
+  const handleCashReset = () => {
+    if (cashId) {
+      const numericCashAmount = cashInput;
+      updateCashMutation.mutate(
+        { money: numericCashAmount },
+        {
+          onSuccess: () => {
+            dispatch(setMoney(numericCashAmount));
+            dispatch(setCashId(cashId));
+            window.location.reload();
+          },
+          onError: (error) => {
+            // 에러 처리
+            const err = error as Error;
+            setErrorMessage(err?.message || "현금 재생성에 실패했습니다.");
+          },
         }
-    };
+      );
+    } else {
+      console.error("cashId is null or not a valid number.");
+    }
+  };
 
-    const validateCashInput = (inputValue: string) => {
-        const numericValue = parseInt(inputValue.replace(/,/g, ''), 10);
-        if (isNaN(numericValue) || numericValue < 1000000 || numericValue > 500000000) {
-            setErrorMessage("100만에서 5억 사이의 수를 입력하세요");
-        } else {
-            setErrorMessage(null);
-        }
-    };
+  const validateCashInput = (inputValue: string) => {
+    const numericValue = parseInt(inputValue.replace(/,/g, ""), 10);
+    if (isNaN(numericValue) || numericValue < 1000000 || numericValue > 500000000) {
+      setErrorMessage("100만에서 5억 사이의 수를 입력하세요");
+    } else {
+      setErrorMessage(null);
+    }
+  };
 
-    const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>, action: () => void) => {
-        if (event.key === 'Enter') {
-            action();
-        }
-    };
+  const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>, action: () => void) => {
+    if (event.key === "Enter") {
+      action();
+    }
+  };
 
-return (
+  return (
     <ModalBackground>
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
         <ModalContainer>
-            <CloseButton onClick={onClose}>&times;</CloseButton>
-            <Title>{titleText}</Title>
+          <CloseButton onClick={onClose}>&times;</CloseButton>
+          <Title>{titleText}</Title>
 
-            {/* cashId가 없거나 cashId 요청에 오류가 있으면 현금 생성 UI 표시 */}
-            {(!cashId || cashError) && (
-                <div>
-                    <CashCreationInput
-                        type="string"
-                        value={initialAmount}
-                        onChange={e => {
-                            setInitialAmount(e.target.value);
-                            validateCashInput(e.target.value);  // 입력 값 변경 시 유효성 검사
-                        }}
-                        placeholder={cashCreationPlaceholder}
-                        onKeyDown={(event) => handleEnterPress(event, handleCreateCash)}
-                    />
-
-                    <CreateCashButton onClick={handleCreateCash}>{createCashButtonText}</CreateCashButton>
-                </div>
-            )}
-
-            {/* cashId가 있으면 현금 리셋 UI 표시 */}
-            {cashId && !cashError && (
-                <div>
-                    <CashInput
-                        type="string"
-                        value={cashInput}
-                        onChange={e => {
-                            setCashInput(e.target.value);
-                            validateCashInput(e.target.value);  // 입력 값 변경 시 유효성 검사
-                        }}
-                        placeholder={cashInputPlaceholder}
-                        onKeyDown={(event) => handleEnterPress(event, handleCashReset)}
-                    />
-
-                    <ReceiveButton onClick={handleCashReset}>{resetButtonText}</ReceiveButton>
-                </div>
-            )}
-
+          {/* cashId가 없거나 cashId 요청에 오류가 있으면 현금 생성 UI 표시 */}
+          {(!cashId || cashError) && (
             <div>
-                <Content style={{ display: 'inline-block', margin: '20px' }}>
-                    현금 보유량: {holdingsAmount}원
-                    {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
-                </Content>
-            </div>
-        </ModalContainer>
-    </ModalBackground>
-);
+              <CashCreationInput
+                type="string"
+                value={initialAmount}
+                onChange={(e) => {
+                  setInitialAmount(e.target.value);
+                  validateCashInput(e.target.value); // 입력 값 변경 시 유효성 검사
+                }}
+                placeholder={cashCreationPlaceholder}
+                onKeyDown={(event) => handleEnterPress(event, handleCreateCash)}
+              />
 
+              <CreateCashButton onClick={handleCreateCash}>{createCashButtonText}</CreateCashButton>
+            </div>
+          )}
+
+          {/* cashId가 있으면 현금 리셋 UI 표시 */}
+          {cashId && !cashError && (
+            <div>
+              <CashInput
+                type="string"
+                value={cashInput}
+                onChange={(e) => {
+                  setCashInput(e.target.value);
+                  validateCashInput(e.target.value); // 입력 값 변경 시 유효성 검사
+                }}
+                placeholder={cashInputPlaceholder}
+                onKeyDown={(event) => handleEnterPress(event, handleCashReset)}
+              />
+
+              <ReceiveButton onClick={handleCashReset}>{resetButtonText}</ReceiveButton>
+            </div>
+          )}
+
+          <div>
+            <Content style={{ display: "inline-block", margin: "20px" }}>
+              현금 보유량: {holdingsAmount}원{errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
+            </Content>
+          </div>
+        </ModalContainer>
+      </motion.div>
+    </ModalBackground>
+  );
 };
 export default CashModal;
 
@@ -159,7 +160,7 @@ const ModalContainer = styled.div`
   background-color: white;
   padding: 20px;
   width: 400px;
-  height:230px;
+  height: 230px;
   border-radius: 10px;
   display: flex;
   flex-direction: column;
@@ -176,57 +177,57 @@ const CloseButton = styled.button`
   position: absolute;
   top: 10px;
   right: 10px;
-  background: #FFFFFF;
-  border-radius:5px;
+  background: #ffffff;
+  border-radius: 5px;
   border: 1px solid lightgray;
   font-size: 1.5rem;
   cursor: pointer;
 `;
 
 const StyledButton = styled.button`
-    padding: 10px 15px;
-    background-color: white;
-    color: darkslategray;
-    border: 1px solid darkslategray;
-    border-radius: 5px;
-    margin-bottom:5px;
-    cursor: pointer;
+  padding: 10px 15px;
+  background-color: white;
+  color: darkslategray;
+  border: 1px solid darkslategray;
+  border-radius: 5px;
+  margin-bottom: 5px;
+  cursor: pointer;
 
-    //호버 시 회색
-    &:hover {
-        background-color: #f2f2f2; 
-    }
+  //호버 시 회색
+  &:hover {
+    background-color: #f2f2f2;
+  }
 `;
 
 const CashInput = styled.input`
-    padding: 10px;
-    border: 1px solid lightgray;
-    border-radius: 5px;
-    margin-right: 10px;
+  padding: 10px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  margin-right: 10px;
 `;
 
 const ReceiveButton = styled(StyledButton)``;
 
 const CashCreationInput = styled.input`
-    padding: 10px;
-    border: 1px solid lightgray;
-    border-radius: 5px;
-    margin-right: 10px;
+  padding: 10px;
+  border: 1px solid lightgray;
+  border-radius: 5px;
+  margin-right: 10px;
 `;
 
 const CreateCashButton = styled(StyledButton)``;
 
 const Content = styled.p`
-    margin: 15px 0;  // 간격 조정
-    font-size: 1.1rem;  // 폰트 크기 증가
-    line-height: 1.5;
-    color: #555;  // 색상 변경
-    text-align: center;  // 텍스트 중앙 정렬
+  margin: 15px 0; // 간격 조정
+  font-size: 1.1rem; // 폰트 크기 증가
+  line-height: 1.5;
+  color: #555; // 색상 변경
+  text-align: center; // 텍스트 중앙 정렬
 `;
 
 // 에러 메시지 스타일링
 const ErrorMessage = styled.div`
-    color: red;
-    font-size: 0.8rem;
-    margin-top: 5px;
+  color: red;
+  font-size: 0.8rem;
+  margin-top: 5px;
 `;

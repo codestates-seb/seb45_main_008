@@ -7,7 +7,9 @@ import axios from "axios";
 const MarketkospiChart = () => {
   const [kospiData, setKospiData] = useState([]);
 
-  const { data, isLoading, error } = useQuery("kospi", getKospiData, {});
+  const { data, isLoading, error } = useQuery("kospi", getKospiData, {
+    staleTime: Infinity,
+  });
 
   useEffect(() => {
     if (data) {

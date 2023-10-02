@@ -72,12 +72,7 @@ const OrderResult = () => {
               const orderTime = `${year}-${month}-${date} ${hour}:${minute}`;
 
               return (
-                <motion.div
-                  key={orderId}
-                  initial={{ opacity: 0, y: -20 }} // 초기 상태
-                  animate={{ opacity: 1, y: 0 }} // 애니메이션 중인 상태
-                  exit={{ opacity: 0, y: -20 }} // 빠져나가는 상태
-                >
+                <motion.div key={orderId} initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
                   <OrderedStock index={index} recordType={recordType} orderType={orderType} orderPrice={price} orderVolume={volume} orderTime={orderTime} companyId={companyId} orderId={orderId} />
                 </motion.div>
               );

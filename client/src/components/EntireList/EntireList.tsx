@@ -1,24 +1,12 @@
 import React, { useState, useEffect } from "react";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 import Header from "./Header";
 import StockItem from "./StockItem";
 import useCompanyData from "../../hooks/useCompanyData";
 import { useSelector } from "react-redux"; // 👈 추가
 import { StateProps } from "../../models/stateProps"; // 👈 추가
 import useGetCash from "../../hooks/useGetCash";
-
-/*
-  🔴 수정사항
-  1) 불필요한 컴포넌트 사용 : Divider 컴포넌트
-  -> 구분선 (border) 설정위해 생성한 것으로 보이나, 상위 컴포넌트 너비 설정으로 해결 가능 (불필요하여 주석처리)
-  -> 삭제하는 게 좋을 것 같음 
-
-  2) 현금 보유량 컴포넌트 조건부 렌더링 변경 (로그인 필요한 서비스 X -> 로그인 해야 화면에 나타나도록)
-
-  3) header 컨테이너 부분 height 43px로 고정
-
-  4) 금액에 회계 단위 (toLocaleString) 적용 -> 이를 위해 useEffect, useState 활용
-  */
 
 const holdingAmountText = "보유 현금";
 const amountUnit = "원";
@@ -51,29 +39,28 @@ const EntireList: React.FC<EntireListProps> = ({ currentListType, onChangeListTy
   // 🔴
 
   return (
-    <WatchListContainer>
-      <Header1Container>
-        <Header currentListType={currentListType} onChangeListType={onChangeListType} isMenuOpen={isMenuOpen} setMenuOpen={setMenuOpen} />
-      </Header1Container>
-      {/* <Divider /> */}
-      <Header2Container isLogin={isLogin}>
-        {/* {isLogin == 0 ? (<HoldingsAmount>로그인이 필요한 서비스 입니다.</HoldingsAmount>) : (<HoldingsAmount>현금 보유량: {holdingsAmount}원</HoldingsAmount>)} */}
-        <HoldingsAmount isLogin={isLogin}>
-          {isLogin === 1 && (
-            <>
-              <div className="amountText">{holdingAmountText}</div>
-              <div className="amount">
-                {holdingCash} {amountUnit}
-              </div>
-            </>
-          )}
-        </HoldingsAmount>
-      </Header2Container>
-      {/* <Divider /> */}
-      <StockList>
-        {isLoading ? <div></div> : isError ? <div>Error fetching data</div> : companiesList.map((company) => <StockItem key={company.companyId} company={company} setShowChangePrice={setShowChangePrice} showChangePrice={showChangePrice} />)}
-      </StockList>
-    </WatchListContainer>
+    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+      <WatchListContainer>
+        <Header1Container>
+          <Header currentListType={currentListType} onChangeListType={onChangeListType} isMenuOpen={isMenuOpen} setMenuOpen={setMenuOpen} />
+        </Header1Container>
+        <Header2Container isLogin={isLogin}>
+          <HoldingsAmount isLogin={isLogin}>
+            {isLogin === 1 && (
+              <>
+                <div className="amountText">{holdingAmountText}</div>
+                <div className="amount">
+                  {holdingCash} {amountUnit}
+                </div>
+              </>
+            )}
+          </HoldingsAmount>
+        </Header2Container>
+        <StockList>
+          {isLoading ? <div></div> : isError ? <div>Error fetching data</div> : companiesList.map((company) => <StockItem key={company.companyId} company={company} setShowChangePrice={setShowChangePrice} showChangePrice={showChangePrice} />)}
+        </StockList>
+      </WatchListContainer>
+    </motion.div>
   );
 };
 

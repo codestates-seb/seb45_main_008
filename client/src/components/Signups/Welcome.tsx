@@ -1,5 +1,6 @@
 import React from "react";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 import { useSelector } from "react-redux";
 import StockHolmLogo from "../../asset/logos/StockHolmLogo.png";
 
@@ -31,20 +32,22 @@ const Welcome: React.FC<WelcomeProps> = ({ onClose }) => {
 
   return (
     <ModalBackground onKeyDown={handleKeyPress} tabIndex={0}>
-      <ModalContainer>
-        <Title>
-          {WELCOME_TEXT}
-          {memberInfo?.name}님!
-        </Title>{" "}
-        {/* Display the member's name */}
-        <Subtitle>
-          {JOINED_DATE_TEXT}
-          {memberInfo?.createdAt && formatDate(memberInfo.createdAt)}
-        </Subtitle>{" "}
-        {/* Display the member's createdAt */}
-        <Logo src={StockHolmLogo} alt="StockHolm Logo" />
-        <ConfirmButton onClick={onClose}>{START_TEXT}</ConfirmButton>
-      </ModalContainer>
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
+        <ModalContainer>
+          <Title>
+            {WELCOME_TEXT}
+            {memberInfo?.name}님!
+          </Title>{" "}
+          {/* Display the member's name */}
+          <Subtitle>
+            {JOINED_DATE_TEXT}
+            {memberInfo?.createdAt && formatDate(memberInfo.createdAt)}
+          </Subtitle>{" "}
+          {/* Display the member's createdAt */}
+          <Logo src={StockHolmLogo} alt="StockHolm Logo" />
+          <ConfirmButton onClick={onClose}>{START_TEXT}</ConfirmButton>
+        </ModalContainer>
+      </motion.div>
     </ModalBackground>
   );
 };
