@@ -1,19 +1,7 @@
-import { useQuery } from 'react-query';
-import axios from 'axios';
+import { useQuery } from "react-query";
+import axios from "axios";
 
-const BASE_URL = 'http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080';
-
-// 데이터 타입 정의
-type CompanyData = {
-  companyId: number;
-  code: string;
-  korName: string;
-  stockInfResponseDto: {
-    stck_prpr: string;
-    prdy_vrss: string;
-    prdy_ctrt: string;
-  };
-};
+const BASE_URL = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080";
 
 // 커스텀 훅 정의
 function useCompanyData(startCompanyId: number, endCompanyId: number) {
@@ -28,10 +16,13 @@ function useCompanyData(startCompanyId: number, endCompanyId: number) {
 
   // 리액트-쿼리의 useQuery 훅 사용
   const { data, isLoading, isError } = useQuery<CompanyData[]>(
-    ['companyData', startCompanyId, endCompanyId],
+    "companyData",
     async () => {
       const promises = companyIds.map((companyId) => fetchData(companyId));
       return Promise.all(promises);
+    },
+    {
+      staleTime: Infinity,
     }
   );
 
@@ -55,3 +46,15 @@ function useCompanyData(startCompanyId: number, endCompanyId: number) {
 }
 
 export default useCompanyData;
+
+// 데이터 타입 정의
+type CompanyData = {
+  companyId: number;
+  code: string;
+  korName: string;
+  stockInfResponseDto: {
+    stck_prpr: string;
+    prdy_vrss: string;
+    prdy_ctrt: string;
+  };
+};
