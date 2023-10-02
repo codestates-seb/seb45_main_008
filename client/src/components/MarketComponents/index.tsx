@@ -1,3 +1,4 @@
+import { motion } from "framer-motion";
 import styled from "styled-components";
 import naver_logo from "../../asset/logos/naver_logo.png";
 import daum_logo from "../../asset/logos/daum_logo.png";
@@ -10,30 +11,32 @@ import MarketkospiChart from "./MarketKospiChart";
 const MarketSummary: React.FC = () => {
   return (
     <Market>
-      <MarketH3>{SummaryText.now}</MarketH3>
-      <KospiContaienr>
-        <MarketkospiChart />
-      </KospiContaienr>
-      <News>
-        <MarketH3>{SummaryText.liveNews}</MarketH3>
-        <NewsCompany>
-          <A className="naver" href={NewsListLink.NaverNews} target="_blank">
-            <img src={naver_logo} alt="Naver Logo" /> {SummaryText.naverNews}
-          </A>
-          <A className="daum" href={NewsListLink.DaumNews} target="_blank">
-            <img src={daum_logo} alt="Daum Logo" /> {SummaryText.daumNews}
-          </A>
-          <A className="chosun" href={NewsListLink.chosunNews} target="_blank">
-            <img src={chosun_logo} alt="Chosun Ilbo Logo" /> {SummaryText.chosunNews}
-          </A>
-          <A className="donga" href={NewsListLink.dongaNews} target="_blank">
-            <img src={donga_logo} alt="Donga Ilbo Logo" /> {SummaryText.dongaNews}
-          </A>
-          <A className="jtbc" href={NewsListLink.jtbcNews} target="_blank">
-            <img src={jtbc_logo} alt="JTBC Logo" /> {SummaryText.jtbcNews}
-          </A>
-        </NewsCompany>
-      </News>
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
+        <MarketH3>{SummaryText.now}</MarketH3>
+        <KospiContaienr>
+          <MarketkospiChart />
+        </KospiContaienr>
+        <News>
+          <MarketH3>{SummaryText.liveNews}</MarketH3>
+          <NewsCompany>
+            <A className="naver" href={NewsListLink.NaverNews} target="_blank">
+              <img src={naver_logo} alt="Naver Logo" /> {SummaryText.naverNews}
+            </A>
+            <A className="daum" href={NewsListLink.DaumNews} target="_blank">
+              <img src={daum_logo} alt="Daum Logo" /> {SummaryText.daumNews}
+            </A>
+            <A className="chosun" href={NewsListLink.chosunNews} target="_blank">
+              <img src={chosun_logo} alt="Chosun Ilbo Logo" /> {SummaryText.chosunNews}
+            </A>
+            <A className="donga" href={NewsListLink.dongaNews} target="_blank">
+              <img src={donga_logo} alt="Donga Ilbo Logo" /> {SummaryText.dongaNews}
+            </A>
+            <A className="jtbc" href={NewsListLink.jtbcNews} target="_blank">
+              <img src={jtbc_logo} alt="JTBC Logo" /> {SummaryText.jtbcNews}
+            </A>
+          </NewsCompany>
+        </News>
+      </motion.div>
     </Market>
   );
 };

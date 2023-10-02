@@ -45,7 +45,7 @@ const WatchList: React.FC<WatchListProps> = ({ currentListType, onChangeListType
         <Divider />
         <StockList>
           {isLoading ? (
-            <div>Loading...</div>
+            <div></div>
           ) : isError ? (
             <div>Error fetching data</div>
           ) : loginStatus === 1 ? (

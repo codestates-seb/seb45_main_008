@@ -87,7 +87,7 @@ const CashModal: React.FC<{ onClose: () => void }> = ({ onClose }) => {
 
   return (
     <ModalBackground>
-      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
+      <motion.div initial={{ opacity: 0.8, y: -20 }} animate={{ opacity: 1, y: 0 }}>
         <ModalContainer>
           <CloseButton onClick={onClose}>&times;</CloseButton>
           <Title>{titleText}</Title>
