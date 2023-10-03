@@ -40,7 +40,7 @@ const useGetStockChart = (companyId: number) => {
 
     const compareChartData = organizeData(data);
     const compareMovingAvgData = calculateMovingAvgLine(averageLineMinute, compareChartData);
-    const compareData = setComparedMovingAvgChart(`${compareName}`, compareMovingAvgData);
+    const compareData = setComparedMovingAvgChart(compareName, compareMovingAvgData);
     setCompare(compareData);
   };
 

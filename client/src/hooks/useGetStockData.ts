@@ -19,10 +19,10 @@ const useGetStockData = (companyId: number) => {
   const isAfter330PM = currentHour > 15 || (currentHour === 15 && currentMinute >= 30);
   const marketCloseTime = isBefore9AM || isAfter330PM;
 
-  const dataRenewalTime = isBusinessDay || !marketCloseTime;
+  const dataRenewalTime = isBusinessDay && !marketCloseTime;
 
   // 시간대 (timeZone) 별로 queryKey를 다르게 설정해서, 서버 데이터가 동일할 때는 캐싱된 데이터 활용하고 서버 데이터가 갱신됐을 때는 새롭게 받아옴 (서버 데이터 30분마다 갱신)
-  const [month, day, hour, minute] = [currentTime.getMonth(), currentTime.getDate(), currentTime.getHours(), currentTime.getMinutes()];
+  const [month, day, hour, minute] = [currentTime.getMonth() + 1, currentTime.getDate(), currentTime.getHours(), currentTime.getMinutes()];
   const timeZone = minute === 0 || minute === 30 ? "30 or 60" : 0 < minute && minute < 30 ? "1~29" : "31~59";
   const queryKey = dataRenewalTime ? `chartData${companyId} ${month}월 ${day}일 ${hour}시 ${timeZone}` : `chartData${companyId}`;
 

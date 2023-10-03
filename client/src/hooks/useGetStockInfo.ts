@@ -19,7 +19,7 @@ const useGetStockInfo = (companyId: number) => {
   const isAfter330PM = currentHour > 15 || (currentHour === 15 && currentMinute >= 30);
   const marketCloseTime = isBefore9AM || isAfter330PM;
 
-  const dataRenewalTime = isBusinessDay || !marketCloseTime;
+  const dataRenewalTime = isBusinessDay && !marketCloseTime;
 
   // 시간대 (timeZone) 별로 queryKey를 다르게 설정해서, 서버 데이터가 동일할 때는 캐싱된 데이터 활용하고 서버 데이터가 갱신됐을 때는 새롭게 받아옴 (서버 데이터 30분마다 갱신)
   const [month, day, hour, minute] = [currentTime.getMonth(), currentTime.getDate(), currentTime.getHours(), currentTime.getMinutes()];
