@@ -6,13 +6,10 @@ import HeaderComponent from "../components/Headers/Index";
 import SignupComponent from "../components/Signups/Index";
 import LoginComponent from "../components/Logins/Index";
 import ProfileComponent from "../components/Profile/Index";
-// import Header from "../components/Headers/Index";
+
+import ListSection from "../components/EntireList/ListSection";
 
 import CentralChart from "../components/CentralChart/Index";
-
-import EntireList from "../components/EntireList/EntireList";
-import HoldingList from "../components/HoldingList/HoldingList";
-import WatchList from "../components/watchlist/WatchList";
 import StockOrderSection from "../components/StockOrderSection/Index";
 
 import { StateProps } from "../models/stateProps";
@@ -254,13 +251,7 @@ const propsForLogin = {
       <HeaderComponent isLogin={isLogin} onProfileClick={openProfileModal} onLoginClick={openOAuthModal} />
       <Main>
         <LeftSection leftExpand={expandScreen.left}>
-          {selectedMenu === "전체종목" ? (
-            <EntireList currentListType={selectedMenu} onChangeListType={handleMenuChange} />
-          ) : selectedMenu === "관심종목" ? (
-            <WatchList currentListType={selectedMenu} onChangeListType={handleMenuChange} openOAuthModal={openOAuthModal} />
-          ) : selectedMenu === "보유종목" ? (
-            <HoldingList currentListType={selectedMenu} onChangeListType={handleMenuChange} openOAuthModal={openOAuthModal} />
-          ) : null}
+          <ListSection selectedMenu={selectedMenu} handleMenuChange={handleMenuChange} openOAuthModal={openOAuthModal} />
         </LeftSection>
         <CentralChart />
         {/* props전달 */}

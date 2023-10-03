@@ -12,6 +12,8 @@ interface LoginProps {
   openEmailLoginModal: () => void;
   closeEmailLoginModal: () => void;
   handleLoginConfirmationClose: () => void;
+  onEmailSignupClick?: () => void;
+
 }
 
 const LoginComponent: React.FC<LoginProps> = ({
@@ -21,12 +23,14 @@ const LoginComponent: React.FC<LoginProps> = ({
   closeOAuthModal,
   openEmailLoginModal,
   closeEmailLoginModal,
-  handleLoginConfirmationClose
+  handleLoginConfirmationClose,
+  onEmailSignupClick = () => {},  // Default to a no-op function if not provided
+
 }) => {
   return (
     <>
-      {isOAuthModalOpen && <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} />}
-      {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} />}
+      {isOAuthModalOpen && <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} onEmailSignupClick={onEmailSignupClick}/>}
+      {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onSignup={onEmailSignupClick} />}
       {isLoginConfirmationModalOpen && <LoginConfirmationModal onClose={handleLoginConfirmationClose} />}
     </>
   );
