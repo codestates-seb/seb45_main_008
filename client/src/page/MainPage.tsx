@@ -1,266 +1,64 @@
-import { useState, useEffect, useCallback } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import styled from "styled-components";
+import { useState } from 'react';
+import { useSelector } from 'react-redux';
+import styled from 'styled-components';
 
-import HeaderComponent from "../components/Headers/Index";
-import SignupComponent from "../components/Signups/Index";
-import LoginComponent from "../components/Logins/Index";
-import ProfileComponent from "../components/Profile/Index";
+import HeaderComponent from '../components/Headers/Index';
+import SignupComponent from '../components/Signups/Index';
+import LoginComponent from '../components/Logins/Index';
+import ProfileComponent from '../components/Profile/Index';
 
-import ListSection from "../components/EntireList/ListSection";
+import ListSection from '../components/EntireList/ListSection';
+import CentralChart from '../components/CentralChart/Index';
+import StockOrderSection from '../components/StockOrderSection/Index';
 
-import CentralChart from "../components/CentralChart/Index";
-import StockOrderSection from "../components/StockOrderSection/Index";
+import { StateProps } from '../models/stateProps';
+import { TabContainerPage } from './TabPages/TabContainerPage';
 
-import { StateProps } from "../models/stateProps";
-import { TabContainerPage } from "./TabPages/TabContainerPage";
-
-import { setLoginState } from "../reducer/member/loginSlice";
-import setAutoLogoutAlarm from "../utils/setAutoLogoutAlarm";
-import { secondAlarmTime, lastAlarmTime } from "../utils/setAutoLogoutAlarm";
+import useModalManagement from '../hooks/customHooks/useModalManagement';
+import useAutoLogout from '../hooks/customHooks/useAutoLogout';
+import useOAuthLogin from '../hooks/customHooks/useOAuthLogin';
 
 const MainPage = () => {
   const expandScreen = useSelector((state: StateProps) => state.expandScreen);
-
-  const [isOAuthModalOpen, setOAuthModalOpen] = useState(false);
-  const [isEmailLoginModalOpen, setEmailLoginModalOpen] = useState(false);
-  const [isEmailSignupModalOpen, setEmailSignupModalOpen] = useState(false);
-  const [userEmail, setUserEmail] = useState("");
-  const [isWelcomeModalOpen, setWelcomeModalOpen] = useState(false);
-  const [isProfileModalOpen, setProfileModalOpen] = useState(false); //프로필 모달 보이기/숨기기
   const isLogin = useSelector((state: StateProps) => state.login);
 
-  const dispatch = useDispatch();
 
-  const openOAuthModal = useCallback(() => {
-    setOAuthModalOpen(true);
-  }, []);
+  const {
+    isProfileModalOpen, 
+    openProfileModal, 
+    openOAuthModal,
+    setProfileModalOpen,
+    ...modalProps
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  } = useModalManagement() as any;
+  const propsForSignup = modalProps.propsForSignup;
+  const propsForLogin = modalProps.propsForLogin;
 
-  const closeOAuthModal = useCallback(() => {
-    setOAuthModalOpen(false);
-  }, []);
-
-  const openEmailLoginModal = useCallback(() => {
-    setOAuthModalOpen(false);
-    setEmailLoginModalOpen(true);
-  }, []);
-
-  const closeEmailLoginModal = useCallback(() => {
-    setEmailLoginModalOpen(false);
-  }, []);
-
-  const openEmailSignupModal = useCallback(() => {
-    setOAuthModalOpen(false);
-    setEmailSignupModalOpen(true);
-  }, []);
-
-  const closeEmailSignupModal = useCallback(() => {
-    setEmailSignupModalOpen(false);
-  }, []);
-  const openEmailSignupFromLogin = useCallback(() => {
-    closeEmailLoginModal();
-    openEmailSignupModal();
-  }, [closeEmailLoginModal, openEmailSignupModal]);
-
-  const [isEmailVerificationModalOpen, setEmailVerificationModalOpen] = useState(false);
-
-  // 이메일 인증 모달을 열 때 사용자가 입력한 이메일을 저장하도록 변경
-  const openEmailVerificationModal = useCallback((enteredEmail: string) => {
-    setEmailSignupModalOpen(false);
-    setEmailVerificationModalOpen(true);
-    setUserEmail(enteredEmail); // 사용자가 입력한 이메일을 저장
-  }, []);
-
-  const closeEmailVerificationModal = useCallback(() => {
-    setEmailVerificationModalOpen(false);
-  }, []);
-
-  const [isPasswordSettingModalOpen, setPasswordSettingModalOpen] = useState(false);
-
-  const openPasswordSettingModal = useCallback(() => {
-    setEmailVerificationModalOpen(false); // 이메일 인증 모달 닫기
-    setPasswordSettingModalOpen(true); // 비밀번호 설정 모달 열기
-  }, []);
-
-  const closePasswordSettingModal = useCallback(() => {
-    setPasswordSettingModalOpen(false);
-  }, []);
-
-  const openWelcomeModal = useCallback(() => {
-    setPasswordSettingModalOpen(false); // 비밀번호 설정 모달 닫기
-    setWelcomeModalOpen(true); // Welcome 모달 열기
-  }, []);
-
-  const closeWelcomeModal = useCallback(() => {
-    setWelcomeModalOpen(false);
-    setGuideModalOpen(true); // Open the GuideModal after closing the WelcomeModal
-  }, []);
-
-  const closeGuideModal = useCallback(() => {
-    setGuideModalOpen(false);
-    openOAuthModal();
-  }, [openOAuthModal]);
-
-  //프로필 모달 열고닫는 매커니즘
-  const openProfileModal = useCallback(() => {
-    setProfileModalOpen(true);
-  }, []);
-
-  const [isLoginConfirmationModalOpen, setLoginConfirmationModalOpen] = useState(false);
-
-  const handleLoginConfirmationClose = () => {
-    setLoginConfirmationModalOpen(false);
-  };
-  const [isGuideModalOpen, setGuideModalOpen] = useState(false);
-
-  const propsForSignup = {
-    isEmailSignupModalOpen,
-    setEmailSignupModalOpen,
-    userEmail,
-    setUserEmail,
-    isEmailVerificationModalOpen,
-    setEmailVerificationModalOpen,
-    isPasswordSettingModalOpen,
-    setPasswordSettingModalOpen,
-    isWelcomeModalOpen,
-    setWelcomeModalOpen,
-    isGuideModalOpen,
-    setGuideModalOpen,
-    openEmailVerificationModal,
-    closeEmailSignupModal,
-    openPasswordSettingModal,
-    closePasswordSettingModal,
-    openWelcomeModal,
-    closeWelcomeModal,
-    closeGuideModal,
-    closeEmailVerificationModal
-};
-
-const propsForLogin = {
-    
-    isOAuthModalOpen,
-    isEmailLoginModalOpen,
-    closeOAuthModal,
-    openEmailLoginModal,
-    closeEmailLoginModal,
-    handleLoginConfirmationClose,
-    openEmailSignupFromLogin,
-    isLoginConfirmationModalOpen
-};
+  useAutoLogout();
+  useOAuthLogin();
 
   // 현재 선택된 메뉴 타입을 상태로 관리
-  const [selectedMenu, setSelectedMenu] = useState<"전체종목" | "관심종목" | "보유종목">("전체종목");
+  const [selectedMenu, setSelectedMenu] = useState<'전체종목' | '관심종목' | '보유종목'>('전체종목');
 
   // 메뉴 변경 핸들러
-  const handleMenuChange = (menu: "전체종목" | "관심종목" | "보유종목") => {
+  const handleMenuChange = (menu: '전체종목' | '관심종목' | '보유종목') => {
     setSelectedMenu(menu);
   };
 
-  useEffect(() => {
-    const acessToken = localStorage.getItem("accessToken");
-    if (acessToken !== null) {
-      const currentTime = Date.now();
-      const autoLogoutSecondAlarm = localStorage.getItem("autoLogoutSecondAlarm");
-      const autoLogoutLastAlarm = localStorage.getItem("autoLogoutLastAlarm");
-
-      if (autoLogoutSecondAlarm !== null) {
-        if (currentTime >= parseInt(autoLogoutSecondAlarm) + secondAlarmTime + lastAlarmTime) {
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("refreshToken");
-          localStorage.removeItem("autoLogoutSecondAlarm");
-        } else {
-          const timeGone = currentTime - parseInt(autoLogoutSecondAlarm);
-          const remainTime = secondAlarmTime - timeGone;
-          dispatch(setLoginState());
-          setAutoLogoutAlarm(dispatch, "second", remainTime, lastAlarmTime);
-        }
-      }
-
-      if (autoLogoutLastAlarm !== null) {
-        if (currentTime >= parseInt(autoLogoutLastAlarm) + lastAlarmTime) {
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("refreshToken");
-          localStorage.removeItem("autoLogoutLastAlarm");
-        } else {
-          const timeGone = currentTime - parseInt(autoLogoutLastAlarm);
-          const remainTime = lastAlarmTime - timeGone;
-          dispatch(setLoginState());
-          setAutoLogoutAlarm(dispatch, "last", remainTime);
-        }
-      }
-    }
-  }, []);
-
-  // Oauth 로그인 관련 코드
-  useEffect(() => {
-    // MainPage로 돌아왔을 때 url에 prameter가 있다면 -> url을 따서
-    const urlParams = new URLSearchParams(window.location.search);
-    const accessToken = urlParams.get("access_token");
-    const refreshToken = urlParams.get("refresh_token");
-
-    const currentTime = Date.now();
-    const autoLogoutSecondAlarm = localStorage.getItem("autoLogoutSecondAlarm");
-    const autoLogoutLastAlarm = localStorage.getItem("autoLogoutLastAlarm");
-
-    if (accessToken && refreshToken) {
-      localStorage.setItem("accessToken", `Bearer ${accessToken}`);
-      localStorage.setItem("refreshToken", refreshToken);
-
-      urlParams.delete("access_token");
-      urlParams.delete("refresh_token");
-      window.history.replaceState({}, "", "?" + urlParams.toString());
-
-      if (autoLogoutSecondAlarm === null) {
-        dispatch(setLoginState()); // 로그인 처리
-        setAutoLogoutAlarm(dispatch, "first", secondAlarmTime, lastAlarmTime);
-      }
-
-      if (autoLogoutSecondAlarm !== null) {
-        if (currentTime >= parseInt(autoLogoutSecondAlarm) + secondAlarmTime + lastAlarmTime) {
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("refreshToken");
-          localStorage.removeItem("autoLogoutSecondAlarm");
-        } else {
-          const timeGone = currentTime - parseInt(autoLogoutSecondAlarm);
-          const remainTime = secondAlarmTime - timeGone;
-          dispatch(setLoginState()); // 로그인 처리
-          setAutoLogoutAlarm(dispatch, "second", remainTime, lastAlarmTime);
-        }
-      }
-
-      if (autoLogoutLastAlarm !== null) {
-        if (currentTime >= parseInt(autoLogoutLastAlarm) + lastAlarmTime) {
-          localStorage.removeItem("accessToken");
-          localStorage.removeItem("refreshToken");
-          localStorage.removeItem("autoLogoutLastAlarm");
-        } else {
-          const timeGone = currentTime - parseInt(autoLogoutLastAlarm);
-          const remainTime = lastAlarmTime - timeGone;
-          dispatch(setLoginState()); // 로그인 처리
-          setAutoLogoutAlarm(dispatch, "last", remainTime);
-        }
-      }
-    }
-  }, []);
-
-
-
   return (
     <Container>
-      {/* <Header/> */}
       <HeaderComponent isLogin={isLogin} onProfileClick={openProfileModal} onLoginClick={openOAuthModal} />
       <Main>
         <LeftSection leftExpand={expandScreen.left}>
           <ListSection selectedMenu={selectedMenu} handleMenuChange={handleMenuChange} openOAuthModal={openOAuthModal} />
         </LeftSection>
         <CentralChart />
-        {/* props전달 */}
         <StockOrderSection openOAuthModal={openOAuthModal} openProfileModal={openProfileModal} />
         <TabContainerPage />
       </Main>
-        <SignupComponent {...propsForSignup} />
-        <LoginComponent {...propsForLogin} />
-        <ProfileComponent isOpen={isProfileModalOpen} onClose={() => setProfileModalOpen(false)} />
+      <SignupComponent {...propsForSignup} />
+      <LoginComponent {...propsForLogin} />
+      <ProfileComponent isOpen={isProfileModalOpen} onClose={() => setProfileModalOpen(false)} />
     </Container>
   );
 };
@@ -287,7 +85,7 @@ const Main = styled.main`
 `;
 
 const LeftSection = styled.section<{ leftExpand: boolean }>`
-  display: ${(props) => props.leftExpand && "none"};
+  display: ${(props) => props.leftExpand && 'none'};
   min-width: 248px;
   height: 100%;
   border-right: 1px solid black;
