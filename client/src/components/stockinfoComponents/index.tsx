@@ -1,4 +1,5 @@
 import styled from "styled-components";
+import { motion } from "framer-motion";
 import { useState } from "react";
 import { useSelector } from "react-redux";
 import { RootState } from "../../store/config";
@@ -446,120 +447,118 @@ const DetailStockInformation: React.FC = () => {
 
   return (
     <StockInfoContainer>
-      {matchingCompany ? (
-        <StockInfo>
-          <StockHeader>
-            <div>
-              <StockImg src={matchingCompany.company.companyImageUrl} />
-            </div>
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
+        {matchingCompany ? (
+          <StockInfo>
+            <StockHeader>
+              <div>
+                <StockImg src={matchingCompany.company.companyImageUrl} />
+              </div>
 
-            <StockName>
-              <li>{matchingCompany.company.companyName}</li>
-              <li>{matchingCompany.company.companyKospi}</li>
-            </StockName>
-          </StockHeader>
-          <StockSkillContainer>
-            {moreView === true ? (
-              <StockSkills className="Allskills">
-                <li>{matchingCompany.company.companySkill.sk1}</li>
-                <li>{matchingCompany.company.companySkill.sk2}</li>
-                <li>{matchingCompany.company.companySkill.sk3}</li>
-                <li>{matchingCompany.company.companySkill.sk4}</li>
-                <li>{matchingCompany.company.companySkill.sk5}</li>
-                <li>{matchingCompany.company.companySkill.sk6}</li>
-                <More onClick={handleOpenMoreView}>{DetailStockText.moreView}</More>
-              </StockSkills>
-            ) : (
-              <StockSkills className="PartOfSkills">
-                <li>{matchingCompany.company.companySkill.sk1}</li>
-                <li>{matchingCompany.company.companySkill.sk2}</li>
-                <More onClick={handleOpenMoreView}>{DetailStockText.moreView}</More>
-              </StockSkills>
-            )}
-          </StockSkillContainer>
-          <StockDetail>
-            <ul>
-              <li>
-                <div>{DetailStockText.companyValue}</div>
-              </li>
-              <li>
-                <div>{matchingCompany.company.companyValue}</div>
-              </li>
-            </ul>
-            <ul>
-              <li>
-                <div>{DetailStockText.companyRanking}</div>
-              </li>
-              <li>{matchingCompany.company.companyRank}</li>
-            </ul>
-            <ul>
-              <li>
-                <div>{DetailStockText.stock}</div>
-              </li>
-              <li>{matchingCompany.company.companyStock}</li>
-            </ul>
-            <ul>
-              <li>
-                <div>{DetailStockText.indust}</div>
-              </li>
-              <li>{matchingCompany.company.compnayIndustrial} </li>
-            </ul>
-            <ul>
-              <li>
-                <div>{DetailStockText.detailIndust}</div>
-              </li>
-              <li>{matchingCompany.company.companyIndustDetail}</li>
-            </ul>
-          </StockDetail>
-          <DevideLine></DevideLine>
-          <StockDetail2>
-            {moreView2 === true ? (
+              <StockName>
+                <li>{matchingCompany.company.companyName}</li>
+                <li>{matchingCompany.company.companyKospi}</li>
+              </StockName>
+            </StockHeader>
+            <StockSkillContainer>
+              {moreView === true ? (
+                <StockSkills className="Allskills">
+                  <li>{matchingCompany.company.companySkill.sk1}</li>
+                  <li>{matchingCompany.company.companySkill.sk2}</li>
+                  <li>{matchingCompany.company.companySkill.sk3}</li>
+                  <li>{matchingCompany.company.companySkill.sk4}</li>
+                  <li>{matchingCompany.company.companySkill.sk5}</li>
+                  <li>{matchingCompany.company.companySkill.sk6}</li>
+                  <More onClick={handleOpenMoreView}>{DetailStockText.moreView}</More>
+                </StockSkills>
+              ) : (
+                <StockSkills className="PartOfSkills">
+                  <li>{matchingCompany.company.companySkill.sk1}</li>
+                  <li>{matchingCompany.company.companySkill.sk2}</li>
+                  <More onClick={handleOpenMoreView}>{DetailStockText.moreView}</More>
+                </StockSkills>
+              )}
+            </StockSkillContainer>
+            <StockDetail>
               <ul>
                 <li>
-                  <div>{DetailStockText.companyEx}</div>
+                  <div>{DetailStockText.companyValue}</div>
                 </li>
-                <li>{matchingCompany.company.companyExample}</li>
-                <li>{matchingCompany.company.companyExample2}</li>
-                <li>{matchingCompany.company.companyExample3}</li>
-                <li>{matchingCompany.company.companyExample4}</li>
-                <MoreView2 onClick={handleOpenMoreView2}>
-                  <span>{moreView2 ? DetailStockText.lessView : DetailStockText.moreView}</span>
-                </MoreView2>
+                <li>
+                  <div>{matchingCompany.company.companyValue}</div>
+                </li>
               </ul>
-            ) : (
               <ul>
                 <li>
-                  <div>{DetailStockText.companyEx}</div>
+                  <div>{DetailStockText.companyRanking}</div>
                 </li>
-                <li>{matchingCompany.company.companyExample}</li>
-                <MoreView2 onClick={handleOpenMoreView2}>
-                  <span>{moreView2 ? DetailStockText.lessView : DetailStockText.moreView}</span>
-                </MoreView2>
+                <li>{matchingCompany.company.companyRank}</li>
               </ul>
-            )}
-          </StockDetail2>
-          <DevideLine></DevideLine>
-          <StockDetail2>
-            <ul>
-              <li>
-                <div>{DetailStockText.totalRatio}</div>
-              </li>
-              <li>{matchingCompany.company.companyAsset.total}</li>
-            </ul>
-            <PortFolioChart />
-          </StockDetail2>
-        </StockInfo>
-      ) : (
-        <div>{DetailStockText.plzPickTheStock}</div>
-      )}
+              <ul>
+                <li>
+                  <div>{DetailStockText.stock}</div>
+                </li>
+                <li>{matchingCompany.company.companyStock}</li>
+              </ul>
+              <ul>
+                <li>
+                  <div>{DetailStockText.indust}</div>
+                </li>
+                <li>{matchingCompany.company.compnayIndustrial} </li>
+              </ul>
+              <ul>
+                <li>
+                  <div>{DetailStockText.detailIndust}</div>
+                </li>
+                <li>{matchingCompany.company.companyIndustDetail}</li>
+              </ul>
+            </StockDetail>
+            <DevideLine></DevideLine>
+            <StockDetail2>
+              {moreView2 === true ? (
+                <ul>
+                  <li>
+                    <div>{DetailStockText.companyEx}</div>
+                  </li>
+                  <li>{matchingCompany.company.companyExample}</li>
+                  <li>{matchingCompany.company.companyExample2}</li>
+                  <li>{matchingCompany.company.companyExample3}</li>
+                  <li>{matchingCompany.company.companyExample4}</li>
+                  <MoreView2 onClick={handleOpenMoreView2}>
+                    <span>{moreView2 ? DetailStockText.lessView : DetailStockText.moreView}</span>
+                  </MoreView2>
+                </ul>
+              ) : (
+                <ul>
+                  <li>
+                    <div>{DetailStockText.companyEx}</div>
+                  </li>
+                  <li>{matchingCompany.company.companyExample}</li>
+                  <MoreView2 onClick={handleOpenMoreView2}>
+                    <span>{moreView2 ? DetailStockText.lessView : DetailStockText.moreView}</span>
+                  </MoreView2>
+                </ul>
+              )}
+            </StockDetail2>
+            <DevideLine></DevideLine>
+            <StockDetail2>
+              <ul>
+                <li>
+                  <div>{DetailStockText.totalRatio}</div>
+                </li>
+                <li>{matchingCompany.company.companyAsset.total}</li>
+              </ul>
+              <PortFolioChart />
+            </StockDetail2>
+          </StockInfo>
+        ) : (
+          <div>{DetailStockText.plzPickTheStock}</div>
+        )}
+      </motion.div>
     </StockInfoContainer>
   );
 };
-//companyAsset: {
-// total: "자산총계" + "4,480,005.60" + "억",
-//lentRatio: "19.87" + "%",
-// assetRatio: "80.13" + "%",
-//}
+
 export default DetailStockInformation;
 const DetailStockText = {
   plzPickTheStock: "종목을 선택 해 주세요",

@@ -2,6 +2,7 @@ import { styled } from "styled-components";
 import { toast } from "react-toastify";
 import { useState, useEffect } from "react";
 import useGetMemberId from "../../hooks/useGetMemberId";
+import { useQueryClient } from "react-query";
 import * as Webstomp from "webstomp-client";
 import { dummyLogo } from "../../dummy/dummyLogo";
 import { volumeUnit } from "../../constant/constant";
@@ -15,6 +16,7 @@ const toastText02: string = " 체결 처리 되었습니다";
 const WaitOrderIndicator = () => {
   const { memberId } = useGetMemberId();
   const [waitOrder, setWaitOrder] = useState<WaitOrderProps | null>(null);
+  const queryClient = useQueryClient();
 
   useEffect(() => {
     if (memberId) {
@@ -40,6 +42,10 @@ const WaitOrderIndicator = () => {
 
   useEffect(() => {
     if (waitOrder !== null) {
+      queryClient.invalidateQueries("cash");
+      queryClient.invalidateQueries("holdingStock");
+      queryClient.invalidateQueries("orderRecord");
+
       const companyId = waitOrder.companyId;
       const type = waitOrder.orderType;
       const logo = dummyLogo[companyId - 1];

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 import Header from "./Header";
 import StockItem from "./StockItem";
 import useGetStockHolds from "../../hooks/useGetStockholds";
@@ -38,38 +39,40 @@ const HoldingList: React.FC<WatchListProps> = ({ currentListType, onChangeListTy
   };
 
   return (
-    <WatchListContainer>
-      <Header1Container>
-        <Header currentListType={currentListType} onChangeListType={onChangeListType} isMenuOpen={isMenuOpen} setMenuOpen={setMenuOpen} />
-      </Header1Container>
-      {/* <Divider /> */}
-      <Header2Container>
-        <EvaluationProfit profit={totalEvaluationProfit}>
-          <div className="profitText">{evalutationProfitText}</div>
-          <div className="profit">
-            {totalEvaluationProfit.toLocaleString()} {profitUnit}
-          </div>
-        </EvaluationProfit>
-      </Header2Container>
-      {/* <Divider /> */}
-      <StockList>
-        {isLogin === 0 ? (
-          <LoginRequestIndicator openOAuthModal={openOAuthModal} />
-        ) : isLoading || isCompanyDataLoading ? (
-          <div></div>
-        ) : isError || isCompanyDataError ? (
-          <div>Error fetching data</div>
-        ) : (
-          Array.isArray(stockHolds) &&
-          stockHolds.length > 0 && // 여기에 조건을 추가합니다
-          stockHolds.map((stockHold: StockItemProps["stockData"]) => {
-            const matchedCompany = companyData ? companyData.find((company) => company.companyId === stockHold.companyId) : undefined;
+    <motion.div initial={{ opacity: 0, y: -10 }} animate={{ opacity: 1, y: 0 }}>
+      <WatchListContainer>
+        <Header1Container>
+          <Header currentListType={currentListType} onChangeListType={onChangeListType} isMenuOpen={isMenuOpen} setMenuOpen={setMenuOpen} />
+        </Header1Container>
+        {/* <Divider /> */}
+        <Header2Container>
+          <EvaluationProfit profit={totalEvaluationProfit}>
+            <div className="profitText">{evalutationProfitText}</div>
+            <div className="profit">
+              {totalEvaluationProfit.toLocaleString()} {profitUnit}
+            </div>
+          </EvaluationProfit>
+        </Header2Container>
+        {/* <Divider /> */}
+        <StockList>
+          {isLogin === 0 ? (
+            <LoginRequestIndicator openOAuthModal={openOAuthModal} />
+          ) : isLoading || isCompanyDataLoading ? (
+            <div></div>
+          ) : isError || isCompanyDataError ? (
+            <div>Error fetching data</div>
+          ) : (
+            Array.isArray(stockHolds) &&
+            stockHolds.length > 0 && // 여기에 조건을 추가합니다
+            stockHolds.map((stockHold: StockItemProps["stockData"]) => {
+              const matchedCompany = companyData ? companyData.find((company) => company.companyId === stockHold.companyId) : undefined;
 
-            return matchedCompany ? <StockItem key={stockHold.companyId} stockData={stockHold} companyData={matchedCompany} setShowChangePrice={setShowChangePrice} showChangePrice={showChangePrice} /> : null;
-          })
-        )}
-      </StockList>
-    </WatchListContainer>
+              return matchedCompany ? <StockItem key={stockHold.companyId} stockData={stockHold} companyData={matchedCompany} setShowChangePrice={setShowChangePrice} showChangePrice={showChangePrice} /> : null;
+            })
+          )}
+        </StockList>
+      </WatchListContainer>
+    </motion.div>
   );
 };
 

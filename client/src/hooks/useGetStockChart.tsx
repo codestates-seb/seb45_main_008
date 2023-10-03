@@ -5,12 +5,22 @@ import useGetStockInfo from "./useGetStockInfo";
 import { StateProps } from "../models/stateProps";
 import axios from "axios";
 
+const url = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/companies/charts/";
+
 const upColor = "rgba(198, 6, 6, 0.37)";
 const downColor = "rgba(59, 119, 247, 0.51)";
 const volumColor = "rgba(57, 118, 249, 0.56)";
 const pointerColor = "#cc3c3a";
 const indexColor = "#4479c2";
 const averageLineMinute = 10;
+
+const openPriceText = "• 시가";
+const closePriceText = "• 종가";
+const highPriceText = "• 고가";
+const lowPriceText = "• 저가";
+const volumeText = "• 거래량";
+const priceUnit = " 원";
+const volumeUnit = " 주";
 
 const useGetStockChart = (companyId: number) => {
   const { stockPrice } = useGetStockData(companyId);
@@ -24,34 +34,19 @@ const useGetStockChart = (companyId: number) => {
   const compareId = useSelector((state: StateProps) => state.compareChart);
   const { stockInfo: compareInfo } = useGetStockInfo(compareId);
 
-  const url = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/companies/charts/";
-  const averageDay = 10;
-
   const getCompareChart = async (compareId: number, compareName: string) => {
     const response = await axios.get(`${url}${compareId}`);
     const data = await response.data;
 
     const compareChartData = organizeData(data);
-    const compareMovingAvgData = calculateMovingAvgLine(averageDay, compareChartData);
-    const compareMovingAvgChart = {
-      name: `${compareName}`,
-      type: "line",
-      data: compareMovingAvgData,
-      smooth: true,
-      lineStyle: {
-        opacity: 0.5,
-        color: "#738f8fc7",
-      },
-      yAxisIndex: 2,
-    };
-
-    setCompare(compareMovingAvgChart);
+    const compareMovingAvgData = calculateMovingAvgLine(averageLineMinute, compareChartData);
+    const compareData = setComparedMovingAvgChart(`${compareName}`, compareMovingAvgData);
+    setCompare(compareData);
   };
 
   useEffect(() => {
     if (compareInfo && compareId !== null) {
       const compareStockName = compareInfo.korName;
-      console.log(compareStockName);
       setCompareName(compareStockName);
     }
   }, [compareInfo]);
@@ -61,8 +56,9 @@ const useGetStockChart = (companyId: number) => {
       getCompareChart(compareId, compareName);
     }
 
-    if (companyId === null) {
-      setCompare(undefined);
+    if (compareId === null) {
+      const deleteCompareChart = setComparedMovingAvgChart("비교취소", []);
+      setCompare(deleteCompareChart);
     }
   }, [compareId, compareName]);
 
@@ -91,14 +87,6 @@ const useGetStockChart = (companyId: number) => {
       },
       formatter: (params: any) => {
         const dataIndex = params[0]?.dataIndex || 0;
-
-        const openPriceText = "• 시가";
-        const closePriceText = "• 종가";
-        const highPriceText = "• 고가";
-        const lowPriceText = "• 저가";
-        const volumeText = "• 거래량";
-        const priceUnit = " 원";
-        const volumeUnit = " 주";
 
         const date = organizedChartData.tooltipTitle[dataIndex];
         const name = `📈 ${corpName}`;
@@ -446,7 +434,7 @@ const organizeData = (rawData: StockProps[]) => {
 };
 
 // 2) 이동 평균선 데이터 계산
-function calculateMovingAvgLine(minuteCount: number, data: OrganizedChartProps) {
+const calculateMovingAvgLine = (minuteCount: number, data: OrganizedChartProps) => {
   const result = [];
   const length = data.values.length;
 
@@ -463,4 +451,20 @@ function calculateMovingAvgLine(minuteCount: number, data: OrganizedChartProps) 
     result.push(+(sum / minuteCount).toFixed(3));
   }
   return result;
-}
+};
+
+const setComparedMovingAvgChart = (compareName: string, compareChartData: (string | number)[]) => {
+  const compareMovingAvgChart = {
+    name: `${compareName}`,
+    type: "line",
+    data: compareChartData,
+    smooth: true,
+    lineStyle: {
+      opacity: 0.5,
+      color: "#738f8fc7",
+    },
+    yAxisIndex: 2,
+  };
+
+  return compareMovingAvgChart;
+};

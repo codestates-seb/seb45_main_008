@@ -32,6 +32,7 @@ const CompareChartBtn = () => {
             {companyList?.map(({ korName, companyId }) => {
               return <CompareList corpName={korName} compareCompanyId={companyId} />;
             })}
+            <CompareList corpName="비교차트 제거" compareCompanyId={null} />
           </StockList>
         </CompareContainer>
       )}
@@ -96,7 +97,7 @@ const StockList = styled.div`
   line-height: 147%;
 
   width: 92px;
-  height: 260px;
+  height: 280px;
   padding: 5px;
   border-radius: 0.4rem;
   z-index: 2;

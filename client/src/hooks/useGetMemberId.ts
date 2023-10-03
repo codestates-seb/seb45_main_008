@@ -6,11 +6,13 @@ import axios from "axios";
 const url = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members";
 
 const useGetMemberId = () => {
-  const login = useSelector((state: StateProps) => state.login);
-  const isLogin = login === 1;
+  const islogin = useSelector((state: StateProps) => state.login);
+  const login = islogin === 1;
 
   const { data, isLoading, isError } = useQuery("memberId", getMemberId, {
-    enabled: isLogin,
+    enabled: login,
+    staleTime: Infinity,
+    cacheTime: Infinity,
   });
 
   return { memberId: data, memberIdLoading: isLoading, memberIdError: isError };

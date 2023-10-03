@@ -141,6 +141,8 @@ const MainPage = () => {
 
       if (autoLogoutSecondAlarm !== null) {
         if (currentTime >= parseInt(autoLogoutSecondAlarm) + secondAlarmTime + lastAlarmTime) {
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
           localStorage.removeItem("autoLogoutSecondAlarm");
         } else {
           const timeGone = currentTime - parseInt(autoLogoutSecondAlarm);
@@ -152,6 +154,8 @@ const MainPage = () => {
 
       if (autoLogoutLastAlarm !== null) {
         if (currentTime >= parseInt(autoLogoutLastAlarm) + lastAlarmTime) {
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
           localStorage.removeItem("autoLogoutLastAlarm");
         } else {
           const timeGone = currentTime - parseInt(autoLogoutLastAlarm);
@@ -189,6 +193,8 @@ const MainPage = () => {
 
       if (autoLogoutSecondAlarm !== null) {
         if (currentTime >= parseInt(autoLogoutSecondAlarm) + secondAlarmTime + lastAlarmTime) {
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
           localStorage.removeItem("autoLogoutSecondAlarm");
         } else {
           const timeGone = currentTime - parseInt(autoLogoutSecondAlarm);
@@ -200,6 +206,8 @@ const MainPage = () => {
 
       if (autoLogoutLastAlarm !== null) {
         if (currentTime >= parseInt(autoLogoutLastAlarm) + lastAlarmTime) {
+          localStorage.removeItem("accessToken");
+          localStorage.removeItem("refreshToken");
           localStorage.removeItem("autoLogoutLastAlarm");
         } else {
           const timeGone = currentTime - parseInt(autoLogoutLastAlarm);
@@ -230,7 +238,7 @@ const MainPage = () => {
         <CentralChart />
         {/* props전달 */}
         <StockOrderSection openOAuthModal={openOAuthModal} openProfileModal={openProfileModal} />
-        <TabContainerPage></TabContainerPage>
+        <TabContainerPage />
       </Main>
       {isOAuthModalOpen && (
         <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} onEmailSignupClick={openEmailSignupModal} onWatchListClick={() => handleMenuChange("관심종목")} onHoldingsClick={() => handleMenuChange("보유종목")} />

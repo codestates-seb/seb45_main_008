@@ -15,16 +15,22 @@ const CompareList = (props: OwnProps) => {
     }
   };
 
-  return <Contianer onClick={handleSelectCompareStock}>{corpName}</Contianer>;
+  return (
+    <Contianer onClick={handleSelectCompareStock} corpName={corpName}>
+      {corpName}
+    </Contianer>
+  );
 };
 export default CompareList;
 
 interface OwnProps {
   corpName: string;
-  compareCompanyId: number;
+  compareCompanyId: number | null;
 }
 
-const Contianer = styled.div`
+const Contianer = styled.div<{ corpName: string }>`
+  color: ${(props) => props.corpName === "비교차트 제거" && "#19488a"};
+
   &:hover {
     color: #19488a;
     transition: color 0.3s ease;

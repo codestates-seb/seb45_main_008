@@ -1,6 +1,7 @@
 import axios from "axios";
 import styled from "styled-components";
 import React, { useState } from "react";
+import { motion } from "framer-motion";
 import { setLoginState } from "../../reducer/member/loginSlice";
 import { useDispatch } from "react-redux";
 import setAutoLogoutAlarm from "../../utils/setAutoLogoutAlarm";
@@ -72,20 +73,22 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onSignup }) 
 
   return (
     <ModalBackground>
-      <ModalContainer>
-        <CloseButton onClick={onClose}>&times;</CloseButton>
-        <Title>{titleText}</Title>
-        <Label>{emailLabelText}</Label>
-        <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} onKeyDown={(event) => handleEnterPress(event, "password")} />
-        <Label>{passwordLabelText}</Label>
-        <Input type="password" placeholder="비밀번호를 입력하세요" value={password} onChange={handlePasswordChange} onKeyDown={(event) => handleEnterPress(event, "loginButton")} />
-        {generalError && <ErrorMessage>{generalError}</ErrorMessage>}
-        <RightAlignedButton onClick={handleFindPasswordClick}>{findPasswordText}</RightAlignedButton>
-        <LoginButton onClick={handleLoginClick}>{loginButtonText}</LoginButton>
-        <BottomText>
-          {noAccountText} <RegisterButton onClick={onSignup}>{registerButtonText}</RegisterButton>
-        </BottomText>
-      </ModalContainer>
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
+        <ModalContainer>
+          <CloseButton onClick={onClose}>&times;</CloseButton>
+          <Title>{titleText}</Title>
+          <Label>{emailLabelText}</Label>
+          <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} onKeyDown={(event) => handleEnterPress(event, "password")} />
+          <Label>{passwordLabelText}</Label>
+          <Input type="password" placeholder="비밀번호를 입력하세요" value={password} onChange={handlePasswordChange} onKeyDown={(event) => handleEnterPress(event, "loginButton")} />
+          {generalError && <ErrorMessage>{generalError}</ErrorMessage>}
+          <RightAlignedButton onClick={handleFindPasswordClick}>{findPasswordText}</RightAlignedButton>
+          <LoginButton onClick={handleLoginClick}>{loginButtonText}</LoginButton>
+          <BottomText>
+            {noAccountText} <RegisterButton onClick={onSignup}>{registerButtonText}</RegisterButton>
+          </BottomText>
+        </ModalContainer>
+      </motion.div>
     </ModalBackground>
   );
 };

@@ -7,9 +7,12 @@ const url = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080
 
 const useGetCash = () => {
   const isLogin = useSelector((state: StateProps) => state.login);
+  const login = isLogin === 1;
 
   const { data, isLoading, isError } = useQuery("cash", getCashData, {
-    enabled: isLogin === 1,
+    enabled: login,
+    staleTime: Infinity,
+    cacheTime: Infinity,
   });
 
   return { cashData: data, cashLoading: isLoading, cashError: isError };

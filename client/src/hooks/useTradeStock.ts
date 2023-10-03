@@ -16,7 +16,6 @@ const useTradeStock = () => {
       queryClient.invalidateQueries("holdingStock");
       queryClient.invalidateQueries("orderRecord");
 
-      // 🟢 중복되는 커스텀훅 -> 일단 기능구현 위해 처리함
       queryClient.invalidateQueries("stockHolds");
       queryClient.invalidateQueries("money");
     },

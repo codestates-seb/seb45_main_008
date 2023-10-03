@@ -1,6 +1,7 @@
 import axios from "axios";
 import { useState, useEffect } from "react";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 import { useDispatch } from "react-redux";
 import { changeCompanyId } from "../../reducer/CompanyId-Reducer";
 import logo from "../../asset/icon/StockHolmImage.png";
@@ -104,61 +105,63 @@ const MarketStockList: React.FC = () => {
 
   return (
     <StockListContainer>
-      <StockListTitle>
-        <StockListDetail onClick={SortName} selected={selectedSort === "name"}>
-          {MarketStockLists.stockName}
-        </StockListDetail>
-        <StockListDetail onClick={SortPrice} selected={selectedSort === "price"}>
-          {MarketStockLists.stockPrice}
-        </StockListDetail>
-        <StockListDetail onClick={SortRate} selected={selectedSort === "rate"}>
-          {MarketStockLists.stockRate}
-        </StockListDetail>
-        <StockListDetail onClick={SortTrade} selected={selectedSort === "trade"}>
-          {MarketStockLists.stockTrade}
-        </StockListDetail>
-      </StockListTitle>
-      <StockListHeader>
-        <StockListHeaderItem1>순위</StockListHeaderItem1>
-        <StockListHeaderItem2>종목명</StockListHeaderItem2>
-        <StockListHeaderItem3>현재가(원)</StockListHeaderItem3>
-        <StockListHeaderItem4>변동률(%)</StockListHeaderItem4>
-        <StockListHeaderItem5>거래량(주)</StockListHeaderItem5>
-      </StockListHeader>
+      <motion.div initial={{ opacity: 0, y: -20 }} animate={{ opacity: 1, y: 0 }}>
+        <StockListTitle>
+          <StockListDetail onClick={SortName} selected={selectedSort === "name"}>
+            {MarketStockLists.stockName}
+          </StockListDetail>
+          <StockListDetail onClick={SortPrice} selected={selectedSort === "price"}>
+            {MarketStockLists.stockPrice}
+          </StockListDetail>
+          <StockListDetail onClick={SortRate} selected={selectedSort === "rate"}>
+            {MarketStockLists.stockRate}
+          </StockListDetail>
+          <StockListDetail onClick={SortTrade} selected={selectedSort === "trade"}>
+            {MarketStockLists.stockTrade}
+          </StockListDetail>
+        </StockListTitle>
+        <StockListHeader>
+          <StockListHeaderItem1>순위</StockListHeaderItem1>
+          <StockListHeaderItem2>종목명</StockListHeaderItem2>
+          <StockListHeaderItem3>현재가(원)</StockListHeaderItem3>
+          <StockListHeaderItem4>변동률(%)</StockListHeaderItem4>
+          <StockListHeaderItem5>거래량(주)</StockListHeaderItem5>
+        </StockListHeader>
 
-      <StockInfoContainer>
-        {marketStockList.slice(0, 10).map((el, index) => {
-          const companyLogo = logos[el.korName] || logo;
+        <StockInfoContainer>
+          {marketStockList.slice(0, 10).map((el, index) => {
+            const companyLogo = logos[el.korName] || logo;
 
-          return (
-            <div key={index}>
-              <StockListInfo onClick={() => dispatch(changeCompanyId(el.companyId))}>
-                {isLoading === true ? (
-                  <div>{MarketStockLists.isLoading}</div>
-                ) : (
-                  <>
-                    <RankingBadge rank={index + 1} />
-                    <Logo src={companyLogo} alt="stock logo" />
-                    <StockNameWrapper>
-                      <StockName key={el.korName}>{el.korName}</StockName>
-                      <StockCode key={el.code}>{el.code}</StockCode>
-                    </StockNameWrapper>
-                    <StockDetailWrapper>
-                      <StockDetail>
-                        <StockDetailItem key={el.stockInfResponseDto.stck_prpr}>{numberWithCommas(parseFloat(el.stockInfResponseDto.stck_prpr))}</StockDetailItem>
-                        <StockDetailItem key={el.stockInfResponseDto.prdy_ctrt} variation={parseFloat(el.stockInfResponseDto.prdy_ctrt) > 0 ? "positive" : parseFloat(el.stockInfResponseDto.prdy_ctrt) < 0 ? "negative" : "neutral"}>
-                          {el.stockInfResponseDto.prdy_ctrt}
-                        </StockDetailItem>
-                        <StockDetailItem key={el.stockInfResponseDto.acml_vol}>{numberWithCommas(parseFloat(el.stockInfResponseDto.acml_vol))}</StockDetailItem>
-                      </StockDetail>
-                    </StockDetailWrapper>
-                  </>
-                )}
-              </StockListInfo>
-            </div>
-          );
-        })}
-      </StockInfoContainer>
+            return (
+              <div key={index}>
+                <StockListInfo onClick={() => dispatch(changeCompanyId(el.companyId))}>
+                  {isLoading === true ? (
+                    <div>{MarketStockLists.isLoading}</div>
+                  ) : (
+                    <>
+                      <RankingBadge rank={index + 1} />
+                      <Logo src={companyLogo} alt="stock logo" />
+                      <StockNameWrapper>
+                        <StockName key={el.korName}>{el.korName}</StockName>
+                        <StockCode key={el.code}>{el.code}</StockCode>
+                      </StockNameWrapper>
+                      <StockDetailWrapper>
+                        <StockDetail>
+                          <StockDetailItem key={el.stockInfResponseDto.stck_prpr}>{numberWithCommas(parseFloat(el.stockInfResponseDto.stck_prpr))}</StockDetailItem>
+                          <StockDetailItem key={el.stockInfResponseDto.prdy_ctrt} variation={parseFloat(el.stockInfResponseDto.prdy_ctrt) > 0 ? "positive" : parseFloat(el.stockInfResponseDto.prdy_ctrt) < 0 ? "negative" : "neutral"}>
+                            {el.stockInfResponseDto.prdy_ctrt}
+                          </StockDetailItem>
+                          <StockDetailItem key={el.stockInfResponseDto.acml_vol}>{numberWithCommas(parseFloat(el.stockInfResponseDto.acml_vol))}</StockDetailItem>
+                        </StockDetail>
+                      </StockDetailWrapper>
+                    </>
+                  )}
+                </StockListInfo>
+              </div>
+            );
+          })}
+        </StockInfoContainer>
+      </motion.div>
     </StockListContainer>
   );
 };

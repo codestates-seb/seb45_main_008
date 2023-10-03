@@ -1,23 +1,9 @@
-import { useSelector } from "react-redux";
 import { styled } from "styled-components";
-import useGetStockInfo from "../../hooks/useGetStockInfo";
-import { StateProps } from "../../models/stateProps";
 import ExpandScreenBtn from "./ExpandScreenBtn";
 import StockOverview from "./StockOverview";
 import StockOrderBtn from "./StockOrderBtn";
 
 const UpperMenuBar = () => {
-  const companyId = useSelector((state: StateProps) => state.companyId);
-  const { stockInfoLoading, stockInfoError } = useGetStockInfo(companyId);
-
-  if (stockInfoLoading) {
-    return <></>;
-  }
-
-  if (stockInfoError) {
-    return <p>에러 발생</p>;
-  }
-
   return (
     <Container>
       <div className="FirstLine">

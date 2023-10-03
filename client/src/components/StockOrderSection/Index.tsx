@@ -1,5 +1,6 @@
 import { useSelector, useDispatch } from "react-redux";
 import { styled } from "styled-components";
+import { CircleLoader } from "react-spinners";
 import useGetStockInfo from "../../hooks/useGetStockInfo";
 import useGetStockData from "../../hooks/useGetStockData";
 import useGetCash from "../../hooks/useGetCash";
@@ -13,6 +14,7 @@ import StockOrder from "./StockOrder";
 import OrderResult from "./OrderResult";
 import WaitOrderIndicator from "./WaitOrderIndicator";
 
+const loadingText: string = "로딩 중...";
 const errorMessage: string = "정보를 불러올 수 없습니다";
 const errorButtonText: string = "닫기";
 const loginRequiredText: string = "로그인이 필요한 서비스입니다";
@@ -39,15 +41,28 @@ const StockOrderSection: React.FC<StockOrderSectionProps> = (props) => {
   const isLoading = stockInfoLoading || stockPriceLoading || cashLoading || orderRecordLoading || holdingStockLoading || compnayListLoading;
   const isError = stockInfoError || stockPriceError || orderRecordError || holdingStockError || companyListError;
 
-  // 1) 데이터 로딩 중
-  if (isLoading) {
-    return <Container orderSet={stockOrderSet}></Container>;
-  }
-
   // 주식주문 창 닫기
   const handleStockOrderClose = () => {
     dispatch(stockOrderClose());
   };
+
+  // 1) 데이터 로딩 중
+  if (isLoading) {
+    return (
+      <Container orderSet={stockOrderSet}>
+        <UpperBar>
+          <h2 className="title">{upperbarTitle}</h2>
+          <button className="closeButton" onClick={handleStockOrderClose}>
+            &#10005;
+          </button>
+        </UpperBar>
+        <div className="loading">
+          <CircleLoader color="#2679ed" />
+          <div className="loadingText">{loadingText}</div>
+        </div>
+      </Container>
+    );
+  }
 
   // 2) 데이터 받아오기 실패 or 성공했으나 빈 데이터일 때
   if (isError || stockPrice.length === 0) {
@@ -169,6 +184,19 @@ const Container = styled.aside<{ orderSet: boolean }>`
   height: 100%;
   box-shadow: -1px 0px 10px darkgray;
   background-color: #ffffff;
+
+  .loading {
+    height: 85%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    .loadingText {
+      margin-top: 20px;
+      color: #9999;
+    }
+  }
 
   .mainContent {
     height: 100%;
