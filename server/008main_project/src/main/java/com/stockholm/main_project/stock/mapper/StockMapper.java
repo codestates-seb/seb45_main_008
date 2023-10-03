@@ -88,4 +88,6 @@ public interface StockMapper {
         }
         return starResponseDtos;
     }
+
+    CompanyInf companyInfDtoToCompanyInf(CompanyInfDto companyInfDto);
 }

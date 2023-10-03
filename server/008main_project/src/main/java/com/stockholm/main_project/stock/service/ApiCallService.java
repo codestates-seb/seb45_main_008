@@ -1,7 +1,9 @@
 package com.stockholm.main_project.stock.service;
 
+import com.stockholm.main_project.stock.dto.CompanyInfDto;
 import com.stockholm.main_project.stock.dto.StockasbiDataDto;
 import com.stockholm.main_project.stock.dto.StockMinDto;
+import com.stockholm.main_project.stock.entity.CompanyInf;
 import com.stockholm.main_project.stock.repository.CompanyRepository;
 import com.stockholm.main_project.utils.Time;
 import lombok.Getter;
@@ -43,6 +45,10 @@ public class ApiCallService {
     @Getter
     @Value("${stock-url.kospi}")
     private String KOSPI_URL;
+
+    @Getter
+    @Value("${stock-url.companyInf}")
+    private String COMPANY_URL;
 
 
     private final String FID_ETC_CLS_CODE = "";
@@ -135,6 +141,32 @@ public class ApiCallService {
 
         if (response.getStatusCode().is2xxSuccessful()) {
             return response.getBody();
+        } else {
+            log.info("error");
+            return null;
+        }
+
+    }
+
+    public CompanyInfDto getCompayInfFromApi(String stockCode){
+        String token = tokenService.getAccessToken();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("Authorization", "Bearer " + token);
+        headers.add("appkey", APP_KEY);
+        headers.add("appsecret", APP_SECRET);
+        headers.add("tr_id", "FHKST01010100");
+
+        String uri = COMPANY_URL + "?FID_COND_MRKT_DIV_CODE=J&FID_INPUT_ISCD=" + stockCode;
+
+        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+
+        ResponseEntity<CompanyInfDto> response = restTemplate.exchange(uri, HttpMethod.GET, entity, new ParameterizedTypeReference<CompanyInfDto>() {});
+
+        if (response.getStatusCode().is2xxSuccessful()) {
+            CompanyInfDto companyInfDto = response.getBody();
+            log.info("실행");
+            return companyInfDto;
         } else {
             log.info("error");
             return null;

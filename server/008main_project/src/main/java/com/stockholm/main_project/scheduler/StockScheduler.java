@@ -79,10 +79,15 @@ public class StockScheduler {
 
     }
 
-//    @Scheduled(fixedRate = 1000)
-//    public void run() throws InterruptedException {
-//        webSocketController.check();
-//    }
+    // 회사 정보 호출
+    @Scheduled(cron = "0 0 8 * * MON-FRI")
+    public void myScheduledUpdateCompanyInfMethod() throws InterruptedException {
+        LocalDateTime start = LocalDateTime.now();
+        companyService.updateCompanyInf();
+        LocalDateTime end = LocalDateTime.now();
+        Duration duration = Duration.between(start, end);
+        System.out.println(duration.getSeconds());
+    }
 
 //    @Scheduled(fixedRate = 10000000)
 //    public void secondSchedule() throws InterruptedException {
