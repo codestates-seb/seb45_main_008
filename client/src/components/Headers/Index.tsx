@@ -1,17 +1,20 @@
+// HeaderComponent.tsx
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { RootState } from '../../store/config';
-import LoginHeader from './LoginHeader';
-import LogoutHeader from './LogoutHeader';
+import LoginHeader from "./LoginHeader";
+import LogoutHeader from "./LogoutHeader";
 
-const Header: React.FC = () => {
-  const isLogin = useSelector((state: RootState) => state.login);
-
-  if (isLogin === 1) {
-    return <LoginHeader onProfileClick={() => { /* Handle profile click logic here */ }} />;
-  }
-  
-  return <LogoutHeader onLoginClick={() => { /* Handle login click logic here */ }} />;
+interface HeaderProps {
+  isLogin: number;
+  onProfileClick: () => void;
+  onLoginClick: () => void;
 }
 
-export default Header;
+const HeaderComponent: React.FC<HeaderProps> = ({ isLogin, onProfileClick, onLoginClick }) => {
+  return isLogin === 1 ? (
+    <LoginHeader onProfileClick={onProfileClick} />
+  ) : (
+    <LogoutHeader onLoginClick={onLoginClick} />
+  );
+};
+
+export default HeaderComponent;

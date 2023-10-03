@@ -2,19 +2,11 @@ import { useState, useEffect, useCallback } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import styled from "styled-components";
 
+import HeaderComponent from "../components/Headers/Index";
+import SignupComponent from "../components/Signups/Index";
+import LoginComponent from "../components/Logins/Index";
+import ProfileComponent from "../components/Profile/Index";
 // import Header from "../components/Headers/Index";
-import LogoutHeader from "../components/Headers/LogoutHeader";
-import LoginHeader from "../components/Headers/LoginHeader";
-
-import OAuthLoginModal from "../components/Logins/OAuthLogin";
-import EmailLoginModal from "../components/Logins/EmailLogin";
-import LoginConfirmationModal from "../components/Logins/LoginConfirmatationModal";
-
-import EmailSignupModal from "../components/Signups/EmailSignup";
-import EmailVerificationModal from "../components/Signups/EmailCertify";
-import PasswordSettingModal from "../components/Signups/Password";
-import Welcome from "../components/Signups/Welcome";
-import GuideModal from "../components/Signups/Guide";
 
 import CentralChart from "../components/CentralChart/Index";
 
@@ -23,7 +15,6 @@ import HoldingList from "../components/HoldingList/HoldingList";
 import WatchList from "../components/watchlist/WatchList";
 import StockOrderSection from "../components/StockOrderSection/Index";
 
-import ProfileModal from "../components/Profile/profileModal";
 import { StateProps } from "../models/stateProps";
 import { TabContainerPage } from "./TabPages/TabContainerPage";
 
@@ -123,6 +114,42 @@ const MainPage = () => {
   const handleLoginConfirmationClose = () => {
     setLoginConfirmationModalOpen(false);
   };
+  const [isGuideModalOpen, setGuideModalOpen] = useState(false);
+
+  const propsForSignup = {
+    isEmailSignupModalOpen,
+    setEmailSignupModalOpen,
+    userEmail,
+    setUserEmail,
+    isEmailVerificationModalOpen,
+    setEmailVerificationModalOpen,
+    isPasswordSettingModalOpen,
+    setPasswordSettingModalOpen,
+    isWelcomeModalOpen,
+    setWelcomeModalOpen,
+    isGuideModalOpen,
+    setGuideModalOpen,
+    openEmailVerificationModal,
+    closeEmailSignupModal,
+    openPasswordSettingModal,
+    closePasswordSettingModal,
+    openWelcomeModal,
+    closeWelcomeModal,
+    closeGuideModal,
+    closeEmailVerificationModal
+};
+
+const propsForLogin = {
+    
+    isOAuthModalOpen,
+    isEmailLoginModalOpen,
+    closeOAuthModal,
+    openEmailLoginModal,
+    closeEmailLoginModal,
+    handleLoginConfirmationClose,
+    openEmailSignupFromLogin,
+    isLoginConfirmationModalOpen
+};
 
   // 현재 선택된 메뉴 타입을 상태로 관리
   const [selectedMenu, setSelectedMenu] = useState<"전체종목" | "관심종목" | "보유종목">("전체종목");
@@ -219,12 +246,12 @@ const MainPage = () => {
     }
   }, []);
 
-  const [isGuideModalOpen, setGuideModalOpen] = useState(false);
+
 
   return (
     <Container>
       {/* <Header/> */}
-      {isLogin == 1 ? <LoginHeader onProfileClick={openProfileModal} /> : <LogoutHeader onLoginClick={openOAuthModal} />}
+      <HeaderComponent isLogin={isLogin} onProfileClick={openProfileModal} onLoginClick={openOAuthModal} />
       <Main>
         <LeftSection leftExpand={expandScreen.left}>
           {selectedMenu === "전체종목" ? (
@@ -240,32 +267,9 @@ const MainPage = () => {
         <StockOrderSection openOAuthModal={openOAuthModal} openProfileModal={openProfileModal} />
         <TabContainerPage />
       </Main>
-      {isOAuthModalOpen && (
-        <OAuthLoginModal onClose={closeOAuthModal} onEmailLoginClick={openEmailLoginModal} onEmailSignupClick={openEmailSignupModal} onWatchListClick={() => handleMenuChange("관심종목")} onHoldingsClick={() => handleMenuChange("보유종목")} />
-      )}
-
-      {isEmailLoginModalOpen && <EmailLoginModal onClose={closeEmailLoginModal} onSignup={openEmailSignupFromLogin} />}
-      {isLoginConfirmationModalOpen && <LoginConfirmationModal onClose={handleLoginConfirmationClose} />}
-
-      {isEmailSignupModalOpen && <EmailSignupModal onClose={closeEmailSignupModal} onRequestVerification={openEmailVerificationModal} />}
-      {isEmailVerificationModalOpen && <EmailVerificationModal onClose={closeEmailVerificationModal} onNextStep={openPasswordSettingModal} initialEmail={userEmail} />}
-
-      {isPasswordSettingModalOpen && (
-        <PasswordSettingModal
-          onClose={closePasswordSettingModal} // Password 모달을 닫는다.
-          onNext={openWelcomeModal} // Welcome 모달을 연다.
-          email={userEmail} // email을 userEmail로 설정
-        />
-      )}
-      {isWelcomeModalOpen && (
-        <Welcome
-          onClose={() => {
-            closeWelcomeModal();
-          }}
-        />
-      )}
-      {isGuideModalOpen && <GuideModal onClose={closeGuideModal} />}
-      {isProfileModalOpen && <ProfileModal onClose={() => setProfileModalOpen(false)} />}
+        <SignupComponent {...propsForSignup} />
+        <LoginComponent {...propsForLogin} />
+        <ProfileComponent isOpen={isProfileModalOpen} onClose={() => setProfileModalOpen(false)} />
     </Container>
   );
 };
