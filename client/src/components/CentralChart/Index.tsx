@@ -50,7 +50,7 @@ const Container = styled.div`
 `;
 
 const LoadingContainer = styled.div`
-  width: 100%;
+  flex: 6.7 0 0;
   min-width: 630px;
   height: 100%;
   display: flex;
