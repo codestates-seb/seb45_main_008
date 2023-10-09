@@ -1,6 +1,9 @@
-package com.stockholm.main_project.auth.jwt;
+package com.stockholm.main_project.auth.jwt.refreshToken;
 
 import com.stockholm.main_project.auth.filter.JwtVerificationFilter;
+import com.stockholm.main_project.auth.jwt.JwtTokenizer;
+import com.stockholm.main_project.exception.BusinessLogicException;
+import com.stockholm.main_project.exception.ExceptionCode;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -39,7 +42,7 @@ public class RefreshTokenService {
 
             return refreshTokenClaims;
         } catch (Exception e) {
-            throw new Exception("Invalid refresh token", e);
+            throw new BusinessLogicException(ExceptionCode.INVALID_REFRESH_TOKEN);
         }
     }
 

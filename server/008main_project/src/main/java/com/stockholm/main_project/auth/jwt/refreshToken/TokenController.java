@@ -1,4 +1,4 @@
-package com.stockholm.main_project.auth.jwt;
+package com.stockholm.main_project.auth.jwt.refreshToken;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,9 +16,9 @@ public class TokenController {
     private RefreshTokenService refreshTokenService;
 
     @PostMapping("/refresh")
-    public ResponseEntity<String> refreshAccessToken(@RequestBody TokenRefreshRequest tokenRefreshRequest) {
+    public ResponseEntity<String> refreshAccessToken(@RequestBody TokenRefreshRequestDto tokenRefreshRequestDto) {
         try {
-            String newAccessToken = refreshTokenService.requestNewAccessToken(tokenRefreshRequest.getRefreshToken());
+            String newAccessToken = refreshTokenService.requestNewAccessToken(tokenRefreshRequestDto.getRefreshToken());
             return ResponseEntity.ok(newAccessToken);
         } catch (Exception e) {
             // 실패한 경우 401 Unauthorized 상태 코드 반환
