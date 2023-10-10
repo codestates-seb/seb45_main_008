@@ -11,6 +11,7 @@ import com.stockholm.main_project.member.service.MemberService;
 import com.stockholm.main_project.stock.service.StockHoldService;
 import com.stockholm.main_project.stock.service.StockOrderService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -45,7 +46,7 @@ public class CashController {
     @ApiResponse(responseCode = "400", description = "이미 보유한 현금이 있습니다.")
     @ApiResponse(responseCode = "401", description = "Not Enough Money")
     public ResponseEntity postCash(@Schema(implementation = CashPostDto.class)@Valid @RequestBody CashPostDto cashPostDto,
-                                   @AuthenticationPrincipal Member member){
+                                   @Parameter(hidden = true) @AuthenticationPrincipal Member member){
 
         Cash cashToCreate = mapper.cashPostToCash(cashPostDto);
 
@@ -65,7 +66,7 @@ public class CashController {
     @ApiResponse(responseCode = "401", description = "Invalid Cash")
     @ApiResponse(responseCode = "404", description = "Not Found")
     public ResponseEntity patchCash(@Schema(implementation = CashPatchDto.class)@PathVariable long cashId, @Valid @RequestBody CashPatchDto requestBody,
-                                    @AuthenticationPrincipal Member member){
+                                    @Parameter(hidden = true) @AuthenticationPrincipal Member member){
 
         Cash cashToUpdate = mapper.cashPatchToCash(requestBody);
 
@@ -86,7 +87,7 @@ public class CashController {
     @ApiResponse(responseCode = "401", description = "Invalid Cash")
     @ApiResponse(responseCode = "404", description = "Not Found")
     @GetMapping
-    private ResponseEntity getCash(@AuthenticationPrincipal Member member){
+    private ResponseEntity getCash(@Parameter(hidden = true) @AuthenticationPrincipal Member member){
         Cash response = cashService.findCash(member);
 
         return new ResponseEntity<>(mapper.cashToCashResponseDto(response), HttpStatus.OK);
