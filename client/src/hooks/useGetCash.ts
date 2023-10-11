@@ -11,8 +11,6 @@ const useGetCash = () => {
 
   const { data, isLoading, isError } = useQuery("cash", getCashData, {
     enabled: login,
-    staleTime: Infinity,
-    cacheTime: Infinity,
   });
 
   return { cashData: data, cashLoading: isLoading, cashError: isError };
