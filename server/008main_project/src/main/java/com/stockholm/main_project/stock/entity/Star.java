@@ -27,4 +27,6 @@ public class Star extends Auditable {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "COMPANY_ID")
     private Company company;
+
+
 }

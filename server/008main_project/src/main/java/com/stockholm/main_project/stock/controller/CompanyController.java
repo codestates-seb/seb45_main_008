@@ -1,10 +1,13 @@
 package com.stockholm.main_project.stock.controller;
 
 import com.stockholm.main_project.stock.dto.CompanyResponseDto;
+import com.stockholm.main_project.stock.dto.StockInfResponseDto;
 import com.stockholm.main_project.stock.dto.StockMinResponseDto;
 import com.stockholm.main_project.stock.entity.Company;
 import com.stockholm.main_project.stock.mapper.StockMapper;
+import com.stockholm.main_project.stock.service.ApiCallService;
 import com.stockholm.main_project.stock.service.CompanyService;
+import com.stockholm.main_project.stock.service.StockInfService;
 import com.stockholm.main_project.stock.service.StockMinService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
@@ -31,12 +34,16 @@ public class CompanyController {
 
     private final CompanyService companyService;
     private final StockMapper stockMapper;
-    private StockMinService stockMinService;
+    private final StockMinService stockMinService;
+    private final ApiCallService apiCallService;
+    private final StockInfService stockInfService;
 
-    public CompanyController(CompanyService companyService, StockMapper stockMapper, StockMinService stockMinService) {
+    public CompanyController(CompanyService companyService, StockMapper stockMapper, StockMinService stockMinService, ApiCallService apiCallService, StockInfService stockInfService) {
         this.companyService = companyService;
         this.stockMapper = stockMapper;
         this.stockMinService = stockMinService;
+        this.apiCallService = apiCallService;
+        this.stockInfService = stockInfService;
     }
     // swagger 추가
     @Operation(summary = "CompanyList 가져오기", description = "CompanyList를 Get해 옵니다", tags = { "Company" })
@@ -88,5 +95,12 @@ public class CompanyController {
         List<StockMinResponseDto> stockMinList = stockMinService.getRecent420StockMin(companyId);
 
         return new ResponseEntity(stockMinList, HttpStatus.OK);
+    }
+
+    @GetMapping("/sort/{criterion}")
+    public ResponseEntity getStockInfSortByCriterion(@PathVariable("criterion") String criterion) {
+        List<StockInfResponseDto> stockInfResponseDtos = stockInfService.stockInfSortByCriterion(criterion);
+
+        return new ResponseEntity(stockInfResponseDtos, HttpStatus.OK);
     }
 }
