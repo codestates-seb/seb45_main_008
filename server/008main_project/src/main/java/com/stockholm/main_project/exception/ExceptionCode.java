@@ -24,7 +24,7 @@ public enum ExceptionCode {
     AWS_CREDENTIALS_ERROR(401, "AWS 인증 오류"),
     S3_UPLOAD_ERROR(500, "S3 파일 업로드 중 오류 발생"),
     S3_DELETE_ERROR(500, "S3 파일 삭제 중 오류 발생"),
-    S3_URL_RETRIEVE_ERROR(500, "S3에서 파일 URL 검색 중 오류 발생"),
+    S3_URL_RETRIEVE_ERROR(500, "S3에서 파일 URL 검색 중 오류 발생");
     INVALID_REFRESH_TOKEN(401, "리플레쉬 토큰이 유효하지 않습니다.");
 
 
