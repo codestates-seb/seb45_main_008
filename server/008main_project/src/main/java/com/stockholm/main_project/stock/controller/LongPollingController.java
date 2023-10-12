@@ -67,7 +67,7 @@ public class LongPollingController {
     private void waitForStockOrdersToUpdate() throws InterruptedException {
         // 변경된 데이터가 도착할 때까지 대기
         synchronized (this) {
-            while (updateBuyStockOrders.isEmpty() && updateSellStockOrders.isEmpty()) {
+            if (updateBuyStockOrders.isEmpty() && updateSellStockOrders.isEmpty()) {
                 wait();
             }
         }

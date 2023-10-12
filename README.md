@@ -17,11 +17,11 @@ http://seb008stockholm.s3-website.ap-northeast-2.amazonaws.com/
 
 ### BE
 
-[![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1695091856085?alt=media&token=0205801d-72b7-4113-a0b2-941d791be50e)](https://github.com/msdio/stackticon)
+[![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1695133984245?alt=media&token=fef31d2b-813d-41ba-a173-eae6e8c6f19b)](https://github.com/msdio/stackticon)
 
 ### FE
 
-[![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1695090639262?alt=media&token=0912fb1f-716b-4563-bf1b-27c3fb2a6b24)](https://github.com/msdio/stackticon)
+[![stackticon](https://firebasestorage.googleapis.com/v0/b/stackticon-81399.appspot.com/o/images%2F1695134306560?alt=media&token=13e75353-3e07-4228-85a7-261c00e1b47f)](https://github.com/msdio/stackticon)
 
 ## API 명세서
 http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/swagger-ui/index.html
@@ -31,6 +31,13 @@ https://drive.google.com/file/d/1ej4sYQusG8g3uFPHRILq7Khd8m1evz4X/view?usp=shari
 
 ## 화면 정의서
 https://docs.google.com/presentation/d/1yyUBoyX8Yo7ZQxZXg2CFiZDh6W0j4_jSM8UTPLbnvy8/edit?usp=sharing
+
+## 요구 사항 정의서
+https://docs.google.com/spreadsheets/d/1SYxtZdxv-H4Cm4O124we4IPbjh4eNBDV/edit#gid=1436212772
+
+## ERD
+![화면 캡처 2023-09-20 000142](https://github.com/codestates-seb/seb45_main_008/assets/130031798/0d52cc8e-2eac-47a5-baec-1d19d98c9d08)
+
 
 ## Github Rule
 
