@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/stockholm")
 public class HelloController {
 
-    @Operation(summary = "hello post 요청", description = "post됩니다.", tags = { "Member" })
+    @Operation(summary = "hello post 요청", description = "post됩니다.", tags = { "Test" })
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(schema = @Schema(implementation = HelloResponse.class))),
@@ -33,7 +33,7 @@ public class HelloController {
         return new ResponseEntity<>(helloResponse, HttpStatus.OK);
     }
 
-    @Operation(summary = "hello get 요청", description = "get됩니다.", tags = { "Member" })
+    @Operation(summary = "hello get 요청", description = "get됩니다.", tags = { "Test" })
     @ApiResponses({
             @ApiResponse(responseCode = "200", description = "OK",
                     content = @Content(schema = @Schema(implementation = HelloResponse.class))),
