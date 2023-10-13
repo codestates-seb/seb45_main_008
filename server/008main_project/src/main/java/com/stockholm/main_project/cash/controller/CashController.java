@@ -41,10 +41,10 @@ public class CashController {
     }
     @PostMapping
     @Operation(summary = "현금 정보 생성", description = "새로운 현금 정보를 생성합니다.", tags = { "Cash" })
-    @ApiResponse(responseCode = "201", description = "Created",
+    @ApiResponse(responseCode = "201", description = "CREATED",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CashResponseDto.class)))
     @ApiResponse(responseCode = "400", description = "이미 보유한 현금이 있습니다.")
-    @ApiResponse(responseCode = "401", description = "Not Enough Money")
+    @ApiResponse(responseCode = "401", description = "NOT ENOUGH MONEY")
     public ResponseEntity postCash(@Schema(implementation = CashPostDto.class)@Valid @RequestBody CashPostDto cashPostDto,
                                    @Parameter(hidden = true) @AuthenticationPrincipal Member member){
 
@@ -62,9 +62,7 @@ public class CashController {
     @Operation(summary = "현금 정보 업데이트", description = "현금 정보를 업데이트합니다.", tags = { "Cash" })
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CashResponseDto.class)))
-    @ApiResponse(responseCode = "400", description = "Bad Request")
-    @ApiResponse(responseCode = "401", description = "Invalid Cash")
-    @ApiResponse(responseCode = "404", description = "Not Found")
+    @ApiResponse(responseCode = "401", description = "INVALID CASH")
     public ResponseEntity patchCash(@Schema(implementation = CashPatchDto.class)@PathVariable long cashId, @Valid @RequestBody CashPatchDto requestBody,
                                     @Parameter(hidden = true) @AuthenticationPrincipal Member member){
 
@@ -84,8 +82,7 @@ public class CashController {
     @Operation(summary = "현금 정보 조회", description = "현금 정보를 조회합니다.", tags = { "Cash" })
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(mediaType = "application/json", schema = @Schema(implementation = CashResponseDto.class)))
-    @ApiResponse(responseCode = "401", description = "Invalid Cash")
-    @ApiResponse(responseCode = "404", description = "Not Found")
+    @ApiResponse(responseCode = "401", description = "INVALID CASH")
     @GetMapping
     private ResponseEntity getCash(@Parameter(hidden = true) @AuthenticationPrincipal Member member){
         Cash response = cashService.findCash(member);
