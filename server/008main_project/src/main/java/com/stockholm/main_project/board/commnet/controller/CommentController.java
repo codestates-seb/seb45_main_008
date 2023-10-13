@@ -40,9 +40,6 @@ public class CommentController {
     @Operation(summary = "댓글 생성", description = "새로운 댓글을 생성합니다.", tags = { "Comment" })
     @ApiResponse(responseCode = "201", description = "CREATED",
             content = @Content(schema = @Schema(implementation = CommentResponseDto.class)))
-    @ApiResponse(responseCode = "400", description = "BAD REQUEST")
-    @ApiResponse(responseCode = "404", description = "NOT FOUND")
-    @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     @PostMapping
     public ResponseEntity postComment(@Schema(implementation = CommentRequestDto.class)@PathVariable long boardId, @RequestBody CommentRequestDto commentRequestDto,@Parameter(hidden = true) @AuthenticationPrincipal Member member){
 
@@ -57,9 +54,7 @@ public class CommentController {
     @Operation(summary = "댓글 수정", description = "작성한 댓글을 수정합니다.", tags = { "Comment" })
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(schema = @Schema(implementation = CommentResponseDto.class)))
-    @ApiResponse(responseCode = "400", description = "BAD REQUEST")
     @ApiResponse(responseCode = "404", description = "INVALID FAILED")
-    @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     @PatchMapping("{commentId}")
     public ResponseEntity updateComment(@PathVariable long boardId,
                                         @PathVariable long commentId,
@@ -77,9 +72,7 @@ public class CommentController {
 
     @Operation(summary = "댓글 삭제", description = "작성한 댓글를 삭제합니다.", tags = { "Comment" })
     @ApiResponse(responseCode = "204", description = "NO CONTENT")
-    @ApiResponse(responseCode = "400", description = "BAD REQUEST")
     @ApiResponse(responseCode = "404", description = "INVALID FAILED")
-    @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     @DeleteMapping("{commentId}")
     public ResponseEntity deleteComment(@PathVariable long boardId, @PathVariable long commentId,@Parameter(hidden = true) @AuthenticationPrincipal Member member) {
 

@@ -53,9 +53,6 @@ public class BoardController {
     @Operation(summary = "게시물 생성", description = "새로운 게시물을 생성합니다.", tags = { "Board" })
     @ApiResponse(responseCode = "201", description = "CREATED",
                     content = @Content(schema = @Schema(implementation = SingleBoardResponseDto.class)))
-    @ApiResponse(responseCode = "400", description = "BAD REQUEST")
-    @ApiResponse(responseCode = "404", description = "NOT FOUND")
-    @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     public ResponseEntity<SingleBoardResponseDto> createBoard(@Schema(implementation = BoardRequestDto.class) @Valid @RequestBody BoardRequestDto boardPostDto, @Parameter(hidden = true) @AuthenticationPrincipal Member member) throws Exception {
         Board boardToCreate = mapper.boardRequestToBoard(boardPostDto);
         boardToCreate.setMember(member);
@@ -69,9 +66,7 @@ public class BoardController {
     @Operation(summary = "게시물 정보 변경", description = "게시물을 수정합니다.", tags = { "Board" })
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(schema = @Schema(implementation = SingleBoardResponseDto.class)))
-    @ApiResponse(responseCode = "400", description = "BAD REQUEST")
     @ApiResponse(responseCode = "404", description = "INVALID FAILED")
-    @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     @PatchMapping("{boardId}")
     public ResponseEntity<SingleBoardResponseDto> updateBoard(@Schema(implementation = BoardRequestDto.class) @Valid @PathVariable long boardId,@RequestBody BoardRequestDto boardRequestDto,
                                                               @Parameter(hidden = true) @AuthenticationPrincipal Member member) throws Exception {
@@ -87,9 +82,7 @@ public class BoardController {
     @Operation(summary = "게시물 정보 조회", description = "게시물을 조회합니다.", tags = { "Board" })
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(schema = @Schema(implementation = SingleBoardResponseDto.class)))
-    @ApiResponse(responseCode = "400", description = "BAD REQUEST")
     @ApiResponse(responseCode = "404", description = "BOARD NOT FOUND")
-    @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     @GetMapping("{boardId}")
     public ResponseEntity<SingleBoardResponseDto> getBoard(@PathVariable long boardId){
         Board response = boardService.findBoard(boardId);
@@ -108,8 +101,6 @@ public class BoardController {
     @Operation(summary = "전체 게시물 조회", description = "모든 게시물을 조회합니다.", tags = { "Board" })
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(schema = @Schema(implementation = AllBoardResponseDto.class)))
-    @ApiResponse(responseCode = "400", description = "BAD REQUEST")
-    @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     @GetMapping
     public ResponseEntity<List<AllBoardResponseDto>> getBoards(){
         List<Board> foundBoards = boardService.getAllBoards();

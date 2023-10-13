@@ -24,7 +24,6 @@ public class TokenController {
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(schema = @Schema(implementation = TokenRefreshRequestDto.class)))
     @ApiResponse(responseCode = "401", description = "INVALID REFRESH TOKEN")
-    @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     @PostMapping("/refresh")
     public ResponseEntity<String> refreshAccessToken(@RequestBody TokenRefreshRequestDto tokenRefreshRequestDto) throws Exception {
 
