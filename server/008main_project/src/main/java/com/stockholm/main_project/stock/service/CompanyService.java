@@ -1,24 +1,32 @@
 package com.stockholm.main_project.stock.service;
 
+import com.stockholm.main_project.stock.dto.CompanyInfDto;
 import com.stockholm.main_project.stock.dto.StockasbiDataDto;
 import com.stockholm.main_project.stock.entity.Company;
+import com.stockholm.main_project.stock.entity.CompanyInf;
 import com.stockholm.main_project.stock.entity.StockAsBi;
 import com.stockholm.main_project.stock.mapper.ApiMapper;
+import com.stockholm.main_project.stock.repository.CompanyInfRepository;
 import com.stockholm.main_project.stock.repository.CompanyRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 import java.util.List;
 
+@Slf4j
 @Service
 @Transactional
 public class CompanyService {
     private final CompanyRepository companyRepository;
+    private final CompanyInfRepository companyInfRepository;
     private final ApiCallService apiCallService;
     private final ApiMapper apiMapper;
 
-    public CompanyService(CompanyRepository companyRepository, ApiCallService apiCallService, ApiMapper apiMapper) {
+
+    public CompanyService(CompanyRepository companyRepository, CompanyInfRepository companyInfRepository, ApiCallService apiCallService, ApiMapper apiMapper) {
         this.companyRepository = companyRepository;
+        this.companyInfRepository = companyInfRepository;
         this.apiCallService = apiCallService;
         this.apiMapper = apiMapper;
     }
@@ -77,6 +85,24 @@ public class CompanyService {
             Thread.sleep(500);
 
             companyRepository.save(company);
+        }
+    }
+
+    public void updateCompanyInf() throws InterruptedException {
+        List<Company> companies = companyRepository.findAll();
+        log.info(String.valueOf(companies.size()));
+        for(Company company : companies) {
+            CompanyInfDto companyInfDto = apiCallService.getCompayInfFromApi(company.getCode());
+            CompanyInf companyInf = company.getCompanyInf();
+            companyInf = companyInf.updateCompanyInf()
+                    .lstn_stcn(companyInfDto.getOutput().getLstn_stcn())
+                    .hts_avls(companyInfDto.getOutput().getHts_avls())
+                    .w52_hgpr(companyInfDto.getOutput().getW52_hgpr())
+                    .w52_lwpr(companyInfDto.getOutput().getW52_lwpr())
+                    .build();
+            company.setCompanyInf(companyInf);
+            companyRepository.save(company);
+            Thread.sleep(500);
         }
     }
 

@@ -22,10 +22,16 @@ public class Company extends Auditable {
     @Column
     private String korName;
 
+    @Column
+    private String imageUrl;
+
     @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
     private StockAsBi stockAsBi;
 
     @OneToOne(mappedBy = "company", cascade = CascadeType.ALL)
     private StockInf stockInf;
+
+    @OneToOne(mappedBy ="company", cascade = CascadeType.ALL)
+    private CompanyInf companyInf;
 
 }

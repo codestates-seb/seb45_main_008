@@ -1,6 +1,7 @@
 package com.stockholm.main_project.scheduler;
 
 import com.stockholm.main_project.stock.service.*;
+import com.stockholm.main_project.websocket.WebSocketController;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -17,13 +18,15 @@ public class StockScheduler {
     private final CompanyService companyService;
     private final TokenService tokenService;
     private final StockOrderService stockOrderService;
+    private final WebSocketController webSocketController;
 
-    public StockScheduler(StockAsBiService stockAsBiService, StockMinService stockMinService, CompanyService companyService, TokenService tokenService, StockOrderService stockOrderService) {
+    public StockScheduler(StockAsBiService stockAsBiService, StockMinService stockMinService, CompanyService companyService, TokenService tokenService, StockOrderService stockOrderService, WebSocketController webSocketController) {
         this.stockAsBiService = stockAsBiService;
         this.stockMinService = stockMinService;
         this.companyService = companyService;
         this.tokenService = tokenService;
         this.stockOrderService = stockOrderService;
+        this.webSocketController = webSocketController;
     }
 
     @Scheduled(cron = "0 30 9-15 * * MON-FRI")
@@ -76,10 +79,15 @@ public class StockScheduler {
 
     }
 
-//    @Scheduled(fixedRate = 100000000)
-//    public void run() throws InterruptedException {
-//        stockOrderService.checkOrder();
-//    }
+    // 회사 정보 호출
+    @Scheduled(cron = "0 0 8 * * MON-FRI")
+    public void myScheduledUpdateCompanyInfMethod() throws InterruptedException {
+        LocalDateTime start = LocalDateTime.now();
+        companyService.updateCompanyInf();
+        LocalDateTime end = LocalDateTime.now();
+        Duration duration = Duration.between(start, end);
+        System.out.println(duration.getSeconds());
+    }
 
 //    @Scheduled(fixedRate = 10000000)
 //    public void secondSchedule() throws InterruptedException {

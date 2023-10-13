@@ -63,7 +63,12 @@ public class SecurityConfiguration {
                         .antMatchers(HttpMethod.POST, "/cash").hasRole("USER")
                         .antMatchers(HttpMethod.PATCH, "/cash/{cashId}").hasRole("USER")
                         .antMatchers(HttpMethod.GET, "/cash").hasRole("USER")
-                        .antMatchers(HttpMethod.POST, "/stockorders").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/stock/buy").hasRole("USER")
+                        .antMatchers(HttpMethod.POST, "/stock/sell").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "/stock/stockholds").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "/stock/stockorders").hasRole("USER")
+                        .antMatchers(HttpMethod.DELETE, "/stock/stockorders").hasRole("USER")
+                        .antMatchers(HttpMethod.GET, "long-polling/listen").hasRole("USER")
                         .antMatchers(HttpMethod.POST, "/api/boards").hasRole("USER")
                         .antMatchers(HttpMethod.PATCH, "/api/boards/{boardId}").hasRole("USER")
                         .antMatchers(HttpMethod.DELETE, "/api/boards/{boardId}").hasRole("USER")
@@ -95,7 +100,8 @@ public class SecurityConfiguration {
         configuration.setAllowCredentials(true);
         configuration.setAllowedOrigins(List.of(
                 "http://seb008stockholm.s3-website.ap-northeast-2.amazonaws.com/",
-                "http://localhost:5173", "http://localhost:3000"
+                "http://localhost:5173", "http://localhost:3000", "http://localhost:8080"
+                ,"chrome-extension://ggnhohnkfcpcanfekomdkjffnfcjnjam"
         ));
         configuration.setAllowedMethods(List.of("GET","POST", "PATCH", "DELETE"));
         configuration.setAllowedHeaders(List.of("*"));
