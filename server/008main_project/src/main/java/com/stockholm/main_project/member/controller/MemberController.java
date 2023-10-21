@@ -8,6 +8,7 @@ import com.stockholm.main_project.member.mapper.MemberMapper;
 import com.stockholm.main_project.member.service.MemberService;
 import com.stockholm.main_project.swaggersample.HelloResponse;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -37,7 +38,6 @@ public class MemberController {
             content = @Content(schema = @Schema(implementation = MemberResponseDto.class)))
     @ApiResponse(responseCode = "400", description = "EMAIL_DUPLICATION")
     @ApiResponse(responseCode = "404", description = "INVALID_PASSWORD")
-    @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     @PostMapping
     public ResponseEntity postMember(@Schema(implementation = MemberPostDto.class)@Valid @RequestBody MemberPostDto memberPostDto){
         Member member = mapper.memberPostToMember(memberPostDto);
@@ -51,11 +51,9 @@ public class MemberController {
     @Operation(summary = "회원 정보 변경", description = "가입한 계정의 이름을 PATCH합니다.", tags = { "Member" })
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(schema = @Schema(implementation = MemberResponseDto.class)))
-    @ApiResponse(responseCode = "400", description = "BAD REQUEST")
     @ApiResponse(responseCode = "404", description = "MEMBER NOT FOUND")
-    @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     @PatchMapping
-    private ResponseEntity patchMember(@Schema(implementation = MemberPatchDto.class)@RequestBody MemberPatchDto memberPatchDto, @AuthenticationPrincipal Member member){
+    private ResponseEntity patchMember(@Schema(implementation = MemberPatchDto.class)@Valid @RequestBody MemberPatchDto memberPatchDto,@Parameter(hidden = true) @AuthenticationPrincipal Member member){
 
         memberPatchDto.setMemberId(member.getMemberId());
 
@@ -73,11 +71,9 @@ public class MemberController {
     @Operation(summary = "회원 조회", description = "가입한 계정 중 하나가 GET됩니다.", tags = { "Member" })
     @ApiResponse(responseCode = "200", description = "OK",
             content = @Content(schema = @Schema(implementation = MemberResponseDto.class)))
-    @ApiResponse(responseCode = "400", description = "BAD REQUEST")
-    @ApiResponse(responseCode = "404", description = "NOT FOUND")
-    @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
+    @ApiResponse(responseCode = "404", description = "INVALID FAILED")
     @GetMapping
-    private ResponseEntity getMember(@AuthenticationPrincipal Member member){
+    private ResponseEntity getMember(@Parameter(hidden = true) @AuthenticationPrincipal Member member){
         Member response = memberService.findMember(member.getMemberId());
 
         return new ResponseEntity<>(mapper.memberToMemberResponseDto(response), HttpStatus.OK);
@@ -89,7 +85,7 @@ public class MemberController {
     @ApiResponse(responseCode = "400", description = "BAD REQUEST")
     @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR")
     @DeleteMapping
-    private ResponseEntity deleteMember(@AuthenticationPrincipal Member member){
+    private ResponseEntity deleteMember(@Parameter(hidden = true) @AuthenticationPrincipal Member member){
         memberService.deleteMember(member.getMemberId());
 
         return new ResponseEntity(HttpStatus.NO_CONTENT);

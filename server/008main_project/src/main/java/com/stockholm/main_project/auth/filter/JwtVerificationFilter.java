@@ -5,6 +5,7 @@ import com.stockholm.main_project.auth.utils.CustomAuthorityUtils;
 import com.stockholm.main_project.member.entity.Member;
 import com.stockholm.main_project.member.service.MemberService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
@@ -16,10 +17,13 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @Slf4j
+@Configuration
 public class JwtVerificationFilter extends OncePerRequestFilter {
     private final JwtTokenizer jwtTokenizer;
     private final CustomAuthorityUtils authorityUtils;
@@ -36,6 +40,7 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         Map<String, Object> claims = verifyJws(request);
+
         setAuthenticationToContext(claims);
         filterChain.doFilter(request, response);
     }
@@ -62,5 +67,21 @@ public class JwtVerificationFilter extends OncePerRequestFilter {
         List<GrantedAuthority> authorities = authorityUtils.createAuthorities((List)claims.get("roles"));
         Authentication authentication = new UsernamePasswordAuthenticationToken(member, null, authorities);
         SecurityContextHolder.getContext().setAuthentication(authentication);
+    }
+
+    public String generateAccessTokenFromRefreshToken(Map<String, Object> claims) {
+        String subject = (String) claims.get("email");
+
+        Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getAccessTokenExpirationMinutes());
+        String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
+
+        Map<String, Object> accessTokenClaims = new HashMap<>();
+        accessTokenClaims.put("email", subject);
+        accessTokenClaims.put("memberId", claims.get("memberId"));
+        accessTokenClaims.put("roles", claims.get("roles"));
+
+        String newAccessToken = jwtTokenizer.generateAccessToken(accessTokenClaims, subject, expiration, base64EncodedSecretKey);
+
+        return newAccessToken;
     }
 }

@@ -48,7 +48,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
         // 액세스 토큰 및 리프레시 토큰 생성
         String accessToken = delegateAccessToken(email, authorities);
-        String refreshToken = delegateRefreshToken(email);
+        String refreshToken = delegateRefreshToken(email, authorities);
 
         // 헤더에 토큰 추가
         response.addHeader("Authorization", "Bearer " + accessToken);
@@ -60,7 +60,7 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
 
     private void redirect(HttpServletRequest request, HttpServletResponse response, String username, List<String> authorities) throws IOException {
         String accessToken = delegateAccessToken(username, authorities);
-        String refreshToken = delegateRefreshToken(username);
+        String refreshToken = delegateRefreshToken(username, authorities);
 
         String uri = createURI(accessToken, refreshToken).toString();
         getRedirectStrategy().sendRedirect(request, response, uri);
@@ -85,14 +85,19 @@ public class OAuth2AuthenticationSuccessHandler extends SimpleUrlAuthenticationS
         return accessToken;
     }
 
-    private String delegateRefreshToken(String username) {
+    private String delegateRefreshToken(String username, List<String> authorities) {
+        int memberId = memberService.findMemberIdByEmail(username);
 
+        Map<String, Object> claims = new HashMap<>();
+        claims.put("email", username);
+        claims.put("roles", authorities);
+        claims.put("memberId", memberId);
 
         String subject = username;
         Date expiration = jwtTokenizer.getTokenExpiration(jwtTokenizer.getRefreshTokenExpirationMinutes());
         String base64EncodedSecretKey = jwtTokenizer.encodeBase64SecretKey(jwtTokenizer.getSecretKey());
 
-        String refreshToken = jwtTokenizer.generateRefreshToken(subject, expiration, base64EncodedSecretKey);
+        String refreshToken = jwtTokenizer.generateRefreshToken(claims, subject, expiration, base64EncodedSecretKey);
 
         return refreshToken;
     }

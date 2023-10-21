@@ -36,6 +36,8 @@ public interface StockMapper {
     @Mapping(source = "company.companyId", target = "companyId")
     StockInfResponseDto stockInfToStockInfResponseDto(StockInf stockInf);
     @Mapping(source = "company.companyId", target = "companyId")
+    List<StockInfResponseDto> stockInfsToStockInfResponseDtos(List<StockInf> stockInf);
+    @Mapping(source = "company.companyId", target = "companyId")
     StockAsBiResponseDto stockAsBiToStockAsBiResponseDto(StockAsBi stockAsBi);
     @Mapping(source = "company.companyId", target = "companyId")
     StockMinResponseDto stockMinToStockMinResponseDto(StockMin stockMin);
@@ -88,4 +90,6 @@ public interface StockMapper {
         }
         return starResponseDtos;
     }
+
+    CompanyInf companyInfDtoToCompanyInf(CompanyInfDto companyInfDto);
 }

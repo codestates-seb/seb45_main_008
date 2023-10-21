@@ -9,7 +9,14 @@ import com.stockholm.main_project.board.dto.responseDto.SingleBoardResponseDto;
 import com.stockholm.main_project.board.entity.Board;
 
 import com.stockholm.main_project.board.service.BoardService;
+import com.stockholm.main_project.member.dto.MemberPostDto;
 import com.stockholm.main_project.member.entity.Member;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -30,8 +37,11 @@ public class CommentController {
         this.mapper = mapper;
     }
 
+    @Operation(summary = "댓글 생성", description = "새로운 댓글을 생성합니다.", tags = { "Comment" })
+    @ApiResponse(responseCode = "201", description = "CREATED",
+            content = @Content(schema = @Schema(implementation = CommentResponseDto.class)))
     @PostMapping
-    public ResponseEntity postComment(@PathVariable long boardId, @RequestBody CommentRequestDto commentRequestDto, @AuthenticationPrincipal Member member){
+    public ResponseEntity postComment(@Schema(implementation = CommentRequestDto.class)@PathVariable long boardId, @RequestBody CommentRequestDto commentRequestDto,@Parameter(hidden = true) @AuthenticationPrincipal Member member){
 
         Comment comment = mapper.commentRequestDtoToComment(commentRequestDto);
         comment.setBoard(boardService.findBoard(boardId));
@@ -41,11 +51,15 @@ public class CommentController {
         CommentResponseDto responseDto = mapper.commentToCommentResponseDto(createdComment);
         return new ResponseEntity<>(responseDto, HttpStatus.CREATED);
     }
+    @Operation(summary = "댓글 수정", description = "작성한 댓글을 수정합니다.", tags = { "Comment" })
+    @ApiResponse(responseCode = "200", description = "OK",
+            content = @Content(schema = @Schema(implementation = CommentResponseDto.class)))
+    @ApiResponse(responseCode = "404", description = "INVALID FAILED")
     @PatchMapping("{commentId}")
     public ResponseEntity updateComment(@PathVariable long boardId,
                                         @PathVariable long commentId,
                                         @RequestBody CommentRequestDto commentRequestDto,
-                                        @AuthenticationPrincipal Member member){
+                                        @Parameter(hidden = true) @AuthenticationPrincipal Member member){
 
         Comment comment = mapper.commentRequestDtoToComment(commentRequestDto);
         comment.setCommentId(commentId);
@@ -56,8 +70,11 @@ public class CommentController {
         return new ResponseEntity<>(responseDto, HttpStatus.OK);
     }
 
+    @Operation(summary = "댓글 삭제", description = "작성한 댓글를 삭제합니다.", tags = { "Comment" })
+    @ApiResponse(responseCode = "204", description = "NO CONTENT")
+    @ApiResponse(responseCode = "404", description = "INVALID FAILED")
     @DeleteMapping("{commentId}")
-    public ResponseEntity deleteComment(@PathVariable long boardId, @PathVariable long commentId, @AuthenticationPrincipal Member member) {
+    public ResponseEntity deleteComment(@PathVariable long boardId, @PathVariable long commentId,@Parameter(hidden = true) @AuthenticationPrincipal Member member) {
 
         commentService.deleteComment(commentId, member);
 
