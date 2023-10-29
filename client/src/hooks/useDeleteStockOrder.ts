@@ -4,12 +4,16 @@ import axios from "axios";
 const useDeleteStockOrder = () => {
   const queryClient = useQueryClient();
 
-  const mutate = useMutation((data: { orderId: number; cancleVolume: number }) => deleteStockOrder(data.orderId, data.cancleVolume), {
-    onSuccess: () => {
-      queryClient.invalidateQueries("holdingStock");
-      queryClient.invalidateQueries("orderRecord");
-    },
-  });
+  const mutate = useMutation(
+    (data: { orderId: number; cancleVolume: number }) =>
+      deleteStockOrder(data.orderId, data.cancleVolume),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("holdingStock");
+        queryClient.invalidateQueries("orderRecord");
+      },
+    }
+  );
 
   return mutate;
 };
@@ -17,7 +21,7 @@ const useDeleteStockOrder = () => {
 export default useDeleteStockOrder;
 
 const deleteStockOrder = async (orderId: number, cancleVolume: number) => {
-  const url = `http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/stock/stockorders?stockOrderId=${orderId}&stockCount=${cancleVolume}`;
+  const url = `http://ec2-3-34-137-99.ap-northeast-2.compute.amazonaws.com:8080/stock/stockorders?stockOrderId=${orderId}&stockCount=${cancleVolume}`;
 
   const accessToken = localStorage.getItem("accessToken");
   const options = {

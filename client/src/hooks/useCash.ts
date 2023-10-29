@@ -5,7 +5,7 @@ import { setCashId, setMoney } from "../reducer/cash/cashSlice";
 import { useSelector } from "react-redux";
 import { RootState } from "../store/config";
 
-const BASE_URL = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080";
+const BASE_URL = "http://ec2-3-34-137-99.ap-northeast-2.compute.amazonaws.com:8080";
 
 const getAuthHeader = () => {
   const accessToken = localStorage.getItem("accessToken");

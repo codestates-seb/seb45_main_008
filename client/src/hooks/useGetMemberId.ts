@@ -3,7 +3,7 @@ import { useQuery } from "react-query";
 import { StateProps } from "../models/stateProps";
 import axios from "axios";
 
-const url = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members";
+const url = "http://ec2-3-34-137-99.ap-northeast-2.compute.amazonaws.com:8080/members";
 
 const useGetMemberId = () => {
   const islogin = useSelector((state: StateProps) => state.login);

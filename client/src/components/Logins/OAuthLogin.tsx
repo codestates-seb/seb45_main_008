@@ -4,15 +4,21 @@ import GoogleLoginButton from "./GoogleLoginButton";
 import KakaoLoginButton from "./KakaoLoginButton";
 import { motion } from "framer-motion";
 
-const OAuthLoginModal: React.FC<LoginModalProps> = ({ onClose, onEmailLoginClick, onEmailSignupClick }) => {
+const OAuthLoginModal: React.FC<LoginModalProps> = ({
+  onClose,
+  onEmailLoginClick,
+  onEmailSignupClick,
+}) => {
   const titleText = "로그인";
   const orText = "또는";
   const emailLoginText = "이메일로 로그인";
   const emailSignupText = "이메일로 회원가입";
 
   //소셜로그인 주소
-  const GOOGLE_BACKEND_URL = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google";
-  const KAKAO_BACKEND_URL = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/kakao";
+  const GOOGLE_BACKEND_URL =
+    "http://ec2-3-34-137-99.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/google";
+  const KAKAO_BACKEND_URL =
+    "http://ec2-3-34-137-99.ap-northeast-2.compute.amazonaws.com:8080/oauth2/authorization/kakao";
 
   return (
     <ModalBackground>

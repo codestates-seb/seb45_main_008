@@ -10,22 +10,30 @@ const useTradeStock = () => {
   const orderVolume = useSelector((state: StateProps) => state.stockOrderVolume);
 
   const queryClient = useQueryClient();
-  const orderRequest = useMutation(() => postOrderRequest(orderType, companyId, orderPrice, orderVolume), {
-    onSuccess: () => {
-      queryClient.invalidateQueries("cash");
-      queryClient.invalidateQueries("holdingStock");
-      queryClient.invalidateQueries("orderRecord");
+  const orderRequest = useMutation(
+    () => postOrderRequest(orderType, companyId, orderPrice, orderVolume),
+    {
+      onSuccess: () => {
+        queryClient.invalidateQueries("cash");
+        queryClient.invalidateQueries("holdingStock");
+        queryClient.invalidateQueries("orderRecord");
 
-      queryClient.invalidateQueries("stockHolds");
-      queryClient.invalidateQueries("money");
-    },
-  });
+        queryClient.invalidateQueries("stockHolds");
+        queryClient.invalidateQueries("money");
+      },
+    }
+  );
   return orderRequest;
 };
 
 export default useTradeStock;
 
-const postOrderRequest = async (orderType: boolean, companyId: number, price: number, volume: number) => {
+const postOrderRequest = async (
+  orderType: boolean,
+  companyId: number,
+  price: number,
+  volume: number
+) => {
   const accessToken = localStorage.getItem("accessToken");
 
   const options = {
@@ -37,7 +45,11 @@ const postOrderRequest = async (orderType: boolean, companyId: number, price: nu
 
   // 매수
   if (!orderType) {
-    const response = await axios.post(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/stock/buy?companyId=${companyId}&price=${price}&stockCount=${volume}`, {}, options);
+    const response = await axios.post(
+      `http://ec2-3-34-137-99.ap-northeast-2.compute.amazonaws.com:8080/stock/buy?companyId=${companyId}&price=${price}&stockCount=${volume}`,
+      {},
+      options
+    );
     const orderResult = await response.data;
 
     return orderResult;
@@ -45,7 +57,11 @@ const postOrderRequest = async (orderType: boolean, companyId: number, price: nu
 
   // 매도
   if (orderType) {
-    const response = await axios.post(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/stock/sell?companyId=${companyId}&price=${price}&stockCount=${volume}`, {}, options);
+    const response = await axios.post(
+      `http://ec2-3-34-137-99.ap-northeast-2.compute.amazonaws.com:8080/stock/sell?companyId=${companyId}&price=${price}&stockCount=${volume}`,
+      {},
+      options
+    );
     const orderResult = await response.data;
 
     return orderResult;

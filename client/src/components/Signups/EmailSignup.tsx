@@ -49,7 +49,7 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
 
     try {
       const response = await axios.post(
-        "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/email/send",
+        "http://ec2-3-34-137-99.ap-northeast-2.compute.amazonaws.com:8080/email/send",
         { email },
         {
           validateStatus: function (status) {
@@ -89,10 +89,18 @@ const EmailSignupModal: React.FC<EmailSignupModalProps> = ({ onClose, onRequestV
           <CloseButton onClick={onClose}>×</CloseButton>
           <Title>{strings.titleText}</Title>
           <Label>{strings.emailLabelText}</Label>
-          <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} onKeyDown={handleKeyPress} />
+          <Input
+            type="email"
+            placeholder="이메일을 입력하세요"
+            value={email}
+            onChange={handleEmailChange}
+            onKeyDown={handleKeyPress}
+          />
           {emailSent && <SuccessMessage>{strings.emailSend}</SuccessMessage>}
           {isInvalidEmail && <ErrorMessage>{strings.invalidEmailText}</ErrorMessage>}
-          <SignupButton onClick={handleVerificationRequest}>{strings.requestVerificationText}</SignupButton>
+          <SignupButton onClick={handleVerificationRequest}>
+            {strings.requestVerificationText}
+          </SignupButton>
           {errorMessage && <ErrorMessage>{errorMessage}</ErrorMessage>}
         </ModalContainer>
       </motion.div>

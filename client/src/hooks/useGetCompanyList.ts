@@ -13,7 +13,9 @@ const useGetCompanyList = () => {
 export default useGetCompanyList;
 
 const getCompanyList = async () => {
-  const res = await axios.get("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/companies");
+  const res = await axios.get(
+    "http://ec2-3-34-137-99.ap-northeast-2.compute.amazonaws.com:8080/companies"
+  );
   const companyList = await res.data;
 
   return companyList;

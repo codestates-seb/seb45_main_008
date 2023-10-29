@@ -34,7 +34,10 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onSignup }) 
     alert("당신의 비밀번호는 !1q2w3e입니다.!");
   };
 
-  const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>, target?: "password" | "loginButton") => {
+  const handleEnterPress = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+    target?: "password" | "loginButton"
+  ) => {
     if (event.key === "Enter") {
       if (target === "password") {
         (document.querySelector('input[type="password"]') as HTMLInputElement).focus();
@@ -46,7 +49,11 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onSignup }) 
 
   const handleLoginClick = async () => {
     try {
-      const response = await axios.post("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members/login", { email, password }, { validateStatus: (status) => status >= 200 && status < 600 });
+      const response = await axios.post(
+        "http://ec2-3-34-137-99.ap-northeast-2.compute.amazonaws.com:8080/members/login",
+        { email, password },
+        { validateStatus: (status) => status >= 200 && status < 600 }
+      );
 
       if (response.status === 200) {
         const accessToken = response.headers["authorization"];
@@ -78,11 +85,25 @@ const EmailLoginModal: React.FC<EmailLoginModalProps> = ({ onClose, onSignup }) 
           <CloseButton onClick={onClose}>&times;</CloseButton>
           <Title>{titleText}</Title>
           <Label>{emailLabelText}</Label>
-          <Input type="email" placeholder="이메일을 입력하세요" value={email} onChange={handleEmailChange} onKeyDown={(event) => handleEnterPress(event, "password")} />
+          <Input
+            type="email"
+            placeholder="이메일을 입력하세요"
+            value={email}
+            onChange={handleEmailChange}
+            onKeyDown={(event) => handleEnterPress(event, "password")}
+          />
           <Label>{passwordLabelText}</Label>
-          <Input type="password" placeholder="비밀번호를 입력하세요" value={password} onChange={handlePasswordChange} onKeyDown={(event) => handleEnterPress(event, "loginButton")} />
+          <Input
+            type="password"
+            placeholder="비밀번호를 입력하세요"
+            value={password}
+            onChange={handlePasswordChange}
+            onKeyDown={(event) => handleEnterPress(event, "loginButton")}
+          />
           {generalError && <ErrorMessage>{generalError}</ErrorMessage>}
-          <RightAlignedButton onClick={handleFindPasswordClick}>{findPasswordText}</RightAlignedButton>
+          <RightAlignedButton onClick={handleFindPasswordClick}>
+            {findPasswordText}
+          </RightAlignedButton>
           <LoginButton onClick={handleLoginClick}>{loginButtonText}</LoginButton>
           <BottomText>
             {noAccountText} <RegisterButton onClick={onSignup}>{registerButtonText}</RegisterButton>

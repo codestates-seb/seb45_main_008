@@ -7,8 +7,23 @@ import * as Webstomp from "webstomp-client";
 import { dummyLogo } from "../../dummy/dummyLogo";
 import { volumeUnit } from "../../constant/constant";
 
-const url = "ws://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/ws";
-const corpName = ["삼성전자", "POSCO홀딩스", "셀트리온", "에코프로", "에코프로비엠", "디와이", "쿠쿠홀딩스", "카카오뱅크", "한세엠케이", "KG케마칼", "LG화학", "현대차", "LG전자", "기아"];
+const url = "ws://ec2-3-34-137-99.ap-northeast-2.compute.amazonaws.com:8080/ws";
+const corpName = [
+  "삼성전자",
+  "POSCO홀딩스",
+  "셀트리온",
+  "에코프로",
+  "에코프로비엠",
+  "디와이",
+  "쿠쿠홀딩스",
+  "카카오뱅크",
+  "한세엠케이",
+  "KG케마칼",
+  "LG화학",
+  "현대차",
+  "LG전자",
+  "기아",
+];
 
 const toastText01: string = "미체결";
 const toastText02: string = " 체결 처리 되었습니다";

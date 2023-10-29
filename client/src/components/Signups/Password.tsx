@@ -54,7 +54,10 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
   // 일반적인 오류 메시지 상태 추가
   const [generalError, setGeneralError] = useState("");
 
-  const handleEnterPress = (event: React.KeyboardEvent<HTMLInputElement>, target?: "confirmPassword" | "name" | "confirmButton") => {
+  const handleEnterPress = (
+    event: React.KeyboardEvent<HTMLInputElement>,
+    target?: "confirmPassword" | "name" | "confirmButton"
+  ) => {
     if (event.key === "Enter") {
       if (target === "confirmPassword") {
         confirmPasswordRef.current?.focus();
@@ -89,7 +92,7 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
     }
     try {
       const response = await axios.post(
-        "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members",
+        "http://ec2-3-34-137-99.ap-northeast-2.compute.amazonaws.com:8080/members",
         {
           email,
           name,
@@ -139,15 +142,36 @@ const PasswordSettingModal: React.FC<PasswordSettingModalProps> = ({ onClose, on
           <CloseButton onClick={onClose}>&times;</CloseButton>
           <Title>{strings.titleText}</Title>
           <Label>{strings.passwordLabelText}</Label>
-          <Input type="password" ref={passwordRef} placeholder="8~16자리 비밀번호를 입력해주세요" value={password} onChange={handlePasswordChange} onKeyDown={(event) => handleEnterPress(event, "confirmPassword")} />
+          <Input
+            type="password"
+            ref={passwordRef}
+            placeholder="8~16자리 비밀번호를 입력해주세요"
+            value={password}
+            onChange={handlePasswordChange}
+            onKeyDown={(event) => handleEnterPress(event, "confirmPassword")}
+          />
           {passwordError && <ErrorMessage>{passwordError}</ErrorMessage>}
 
           <Label>{strings.confirmPasswordLabelText}</Label>
-          <Input type="password" ref={confirmPasswordRef} placeholder="비밀번호를 다시 입력해주세요" value={confirmPassword} onChange={handleConfirmPasswordChange} onKeyDown={(event) => handleEnterPress(event, "name")} />
+          <Input
+            type="password"
+            ref={confirmPasswordRef}
+            placeholder="비밀번호를 다시 입력해주세요"
+            value={confirmPassword}
+            onChange={handleConfirmPasswordChange}
+            onKeyDown={(event) => handleEnterPress(event, "name")}
+          />
           {confirmPasswordError && <ErrorMessage>{confirmPasswordError}</ErrorMessage>}
 
           <Label>{strings.nicknameLabelText}</Label>
-          <Input type="text" ref={nameRef} placeholder="이름을 입력해주세요" value={name} onChange={handleNameChange} onKeyDown={(event) => handleEnterPress(event, "confirmButton")} />
+          <Input
+            type="text"
+            ref={nameRef}
+            placeholder="이름을 입력해주세요"
+            value={name}
+            onChange={handleNameChange}
+            onKeyDown={(event) => handleEnterPress(event, "confirmButton")}
+          />
 
           {generalError && <ErrorMessage>{generalError}</ErrorMessage>}
 
