@@ -6,7 +6,7 @@ import { DotIcon } from "./IconComponent/Icon";
 import { toast } from "react-toastify";
 import axios from "axios";
 
-const serverUrl = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/api/boards";
+const serverUrl = "http://ec2-3-34-137-99.ap-northeast-2.compute.amazonaws.com:8080/api/boards";
 
 const TimeLineComponent = () => {
   const [boardData, setBoardData] = useState<BoardData[]>([]);
@@ -150,7 +150,11 @@ const TimeLineComponent = () => {
 
   const [expandedPosts, setExpandedPosts] = useState<number[]>([]);
   const toggleExpandPost = (boardId: number) => {
-    setExpandedPosts((prevExpandedPosts) => (prevExpandedPosts.includes(boardId) ? prevExpandedPosts.filter((id) => id !== boardId) : [...prevExpandedPosts, boardId]));
+    setExpandedPosts((prevExpandedPosts) =>
+      prevExpandedPosts.includes(boardId)
+        ? prevExpandedPosts.filter((id) => id !== boardId)
+        : [...prevExpandedPosts, boardId]
+    );
   };
 
   return (
@@ -159,7 +163,12 @@ const TimeLineComponent = () => {
         {openDropDown === false && <Button onClick={handleSetOpenDropDown}></Button>}
         {openDropDown === true && (
           <>
-            <DropdownInput type="text" placeholder="이곳에 작성해 주세요" value={inputValue} onChange={handleOnChange}></DropdownInput>
+            <DropdownInput
+              type="text"
+              placeholder="이곳에 작성해 주세요"
+              value={inputValue}
+              onChange={handleOnChange}
+            ></DropdownInput>
 
             <ButtonContainer>
               <SubmitButton onClick={handleClickSubmit}>Submit</SubmitButton>
@@ -181,7 +190,11 @@ const TimeLineComponent = () => {
                     <div onClick={() => handleDotOpen(el.boardId)}>
                       <DotIcon />
                     </div>
-                    {dotMenuOpenMap[el.boardId] && <DeleteBoard onClick={() => handleDeleteClick(el.boardId)}>{timeLineText.delete}</DeleteBoard>}
+                    {dotMenuOpenMap[el.boardId] && (
+                      <DeleteBoard onClick={() => handleDeleteClick(el.boardId)}>
+                        {timeLineText.delete}
+                      </DeleteBoard>
+                    )}
                   </Delete>
                   <BoardText>
                     <MemberInfo>
@@ -195,7 +208,9 @@ const TimeLineComponent = () => {
                       <>
                         {el.content.length > 50 ? el.content.substring(0, 50) + "..." : el.content}
                         <br />
-                        {el.content.length > 50 && <div onClick={() => toggleExpandPost(el.boardId)}>더 보기</div>}
+                        {el.content.length > 50 && (
+                          <div onClick={() => toggleExpandPost(el.boardId)}>더 보기</div>
+                        )}
                       </>
                     )}
                   </BoardText>

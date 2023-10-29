@@ -90,7 +90,8 @@ const MarketkospiChart = () => {
 
               data: kospiData.map((item: KospiProps, index: number, array: KospiProps[]) => {
                 const currentPrice = parseFloat(item.bstp_nmix_oprc);
-                const previousPrice = index > 0 ? parseFloat(array[index - 1].bstp_nmix_oprc) : currentPrice;
+                const previousPrice =
+                  index > 0 ? parseFloat(array[index - 1].bstp_nmix_oprc) : currentPrice;
 
                 // 현재 가격과 이전 가격을 비교하여 색상 설정
                 const color = currentPrice > previousPrice ? "#f87369" : "#5a99f8";
@@ -121,7 +122,7 @@ const MarketkospiChart = () => {
 export default MarketkospiChart;
 
 const getKospiData = async () => {
-  const res = await axios.get("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com/kospi");
+  const res = await axios.get("http://ec2-3-34-137-99.ap-northeast-2.compute.amazonaws.com/kospi");
   const chartData = res.data.output2;
   const kospiData = chartData.reverse();
 

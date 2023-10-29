@@ -1,7 +1,7 @@
 import { useQuery } from "react-query";
 import axios from "axios";
 
-const BASE_URL = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080";
+const BASE_URL = "http://ec2-3-34-137-99.ap-northeast-2.compute.amazonaws.com:8080";
 
 // 커스텀 훅 정의
 function useCompanyData(startCompanyId: number, endCompanyId: number) {
@@ -12,7 +12,10 @@ function useCompanyData(startCompanyId: number, endCompanyId: number) {
   };
 
   // companyId 범위에 대한 배열 생성
-  const companyIds = Array.from({ length: endCompanyId - startCompanyId + 1 }, (_, index) => startCompanyId + index);
+  const companyIds = Array.from(
+    { length: endCompanyId - startCompanyId + 1 },
+    (_, index) => startCompanyId + index
+  );
 
   // 리액트-쿼리의 useQuery 훅 사용
   const { data, isLoading, isError } = useQuery<CompanyData[]>(

@@ -5,7 +5,7 @@ import useGetStockInfo from "./useGetStockInfo";
 import { StateProps } from "../models/stateProps";
 import axios from "axios";
 
-const url = "http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/companies/charts/";
+const url = "http://ec2-3-34-137-99.ap-northeast-2.compute.amazonaws.com:8080/companies/charts/";
 
 const upColor = "rgba(198, 6, 6, 0.37)";
 const downColor = "rgba(59, 119, 247, 0.51)";
@@ -78,7 +78,12 @@ const useGetStockChart = (companyId: number) => {
       top: 10,
       left: "left",
       padding: [4, 0, 0, 15],
-      data: [`주가`, `거래량`, `이동평균선 (${averageLineMinute}분)`, compareChart !== undefined && `${compareName}`],
+      data: [
+        `주가`,
+        `거래량`,
+        `이동평균선 (${averageLineMinute}분)`,
+        compareChart !== undefined && `${compareName}`,
+      ],
     },
     tooltip: {
       trigger: "axis",
@@ -270,7 +275,15 @@ const useGetStockChart = (companyId: number) => {
         position: "right",
         gridIndex: 1,
         splitNumber: 2,
-        axisLabel: { show: true, inside: true, color: indexColor, padding: 10, showMinLabel: false, showMaxLabel: false, fontWeight: "500" },
+        axisLabel: {
+          show: true,
+          inside: true,
+          color: indexColor,
+          padding: 10,
+          showMinLabel: false,
+          showMaxLabel: false,
+          fontWeight: "500",
+        },
         axisTick: { show: false },
         splitLine: { show: false },
         splitArea: {

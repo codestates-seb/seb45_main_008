@@ -5,11 +5,14 @@ export function useGetMemberInfo() {
   return useQuery(["member"], async () => {
     const accessToken = localStorage.getItem("accessToken");
 
-    const response = await axios.get(`http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/members`, {
-      headers: {
-        Authorization: `${accessToken}`,
-      },
-    });
+    const response = await axios.get(
+      `http://ec2-3-34-137-99.ap-northeast-2.compute.amazonaws.com:8080/members`,
+      {
+        headers: {
+          Authorization: `${accessToken}`,
+        },
+      }
+    );
 
     if (response.status === 200) {
       return response.data;

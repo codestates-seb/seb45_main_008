@@ -41,11 +41,14 @@ const fetchStarData = async () => {
 
   // 로그인 상태에만 관심목록 데이터 호출하도록 설정
   if (accessToken !== null) {
-    const res = await fetch("http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/stars", {
-      headers: {
-        Authorization: `${accessToken}`,
-      },
-    });
+    const res = await fetch(
+      "http://ec2-3-34-137-99.ap-northeast-2.compute.amazonaws.com:8080/stars",
+      {
+        headers: {
+          Authorization: `${accessToken}`,
+        },
+      }
+    );
 
     if (!res.ok) {
       const data = await res.json();
