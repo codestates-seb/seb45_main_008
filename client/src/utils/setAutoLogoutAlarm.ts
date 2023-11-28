@@ -20,107 +20,81 @@ export const secondAlarmTime = 1000 * 60 * 29; // 29분
 export const lastAlarmTime = 1000 * 60; // 1분
 
 const setAutoLogoutAlarm = (dispatch: any, alarmNum: string, secondAlarmTime: number, lastAlarmTime?: number) => {
-  // 1~3차 알림 모두 설정
-  if (alarmNum === alarmNumType.First) {
-    toast.warning("로그인 상태는 30분 동안 유지됩니다", {
-      style: toastStyle,
-      position: "top-center",
-    });
+    // 리프레시 토큰을 사용하여 새 엑세스 토큰을 요청하는 함수
+    const requestNewAccessToken = async () => {
+        const refreshToken = localStorage.getItem("refreshToken");
+        try {
+            const response = await fetch('http://ec2-13-125-246-160.ap-northeast-2.compute.amazonaws.com:8080/tokens/refresh', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ refreshToken: refreshToken })
+            });
 
-    // 2차 알림 셋팅 시간 기록
-    const autoLogoutSecondAlarm = Date.now();
-    localStorage.setItem("autoLogoutSecondAlarm", `${autoLogoutSecondAlarm}`);
+            if (response.status !== 201) {
+              throw new Error('Failed to fetch new access token');
+          }
 
-    setTimeout(() => {
-      // 2차 알림 셋팅 시간 제거
-      localStorage.removeItem("autoLogoutSecondAlarm");
+            const data = await response.json();
+            return data.accessToken;
+        } catch (error) {
+            console.error(error);
+            return null;
+        }
+    };
 
-      toast.warning("1분 뒤 로그아웃 처리됩니다", {
-        style: toastStyle,
-        position: "top-center",
-      });
+    const handleTokenRefresh = async () => {
+        const newAccessToken = await requestNewAccessToken();
 
-      // 3차 알림 셋팅 시간 기록
-      const autoLogoutLastAlarm = Date.now();
-      localStorage.setItem("autoLogoutLastAlarm", `${autoLogoutLastAlarm}`);
+        if (newAccessToken) {
+            sessionStorage.setItem("accessToken", `Bearer ${newAccessToken}`);
+            toast.success("로그인이 연장되었습니다", { style: toastStyle, position: "top-center" });
+        } else {
+            dispatch(setLogoutState());
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            toast.warning("로그아웃 처리되었습니다", { style: toastStyle, position: "top-center" });
+        }
+    };
 
-      setTimeout(() => {
-        // 3차 알림 셋팅 시간 제거
-        localStorage.removeItem("autoLogoutLastAlarm");
-
-        dispatch(setLogoutState());
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-
-        toast.warning("로그아웃 처리되었습니다", {
-          style: toastStyle,
-          position: "top-center",
+    if (alarmNum === alarmNumType.First) {
+        toast.warning("로그인 상태는 30분 동안 유지됩니다", {
+            style: toastStyle,
+            position: "top-center",
         });
-      }, lastAlarmTime);
-    }, secondAlarmTime);
-  }
 
-  // 2~3차 알림 설정
-  if (alarmNum === alarmNumType.Second) {
-    setTimeout(() => {
-      // 2차 알림 셋팅 시간 제거
-      localStorage.removeItem("autoLogoutSecondAlarm");
+        const autoLogoutSecondAlarm = Date.now();
+        localStorage.setItem("autoLogoutSecondAlarm", `${autoLogoutSecondAlarm}`);
 
-      toast.warning("1분 뒤 로그아웃 처리됩니다", {
-        style: toastStyle,
-        position: "top-center",
-      });
+        setTimeout(handleTokenRefresh, secondAlarmTime);
+    }
 
-      // 3차 알림 셋팅 시간 기록
-      const autoLogoutLastAlarm = Date.now();
-      localStorage.setItem("autoLogoutLastAlarm", `${autoLogoutLastAlarm}`);
+    if (alarmNum === alarmNumType.Second) {
+        setTimeout(handleTokenRefresh, secondAlarmTime);
+    }
 
-      setTimeout(() => {
-        // 3차 알림 셋팅 시간 제거
-        localStorage.removeItem("autoLogoutLastAlarm");
-
-        dispatch(setLogoutState());
-        localStorage.removeItem("accessToken");
-        localStorage.removeItem("refreshToken");
-
-        toast.warning("로그아웃 처리되었습니다", {
-          style: toastStyle,
-          position: "top-center",
-        });
-      }, lastAlarmTime);
-    }, secondAlarmTime);
-
-    return;
-  }
-
-  // 3차 알림만 설정
-  if (alarmNum === alarmNumType.Last) {
-    setTimeout(() => {
-      // 3차 알림 셋팅 시간 제거
-      localStorage.removeItem("autoLogoutLastAlarm");
-
-      dispatch(setLogoutState());
-      localStorage.removeItem("accessToken");
-      localStorage.removeItem("refreshToken");
-
-      toast.warning("로그아웃 처리되었습니다", {
-        style: toastStyle,
-        position: "top-center",
-      });
-    }, lastAlarmTime);
-  }
+    // 3차 알림만 설정
+    if (alarmNum === alarmNumType.Last) {
+        setTimeout(() => {
+            dispatch(setLogoutState());
+            localStorage.removeItem("accessToken");
+            localStorage.removeItem("refreshToken");
+            toast.warning("로그아웃 처리되었습니다", { style: toastStyle, position: "top-center" });
+        }, lastAlarmTime);
+    }
 };
 
 export default setAutoLogoutAlarm;
 
 const alarmNumType = {
-  First: "first",
-  Second: "second",
-  Last: "last",
+    First: "first",
+    Second: "second",
+    Last: "last",
 };
 
 const toastStyle = {
-  fontSize: "15px",
-  fontWeight: 350,
-  color: "black",
+    fontSize: "15px",
+    fontWeight: 350,
+    color: "black",
 };
